@@ -1,28 +1,36 @@
 package de.dome.shopy.listener.lobby;
 
 import de.dome.shopy.Shopy;
+import org.bukkit.GameMode;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 
-public class BlockBreak implements Listener {
+public class BlockBreakListener implements Listener {
 
-    public PlayerJoinListener() {
-        Shopy.getInstance().getServer().getPluginManager().registerEvents(this, GrandShop.getInstance());
+    public BlockBreakListener() {
+        Shopy.getInstance().getServer().getPluginManager().registerEvents(this, Shopy.getInstance());
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent e) {
+    public void blockBreak(BlockBreakEvent e) {
         Player p = e.getPlayer();
 
-        /* Spieler zum Spawn bringen */
-        if(GrandShop.getInstance().getServerSpawn() != null){
-            p.teleport(GrandShop.getInstance().getServerSpawn());
+        if(p.getGameMode() != GameMode.CREATIVE){
+            e.setCancelled(true);
+            p.sendMessage(Shopy.getInstance().getNoperm());
         }
-
-        /* Spieler eine willkommens nachricht senden */
-        p.sendMessage(GrandShop.getInstance().getPrefix() + "Du brauchst Hilfe dabei, diesen Modus zu verstehen? Hier hast du eine Anleitung: XXX.");
-        GrandShop.getInstance().getSpielerShops().put(p.getUniqueId(), new Shop(p.getUniqueId()));
     }
 
+    @EventHandler
+    public void blockPlace(BlockPlaceEvent e) {
+        Player p = e.getPlayer();
 
-
+        if(p.getGameMode() != GameMode.CREATIVE){
+            e.setCancelled(true);
+            p.sendMessage(Shopy.getInstance().getNoperm());
+        }
+    }
 }
