@@ -1,0 +1,8 @@
+name: Shopy
+version: ${project.version}
+main: de.dome.shopy.Shopy
+author: Dev_Dome
+description: Kommt später
+
+# Optionale Angaben
+api-version: 1.20.2
