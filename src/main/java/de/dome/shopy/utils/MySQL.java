@@ -82,13 +82,23 @@ public class MySQL {
 
         try {
             Statement statement = connection.createStatement();
-
-            // Beispiel: CREATE TABLE
-            String TableSQL = sql;
-            int rowsAffected = statement.executeUpdate(TableSQL);
+            statement.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
             return;
+        }
+    }
+
+    public ResultSet resultSet(String sql) {
+        if (this.connection == null) {
+            return null;
+        }
+        try {
+            PreparedStatement statement = this.connection.prepareStatement(sql);
+            return statement.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

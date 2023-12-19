@@ -1,7 +1,14 @@
 name: Shopy
-version: ${project.version}
+version: 1
 main: de.dome.shopy.Shopy
 author: Dev_Dome
 description: Kommt später
+authors: [Dev_Dome]
+depend: [PlayerNPC]
+api-version: '1.20'
 commands:
   setspawn:
+  LoadDefaultValue:
+  setnpcspawn:
+  shop:
+  spawn:

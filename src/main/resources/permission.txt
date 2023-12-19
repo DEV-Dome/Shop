@@ -1,1 +1,2 @@
 shopy.cmd.setspawn
+shopy.cmd.loadDefaultValue
