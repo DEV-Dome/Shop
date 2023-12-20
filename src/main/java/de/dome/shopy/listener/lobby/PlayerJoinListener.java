@@ -1,6 +1,7 @@
 package de.dome.shopy.listener.lobby;
 
 import de.dome.shopy.Shopy;
+import de.dome.shopy.listener.shop.BlockBreakListener;
 import de.dome.shopy.utils.Shop;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,6 +35,9 @@ public class PlayerJoinListener implements Listener {
         if(Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())) {
             Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).unLoadWorld();
             Shopy.getInstance().getSpielerShops().remove(p.getUniqueId());
+        }
+        if(de.dome.shopy.listener.shop.BlockBreakListener.shopszones.containsKey(p.getUniqueId())){
+            BlockBreakListener.shopszones.remove(p.getUniqueId());
         }
 
     }

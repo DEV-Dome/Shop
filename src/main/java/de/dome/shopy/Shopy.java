@@ -74,12 +74,16 @@ public class Shopy extends JavaPlugin {
     }
 
     private void registerListener(){
+        /* Lobby welt */
         new BlockBreakListener();
         new EntityDamageListener();
         new PlayerJoinListener();
         new WorldListener();
         new NPCInteractListener();
         new InventoryClickListener();
+
+        /* Shop Welt */
+        new de.dome.shopy.listener.shop.BlockBreakListener();
     }
 
     private void registerCommands(){
@@ -88,6 +92,7 @@ public class Shopy extends JavaPlugin {
         getCommand("setnpcspawn").setExecutor(new SetNpcSpawn());
         getCommand("shop").setExecutor(new ShopCMD());
         getCommand("spawn").setExecutor(new SpawnCMD());
+        getCommand("setshopzone").setExecutor(new SetShopZone());
     }
 
     private void registerNPC(){

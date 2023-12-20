@@ -50,11 +50,29 @@ public class MySQLDefault {
         Shopy.getInstance().getServer().getScheduler().runTask(Shopy.getInstance(), new Runnable() {
             @Override
             public void run() {
+                Shopy.getInstance().getMySQLConntion().query("CREATE TABLE IF NOT EXISTS shop_template (" +
+                        "    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
+                        "    name VARCHAR(150) NOT NULL," +
+                        "    template_ordner VARCHAR(500)" +
+                        ") ");
+
+                Shopy.getInstance().getMySQLConntion().query("CREATE TABLE IF NOT EXISTS shop_template_zonen (" +
+                        "    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
+                        "    template INT NOT NULL," +
+                        "    locationen_1 TEXT NOT NULL," +
+                        "    locationen_2 TEXT NOT NULL," +
+                        "    anordnung INT," +
+                        "    FOREIGN KEY (template) REFERENCES shop_template(id)" +
+                        ") ");
+
                 Shopy.getInstance().getMySQLConntion().query("CREATE TABLE IF NOT EXISTS shop (" +
                         "    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
+                        "    template INT NOT NULL," +
                         "    owner VARCHAR(36) NOT NULL," +
                         "    shop_level VARCHAR(16) NOT NULL," +
-                        "    shop_ordner VARCHAR(500)" +
+                        "    shop_ordner VARCHAR(500)," +
+                        "    shop_zones INT NOT NULL," +
+                        "    FOREIGN KEY (template) REFERENCES shop_template(id)" +
                         ") ");
 
                 Shopy.getInstance().getMySQLConntion().query("CREATE TABLE IF NOT EXISTS ressource (" +
@@ -83,6 +101,8 @@ public class MySQLDefault {
                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO ressource (name, beschreibung, typ) VALUES ('Holz', 'Ein grundlegendes Material', 'STANDART')" );
                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO ressource (name, beschreibung, typ) VALUES ('Stein', 'Ein grundlegendes Material', 'STANDART')" );
                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO ressource (name, beschreibung, typ) VALUES ('Eisen', 'Ein grundlegendes Material', 'STANDART')" );
+
+                Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_template (name, template_ordner) VALUES ('Standart', 'vorlage1')" );
             }
         });
     }

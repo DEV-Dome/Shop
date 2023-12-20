@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.concurrent.CompletableFuture;
 
 public class InventoryClickListener implements Listener {
 
@@ -43,7 +44,7 @@ public class InventoryClickListener implements Listener {
                         public void run() {
                             try {
                                 String weltName = "sps_" + p.getUniqueId() + "_";
-                                Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop (owner, shop_level, shop_ordner) VALUES ('" + p.getUniqueId() + "', 1, NULL)");
+                                Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop (owner, template, shop_level, shop_ordner, shop_zones) VALUES ('" + p.getUniqueId() + "', 1, 1, NULL, 1)");
 
                                 String query = "SELECT * FROM shop WHERE owner = '" + p.getUniqueId() + "' ORDER BY id DESC";
                                 ResultSet result =  Shopy.getInstance().getMySQLConntion().resultSet(query);
@@ -58,20 +59,17 @@ public class InventoryClickListener implements Listener {
                                     kopiereOrdner(von, zu);
                                     Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + " " + zu.toPath().toString());
 
-                                    Shopy.getInstance().getServer().getScheduler().runTask(Shopy.getInstance(), new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            WorldCreator creator = new WorldCreator(zu.getPath());
+                                    CompletableFuture.runAsync(() -> {
+                                        WorldCreator creator = new WorldCreator(zu.getPath());
 
-                                            creator.environment(World.Environment.NORMAL);
-                                            creator.type(WorldType.NORMAL);
+                                        creator.environment(World.Environment.NORMAL);
+                                        creator.type(WorldType.NORMAL);
 
-                                            World neueWelt = creator.createWorld();
+                                        World neueWelt = creator.createWorld();
 
-                                            p.teleport(neueWelt.getSpawnLocation());
-                                            p.sendMessage(Shopy.getInstance().getPrefix() + "Dein Shop wurde erstellt. Du kannst nun Loslegen.");
-                                            new Shop(p.getUniqueId());
-                                        }
+                                        p.teleport(neueWelt.getSpawnLocation());
+                                        p.sendMessage(Shopy.getInstance().getPrefix() + "Dein Shop wurde erstellt. Du kannst nun Loslegen.");
+                                        new Shop(p.getUniqueId());
                                     });
 
                                     Shopy.getInstance().getMySQLConntion().query("UPDATE shop SET shop_ordner = '" + weltName +"' WHERE id = " + shop_id);

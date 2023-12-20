@@ -12,3 +12,4 @@ commands:
   setnpcspawn:
   shop:
   spawn:
+  setshopzone:
