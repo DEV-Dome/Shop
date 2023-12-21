@@ -55,7 +55,11 @@ public class BlockBreakListener implements Listener {
                 p.sendMessage(Shopy.getInstance().getPrefix() + "1");
                 if(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getWorld().getName().equalsIgnoreCase(e.getBlock().getWorld().getName()) || p.hasPermission("shopy.bypass.buildOnOtherWorlds")){
                     p.sendMessage(Shopy.getInstance().getPrefix() + "2");
+
+
                     Shop ps = Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
+
+                    p.sendMessage(Shopy.getInstance().getPrefix() + ps.getZones().size());
                     for(Cuboid cb : ps.getZones()){
                         p.sendMessage(Shopy.getInstance().getPrefix() + cb.getCenter());
                         if(cb.contains(e.getBlock())){
