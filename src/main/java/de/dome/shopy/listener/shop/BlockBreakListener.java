@@ -51,19 +51,14 @@ public class BlockBreakListener implements Listener {
                 return;
             }
 
+            /* Überprüfe ob der Spieler, auf der Fläche von Shop bauen darf */
             if(Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())){
-                p.sendMessage(Shopy.getInstance().getPrefix() + "1");
+                /* Check, ist es der Shop von Spieler oder hat er eine Admin permission */
                 if(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getWorld().getName().equalsIgnoreCase(e.getBlock().getWorld().getName()) || p.hasPermission("shopy.bypass.buildOnOtherWorlds")){
-                    p.sendMessage(Shopy.getInstance().getPrefix() + "2");
-
-
                     Shop ps = Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
-
-                    p.sendMessage(Shopy.getInstance().getPrefix() + ps.getZones().size());
+                    /* Check, ob sich der Spieler in einem Grundstück befindet, welches der Spieler auch schon gekauft hat */
                     for(Cuboid cb : ps.getZones()){
-                        p.sendMessage(Shopy.getInstance().getPrefix() + cb.getCenter());
                         if(cb.contains(e.getBlock())){
-
                             return;
                         }
                     }

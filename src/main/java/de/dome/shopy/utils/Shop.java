@@ -33,7 +33,6 @@ public class Shop {
                 this.level = result.getInt("shop_level");
                 String world = Shopy.getInstance().getDataFolder().getPath() + "/shop_welten/"  + result.getString("shop_ordner");
 
-                this.owner.sendMessage(Shopy.getInstance().getPrefix() + "TEST!");
                 Shopy.getInstance().getSpielerShops().put(ownerUUID, this);
                 loadWorld(world);
                 CompletableFuture.runAsync(() -> {
@@ -41,29 +40,22 @@ public class Shop {
                     Location loc2 = null;
                     /* Welt Zonen Laden */
                     try {
-                        this.owner.sendMessage(Shopy.getInstance().getPrefix() + "TEST! 2");
                         String queryZones = "SELECT * FROM shop_template_zonen WHERE template = " + result.getInt("template") +" LIMIT " + result.getInt("shop_zones");
 
                         ResultSet resultZones = Shopy.getInstance().getMySQLConntion().resultSet(queryZones);
-                        this.owner.sendMessage(Shopy.getInstance().getPrefix() + "TEST! 3");
                         while(resultZones.next()){
-                            this.owner.sendMessage(Shopy.getInstance().getPrefix() + "TEST! 4");
-                             loc1 = getLocationFromString(resultZones.getString("locationen_1"));
+                            loc1 = getLocationFromString(resultZones.getString("locationen_1"));
                             loc1.setY(-80);
 
-                             loc2 = getLocationFromString(resultZones.getString("locationen_2"));
+                            loc2 = getLocationFromString(resultZones.getString("locationen_2"));
                             loc2.setY(150);
+
+                            Cuboid add = new Cuboid(loc1, loc2);
+                            zones.add(add);
                         }
-                        this.owner.sendMessage(Shopy.getInstance().getPrefix() + "TEST! 5");
                     } catch (SQLException e) {
                         Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + e.getMessage());
                     }
-                    this.owner.sendMessage(Shopy.getInstance().getPrefix() + "TEST! 6");
-                    Cuboid add = new Cuboid(loc1, loc2);
-                    zones.add(add);
-
-                    this.owner.sendMessage(Shopy.getInstance().getPrefix() + "Arraylist §e" + zones.size() + "");
-                    this.owner.sendMessage(Shopy.getInstance().getPrefix() + "Zone mit der Mitte §e" + add.getCenter() + " §7Hinzugefügt");
                 });
 
             }
@@ -110,9 +102,9 @@ public class Shop {
 
         String[] dataArray = locationString.split(",");
 
-        String worldname =      dataArray[0].split("name=")[1];
-        worldname.substring(0, worldname.length() - 1);
-        World world =           Bukkit.getWorld(worldname);
+        String worldname = dataArray[0].split("name=")[1];
+        worldname = worldname.substring(0, worldname.length() - 1);
+        World world = Bukkit.getWorld(worldname);
 
         double x =      Double.parseDouble(dataArray[1].split("=")[1]);
         double y =      Double.parseDouble(dataArray[2].split("=")[1]);

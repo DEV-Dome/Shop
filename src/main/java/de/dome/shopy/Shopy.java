@@ -70,6 +70,11 @@ public class Shopy extends JavaPlugin {
     public void onDisable() {
         super.onDisable();
 
+        /* Alle spieler beim Reload kicken */
+        for(Player all : Bukkit.getOnlinePlayers()){
+            all.kick();
+        }
+
         Bukkit.getConsoleSender().sendMessage(prefix + "§cPlugin getsoppt");
     }
 
