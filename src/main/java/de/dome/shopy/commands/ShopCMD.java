@@ -2,6 +2,9 @@ package de.dome.shopy.commands;
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.Shop;
+import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
+import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
+import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -20,18 +23,18 @@ public class ShopCMD implements CommandExecutor {
             Shop shop = Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
 
             if(Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())){
+                RyseInventory.builder().title("§9Shop")
+                        .rows(5)
+                        .provider(new InventoryProvider() {
+                            @Override
+                            public void init(Player player, InventoryContents contents) {
+                                ArrayList beschreibungShopInfo = new ArrayList<>();
+                                beschreibungShopInfo.add("§7Level: §9" + shop.getLevel());
 
-                Inventory inv = Bukkit.createInventory(null, 45, "§9Shop");
-
-                ArrayList beschreibungShopInfo = new ArrayList<>();
-                beschreibungShopInfo.add("§7Level: §9" + shop.getLevel());
-
-
-                inv.setItem(13, Shopy.getInstance().createItemWithLore(Material.CHEST, "§eShop von " + p.getName(), beschreibungShopInfo));
-                inv.setItem(31, Shopy.getInstance().createItem(Material.NETHER_STAR, "§7zum Shop Teleporiren"));
-
-                p.openInventory(inv);
-
+                                contents.set(13, Shopy.getInstance().createItemWithLore(Material.CHEST, "§eShop von " + p.getName(), beschreibungShopInfo));
+                                contents.set(31, Shopy.getInstance().createItem(Material.NETHER_STAR, "§7zum Shop Teleporiren"));
+                            }
+                        }).build(Shopy.getInstance()).open(p);
             }else {
                 p.sendMessage(Shopy.getInstance().getPrefix() + "Du hast dir noch keinen Shop erstellt. Dieses kannst du beim §eWelten Ersteller§7 tun.");
             }

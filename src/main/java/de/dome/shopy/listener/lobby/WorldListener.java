@@ -20,6 +20,8 @@ public class WorldListener implements Listener {
 
     @EventHandler
     public void timeSkip(TimeSkipEvent e) {
-        e.setCancelled(true);
+       if(e.getWorld().getName().equalsIgnoreCase("world")){
+           e.setCancelled(true);
+       }
     }
 }

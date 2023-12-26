@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
@@ -91,8 +92,30 @@ public class InventoryClickListener implements Listener {
             if(item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()){
                 if(item.getType() == Material.NETHER_STAR){
 
-                    p.teleport(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getWorld().getSpawnLocation());
+                    if (!Shopy.getInstance().getPlayersNotTeleport().contains(p)) {
+                        /* Countdown, damit Spieler erst nach 5 Sekunden zum Spawn teleportiert wird */
+                        p.closeInventory();
+                        Shopy.getInstance().getPlayersNotTeleport().add(p);
 
+                        new BukkitRunnable() {
+                            int countdownTime = 3;
+
+                            @Override
+                            public void run() {
+                                if (countdownTime <= 0) {
+                                    cancel();
+                                    p.teleport(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getWorld().getSpawnLocation());
+                                    p.sendMessage(Shopy.getInstance().getPrefix() + "§aDu wurdest zu deinem Shop Teleporiert.");
+                                    if(Shopy.getInstance().getPlayersNotTeleport().contains(p)) Shopy.getInstance().getPlayersNotTeleport().remove(p);
+                                } else {
+                                    p.sendMessage(Shopy.getInstance().getPrefix() + "Du wirst in " + countdownTime + " Sekunden zum Spawn Teleporiert.");
+                                    countdownTime--;
+                                }
+                            }
+                        }.runTaskTimer(Shopy.getInstance(), 0L, 20L);
+                    }else {
+                        p.sendMessage(Shopy.getInstance().getPrefix() + "§cDu kannst dich zurzeit nicht Teleporieren");
+                    }
                 }else {
                     e.setCancelled(true);
                 }

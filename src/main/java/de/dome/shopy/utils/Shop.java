@@ -3,6 +3,7 @@ package de.dome.shopy.utils;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import de.dome.shopy.Shopy;
+import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
@@ -19,48 +20,54 @@ public class Shop {
     int level;
     World world;
     ArrayList<Cuboid> zones;
+    RessourenShopManger rsm;
+
 
     public Shop(UUID ownerUUID){
         zones = new ArrayList<>();
 
-        try {
-            String query = "SELECT * FROM shop WHERE owner = '" + ownerUUID + "' LIMIT 1";
-            ResultSet result = Shopy.getInstance().getMySQLConntion().resultSet(query);
+        CompletableFuture.runAsync(() -> {
+            try {
+                String query = "SELECT * FROM shop WHERE owner = '" + ownerUUID + "' LIMIT 1";
+                ResultSet result = Shopy.getInstance().getMySQLConntion().resultSet(query);
 
-            if (result.next()){
-                this.shopId = result.getInt("id");
-                this.owner = Bukkit.getPlayer(UUID.fromString(result.getString("owner")));
-                this.level = result.getInt("shop_level");
-                String world = Shopy.getInstance().getDataFolder().getPath() + "/shop_welten/"  + result.getString("shop_ordner");
+                /* Shop daten aus datenbank laden*/
+                if (result.next()){
+                    this.shopId = result.getInt("id");
+                    this.owner = Bukkit.getPlayer(UUID.fromString(result.getString("owner")));
+                    this.level = result.getInt("shop_level");
+                    String world = Shopy.getInstance().getDataFolder().getPath() + "/shop_welten/"  + result.getString("shop_ordner");
 
-                Shopy.getInstance().getSpielerShops().put(ownerUUID, this);
-                loadWorld(world);
-                CompletableFuture.runAsync(() -> {
-                    Location loc1 = null;
-                    Location loc2 = null;
-                    /* Welt Zonen Laden */
-                    try {
-                        String queryZones = "SELECT * FROM shop_template_zonen WHERE template = " + result.getInt("template") +" LIMIT " + result.getInt("shop_zones");
+                    Shopy.getInstance().getSpielerShops().put(ownerUUID, this);
+                    loadWorld(world);
 
-                        ResultSet resultZones = Shopy.getInstance().getMySQLConntion().resultSet(queryZones);
-                        while(resultZones.next()){
-                            loc1 = getLocationFromString(resultZones.getString("locationen_1"));
-                            loc1.setY(-80);
+                        /* Welt Zonen Laden */
+                        Location loc1 = null;
+                        Location loc2 = null;
 
-                            loc2 = getLocationFromString(resultZones.getString("locationen_2"));
-                            loc2.setY(150);
+                        try {
+                            String queryZones = "SELECT * FROM shop_template_zonen WHERE template = " + result.getInt("template") +" LIMIT " + result.getInt("shop_zones");
 
-                            Cuboid add = new Cuboid(loc1, loc2);
-                            zones.add(add);
+                            ResultSet resultZones = Shopy.getInstance().getMySQLConntion().resultSet(queryZones);
+                            while(resultZones.next()){
+                                loc1 = getLocationFromString(resultZones.getString("locationen_1"));
+                                loc1.setY(-80);
+
+                                loc2 = getLocationFromString(resultZones.getString("locationen_2"));
+                                loc2.setY(150);
+
+                                Cuboid add = new Cuboid(loc1, loc2);
+                                zones.add(add);
+                            }
+                        } catch (SQLException e) {
+                            Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
                         }
-                    } catch (SQLException e) {
-                        Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + e.getMessage());
-                    }
-                });
+                }
 
-            }
-        } catch (SQLException e) { }
+            } catch (SQLException e) { }
+        });
 
+        rsm = new RessourenShopManger(this);
     }
 
     public void loadWorld(String world){

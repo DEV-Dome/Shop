@@ -4,9 +4,11 @@ import de.dome.shopy.commands.*;
 import de.dome.shopy.listener.lobby.*;
 import de.dome.shopy.utils.MySQL;
 import de.dome.shopy.utils.MySQLDefault;
+import de.dome.shopy.utils.Ressoure;
 import de.dome.shopy.utils.Shop;
 import dev.sergiferry.playernpc.api.NPC;
 import dev.sergiferry.playernpc.api.NPCLib;
+import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
@@ -19,9 +21,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class Shopy extends JavaPlugin {
 
@@ -32,7 +37,7 @@ public class Shopy extends JavaPlugin {
     MySQL mySQLConntion;
     HashMap<UUID, Shop> spielerShops;
     ArrayList<Player> playersNotTeleport;
-
+    InventoryManager inventoryManager;
 
     @Override
     public void onEnable() {
@@ -40,6 +45,8 @@ public class Shopy extends JavaPlugin {
         instance = this;
         playersNotTeleport = new ArrayList<>();
         spielerShops = new HashMap<>();
+        inventoryManager = new InventoryManager(getInstance());
+        inventoryManager.invoke();
 
         registerListener();
         registerCommands();
@@ -98,6 +105,7 @@ public class Shopy extends JavaPlugin {
         getCommand("shop").setExecutor(new ShopCMD());
         getCommand("spawn").setExecutor(new SpawnCMD());
         getCommand("setshopzone").setExecutor(new SetShopZone());
+        getCommand("ressouren").setExecutor(new RessourenCMD());
     }
 
     private void registerNPC(){
@@ -189,5 +197,9 @@ public class Shopy extends JavaPlugin {
 
     public ArrayList<Player> getPlayersNotTeleport() {
         return playersNotTeleport;
+    }
+
+    public InventoryManager getInventoryManager() {
+        return inventoryManager;
     }
 }

@@ -35,6 +35,9 @@ public class MySQLDefault {
                 }else {
                     loadDefault();
                 }
+
+                /* Ressouren Laden */
+                Ressoure.registerRessouren();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
