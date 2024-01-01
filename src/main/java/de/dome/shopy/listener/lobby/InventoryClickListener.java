@@ -60,7 +60,8 @@ public class InventoryClickListener implements Listener {
                                     kopiereOrdner(von, zu);
                                     Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + " " + zu.toPath().toString());
 
-                                    CompletableFuture.runAsync(() -> {
+                                    /* Welt auf dem Haupt Thread Ausführen */
+                                    Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
                                         WorldCreator creator = new WorldCreator(zu.getPath());
 
                                         creator.environment(World.Environment.NORMAL);
@@ -70,8 +71,9 @@ public class InventoryClickListener implements Listener {
 
                                         p.teleport(neueWelt.getSpawnLocation());
                                         p.sendMessage(Shopy.getInstance().getPrefix() + "Dein Shop wurde erstellt. Du kannst nun Loslegen.");
-                                        new Shop(p.getUniqueId());
                                     });
+
+                                    new Shop(p.getUniqueId());
 
                                     Shopy.getInstance().getMySQLConntion().query("UPDATE shop SET shop_ordner = '" + weltName +"' WHERE id = " + shop_id);
                                 }else {
@@ -116,7 +118,9 @@ public class InventoryClickListener implements Listener {
                     }else {
                         p.sendMessage(Shopy.getInstance().getPrefix() + "§cDu kannst dich zurzeit nicht Teleporieren");
                     }
-                }else {
+                }else if(item.getType() == Material.HEART_OF_THE_SEA) {
+                    Bukkit.dispatchCommand(p, "ressouren");
+                } else {
                     e.setCancelled(true);
                 }
             }

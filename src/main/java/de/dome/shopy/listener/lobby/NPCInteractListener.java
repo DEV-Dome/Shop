@@ -38,7 +38,7 @@ public class NPCInteractListener implements Listener {
 
                 p.openInventory(inv);
             }else {
-                p.sendMessage(Shopy.getInstance().getPrefix() + "Du besitzt schon einen Shop!");
+                Bukkit.dispatchCommand(p, "shop");
             }
         }
     }

@@ -1,9 +1,6 @@
 package de.dome.shopy.utils;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import de.dome.shopy.Shopy;
-import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
@@ -20,7 +17,7 @@ public class Shop {
     int level;
     World world;
     ArrayList<Cuboid> zones;
-    RessourenShopManger rsm;
+    RessourenShopManger ressourenShopManger;
 
 
     public Shop(UUID ownerUUID){
@@ -41,33 +38,33 @@ public class Shop {
                     Shopy.getInstance().getSpielerShops().put(ownerUUID, this);
                     loadWorld(world);
 
-                        /* Welt Zonen Laden */
-                        Location loc1 = null;
-                        Location loc2 = null;
-
                         try {
                             String queryZones = "SELECT * FROM shop_template_zonen WHERE template = " + result.getInt("template") +" LIMIT " + result.getInt("shop_zones");
+                            owner.sendMessage(Shopy.getInstance().getPrefix() + "§5 " + queryZones);
 
                             ResultSet resultZones = Shopy.getInstance().getMySQLConntion().resultSet(queryZones);
                             while(resultZones.next()){
-                                loc1 = getLocationFromString(resultZones.getString("locationen_1"));
+                                Location loc1 = getLocationFromString(resultZones.getString("locationen_1"));
                                 loc1.setY(-80);
 
-                                loc2 = getLocationFromString(resultZones.getString("locationen_2"));
+
+                                Location loc2 = getLocationFromString(resultZones.getString("locationen_2"));
                                 loc2.setY(150);
 
                                 Cuboid add = new Cuboid(loc1, loc2);
+
                                 zones.add(add);
                             }
                         } catch (SQLException e) {
                             Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
                         }
+                    owner.sendMessage(Shopy.getInstance().getPrefix() + "§5Zonennen Geladen: " + zones.size());
                 }
 
             } catch (SQLException e) { }
         });
 
-        rsm = new RessourenShopManger(this);
+        ressourenShopManger = new RessourenShopManger(this);
     }
 
     public void loadWorld(String world){
@@ -101,6 +98,10 @@ public class Shop {
 
     public ArrayList<Cuboid> getZones() {
         return zones;
+    }
+
+    public RessourenShopManger getRessourenShopManger() {
+        return ressourenShopManger;
     }
 
     //Location{world=CraftWorld{name=plugins/Shopy/shop_welten/sps_d202f2c8-d4e7-4cc8-94e5-285f3d026a6f_1},x=0.0,y=-60.0,z=-17.0,pitch=0.0,yaw=0.0}

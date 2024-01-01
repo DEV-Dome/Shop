@@ -30,9 +30,10 @@ public class ShopCMD implements CommandExecutor {
                             public void init(Player player, InventoryContents contents) {
                                 ArrayList beschreibungShopInfo = new ArrayList<>();
                                 beschreibungShopInfo.add("§7Level: §9" + shop.getLevel());
-
                                 contents.set(13, Shopy.getInstance().createItemWithLore(Material.CHEST, "§eShop von " + p.getName(), beschreibungShopInfo));
-                                contents.set(31, Shopy.getInstance().createItem(Material.NETHER_STAR, "§7zum Shop Teleporiren"));
+
+                                contents.set(29, Shopy.getInstance().createItem(Material.HEART_OF_THE_SEA, "§9Shop Ressouren"));
+                                contents.set(31, Shopy.getInstance().createItem(Material.NETHER_STAR, "§9zum Shop Teleporiren"));
                             }
                         }).build(Shopy.getInstance()).open(p);
             }else {
