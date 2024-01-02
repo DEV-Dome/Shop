@@ -24,7 +24,7 @@ public class PlayerJoinListener implements Listener {
         if(Shopy.getInstance().getServerSpawn() != null){
             p.teleport(Shopy.getInstance().getServerSpawn());
         }
-        new Shop(p.getUniqueId());
+        new Shop(p.getUniqueId(), false);
     }
 
     public void playerQuit(PlayerQuitEvent e) {

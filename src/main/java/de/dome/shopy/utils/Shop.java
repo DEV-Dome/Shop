@@ -18,66 +18,89 @@ public class Shop {
     World world;
     ArrayList<Cuboid> zones;
     RessourenShopManger ressourenShopManger;
+    /* Halte fest, ob überhaupt ein Spielershop gefunden wurde  */
+    private boolean loadShop = false;
 
-
-    public Shop(UUID ownerUUID){
+    public Shop(UUID ownerUUID, Boolean playerTeleport){
         zones = new ArrayList<>();
 
-        CompletableFuture.runAsync(() -> {
+        CompletableFuture<Void> basisDaten = CompletableFuture.runAsync(() -> {
             try {
                 String query = "SELECT * FROM shop WHERE owner = '" + ownerUUID + "' LIMIT 1";
                 ResultSet result = Shopy.getInstance().getMySQLConntion().resultSet(query);
 
                 /* Shop daten aus datenbank laden*/
                 if (result.next()){
+                    loadShop = true;
+
                     this.shopId = result.getInt("id");
                     this.owner = Bukkit.getPlayer(UUID.fromString(result.getString("owner")));
                     this.level = result.getInt("shop_level");
                     String world = Shopy.getInstance().getDataFolder().getPath() + "/shop_welten/"  + result.getString("shop_ordner");
 
-                    Shopy.getInstance().getSpielerShops().put(ownerUUID, this);
-                    loadWorld(world);
-
-                        try {
-                            String queryZones = "SELECT * FROM shop_template_zonen WHERE template = " + result.getInt("template") +" LIMIT " + result.getInt("shop_zones");
-                            owner.sendMessage(Shopy.getInstance().getPrefix() + "§5 " + queryZones);
-
-                            ResultSet resultZones = Shopy.getInstance().getMySQLConntion().resultSet(queryZones);
-                            while(resultZones.next()){
-                                Location loc1 = getLocationFromString(resultZones.getString("locationen_1"));
-                                loc1.setY(-80);
-
-
-                                Location loc2 = getLocationFromString(resultZones.getString("locationen_2"));
-                                loc2.setY(150);
-
-                                Cuboid add = new Cuboid(loc1, loc2);
-
-                                zones.add(add);
-                            }
-                        } catch (SQLException e) {
-                            Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
+                    Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
+                        owner.sendMessage(Shopy.getInstance().getPrefix() + "§5worldName: " + world + " - " + Bukkit.getWorld(world));
+                        if(Bukkit.getWorld(world) == null){
+                            loadWorld(world);
+                        }else {
+                            this.world = Bukkit.getWorld(world);
                         }
-                    owner.sendMessage(Shopy.getInstance().getPrefix() + "§5Zonennen Geladen: " + zones.size());
+                        if(playerTeleport){
+                            owner.teleport(this.world.getSpawnLocation());
+                        }
+                    });
+
+
+                    Shopy.getInstance().getSpielerShops().put(ownerUUID, this);
+
+                    try {
+                        String queryZones = "SELECT * FROM shop_template_zonen WHERE template = " + result.getInt("template") +" LIMIT " + result.getInt("shop_zones");
+
+                        ResultSet resultZones = Shopy.getInstance().getMySQLConntion().resultSet(queryZones);
+                        while(resultZones.next()){
+                            Location loc1 = getLocationFromString(resultZones.getString("locationen_1"));
+                            loc1.setY(-80);
+                            loc1.setWorld(this.world);
+
+                            Location loc2 = getLocationFromString(resultZones.getString("locationen_2"));
+                            loc2.setY(150);
+                            loc2.setWorld(this.world);
+
+                            Cuboid add = new Cuboid(loc1, loc2);
+
+                            zones.add(add);
+                        }
+                    } catch (SQLException e) {
+                        Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
+                    }
                 }
 
             } catch (SQLException e) { }
         });
+        basisDaten.thenRun(() -> {
+            if(loadShop){
+                this.ressourenShopManger = new RessourenShopManger(this);
+            }
+        });
 
-        ressourenShopManger = new RessourenShopManger(this);
+
     }
 
     public void loadWorld(String world){
-        WorldCreator creator = new WorldCreator(world);
+        Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
+            WorldCreator creator = new WorldCreator(world);
 
-        creator.environment(World.Environment.NORMAL);
-        creator.type(WorldType.NORMAL);
+            creator.environment(World.Environment.NORMAL);
+            creator.type(WorldType.NORMAL);
 
-        this.world = creator.createWorld();
+            this.world = creator.createWorld();
+        });
     }
 
     public void unLoadWorld(){
-        Bukkit.unloadWorld(world, true);
+        Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
+            Bukkit.unloadWorld(world, true);
+        });
     }
 
     public Player getOwner() {
