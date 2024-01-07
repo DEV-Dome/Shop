@@ -84,7 +84,8 @@ public class MySQLDefault {
                         "    icon VARCHAR(250) NOT NULL," +
                         "    name VARCHAR(50) NOT NULL," +
                         "    beschreibung TEXT NOT NULL," +
-                        "    typ ENUM('STANDART', 'AUFWERTER') NOT NULL" +
+                        "    typ ENUM('STANDART', 'AUFWERTER') NOT NULL," +
+                        "    reinfolge INT NOT NULL" +
                         ") ");
 
                 Shopy.getInstance().getMySQLConntion().query("CREATE TABLE IF NOT EXISTS shop_ressource (" +
@@ -103,9 +104,9 @@ public class MySQLDefault {
         Shopy.getInstance().getServer().getScheduler().runTask(Shopy.getInstance(), new Runnable() {
             @Override
             public void run() {
-                Shopy.getInstance().getMySQLConntion().query("INSERT INTO ressource (icon, name, beschreibung, typ) VALUES ('OAK_WOOD', 'Holz', 'Ein grundlegendes Material', 'STANDART')" );
-                Shopy.getInstance().getMySQLConntion().query("INSERT INTO ressource (icon, name, beschreibung, typ) VALUES ('STONE', 'Stein', 'Ein grundlegendes Material', 'STANDART')" );
-                Shopy.getInstance().getMySQLConntion().query("INSERT INTO ressource (icon, name, beschreibung, typ) VALUES ('IRON_INGOT', 'Eisen', 'Ein grundlegendes Material', 'STANDART')" );
+                Shopy.getInstance().getMySQLConntion().query("INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge) VALUES ('OAK_WOOD', 'Holz', 'Ein grundlegendes Material', 'STANDART', 1)" );
+                Shopy.getInstance().getMySQLConntion().query("INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge) VALUES ('STONE', 'Stein', 'Ein grundlegendes Material', 'STANDART', 2)" );
+                Shopy.getInstance().getMySQLConntion().query("INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge) VALUES ('IRON_INGOT', 'Eisen', 'Ein grundlegendes Material', 'STANDART', 3)" );
 
                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_template (name, template_ordner) VALUES ('Standart', 'vorlage1')" );
             }

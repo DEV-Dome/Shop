@@ -21,7 +21,7 @@ public class WorldListener implements Listener {
     @EventHandler
     public void timeSkip(TimeSkipEvent e) {
        if(e.getWorld().getName().equalsIgnoreCase("world")){
-           e.setCancelled(true);
+          e.setCancelled(true);
        }
     }
 }

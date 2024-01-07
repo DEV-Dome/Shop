@@ -66,16 +66,7 @@ public class InventoryClickListener implements Listener {
                         } catch (SQLException erro) {} catch (IOException ex) {}
                     });
                     shopErstellen.thenRun(() -> {
-//                        WorldCreator creator = new WorldCreator(zu.getPath());
-//
-//                        creator.environment(World.Environment.NORMAL);
-//                        creator.type(WorldType.NORMAL);
-//
-//                        World neueWelt = creator.createWorld();
-//
-//                        p.teleport(neueWelt.getSpawnLocation());
                         new Shop(p.getUniqueId(), true);
-
                         p.sendMessage(Shopy.getInstance().getPrefix() + "Dein Shop wurde erstellt. Du kannst nun Loslegen.");
                     });
 

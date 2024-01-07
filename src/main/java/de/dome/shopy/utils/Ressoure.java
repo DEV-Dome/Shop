@@ -51,7 +51,7 @@ public class Ressoure {
             ressoureList = new ArrayList<>();
 
             try {
-                String queryRessourecs = "SELECT * FROM ressource";
+                String queryRessourecs = "SELECT * FROM ressource ORDER BY reinfolge";
 
                 ResultSet resultRessourecs = Shopy.getInstance().getMySQLConntion().resultSet(queryRessourecs);
                 while (resultRessourecs.next()) {
