@@ -29,8 +29,9 @@ public class RessourenCMD implements CommandExecutor {
                             public void init(Player player, InventoryContents contents) {
                                 int solt = 10;
                                 int zaheler = 0;
-                                for (Map.Entry<Ressoure, Integer> shopRessoure  : Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger().getShopRessoure().entrySet()) {
+                                for (Map.Entry<Ressoure, Integer> shopRessoure : Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger().getShopRessoure().entrySet()) {
                                     Ressoure ressoure = shopRessoure.getKey();
+                                    if(!ressoure.getType().equalsIgnoreCase("STANDART")) continue;
 
                                     ArrayList<String> beschreibung = new ArrayList<>();
                                     beschreibung.add("§7Menge: §e" + shopRessoure.getValue());

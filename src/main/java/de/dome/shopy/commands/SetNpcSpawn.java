@@ -19,7 +19,7 @@ public class SetNpcSpawn implements CommandExecutor {
             Player p = (Player) sender;
 
             if(args.length != 0){
-                if(p.hasPermission("")){
+                if(p.hasPermission("shopy.cmd.setnpcspawn")){
                     File configFile = new File(Shopy.getInstance().getDataFolder(), "npc.yml");
                     FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 

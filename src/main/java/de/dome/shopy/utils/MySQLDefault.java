@@ -84,7 +84,9 @@ public class MySQLDefault {
                         "    icon VARCHAR(250) NOT NULL," +
                         "    name VARCHAR(50) NOT NULL," +
                         "    beschreibung TEXT NOT NULL," +
-                        "    typ ENUM('STANDART', 'AUFWERTER') NOT NULL," +
+                        "    typ ENUM('STANDART', 'AUFWERTER', 'WAHRUNG') NOT NULL," +
+                        "    minimale_kosten DECIMAL(8,2) NOT NULL," +
+                        "    maximale_kosten DECIMAL(8,2) NOT NULL," +
                         "    reinfolge INT NOT NULL" +
                         ") ");
 
@@ -104,9 +106,11 @@ public class MySQLDefault {
         Shopy.getInstance().getServer().getScheduler().runTask(Shopy.getInstance(), new Runnable() {
             @Override
             public void run() {
-                Shopy.getInstance().getMySQLConntion().query("INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge) VALUES ('OAK_WOOD', 'Holz', 'Ein grundlegendes Material', 'STANDART', 1)" );
-                Shopy.getInstance().getMySQLConntion().query("INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge) VALUES ('STONE', 'Stein', 'Ein grundlegendes Material', 'STANDART', 2)" );
-                Shopy.getInstance().getMySQLConntion().query("INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge) VALUES ('IRON_INGOT', 'Eisen', 'Ein grundlegendes Material', 'STANDART', 3)" );
+                Shopy.getInstance().getMySQLConntion().query("INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('OAK_WOOD', 'Holz', 'Ein grundlegendes Material', 'STANDART', 1, '5', '15')" );
+                Shopy.getInstance().getMySQLConntion().query("INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('STONE', 'Stein', 'Ein grundlegendes Material', 'STANDART', 2, '8', '20')" );
+                Shopy.getInstance().getMySQLConntion().query("INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('IRON_INGOT', 'Eisen', 'Ein grundlegendes Material', 'STANDART', 3, '12', '22')" );
+
+                Shopy.getInstance().getMySQLConntion().query("INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('GOLD_INGOT', 'Geld', 'Geld, zum Handeln auf der ganzen Welt', 'WAHRUNG', 100, '0', '0')" );
 
                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_template (name, template_ordner) VALUES ('Standart', 'vorlage1')" );
             }

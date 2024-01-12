@@ -2,7 +2,6 @@ package de.dome.shopy.commands;
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.listener.shop.BlockBreakListener;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,7 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.util.concurrent.CompletableFuture;
 
-public class SetShopZone implements CommandExecutor {
+public class SetShopZoneCMD implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {

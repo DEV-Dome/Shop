@@ -1,5 +1,8 @@
 shopy.cmd.setspawn
 shopy.cmd.loadDefaultValue
 shopy.cmd.setshopzone
+shopy.cmd.setnpcspawn
+shopy.cmd.setressource
 
 shopy.bypass.buildOnOtherWorlds
+shopy.bypass.interactOnOtherWorlds

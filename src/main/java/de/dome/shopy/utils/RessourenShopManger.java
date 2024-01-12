@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class RessourenShopManger {
@@ -53,5 +54,26 @@ public class RessourenShopManger {
 
     public HashMap<Ressoure, Integer> getShopRessoure() {
         return shopRessoure;
+    }
+
+    public int getRessourceValue(Ressoure ressoure){
+        int ret = -1;
+
+        for (Map.Entry<Ressoure, Integer> shopRessoure : shopRessoure.entrySet()) {
+            if(shopRessoure.getKey().getName().equalsIgnoreCase(ressoure.getName())){
+                ret = shopRessoure.getValue();
+            }
+        }
+
+        return ret;
+    }
+
+    public void setRessourcenValue(Ressoure ressoure, int newValue){
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_ressource SET menge = '"+ newValue+"' WHERE shop = " + shop.shopId + " AND ressource = " + ressoure.getId());
+        });
+
+        shopRessoure.remove(ressoure);
+        shopRessoure.put(ressoure, newValue);
     }
 }

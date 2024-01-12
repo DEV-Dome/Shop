@@ -2,9 +2,9 @@ package de.dome.shopy;
 
 import de.dome.shopy.commands.*;
 import de.dome.shopy.listener.lobby.*;
+import de.dome.shopy.listener.shop.PlayerInteractListener;
 import de.dome.shopy.utils.MySQL;
 import de.dome.shopy.utils.MySQLDefault;
-import de.dome.shopy.utils.Ressoure;
 import de.dome.shopy.utils.Shop;
 import dev.sergiferry.playernpc.api.NPC;
 import dev.sergiferry.playernpc.api.NPCLib;
@@ -21,12 +21,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 public class Shopy extends JavaPlugin {
 
@@ -96,6 +93,7 @@ public class Shopy extends JavaPlugin {
 
         /* Shop Welt */
         new de.dome.shopy.listener.shop.BlockBreakListener();
+        new PlayerInteractListener();
     }
 
     private void registerCommands(){
@@ -104,8 +102,10 @@ public class Shopy extends JavaPlugin {
         getCommand("setnpcspawn").setExecutor(new SetNpcSpawn());
         getCommand("shop").setExecutor(new ShopCMD());
         getCommand("spawn").setExecutor(new SpawnCMD());
-        getCommand("setshopzone").setExecutor(new SetShopZone());
+        getCommand("setshopzone").setExecutor(new SetShopZoneCMD());
         getCommand("ressouren").setExecutor(new RessourenCMD());
+        getCommand("money").setExecutor(new moneyCMD());
+        getCommand("setRessource").setExecutor(new setRessourceCMD());
     }
 
     private void registerNPC(){

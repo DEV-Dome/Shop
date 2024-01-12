@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -18,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 
 public class InventoryClickListener implements Listener {
@@ -65,9 +67,34 @@ public class InventoryClickListener implements Listener {
                             }
                         } catch (SQLException erro) {} catch (IOException ex) {}
                     });
+                    /* Wenn neue Shop Kopiert und gerneriert wurde, kann weiters passiern */
                     shopErstellen.thenRun(() -> {
                         new Shop(p.getUniqueId(), true);
                         p.sendMessage(Shopy.getInstance().getPrefix() + "Dein Shop wurde erstellt. Du kannst nun Loslegen.");
+
+                        /* Starter Itemes geben */
+                        String buildingHinweis  = "§7Dieser Gegenstand kann nur in der Shop-Welt platziert werden. Und entfaltet da einen besonderen Effet der über das, gewöhnlich Maß in Minecraft hinaus geht.";
+
+                        ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("§5Mithilfe dieses Gegenstandes können Ressourcen gekauft werden.");
+                        beschreibung.add("");
+                        beschreibung.add(buildingHinweis);
+
+                        p.getInventory().addItem(Shopy.getInstance().createItemWithLore(Material.LECTERN, "§9Ressourcen Mark", beschreibung));
+
+                        beschreibung = new ArrayList<>();
+                        beschreibung.add("§5Pro Item lager können 10 hergestellte Items gelagert werden.");
+                        beschreibung.add("");
+                        beschreibung.add(buildingHinweis);
+
+                        p.getInventory().addItem(Shopy.getInstance().createItemWithLore(Material.TRAPPED_CHEST, "§9Item Lager", beschreibung));
+
+                        beschreibung = new ArrayList<>();
+                        beschreibung.add("§5Pro Ressourcen lager können 10 Ressourcen gelagert werden");
+                        beschreibung.add("");
+                        beschreibung.add(buildingHinweis);
+
+                        p.getInventory().addItem(Shopy.getInstance().createItemWithLore(Material.BARREL, "§9Ressourcen Lager", beschreibung));
                     });
 
                     return;
@@ -112,6 +139,8 @@ public class InventoryClickListener implements Listener {
             }
         }
     }
+
+
 
     public void kopiereOrdner(File quelle, File ziel) throws IOException {
         // Prüfen, ob die Quelle ein Verzeichnis ist

@@ -86,10 +86,7 @@ public class Shop {
                 this.ressourenShopManger = new RessourenShopManger(this);
             }
         });
-
-
     }
-
 
     public void unLoadWorld(){
         Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {

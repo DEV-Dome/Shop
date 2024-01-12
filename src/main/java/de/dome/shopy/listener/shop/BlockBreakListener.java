@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -59,14 +60,47 @@ public class BlockBreakListener implements Listener {
                     /* Check, ob sich der Spieler in einem Grundstück befindet, welches der Spieler auch schon gekauft hat */
                     for(Cuboid cb : ps.getZones()){
                         if(cb.contains(e.getBlock())){
+                           /* Besöndere Blöcke Spawnbar machen*/
+                            if(e.getBlock().getType() == Material.LECTERN){
+                                e.setDropItems(false);
+                                String buildingHinweis  = "§7Dieser Gegenstand kann nur in der Shop-Welt platziert werden. Und entfaltet da einen besonderen Effet der über das, gewöhnlich Maß in Minecraft hinaus geht.";
+
+                                ArrayList<String> beschreibung = new ArrayList<>();
+                                beschreibung.add("§5Mithilfe dieses Gegenstandes können Ressourcen gekauft werden.");
+                                beschreibung.add("");
+                                beschreibung.add(buildingHinweis);
+
+                                p.getInventory().addItem(Shopy.getInstance().createItemWithLore(Material.LECTERN, "§9Ressourcen Mark", beschreibung));
+                            }
+                            if(e.getBlock().getType() == Material.TRAPPED_CHEST){
+                                e.setDropItems(false);
+                                String buildingHinweis  = "§7Dieser Gegenstand kann nur in der Shop-Welt platziert werden. Und entfaltet da einen besonderen Effet der über das, gewöhnlich Maß in Minecraft hinaus geht.";
+
+                                ArrayList<String> beschreibung = new ArrayList<>();
+                                beschreibung.add("§5Pro Item lager können 10 hergestellte Items gelagert werden.");
+                                beschreibung.add("");
+                                beschreibung.add(buildingHinweis);
+
+                                p.getInventory().addItem(Shopy.getInstance().createItemWithLore(Material.TRAPPED_CHEST, "§9Item Lager", beschreibung));
+                            }
+                            if(e.getBlock().getType() == Material.BARREL){
+                                e.setDropItems(false);
+                                String buildingHinweis  = "§7Dieser Gegenstand kann nur in der Shop-Welt platziert werden. Und entfaltet da einen besonderen Effet der über das, gewöhnlich Maß in Minecraft hinaus geht.";
+
+                                ArrayList<String> beschreibung = new ArrayList<>();
+                                beschreibung.add("§5Pro Ressourcen lager können 10 Ressourcen gelagert werden");
+                                beschreibung.add("");
+                                beschreibung.add(buildingHinweis);
+
+                                p.getInventory().addItem(Shopy.getInstance().createItemWithLore(Material.BARREL, "§9Ressourcen Lager", beschreibung));
+                            }
+
                             return;
                         }
                     }
                     e.setCancelled(true);
                 }
             }
-
-
         }
     }
 
