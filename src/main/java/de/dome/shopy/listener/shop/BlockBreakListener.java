@@ -82,6 +82,13 @@ public class BlockBreakListener implements Listener {
                                 beschreibung.add(buildingHinweis);
 
                                 p.getInventory().addItem(Shopy.getInstance().createItemWithLore(Material.TRAPPED_CHEST, "§9Item Lager", beschreibung));
+
+                                /* Item Effeckt beim Abbauen (negativ) */
+                                int newAmount = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getItemLager() - 10;
+                                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).changeItemLager(newAmount);
+
+                                p.sendMessage(Shopy.getInstance().getPrefix() + "Durch das Platzieren des Item, wurde dein Itemlager um 10 Plätze reduziert.");
+
                             }
                             if(e.getBlock().getType() == Material.BARREL){
                                 e.setDropItems(false);
@@ -93,6 +100,12 @@ public class BlockBreakListener implements Listener {
                                 beschreibung.add(buildingHinweis);
 
                                 p.getInventory().addItem(Shopy.getInstance().createItemWithLore(Material.BARREL, "§9Ressourcen Lager", beschreibung));
+
+                                /* Item Effeckt beim Abbauen (negativ) */
+                                int newAmount = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourcenLager() - 10;
+                                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).changeRessourcenLager(newAmount);
+
+                                p.sendMessage(Shopy.getInstance().getPrefix() + "Durch das Platzieren des Item, wurde dein Ressourcenlager um 10 Plätze reduziert.");
                             }
 
                             return;
@@ -104,22 +117,4 @@ public class BlockBreakListener implements Listener {
         }
     }
 
-    @EventHandler
-    public void blockPlace(BlockPlaceEvent e) {
-        Player p = e.getPlayer();
-
-        if(!e.getBlock().getWorld().getName().equals("world")){
-            if(Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())){
-                if(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getWorld().getName().equalsIgnoreCase(e.getBlock().getWorld().getName()) || p.hasPermission("shopy.bypass.buildOnOtherWorlds")){
-                    Shop ps = Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
-                    for(Cuboid cb : ps.getZones()){
-                        if(cb.contains(e.getBlock())){
-                            return;
-                        }
-                    }
-                    e.setCancelled(true);
-                }
-            }
-        }
-    }
 }

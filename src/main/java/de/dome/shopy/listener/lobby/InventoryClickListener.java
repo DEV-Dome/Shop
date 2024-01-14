@@ -1,6 +1,7 @@
 package de.dome.shopy.listener.lobby;
 
 import de.dome.shopy.Shopy;
+import de.dome.shopy.utils.Ressoure;
 import de.dome.shopy.utils.RessourenShopManger;
 import de.dome.shopy.utils.Shop;
 import org.bukkit.*;
@@ -62,6 +63,14 @@ public class InventoryClickListener implements Listener {
                                 Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + " " + zu.toPath().toString());
 
                                 Shopy.getInstance().getMySQLConntion().query("UPDATE shop SET shop_ordner = '" + weltName +"' WHERE id = " + shop_id);
+
+                                /*Shop werte */
+                                Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_werte (shop, wert, value) VALUES ('" + shop_id + "', 'ressourcen_lager', '5')");
+                                Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_werte (shop, wert, value) VALUES ('" + shop_id + "', 'item_lager', '10')");
+
+                                /*Start geld*/
+                                Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_ressource (shop, ressource, menge) VALUES ('" + shop_id + "', '" + Ressoure.getRessoureByName("Geld").getId() +"', '100')");
+
                             }else {
                                 p.sendMessage(Shopy.getInstance().getPrefix() + "§cBeim Erstellen deines Shops ist ein Fehler aufgetreten, wende dich bitte an den §eSupport§c.");
                             }

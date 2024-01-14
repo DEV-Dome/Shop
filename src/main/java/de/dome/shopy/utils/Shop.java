@@ -1,12 +1,16 @@
 package de.dome.shopy.utils;
 
 import de.dome.shopy.Shopy;
+import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
+import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
+import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -15,6 +19,8 @@ public class Shop {
     int shopId;
     Player owner;
     int level;
+    int ressourcenLager;
+    int itemLager;
     World world;
     ArrayList<Cuboid> zones;
     RessourenShopManger ressourenShopManger;
@@ -85,6 +91,21 @@ public class Shop {
             if(loadShop){
                 this.ressourenShopManger = new RessourenShopManger(this);
             }
+            CompletableFuture.runAsync(() -> {
+                String query = "SELECT * FROM shop_werte WHERE shop = '" + shopId + "'";
+                ResultSet result = Shopy.getInstance().getMySQLConntion().resultSet(query);
+
+                /* Shop werte daten aus datenbank laden*/
+                try {
+                    while (result.next()){
+                        if(result.getString("wert").equals("ressourcen_lager")) ressourcenLager = Integer.parseInt(result.getString("value"));
+                        if(result.getString("wert").equals("item_lager")) itemLager = Integer.parseInt(result.getString("value"));
+                    }
+                } catch (SQLException e) {
+                    Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
+                }
+
+            });
         });
     }
 
@@ -92,6 +113,62 @@ public class Shop {
         Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
             Bukkit.unloadWorld(world, true);
         });
+    }
+
+    public void openMarkplatzInventar(){
+        RyseInventory.builder().title("§9Ressouren Markplatz").rows(4).provider(new InventoryProvider() {
+            @Override
+            public void init(Player player, InventoryContents contents) {
+                int solt = 10;
+                int zaheler = 0;
+                for (Map.Entry<Ressoure, Integer> shopRessoure : Shopy.getInstance().getSpielerShops().get(owner.getUniqueId()).getRessourenShopManger().getShopRessoure().entrySet()) {
+                    Ressoure ressoure = shopRessoure.getKey();
+                    if(!ressoure.getType().equalsIgnoreCase("STANDART")) continue;
+
+                    /*
+                      Anzahl farbig markieren, damit man leichter erkennt wie der Stand ist:
+                      X < getRessourcenLager = §e (Gelb)
+                      X ==getRessourcenLager = §a (Grün)
+                      X > getRessourcenLager = §c (Rot)
+                    *  */
+                    String colorkey = "§e";
+                    if(shopRessoure.getValue() <  getRessourcenLager()) colorkey = "§e";
+                    if(shopRessoure.getValue() == getRessourcenLager()) colorkey = "§a";
+                    if(shopRessoure.getValue() >  getRessourcenLager()) colorkey = "§c";
+
+                    ArrayList<String> beschreibung = new ArrayList<>();
+                    beschreibung.add("§7Deine Menge: " + colorkey +  shopRessoure.getValue() + " §7/§e " + getRessourcenLager() + " §7" + ressoure.getName());
+                    beschreibung.add("§7Aktuelle Kosten: §e" + Math.round(ressoure.getAktuelleKosten()) + " §7€");
+                    beschreibung.add("");
+                    beschreibung.add("§6(Du hast " + ressourenShopManger.getRessourceValue(Ressoure.getRessoureByName("geld")) + " €)");
+                    beschreibung.add("");
+                    beschreibung.add("§5" + ressoure.getBeschreibung());
+
+                    contents.set(solt, Shopy.getInstance().createItemWithLore(ressoure.getIcon(), "§9" + ressoure.getName(), beschreibung));
+
+                    /* Items Anordenen */
+                    zaheler++;
+                    if (zaheler == 7) {
+                        solt += 3;
+                        zaheler = 0;
+                    } else {
+                        solt++;
+                    }
+                }
+            }
+        }).build(Shopy.getInstance()).open(owner);
+    }
+    public void changeRessourcenLager(int newAmount){
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET value = '"+ newAmount +"' WHERE wert = 'ressourcen_lager'");
+        });
+        ressourcenLager = newAmount;
+    }
+    public void changeItemLager(int newAmount){
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET value = '"+ newAmount +"' WHERE wert = 'item_lager'");
+        });
+        itemLager = newAmount;
     }
 
     public Player getOwner() {
@@ -116,6 +193,14 @@ public class Shop {
 
     public RessourenShopManger getRessourenShopManger() {
         return ressourenShopManger;
+    }
+
+    public int getRessourcenLager() {
+        return ressourcenLager;
+    }
+
+    public int getItemLager() {
+        return itemLager;
     }
 
     //Location{world=CraftWorld{name=plugins/Shopy/shop_welten/sps_d202f2c8-d4e7-4cc8-94e5-285f3d026a6f_1},x=0.0,y=-60.0,z=-17.0,pitch=0.0,yaw=0.0}

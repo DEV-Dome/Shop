@@ -6,18 +6,53 @@ import org.bukkit.Bukkit;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class RessourenShopManger {
 
     Shop shop;
-    private HashMap<Ressoure, Integer> shopRessoure;
+    private Map<Ressoure, Integer> shopRessoure;
 
     public RessourenShopManger(Shop shop){
         this.shop = shop;
-        this.shopRessoure = new HashMap<>();
+        this.shopRessoure = new LinkedHashMap<>();
 
+        ladeResscuren();
+    }
+
+    public Shop getShop() {
+        return shop;
+    }
+
+    public Map<Ressoure, Integer> getShopRessoure() {
+        return shopRessoure;
+    }
+
+    public int getRessourceValue(Ressoure ressoure){
+        int ret = -1;
+
+        for (Map.Entry<Ressoure, Integer> shopRessoure : shopRessoure.entrySet()) {
+            if(shopRessoure.getKey().getName().equalsIgnoreCase(ressoure.getName())){
+                ret = shopRessoure.getValue();
+            }
+        }
+
+        return ret;
+    }
+
+    public void setRessourcenValue(Ressoure ressoure, int newValue){
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_ressource SET menge = '"+ newValue+"' WHERE shop = " + shop.shopId + " AND ressource = " + ressoure.getId());
+            ladeResscuren();
+        });
+
+//        shopRessoure.remove(ressoure);
+//        shopRessoure.put(ressoure, newValue);
+    }
+
+    private void ladeResscuren(){
         CompletableFuture.runAsync(() -> {
             try {
                 String queryRessourecs = "SELECT * FROM ressource ORDER BY reinfolge";
@@ -46,34 +81,5 @@ public class RessourenShopManger {
                 Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
             }
         });
-    }
-
-    public Shop getShop() {
-        return shop;
-    }
-
-    public HashMap<Ressoure, Integer> getShopRessoure() {
-        return shopRessoure;
-    }
-
-    public int getRessourceValue(Ressoure ressoure){
-        int ret = -1;
-
-        for (Map.Entry<Ressoure, Integer> shopRessoure : shopRessoure.entrySet()) {
-            if(shopRessoure.getKey().getName().equalsIgnoreCase(ressoure.getName())){
-                ret = shopRessoure.getValue();
-            }
-        }
-
-        return ret;
-    }
-
-    public void setRessourcenValue(Ressoure ressoure, int newValue){
-        CompletableFuture.runAsync(() -> {
-            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_ressource SET menge = '"+ newValue+"' WHERE shop = " + shop.shopId + " AND ressource = " + ressoure.getId());
-        });
-
-        shopRessoure.remove(ressoure);
-        shopRessoure.put(ressoure, newValue);
     }
 }

@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -24,38 +25,18 @@ public class PlayerInteractListener implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
         Player p = e.getPlayer();
+        if(e.getClickedBlock() == null) return;
+        if(e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_AIR) return;
 
         if(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getWorld().getName().equalsIgnoreCase(e.getClickedBlock().getWorld().getName()) || p.hasPermission("shopy.bypass.interactOnOtherWorlds")) {
             if (e.getClickedBlock().getType() == Material.LECTERN) {
-                RyseInventory.builder().title("§9Ressouren Markplatz").rows(4).provider(new InventoryProvider() {
-                    @Override
-                    public void init(Player player, InventoryContents contents) {
-                        int solt = 10;
-                        int zaheler = 0;
-                        for (Map.Entry<Ressoure, Integer> shopRessoure : Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger().getShopRessoure().entrySet()) {
-                            Ressoure ressoure = shopRessoure.getKey();
-                            if(!ressoure.getType().equalsIgnoreCase("STANDART")) continue;
+                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openMarkplatzInventar();
+            }
 
-                            ArrayList<String> beschreibung = new ArrayList<>();
-                            beschreibung.add("§7Menge: §e" + shopRessoure.getValue());
-                            beschreibung.add("");
-                            beschreibung.add("§7Aktuelle Kosten §e:" + Math.round(ressoure.getAktuelleKosten()));
-                            beschreibung.add("");
-                            beschreibung.add("§5" + ressoure.getBeschreibung());
-
-                            contents.set(solt, Shopy.getInstance().createItemWithLore(ressoure.getIcon(), "§9" + ressoure.getName(), beschreibung));
-
-                            /* Items Anordenen */
-                            zaheler++;
-                            if (zaheler == 7) {
-                                solt += 3;
-                                zaheler = 0;
-                            } else {
-                                solt++;
-                            }
-                        }
-                    }
-                }).build(Shopy.getInstance()).open(p);
+            if (e.getClickedBlock().getType() == Material.TRAPPED_CHEST ||
+                e.getClickedBlock().getType() == Material.BARREL
+            ) {
+                e.setCancelled(true);
             }
         }
     }

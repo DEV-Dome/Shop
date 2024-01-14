@@ -98,6 +98,13 @@ public class MySQLDefault {
                         "    FOREIGN KEY (shop) REFERENCES shop(id)," +
                         "    FOREIGN KEY (ressource) REFERENCES ressource(id)" +
                         ") ");
+                Shopy.getInstance().getMySQLConntion().query("CREATE TABLE IF NOT EXISTS shop_werte (" +
+                        "    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
+                        "    shop INT NOT NULL," +
+                        "    wert VARCHAR(512) NOT NULL," +
+                        "    value TEXT," +
+                        "    FOREIGN KEY (shop) REFERENCES shop(id)" +
+                        ") ");
             }
         });
     }

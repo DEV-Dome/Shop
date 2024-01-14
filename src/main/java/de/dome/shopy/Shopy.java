@@ -2,6 +2,7 @@ package de.dome.shopy;
 
 import de.dome.shopy.commands.*;
 import de.dome.shopy.listener.lobby.*;
+import de.dome.shopy.listener.shop.BlockPlaceListener;
 import de.dome.shopy.listener.shop.PlayerInteractListener;
 import de.dome.shopy.utils.MySQL;
 import de.dome.shopy.utils.MySQLDefault;
@@ -94,6 +95,8 @@ public class Shopy extends JavaPlugin {
         /* Shop Welt */
         new de.dome.shopy.listener.shop.BlockBreakListener();
         new PlayerInteractListener();
+        new de.dome.shopy.listener.shop.InventoryClickListener();
+        new BlockPlaceListener();
     }
 
     private void registerCommands(){
