@@ -102,9 +102,34 @@ public class MySQLDefault {
                         "    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
                         "    shop INT NOT NULL," +
                         "    wert VARCHAR(512) NOT NULL," +
-                        "    value TEXT," +
+                        "    value TEXT NOT NULL," +
                         "    FOREIGN KEY (shop) REFERENCES shop(id)" +
                         ") ");
+                Shopy.getInstance().getMySQLConntion().query("CREATE TABLE IF NOT EXISTS item_kategorie (" +
+                        "    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
+                        "    icon VARCHAR(512) NOT NULL," +
+                        "    name VARCHAR(512) NOT NULL," +
+                        "    beschreibung TEXT NOT NULL," +
+                        "    reinfolge INT NOT NULL" +
+                        ") ");
+
+                Shopy.getInstance().getMySQLConntion().query("CREATE TABLE IF NOT EXISTS item (" +
+                        "    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
+                        "    item_kategorie INT NOT NULL," +
+                        "    icon VARCHAR(512) NOT NULL," +
+                        "    name VARCHAR(512) NOT NULL," +
+                        "    beschreibung TEXT NOT NULL," +
+                        "    FOREIGN KEY (item_kategorie) REFERENCES item_kategorie(id)" +
+                        ") ");
+                Shopy.getInstance().getMySQLConntion().query("CREATE TABLE IF NOT EXISTS item_kosten (" +
+                        "    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
+                        "    item INT NOT NULL," +
+                        "    ressource INT NOT NULL," +
+                        "    menge INT NOT NULL," +
+                        "    FOREIGN KEY (item) REFERENCES item(id)," +
+                        "    FOREIGN KEY (ressource) REFERENCES ressource(id)" +
+                        ") ");
+
             }
         });
     }
@@ -120,6 +145,11 @@ public class MySQLDefault {
                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('GOLD_INGOT', 'Geld', 'Geld, zum Handeln auf der ganzen Welt', 'WAHRUNG', 100, '0', '0')" );
 
                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_template (name, template_ordner) VALUES ('Standart', 'vorlage1')" );
+
+                /*Items kategorie*/
+                Shopy.getInstance().getMySQLConntion().query("INSERT INTO item_kategorie (icon, name, beschreibung, reinfolge) VALUES ('NETHERITE_AXE', 'Äxte', 'Baue und erforsche die mächtigsten Äxte', 1)" );
+                Shopy.getInstance().getMySQLConntion().query("INSERT INTO item_kategorie (icon, name, beschreibung, reinfolge) VALUES ('NETHERITE_SWORD', 'Schwerter', 'Baue und erforsche die mächtigsten Schwerter', 1)" );
+                Shopy.getInstance().getMySQLConntion().query("INSERT INTO item_kategorie (icon, name, beschreibung, reinfolge) VALUES ('NETHERITE_SHOVEL', 'Schaufeln', 'Baue und erforsche die mächtigsten Schaufeln', 1)" );
             }
         });
     }
