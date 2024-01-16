@@ -61,9 +61,9 @@ public class BlockBreakListener implements Listener {
                     for(Cuboid cb : ps.getZones()){
                         if(cb.contains(e.getBlock())){
                            /* Besöndere Blöcke Spawnbar machen*/
+                            String buildingHinweis  = "§7Dieser Gegenstand kann nur in der Shop-Welt platziert werden. Und entfaltet da einen besonderen Effet der über das, gewöhnlich Maß in Minecraft hinaus geht.";
                             if(e.getBlock().getType() == Material.LECTERN){
                                 e.setDropItems(false);
-                                String buildingHinweis  = "§7Dieser Gegenstand kann nur in der Shop-Welt platziert werden. Und entfaltet da einen besonderen Effet der über das, gewöhnlich Maß in Minecraft hinaus geht.";
 
                                 ArrayList<String> beschreibung = new ArrayList<>();
                                 beschreibung.add("§5Mithilfe dieses Gegenstandes können Ressourcen gekauft werden.");
@@ -72,9 +72,18 @@ public class BlockBreakListener implements Listener {
 
                                 p.getInventory().addItem(Shopy.getInstance().createItemWithLore(Material.LECTERN, "§9Ressourcen Mark", beschreibung));
                             }
+                            if(e.getBlock().getType() == Material.CRAFTING_TABLE){
+                                e.setDropItems(false);
+
+                                ArrayList<String> beschreibung = new ArrayList<>();
+                                beschreibung.add("§5Auf diesem Gegenstand können mächtige Waffen und Werkzeuge hergestellt werden..");
+                                beschreibung.add("");
+                                beschreibung.add(buildingHinweis);
+
+                                p.getInventory().addItem(Shopy.getInstance().createItemWithLore(Material.CRAFTING_TABLE, "§9Werkbank", beschreibung));
+                            }
                             if(e.getBlock().getType() == Material.TRAPPED_CHEST){
                                 e.setDropItems(false);
-                                String buildingHinweis  = "§7Dieser Gegenstand kann nur in der Shop-Welt platziert werden. Und entfaltet da einen besonderen Effet der über das, gewöhnlich Maß in Minecraft hinaus geht.";
 
                                 ArrayList<String> beschreibung = new ArrayList<>();
                                 beschreibung.add("§5Pro Item lager können 10 hergestellte Items gelagert werden.");
@@ -92,7 +101,6 @@ public class BlockBreakListener implements Listener {
                             }
                             if(e.getBlock().getType() == Material.BARREL){
                                 e.setDropItems(false);
-                                String buildingHinweis  = "§7Dieser Gegenstand kann nur in der Shop-Welt platziert werden. Und entfaltet da einen besonderen Effet der über das, gewöhnlich Maß in Minecraft hinaus geht.";
 
                                 ArrayList<String> beschreibung = new ArrayList<>();
                                 beschreibung.add("§5Pro Ressourcen lager können 10 Ressourcen gelagert werden");

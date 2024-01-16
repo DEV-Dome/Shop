@@ -1,20 +1,12 @@
 package de.dome.shopy.listener.shop;
 
 import de.dome.shopy.Shopy;
-import de.dome.shopy.utils.Ressoure;
-import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
-import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-
-import java.util.ArrayList;
-import java.util.Map;
 
 public class PlayerInteractListener implements Listener {
 
@@ -31,6 +23,10 @@ public class PlayerInteractListener implements Listener {
         if(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getWorld().getName().equalsIgnoreCase(e.getClickedBlock().getWorld().getName()) || p.hasPermission("shopy.bypass.interactOnOtherWorlds")) {
             if (e.getClickedBlock().getType() == Material.LECTERN) {
                 Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openMarkplatzInventar();
+            }
+            if (e.getClickedBlock().getType() == Material.CRAFTING_TABLE) {
+                e.setCancelled(true);
+                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openWerkbankInventar();
             }
 
             if (e.getClickedBlock().getType() == Material.TRAPPED_CHEST ||

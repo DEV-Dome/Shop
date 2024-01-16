@@ -1,13 +1,11 @@
 package de.dome.shopy.commands;
 
 import de.dome.shopy.Shopy;
-import de.dome.shopy.utils.Ressoure;
+import de.dome.shopy.utils.items.Ressoure;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.Map;
 
 public class moneyCMD implements CommandExecutor {
 

@@ -1,4 +1,4 @@
-package de.dome.shopy.utils;
+package de.dome.shopy.utils.items;
 
 import de.dome.shopy.Shopy;
 import org.bukkit.Bukkit;

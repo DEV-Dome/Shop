@@ -4,9 +4,9 @@ import de.dome.shopy.Shopy;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.sql.*;
+import java.util.Scanner;
 
 public class MySQL {
 
@@ -99,6 +99,27 @@ public class MySQL {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public String readSQLFile(String filePath) throws IOException {
+        // Hole den ClassLoader deines Plugins
+        ClassLoader classLoader = getClass().getClassLoader();
+
+        // Öffne einen InputStream zur Ressource
+        InputStream inputStream = classLoader.getResourceAsStream(filePath);
+
+        if (inputStream != null) {
+            // Lese den Inhalt der Datei aus dem InputStream
+            try (Scanner scanner = new Scanner(inputStream, "UTF-8")) {
+                StringBuilder stringBuilder = new StringBuilder();
+                while (scanner.hasNextLine()) {
+                    stringBuilder.append(scanner.nextLine()).append("\n");
+                }
+                return stringBuilder.toString();
+            }
+        } else {
+            throw new IOException("Die SQL-Datei wurde nicht gefunden: " + filePath);
         }
     }
 

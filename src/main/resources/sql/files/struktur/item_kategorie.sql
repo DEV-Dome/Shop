@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS item_kategorie (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    icon VARCHAR(512) NOT NULL,
+    name VARCHAR(512) NOT NULL,
+    beschreibung TEXT NOT NULL,
+    reinfolge INT NOT NULL
+);

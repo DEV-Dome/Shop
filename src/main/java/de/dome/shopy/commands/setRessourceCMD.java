@@ -1,7 +1,7 @@
 package de.dome.shopy.commands;
 
 import de.dome.shopy.Shopy;
-import de.dome.shopy.utils.Ressoure;
+import de.dome.shopy.utils.items.Ressoure;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

@@ -1,15 +1,13 @@
 package de.dome.shopy.listener.lobby;
 
 import de.dome.shopy.Shopy;
-import de.dome.shopy.utils.Ressoure;
-import de.dome.shopy.utils.RessourenShopManger;
+import de.dome.shopy.utils.items.Ressoure;
 import de.dome.shopy.utils.Shop;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -90,6 +88,13 @@ public class InventoryClickListener implements Listener {
                         beschreibung.add(buildingHinweis);
 
                         p.getInventory().addItem(Shopy.getInstance().createItemWithLore(Material.LECTERN, "§9Ressourcen Mark", beschreibung));
+
+                        beschreibung = new ArrayList<>();
+                        beschreibung.add("§5Auf diesem Gegenstand können mächtige Waffen und Werkzeuge hergestellt werden.");
+                        beschreibung.add("");
+                        beschreibung.add(buildingHinweis);
+
+                        p.getInventory().addItem(Shopy.getInstance().createItemWithLore(Material.CRAFTING_TABLE, "§9Werkbank", beschreibung));
 
                         beschreibung = new ArrayList<>();
                         beschreibung.add("§5Pro Item lager können 10 hergestellte Items gelagert werden.");

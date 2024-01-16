@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS shop_werte (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    shop INT NOT NULL,
+    wert VARCHAR(512) NOT NULL,
+    value TEXT NOT NULL,
+    FOREIGN KEY (shop) REFERENCES shop(id)
+);

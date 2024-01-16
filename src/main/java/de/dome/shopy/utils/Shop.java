@@ -1,6 +1,8 @@
 package de.dome.shopy.utils;
 
 import de.dome.shopy.Shopy;
+import de.dome.shopy.utils.items.ItemKategorie;
+import de.dome.shopy.utils.items.Ressoure;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
@@ -149,6 +151,29 @@ public class Shop {
                     /* Items Anordenen */
                     zaheler++;
                     if (zaheler == 7) {
+                        solt += 3;
+                        zaheler = 0;
+                    } else {
+                        solt++;
+                    }
+                }
+            }
+        }).build(Shopy.getInstance()).open(owner);
+    }
+    public void openWerkbankInventar(){
+        RyseInventory.builder().title("§9Werkbank-Kategorie").rows(3).provider(new InventoryProvider() {
+            @Override
+            public void init(Player player, InventoryContents contents) {
+                int solt = 10;
+                int zaheler = 0;
+                for(ItemKategorie itemKategorie : ItemKategorie.itemKategorieList){
+                    ArrayList<String> beschreibung = new ArrayList<>();
+                    beschreibung.add(itemKategorie.getBeschreibung());
+
+                    contents.set(solt, Shopy.getInstance().createItemWithLore(itemKategorie.getIcon(), "§9" + itemKategorie.getName(), beschreibung));
+
+                    zaheler+=2;
+                    if (zaheler <= 7) {
                         solt += 3;
                         zaheler = 0;
                     } else {
