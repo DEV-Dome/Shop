@@ -1,7 +1,6 @@
 package de.dome.shopy.utils;
 
 import de.dome.shopy.Shopy;
-import de.dome.shopy.utils.items.Ressoure;
 import org.bukkit.Bukkit;
 
 import java.sql.ResultSet;

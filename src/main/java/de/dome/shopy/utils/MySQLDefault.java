@@ -2,13 +2,10 @@ package de.dome.shopy.utils;
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.items.ItemKategorie;
-import de.dome.shopy.utils.items.Ressoure;
-import org.bukkit.Bukkit;
 
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public class MySQLDefault {
@@ -44,6 +41,7 @@ public class MySQLDefault {
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ressource.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/shop_ressource.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/shop_werte.sql"));
+                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/item_stufen.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/item_kategorie.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/item.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/item_kosten.sql"));
@@ -83,6 +81,21 @@ public class MySQLDefault {
                     }
                 }
             }
+
+            ResultSet itemStufen = Shopy.getInstance().getMySQLConntion().resultSet("SELECT * FROM item_stufen");
+
+            if(itemStufen != null){
+                if(!itemStufen.next()){
+                    String[] querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/loader/itemStufenLoader.sql").split(";");
+                    for(String query : querys){
+                        query = query.trim();
+                        if(query.equals("") || query.equals(" ")) continue;
+
+                        Shopy.getInstance().getMySQLConntion().query(query);
+                    }
+                }
+            }
+
             ResultSet itemKategorie = Shopy.getInstance().getMySQLConntion().resultSet("SELECT * FROM item_kategorie");
 
             if(itemKategorie != null){

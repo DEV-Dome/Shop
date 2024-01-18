@@ -1,4 +1,4 @@
-package de.dome.shopy.utils.items;
+package de.dome.shopy.utils;
 
 import de.dome.shopy.Shopy;
 import org.bukkit.Bukkit;
@@ -92,6 +92,17 @@ public class Ressoure {
 
         for (Ressoure res: ressoureList) {
             if(name.equalsIgnoreCase(res.getName())){
+                ressoure = res;
+            }
+        }
+
+        return ressoure;
+    }
+    public static Ressoure getRessoureByID(int id){
+        Ressoure ressoure = null;
+
+        for (Ressoure res: ressoureList) {
+            if(id == res.getId()){
                 ressoure = res;
             }
         }

@@ -1,8 +1,10 @@
 package de.dome.shopy.utils;
 
 import de.dome.shopy.Shopy;
+import de.dome.shopy.utils.items.Item;
 import de.dome.shopy.utils.items.ItemKategorie;
-import de.dome.shopy.utils.items.Ressoure;
+import de.dome.shopy.utils.items.ItemRessourecsKosten;
+import de.dome.shopy.utils.items.ItemStufe;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
@@ -159,6 +161,53 @@ public class Shop {
                 }
             }
         }).build(Shopy.getInstance()).open(owner);
+    }
+    public void openMarkplatzWaffenInventar(int seite, ItemKategorie itemKategorie){
+        RyseInventory.builder().title("§9Werkbank " + itemKategorie.getName() + " Seite " + seite).rows(3).provider(new InventoryProvider() {
+            @Override
+            public void init(Player player, InventoryContents contents) {
+                int solt = 11;
+                int zaheler = 0;
+                int startBei = seite * 5;
+                for(Item item : Item.itemList){
+                    if(item.getItemKategorie().getId() != itemKategorie.getId()) continue;
+                    if(startBei > zaheler){
+                        zaheler++;
+                        continue;
+                    }else if(startBei != -1){
+                        zaheler = 0;
+                        startBei = -1;
+                    }
+
+                    ArrayList<String> beschreibung = new ArrayList<>();
+                    beschreibung.add("");
+
+                    for(ItemRessourecsKosten itr : item.getRessourecsKostenList()){
+                        beschreibung.add("§e" + itr.getMenge() + " §7" + itr.getRessoure().getName());
+                    }
+                    beschreibung.add("");
+                    beschreibung.add(item.getBeschreibung());
+
+                    String itemName = "§9" + item.getName() +  " " + item.getItemStufe().getFarbe() + " [" + item.getItemStufe().getName() + "]";
+                    contents.set(solt, Shopy.getInstance().createItemWithLore(item.getIcon(), itemName, beschreibung));
+
+                    zaheler++;
+                    solt += 1;
+                    if (zaheler == 5) {
+                        break;
+                    }
+                }
+
+                /*Menü Regeler */
+                contents.set(9, Shopy.getInstance().createItem(Material.ARROW, "§7Zurück"));
+                contents.set(17, Shopy.getInstance().createItem(Material.ARROW, "§7Nach vorne"));
+
+                contents.set(18, Shopy.getInstance().createItem(Material.CRAFTING_TABLE, "§7Zurück zur Übersicht"));
+                contents.set(26, Shopy.getInstance().createItem(Material.BARRIER, "§7Menü Schlissen"));
+
+                contents.set(4, Shopy.getInstance().createItem(itemKategorie.getIcon(), "§9" + itemKategorie.getName() + " Statistk"));
+            }
+        }).build(Shopy.getInstance()).open(this.owner);
     }
     public void openWerkbankInventar(){
         RyseInventory.builder().title("§9Werkbank-Kategorie").rows(3).provider(new InventoryProvider() {

@@ -1,7 +1,7 @@
 package de.dome.shopy.listener.lobby;
 
 import de.dome.shopy.Shopy;
-import de.dome.shopy.utils.items.Ressoure;
+import de.dome.shopy.utils.Ressoure;
 import de.dome.shopy.utils.Shop;
 import org.bukkit.*;
 import org.bukkit.entity.Player;

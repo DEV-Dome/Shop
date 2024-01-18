@@ -1,7 +1,7 @@
 package de.dome.shopy.commands;
 
 import de.dome.shopy.Shopy;
-import de.dome.shopy.utils.items.Ressoure;
+import de.dome.shopy.utils.Ressoure;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;

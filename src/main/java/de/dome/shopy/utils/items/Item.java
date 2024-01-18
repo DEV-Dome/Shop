@@ -1,8 +1,10 @@
 package de.dome.shopy.utils.items;
 
 import de.dome.shopy.Shopy;
+import de.dome.shopy.utils.Ressoure;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.checkerframework.checker.units.qual.A;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +17,9 @@ public class Item {
     String name;
     String beschreibung;
     Material icon;
+    ItemStufe itemStufe;
     public static ArrayList<Item> itemList;
+    public ArrayList<ItemRessourecsKosten> ressourecsKostenList;
 
     public Item(int id, ItemKategorie itemKategorie, String name, String beschreibung, Material icon) {
         this.id = id;
@@ -23,6 +27,8 @@ public class Item {
         this.name = name;
         this.beschreibung = beschreibung;
         this.icon = icon;
+
+        ressourecsKostenList = new ArrayList<>();
     }
 
     public int getId() {
@@ -45,6 +51,14 @@ public class Item {
         return icon;
     }
 
+    public ArrayList<ItemRessourecsKosten> getRessourecsKostenList() {
+        return ressourecsKostenList;
+    }
+
+    public ItemStufe getItemStufe() {
+        return itemStufe;
+    }
+
     public static void registerItem(){
         CompletableFuture.runAsync(() -> {
             itemList = new ArrayList<>();
@@ -56,7 +70,16 @@ public class Item {
                 while (resultItem.next()) {
                     Item newItem = new Item(resultItem.getInt("id"), ItemKategorie.getItemKategorieById(resultItem.getInt("item_kategorie")), resultItem.getString("name"), resultItem.getString("beschreibung"), Material.getMaterial(resultItem.getString("icon")));
 
-                    Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§5Item geladen: " + newItem.getName());
+                    /*Kosten Laden*/
+                    String queryRessourecsKosten = "SELECT * FROM item_kosten WHERE item = " + newItem.getId();
+                    ResultSet resultItemKosten = Shopy.getInstance().getMySQLConntion().resultSet(queryRessourecsKosten);
+                    while (resultItemKosten.next()) {
+                        newItem.getRessourecsKostenList().add(new ItemRessourecsKosten(resultItemKosten.getInt("id"), newItem, Ressoure.getRessoureByID(resultItemKosten.getInt("ressource")), resultItemKosten.getInt("menge")));
+                    }
+                    /* Item Stufe */
+                    newItem.itemStufe = ItemStufe.getIteStufeById(resultItem.getInt("item_stufe"));
+
+                    Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + newItem.getItemStufe().getFarbe() +"Item geladen: " + newItem.getName());
 
                     itemList.add(newItem);
                 }

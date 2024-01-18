@@ -59,9 +59,8 @@ public class ItemKategorie {
             }catch (SQLException e) {
                 Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
             }
-        });
-        itemKategorieDaten.thenRun(() -> {
-            Item.registerItem();
+        }).thenRun(() -> {
+            ItemStufe.registerItemStufen();
         });
     }
 
