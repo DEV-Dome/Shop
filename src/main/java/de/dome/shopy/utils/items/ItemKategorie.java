@@ -60,7 +60,7 @@ public class ItemKategorie {
                 Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
             }
         }).thenRun(() -> {
-            ItemStufe.registerItemStufen();
+            ItemSeltenheit.registerItemStufen();
         });
     }
 

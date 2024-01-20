@@ -4,7 +4,6 @@ import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.items.Item;
 import de.dome.shopy.utils.items.ItemKategorie;
 import de.dome.shopy.utils.items.ItemRessourecsKosten;
-import de.dome.shopy.utils.items.ItemStufe;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
@@ -188,7 +187,7 @@ public class Shop {
                     beschreibung.add("");
                     beschreibung.add(item.getBeschreibung());
 
-                    String itemName = "§9" + item.getName() +  " " + item.getItemStufe().getFarbe() + " [" + item.getItemStufe().getName() + "]";
+                    String itemName = "§9" + item.getName() +  " " + item.getItemSeltenheit().getFarbe() + " [" + item.getItemSeltenheit().getName() + "]";
                     contents.set(solt, Shopy.getInstance().createItemWithLore(item.getIcon(), itemName, beschreibung));
 
                     zaheler++;

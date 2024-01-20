@@ -4,7 +4,6 @@ import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.Ressoure;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.checkerframework.checker.units.qual.A;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,7 +16,7 @@ public class Item {
     String name;
     String beschreibung;
     Material icon;
-    ItemStufe itemStufe;
+    ItemSeltenheit itemSeltenheit;
     public static ArrayList<Item> itemList;
     public ArrayList<ItemRessourecsKosten> ressourecsKostenList;
 
@@ -55,8 +54,8 @@ public class Item {
         return ressourecsKostenList;
     }
 
-    public ItemStufe getItemStufe() {
-        return itemStufe;
+    public ItemSeltenheit getItemSeltenheit() {
+        return itemSeltenheit;
     }
 
     public static void registerItem(){
@@ -77,9 +76,9 @@ public class Item {
                         newItem.getRessourecsKostenList().add(new ItemRessourecsKosten(resultItemKosten.getInt("id"), newItem, Ressoure.getRessoureByID(resultItemKosten.getInt("ressource")), resultItemKosten.getInt("menge")));
                     }
                     /* Item Stufe */
-                    newItem.itemStufe = ItemStufe.getIteStufeById(resultItem.getInt("item_stufe"));
+                    newItem.itemSeltenheit = ItemSeltenheit.getIteStufeById(resultItem.getInt("item_seltenheit"));
 
-                    Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + newItem.getItemStufe().getFarbe() +"Item geladen: " + newItem.getName());
+                    Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + newItem.getItemSeltenheit().getFarbe() +"Item geladen: " + newItem.getName());
 
                     itemList.add(newItem);
                 }

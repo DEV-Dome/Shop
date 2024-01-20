@@ -2,6 +2,7 @@ package de.dome.shopy.utils;
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.items.ItemKategorie;
+import org.bukkit.Bukkit;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -35,16 +36,18 @@ public class MySQLDefault {
     private void sqlStruktur(){
         CompletableFuture.runAsync(() -> {
                 try {
-                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/shop_template.sql"));
-                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/shop_template_zonen.sql"));
-                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/shop.sql"));
-                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ressource.sql"));
-                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/shop_ressource.sql"));
-                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/shop_werte.sql"));
-                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/item_stufen.sql"));
-                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/item_kategorie.sql"));
-                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/item.sql"));
-                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/item_kosten.sql"));
+                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ShopTemplate.sql"));
+                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ShopTemplateZonen.sql"));
+                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/Shop.sql"));
+
+                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/Ressource.sql"));
+                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ShopRessource.sql"));
+                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ShopWerte.sql"));
+
+                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ItemSeltenheit.sql"));
+                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ItemKategorie.sql"));
+                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/Item.sql"));
+                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ItemKosten.sql"));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -59,7 +62,7 @@ public class MySQLDefault {
 
             if(ressource != null){
                 if(!ressource.next()){
-                    String[] querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/loader/ressourceLoader.sql").split(";");
+                    String[] querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/loader/RessourceLoader.sql").split(";");
                     for(String query : querys){
                         query = query.trim();
                         if(query.equals("") || query.equals(";")) continue;
@@ -72,7 +75,7 @@ public class MySQLDefault {
 
             if(shopTemplate != null){
                 if(!shopTemplate.next()){
-                    String[] querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/loader/shopTemplateLoader.sql").split(";");
+                    String[] querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/loader/ShopTemplateLoader.sql").split(";");
                     for(String query : querys){
                         query = query.trim();
                         if(query.equals("") || query.equals(";")) continue;
@@ -82,11 +85,11 @@ public class MySQLDefault {
                 }
             }
 
-            ResultSet itemStufen = Shopy.getInstance().getMySQLConntion().resultSet("SELECT * FROM item_stufen");
+            ResultSet itemStufen = Shopy.getInstance().getMySQLConntion().resultSet("SELECT * FROM item_seltenheit");
 
             if(itemStufen != null){
                 if(!itemStufen.next()){
-                    String[] querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/loader/itemStufenLoader.sql").split(";");
+                    String[] querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/loader/ItemSeltenheitsLoader.sql").split(";");
                     for(String query : querys){
                         query = query.trim();
                         if(query.equals("") || query.equals(" ")) continue;
