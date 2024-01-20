@@ -17,6 +17,8 @@ public class Item {
     String beschreibung;
     Material icon;
     ItemSeltenheit itemSeltenheit;
+    int shopXp;
+    int kategorieXp;
     public static ArrayList<Item> itemList;
     public ArrayList<ItemRessourecsKosten> ressourecsKostenList;
 
@@ -58,6 +60,14 @@ public class Item {
         return itemSeltenheit;
     }
 
+    public int getShopXp() {
+        return shopXp;
+    }
+
+    public int getKategorieXp() {
+        return kategorieXp;
+    }
+
     public static void registerItem(){
         CompletableFuture.runAsync(() -> {
             itemList = new ArrayList<>();
@@ -74,6 +84,13 @@ public class Item {
                     ResultSet resultItemKosten = Shopy.getInstance().getMySQLConntion().resultSet(queryRessourecsKosten);
                     while (resultItemKosten.next()) {
                         newItem.getRessourecsKostenList().add(new ItemRessourecsKosten(resultItemKosten.getInt("id"), newItem, Ressoure.getRessoureByID(resultItemKosten.getInt("ressource")), resultItemKosten.getInt("menge")));
+                    }
+                    /*Werte Laden*/
+                    String queryRessourecsWerte = "SELECT * FROM item_werte WHERE item = " + newItem.getId();
+                    ResultSet resultItemWerte = Shopy.getInstance().getMySQLConntion().resultSet(queryRessourecsWerte);
+                    while (resultItemWerte.next()) {
+                        if(resultItemWerte.getString("wert").equals("shop_xp")) newItem.shopXp = Integer.parseInt(resultItemWerte.getString("value"));
+                        if(resultItemWerte.getString("wert").equals("kategorie_xp")) newItem.kategorieXp = Integer.parseInt(resultItemWerte.getString("value"));
                     }
                     /* Item Stufe */
                     newItem.itemSeltenheit = ItemSeltenheit.getIteStufeById(resultItem.getInt("item_seltenheit"));

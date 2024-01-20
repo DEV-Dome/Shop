@@ -181,11 +181,20 @@ public class Shop {
                     ArrayList<String> beschreibung = new ArrayList<>();
                     beschreibung.add("");
 
+                    beschreibung.add("§7Kosten:");
                     for(ItemRessourecsKosten itr : item.getRessourecsKostenList()){
-                        beschreibung.add("§e" + itr.getMenge() + " §7" + itr.getRessoure().getName());
+                        beschreibung.add("  §7- §e" + itr.getMenge() + " §7" + itr.getRessoure().getName());
                     }
                     beschreibung.add("");
-                    beschreibung.add(item.getBeschreibung());
+                    beschreibung.add("§7Erfahrungspunkt:");
+                    beschreibung.add("  §7- §e" + item.getShopXp() + " §7Shop Erfahrungspunkte");
+                    beschreibung.add("  §7- §e" + item.getKategorieXp() + " §7Item-linien Erfahrungspunkte");
+                    beschreibung.add("");
+
+                    String[] beschreibungsArray = item.getBeschreibung().split("\n");
+                    for(String itemBeschreibung : beschreibungsArray){
+                        beschreibung.add(itemBeschreibung.trim());
+                    }
 
                     String itemName = "§9" + item.getName() +  " " + item.getItemSeltenheit().getFarbe() + " [" + item.getItemSeltenheit().getName() + "]";
                     contents.set(solt, Shopy.getInstance().createItemWithLore(item.getIcon(), itemName, beschreibung));

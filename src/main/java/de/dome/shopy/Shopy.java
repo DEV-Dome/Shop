@@ -153,7 +153,6 @@ public class Shopy extends JavaPlugin {
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(Name);
-        meta.setUnbreakable(true);
 
         item.setItemMeta(meta);
 
@@ -164,7 +163,6 @@ public class Shopy extends JavaPlugin {
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(Name);
-        meta.setUnbreakable(true);
         meta.setLore(lore);
 
         item.setItemMeta(meta);
@@ -176,7 +174,6 @@ public class Shopy extends JavaPlugin {
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(Name);
-        meta.setUnbreakable(true);
         meta.setLore(lore);
 
 
