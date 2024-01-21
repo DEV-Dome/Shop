@@ -2,16 +2,14 @@
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.Cuboid;
-import de.dome.shopy.utils.Shop;
-import de.dome.shopy.utils.ShopsZonesCreator;
-import org.bukkit.Bukkit;
+import de.dome.shopy.utils.shop.Shop;
+import de.dome.shopy.utils.shop.ShopsZonesCreator;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;

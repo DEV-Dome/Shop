@@ -2,7 +2,7 @@ package de.dome.shopy.listener.lobby;
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.listener.shop.BlockBreakListener;
-import de.dome.shopy.utils.Shop;
+import de.dome.shopy.utils.shop.Shop;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

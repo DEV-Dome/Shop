@@ -1,9 +1,11 @@
 package de.dome.shopy.listener.shop;
 
 import de.dome.shopy.Shopy;
+import de.dome.shopy.utils.items.Item;
 import de.dome.shopy.utils.items.ItemKategorie;
 import de.dome.shopy.utils.Ressoure;
-import de.dome.shopy.utils.Shop;
+import de.dome.shopy.utils.items.ItemRessourecenKosten;
+import de.dome.shopy.utils.shop.Shop;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -38,11 +40,11 @@ public class InventoryClickListener implements Listener {
 
                 if(spielerGeld < kosten){
                     double zuWenig = kosten - spielerGeld;
-                    p.sendMessage(Shopy.getInstance().getPrefix() + "§cLeider reicht dein geld dafür nicht aus! Dir fehlen §e" + zuWenig + " §c€");
+                    p.sendMessage(Shopy.getInstance().getPrefix() + "Leider reicht dein geld dafür nicht aus! Dir fehlen §e" + zuWenig + " §7€");
                     return;
                 }
                 if(newAmount > spielerShop.getRessourcenLager()){
-                    p.sendMessage(Shopy.getInstance().getPrefix() + "§cLeider reicht der Platz in deinem Ressourcenlager nicht. Dieser ist zurzeit auf " + spielerShop.getRessourcenLager() + " begrenzt.");
+                    p.sendMessage(Shopy.getInstance().getPrefix() + "Leider reicht der Platz in deinem Ressourcenlager nicht. Dieser ist zurzeit auf " + spielerShop.getRessourcenLager() + " begrenzt.");
                     return;
                 }
 
@@ -67,8 +69,14 @@ public class InventoryClickListener implements Listener {
             if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
                 Shop spielerShop = Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
                 /*Statische Items*/
-                if(item.getItemMeta().getDisplayName().equals("§7Zurück zur Übersicht")) spielerShop.openWerkbankInventar();
-                if(item.getItemMeta().getDisplayName().equals("§7Menü Schlissen")) p.closeInventory();
+                if(item.getItemMeta().getDisplayName().equals("§7Zurück zur Übersicht")){
+                    spielerShop.openWerkbankInventar();
+                    return;
+                }
+                if(item.getItemMeta().getDisplayName().equals("§7Menü Schlissen")){
+                    p.closeInventory();
+                    return;
+                }
 
                 if(item.getItemMeta().getDisplayName().equals("§7Nach vorne")) {
                     String[] titleWorte = e.getView().getTitle().split(" ");
@@ -76,6 +84,7 @@ public class InventoryClickListener implements Listener {
                     ItemKategorie itemKategorie = ItemKategorie.getItemKategorieByName(titleWorte[1]);
 
                     Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openMarkplatzWaffenInventar(AkkuelleSeite, itemKategorie);
+                    return;
                 }
                 if(item.getItemMeta().getDisplayName().equals("§7Zurück")) {
                     String[] titleWorte = e.getView().getTitle().split(" ");
@@ -85,6 +94,52 @@ public class InventoryClickListener implements Listener {
                     if(AkkuelleSeite < 0) return;
 
                     Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openMarkplatzWaffenInventar(AkkuelleSeite, itemKategorie);
+                    return;
+                }
+
+                /* Item herstellen */
+                String[] itemNameWorte = item.getItemMeta().getDisplayName().split(" ");
+                String itemName = "";
+
+                /* Nur den Item Namen bauen */
+                int zeahler = 0;
+                for(String wort : itemNameWorte){
+                    if(itemNameWorte.length - 1 == zeahler) break;
+
+                    itemName += " " + wort;
+                    zeahler++;
+                }
+
+                itemName = itemName.substring(3, itemName.length() - 3);
+
+                Item realItem = Item.getItemByName(itemName);
+                if(realItem != null){
+                    // Item gefunden, Neun kann es 'gebaut' werden.
+
+                    /* Item Kosten */
+                    boolean kostenvorhanden = true;
+                    String fehlendeRessourecen = "";
+                    for(ItemRessourecenKosten itk : realItem.getRessourecsKostenList()){
+                        int ressourenMenge = spielerShop.getRessourenShopManger().getRessourceValue(itk.getRessoure());
+                        if(ressourenMenge < itk.getMenge()){
+                            if(kostenvorhanden) kostenvorhanden = false;
+                            fehlendeRessourecen += "§e" + (itk.getMenge() - ressourenMenge ) + " §7" + itk.getRessoure().getName() + ", ";
+                        }
+                    }
+
+
+                    /* Wenn nicht alle Kosten vorhanden sind */
+                    if(!kostenvorhanden) {
+                        fehlendeRessourecen = fehlendeRessourecen.substring(0, fehlendeRessourecen.length() - 2);
+                        fehlendeRessourecen += ".";
+
+                        p.sendMessage(Shopy.getInstance().getPrefix() + "Dir fehlen noch Ressourcen um dieses Item bauen zu können: " + fehlendeRessourecen);
+                        return;
+                    }
+
+                    p.sendMessage(Shopy.getInstance().getPrefix() + "Item herstellen ...");
+                }else {
+                  p.sendMessage(Shopy.getInstance().getPrefix() + "§cBeim Ausführen dieser Aktion ist leider ein Fehler aufgetreten. Bitte versuche es später erneut oder Kontaktiere den Support.");
                 }
             }
 

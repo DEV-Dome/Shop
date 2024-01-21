@@ -20,7 +20,7 @@ public class Item {
     int shopXp;
     int kategorieXp;
     public static ArrayList<Item> itemList;
-    public ArrayList<ItemRessourecsKosten> ressourecsKostenList;
+    public ArrayList<ItemRessourecenKosten> ressourecsKostenList;
 
     public Item(int id, ItemKategorie itemKategorie, String name, String beschreibung, Material icon) {
         this.id = id;
@@ -52,7 +52,7 @@ public class Item {
         return icon;
     }
 
-    public ArrayList<ItemRessourecsKosten> getRessourecsKostenList() {
+    public ArrayList<ItemRessourecenKosten> getRessourecsKostenList() {
         return ressourecsKostenList;
     }
 
@@ -83,7 +83,7 @@ public class Item {
                     String queryRessourecsKosten = "SELECT * FROM item_kosten WHERE item = " + newItem.getId();
                     ResultSet resultItemKosten = Shopy.getInstance().getMySQLConntion().resultSet(queryRessourecsKosten);
                     while (resultItemKosten.next()) {
-                        newItem.getRessourecsKostenList().add(new ItemRessourecsKosten(resultItemKosten.getInt("id"), newItem, Ressoure.getRessoureByID(resultItemKosten.getInt("ressource")), resultItemKosten.getInt("menge")));
+                        newItem.getRessourecsKostenList().add(new ItemRessourecenKosten(resultItemKosten.getInt("id"), newItem, Ressoure.getRessoureByID(resultItemKosten.getInt("ressource")), resultItemKosten.getInt("menge")));
                     }
                     /*Werte Laden*/
                     String queryRessourecsWerte = "SELECT * FROM item_werte WHERE item = " + newItem.getId();
@@ -103,5 +103,18 @@ public class Item {
                 Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
             }
         });
+    }
+
+    public static Item getItemByName(String name){
+        Item ret = null;
+
+        for(Item item : itemList){
+            if(item.getName().equalsIgnoreCase(name)){
+                ret = item;
+                break;
+            }
+        }
+
+        return ret;
     }
 }

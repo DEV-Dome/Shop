@@ -2,14 +2,14 @@ package de.dome.shopy.utils.items;
 
 import de.dome.shopy.utils.Ressoure;
 
-public class ItemRessourecsKosten {
+public class ItemRessourecenKosten {
 
     int id;
     Item item;
     Ressoure ressoure;
     int menge;
 
-    public ItemRessourecsKosten(int id, Item item, Ressoure ressoure, int menge) {
+    public ItemRessourecenKosten(int id, Item item, Ressoure ressoure, int menge) {
         this.id = id;
         this.item = item;
         this.ressoure = ressoure;

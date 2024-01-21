@@ -2,16 +2,12 @@ package de.dome.shopy.listener.shop;
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.Cuboid;
-import de.dome.shopy.utils.Shop;
-import de.dome.shopy.utils.ShopsZonesCreator;
+import de.dome.shopy.utils.shop.Shop;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
-
-import java.util.HashMap;
-import java.util.UUID;
 
 public class BlockPlaceListener implements Listener {
 

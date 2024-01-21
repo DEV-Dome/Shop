@@ -1,4 +1,4 @@
-package de.dome.shopy.utils;
+package de.dome.shopy.utils.shop;
 
 import org.bukkit.Location;
 

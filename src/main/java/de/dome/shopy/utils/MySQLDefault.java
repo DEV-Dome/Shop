@@ -46,6 +46,7 @@ public class MySQLDefault {
 
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ItemSeltenheit.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ItemKategorie.sql"));
+                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ItemKategorieLevel.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/Item.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ItemKosten.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ItemWerte.sql"));
@@ -91,6 +92,19 @@ public class MySQLDefault {
             if(itemStufen != null){
                 if(!itemStufen.next()){
                     String[] querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/loader/ItemSeltenheitsLoader.sql").split(";");
+                    for(String query : querys){
+                        query = query.trim();
+                        if(query.equals("") || query.equals(" ")) continue;
+
+                        Shopy.getInstance().getMySQLConntion().query(query);
+                    }
+                }
+            }
+            ResultSet ItemKategorieLevel = Shopy.getInstance().getMySQLConntion().resultSet("SELECT * FROM item_kategorie_level");
+
+            if(ItemKategorieLevel != null){
+                if(!ItemKategorieLevel.next()){
+                    String[] querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/loader/ItemKategorieLevelLoader.sql").split(";");
                     for(String query : querys){
                         query = query.trim();
                         if(query.equals("") || query.equals(" ")) continue;

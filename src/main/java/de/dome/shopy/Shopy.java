@@ -6,7 +6,7 @@ import de.dome.shopy.listener.shop.BlockPlaceListener;
 import de.dome.shopy.listener.shop.PlayerInteractListener;
 import de.dome.shopy.utils.MySQL;
 import de.dome.shopy.utils.MySQLDefault;
-import de.dome.shopy.utils.Shop;
+import de.dome.shopy.utils.shop.Shop;
 import dev.sergiferry.playernpc.api.NPC;
 import dev.sergiferry.playernpc.api.NPCLib;
 import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;

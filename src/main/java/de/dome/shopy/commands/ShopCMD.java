@@ -1,17 +1,15 @@
 package de.dome.shopy.commands;
 
 import de.dome.shopy.Shopy;
-import de.dome.shopy.utils.Shop;
+import de.dome.shopy.utils.shop.Shop;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 
 import java.util.ArrayList;
 

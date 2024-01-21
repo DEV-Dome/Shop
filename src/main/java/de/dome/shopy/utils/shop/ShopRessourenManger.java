@@ -1,6 +1,7 @@
-package de.dome.shopy.utils;
+package de.dome.shopy.utils.shop;
 
 import de.dome.shopy.Shopy;
+import de.dome.shopy.utils.Ressoure;
 import org.bukkit.Bukkit;
 
 import java.sql.ResultSet;
@@ -9,12 +10,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-public class RessourenShopManger {
+public class ShopRessourenManger {
 
     Shop shop;
     private Map<Ressoure, Integer> shopRessoure;
 
-    public RessourenShopManger(Shop shop){
+    public ShopRessourenManger(Shop shop){
         this.shop = shop;
         this.shopRessoure = new LinkedHashMap<>();
 

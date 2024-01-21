@@ -1,20 +1,12 @@
 package de.dome.shopy.listener.lobby;
 
 import de.dome.shopy.Shopy;
-import de.dome.shopy.utils.Shop;
-import de.dome.shopy.utils.ShopsZonesCreator;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-
-import java.util.HashMap;
-import java.util.UUID;
 
 public class BlockBreakListener implements Listener {
 
