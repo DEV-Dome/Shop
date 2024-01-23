@@ -6,11 +6,16 @@ import de.dome.shopy.utils.items.ItemKategorie;
 import de.dome.shopy.utils.Ressoure;
 import de.dome.shopy.utils.items.ItemRessourecenKosten;
 import de.dome.shopy.utils.shop.Shop;
+import de.dome.shopy.utils.shop.ShopItem;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.sql.SQLException;
+import java.util.concurrent.CompletableFuture;
 
 public class InventoryClickListener implements Listener {
 
@@ -137,7 +142,13 @@ public class InventoryClickListener implements Listener {
                         return;
                     }
 
+                    spielerShop.getShopItems().add(new ShopItem(-1, realItem.getItemKategorie(), realItem.getName(), realItem.getBeschreibung(), realItem.getIcon(), realItem.getItemSeltenheit()));
+                    CompletableFuture.runAsync(() -> {
+                        Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_lager (shop, item) VALUES ('" + spielerShop.getShopId() + "', '" + realItem.getId() + "')");
+                    });
+
                     p.sendMessage(Shopy.getInstance().getPrefix() + "Item herstellen ...");
+                    p.playSound(p, Sound.ENTITY_ITEM_PICKUP,  1,1);
                 }else {
                   p.sendMessage(Shopy.getInstance().getPrefix() + "§cBeim Ausführen dieser Aktion ist leider ein Fehler aufgetreten. Bitte versuche es später erneut oder Kontaktiere den Support.");
                 }

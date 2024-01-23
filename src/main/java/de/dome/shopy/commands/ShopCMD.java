@@ -22,7 +22,7 @@ public class ShopCMD implements CommandExecutor {
 
             if(Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())){
                 RyseInventory.builder().title("§9Shop")
-                        .rows(5)
+                        .rows(6)
                         .provider(new InventoryProvider() {
                             @Override
                             public void init(Player player, InventoryContents contents) {
@@ -38,6 +38,8 @@ public class ShopCMD implements CommandExecutor {
                                 beschreibungShopInfo.add("§7Item Lager: §e" + shop.getItemLager());
 
                                 contents.set(33, Shopy.getInstance().createItemWithLore(Material.FEATHER, "§9Statistik", beschreibungShopInfo));
+
+                                contents.set(39, Shopy.getInstance().createItem(Material.TRAPPED_CHEST, "§9Item Lager"));
                             }
                         }).build(Shopy.getInstance()).open(p);
             }else {

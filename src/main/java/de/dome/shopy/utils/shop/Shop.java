@@ -6,6 +6,7 @@ import de.dome.shopy.utils.Ressoure;
 import de.dome.shopy.utils.items.Item;
 import de.dome.shopy.utils.items.ItemKategorie;
 import de.dome.shopy.utils.items.ItemRessourecenKosten;
+import de.dome.shopy.utils.items.ItemSeltenheit;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
@@ -22,18 +23,20 @@ public class Shop {
     int shopId;
     Player owner;
     int level;
-    int ressourcenLager;
-    int itemLager;
+    int ressourcenLagerSize;
+    int itemLagerSize;
     World world;
     ArrayList<Cuboid> zones;
     ShopRessourenManger shopRessourenManger;
     /* itemKategorieLevel auf den Shop bezogen */
     Map<String, ShopItemKategorieLevel> itemKategorieLevel;
+   ArrayList<ShopItem> shopItems;
     /* Halte fest, ob überhaupt ein Spielershop gefunden wurde  */
     private boolean loadShop = false;
 
     public Shop(UUID ownerUUID, Boolean playerTeleport){
         zones = new ArrayList<>();
+        shopItems = new ArrayList<>();
         itemKategorieLevel = new LinkedHashMap<>();
 
         CompletableFuture<Void> basisDaten = CompletableFuture.runAsync(() -> {
@@ -124,6 +127,13 @@ public class Shop {
                     }
 
                     Shopy.getInstance().getSpielerShops().put(ownerUUID, this);
+
+                    String queryItemLager = "SELECT * From shop_item_lager JOIN item ON item.id = shop_item_lager.item";
+                    ResultSet resultItemLager = Shopy.getInstance().getMySQLConntion().resultSet(queryItemLager);
+                    while(resultItemLager.next()){
+                        ShopItem newItem = new ShopItem(resultItemLager.getInt("shop_item_lager.id"), ItemKategorie.getItemKategorieById(resultItemLager.getInt("item_kategorie")), resultItemLager.getString("name"), resultItemLager.getString("beschreibung"), Material.getMaterial(resultItemLager.getString("icon")), ItemSeltenheit.getItemStufeById(resultItemLager.getInt("item_seltenheit")));
+                        shopItems.add(newItem);
+                    }
                 }
 
             } catch (SQLException e) { }
@@ -139,8 +149,8 @@ public class Shop {
                 /* Shop werte daten aus datenbank laden*/
                 try {
                     while (result.next()){
-                        if(result.getString("wert").equals("ressourcen_lager")) ressourcenLager = Integer.parseInt(result.getString("value"));
-                        if(result.getString("wert").equals("item_lager")) itemLager = Integer.parseInt(result.getString("value"));
+                        if(result.getString("wert").equals("ressourcen_lager")) ressourcenLagerSize = Integer.parseInt(result.getString("value"));
+                        if(result.getString("wert").equals("item_lager")) itemLagerSize = Integer.parseInt(result.getString("value"));
                     }
                 } catch (SQLException e) {
                     Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
@@ -288,13 +298,13 @@ public class Shop {
         CompletableFuture.runAsync(() -> {
             Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET value = '"+ newAmount +"' WHERE wert = 'ressourcen_lager'");
         });
-        ressourcenLager = newAmount;
+        ressourcenLagerSize = newAmount;
     }
     public void changeItemLager(int newAmount){
         CompletableFuture.runAsync(() -> {
             Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET value = '"+ newAmount +"' WHERE wert = 'item_lager'");
         });
-        itemLager = newAmount;
+        itemLagerSize = newAmount;
     }
 
     public Player getOwner() {
@@ -322,11 +332,15 @@ public class Shop {
     }
 
     public int getRessourcenLager() {
-        return ressourcenLager;
+        return ressourcenLagerSize;
     }
 
     public int getItemLager() {
-        return itemLager;
+        return itemLagerSize;
+    }
+
+    public ArrayList<ShopItem> getShopItems() {
+        return shopItems;
     }
 
     //Location{world=CraftWorld{name=plugins/Shopy/shop_welten/sps_d202f2c8-d4e7-4cc8-94e5-285f3d026a6f_1},x=0.0,y=-60.0,z=-17.0,pitch=0.0,yaw=0.0}

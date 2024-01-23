@@ -15,4 +15,5 @@ commands:
   setshopzone:
   ressouren:
   money:
-  setRessource:
+  setressource:
+  itemlager:

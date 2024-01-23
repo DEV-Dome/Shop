@@ -147,6 +147,8 @@ public class InventoryClickListener implements Listener {
                     }
                 }else if(item.getType() == Material.HEART_OF_THE_SEA) {
                     Bukkit.dispatchCommand(p, "ressouren");
+                }else if(item.getType() == Material.TRAPPED_CHEST) {
+                    Bukkit.dispatchCommand(p, "itemlager");
                 } else {
                     e.setCancelled(true);
                 }

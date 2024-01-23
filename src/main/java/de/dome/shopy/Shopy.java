@@ -109,6 +109,7 @@ public class Shopy extends JavaPlugin {
         getCommand("ressouren").setExecutor(new RessourenCMD());
         getCommand("money").setExecutor(new moneyCMD());
         getCommand("setRessource").setExecutor(new setRessourceCMD());
+        getCommand("itemlager").setExecutor(new ItemLagerCMD());
     }
 
     private void registerNPC(){

@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS shop_item_lager (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    shop INT NOT NULL,
+    item INT NOT NULL,
+    FOREIGN KEY (shop) REFERENCES shop(id),
+    FOREIGN KEY (item) REFERENCES item(id)
+);

@@ -93,7 +93,7 @@ public class Item {
                         if(resultItemWerte.getString("wert").equals("kategorie_xp")) newItem.kategorieXp = Integer.parseInt(resultItemWerte.getString("value"));
                     }
                     /* Item Stufe */
-                    newItem.itemSeltenheit = ItemSeltenheit.getIteStufeById(resultItem.getInt("item_seltenheit"));
+                    newItem.itemSeltenheit = ItemSeltenheit.getItemStufeById(resultItem.getInt("item_seltenheit"));
 
                     Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + newItem.getItemSeltenheit().getFarbe() +"Item geladen: " + newItem.getName());
 

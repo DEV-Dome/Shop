@@ -53,7 +53,7 @@ public class ItemSeltenheit {
             Item.registerItem();
         });
     }
-    public static ItemSeltenheit getIteStufeByName(String name){
+    public static ItemSeltenheit getItemStufeByName(String name){
         ItemSeltenheit returnItemSeltenheit = null;
 
         for(ItemSeltenheit itemSeltenheit : itemSeltenheitList){
@@ -65,7 +65,7 @@ public class ItemSeltenheit {
 
         return returnItemSeltenheit;
     }
-    public static ItemSeltenheit getIteStufeById(int id){
+    public static ItemSeltenheit getItemStufeById(int id){
         ItemSeltenheit returnItemSeltenheit = null;
 
         for(ItemSeltenheit itemSeltenheit : itemSeltenheitList){
