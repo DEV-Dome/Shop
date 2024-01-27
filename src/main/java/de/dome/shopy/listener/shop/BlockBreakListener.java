@@ -91,7 +91,7 @@ public class BlockBreakListener implements Listener {
                                 p.getInventory().addItem(Shopy.getInstance().createItemWithLore(Material.TRAPPED_CHEST, "§9Item Lager", beschreibung));
 
                                 /* Item Effeckt beim Abbauen (negativ) */
-                                int newAmount = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getItemLager() - 10;
+                                int newAmount = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getItemLagerSize() - 10;
                                 Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).changeItemLager(newAmount);
 
                                 p.sendMessage(Shopy.getInstance().getPrefix() + "Durch das Platzieren des Item, wurde dein Itemlager um 10 Plätze reduziert.");

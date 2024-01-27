@@ -1,5 +1,6 @@
 package de.dome.shopy.utils.shop;
 
+import de.dome.shopy.utils.items.Item;
 import de.dome.shopy.utils.items.ItemKategorie;
 import de.dome.shopy.utils.items.ItemSeltenheit;
 import org.bukkit.Material;
@@ -43,7 +44,6 @@ public class ShopItem {
     public Material getIcon() {
         return icon;
     }
-
     public ItemSeltenheit getItemSeltenheit() {
         return itemSeltenheit;
     }

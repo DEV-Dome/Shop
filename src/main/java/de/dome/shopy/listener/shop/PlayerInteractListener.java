@@ -28,10 +28,12 @@ public class PlayerInteractListener implements Listener {
                 e.setCancelled(true);
                 Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openWerkbankInventar();
             }
+            if(e.getClickedBlock().getType() == Material.TRAPPED_CHEST){
+                e.setCancelled(true);
+                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openItemLagerInventar(1);
+            }
 
-            if (e.getClickedBlock().getType() == Material.TRAPPED_CHEST ||
-                e.getClickedBlock().getType() == Material.BARREL
-            ) {
+            if (e.getClickedBlock().getType() == Material.BARREL) {
                 e.setCancelled(true);
             }
         }

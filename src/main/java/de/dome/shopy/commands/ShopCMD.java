@@ -35,7 +35,7 @@ public class ShopCMD implements CommandExecutor {
 
                                 beschreibungShopInfo = new ArrayList<>();
                                 beschreibungShopInfo.add("§7Ressourcen Lager: §e" + shop.getRessourcenLager());
-                                beschreibungShopInfo.add("§7Item Lager: §e" + shop.getItemLager());
+                                beschreibungShopInfo.add("§7Item Lager: §e" + shop.getItemLagerSize());
 
                                 contents.set(33, Shopy.getInstance().createItemWithLore(Material.FEATHER, "§9Statistik", beschreibungShopInfo));
 

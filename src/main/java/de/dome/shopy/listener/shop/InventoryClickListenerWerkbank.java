@@ -14,12 +14,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.sql.SQLException;
 import java.util.concurrent.CompletableFuture;
 
-public class InventoryClickListener implements Listener {
+public class InventoryClickListenerWerkbank implements Listener {
 
-    public InventoryClickListener() {
+    public InventoryClickListenerWerkbank() {
         Shopy.getInstance().getServer().getPluginManager().registerEvents(this, Shopy.getInstance());
     }
 
@@ -30,36 +29,7 @@ public class InventoryClickListener implements Listener {
         Player p = (Player) e.getWhoClicked();
         ItemStack item = e.getCurrentItem();
 
-        /* Item Markt*/
-        if (e.getView().getTitle().equals("§9Ressouren Markplatz")) {
-            if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
-                String name = item.getItemMeta().getDisplayName().substring(2);
-                Shop spielerShop = Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
 
-                Ressoure ressoure = Ressoure.getRessoureByName(name);
-                int ressoureValue = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger().getRessourceValue(ressoure);
-                int newAmount = ressoureValue + 1;
-
-                double kosten = Math.round(ressoure.getAktuelleKosten());
-                int spielerGeld = spielerShop.getRessourenShopManger().getRessourceValue(Ressoure.getRessoureByName("Geld"));
-
-                if(spielerGeld < kosten){
-                    double zuWenig = kosten - spielerGeld;
-                    p.sendMessage(Shopy.getInstance().getPrefix() + "Leider reicht dein geld dafür nicht aus! Dir fehlen §e" + zuWenig + " §7€");
-                    return;
-                }
-                if(newAmount > spielerShop.getRessourcenLager()){
-                    p.sendMessage(Shopy.getInstance().getPrefix() + "Leider reicht der Platz in deinem Ressourcenlager nicht. Dieser ist zurzeit auf " + spielerShop.getRessourcenLager() + " begrenzt.");
-                    return;
-                }
-
-                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger().setRessourcenValue(ressoure, newAmount);
-                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger().setRessourcenValue(Ressoure.getRessoureByName("Geld"), (int) (spielerGeld - kosten));
-
-                p.sendMessage(Shopy.getInstance().getPrefix() + "Du hast dir ein §e" + name + " §7für §e" + kosten + " §7€ gekauft.");
-                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openMarkplatzInventar();
-            }
-        }
         /* Werkbank Übersicht*/
         if (e.getView().getTitle().equals("§9Werkbank-Kategorie")) {
             if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
@@ -121,6 +91,12 @@ public class InventoryClickListener implements Listener {
                 if(realItem != null){
                     // Item gefunden, Neun kann es 'gebaut' werden.
 
+                    /* Prüfe ob Platz im Itemlager ist */
+                    if(spielerShop.getItemLagerSize() < spielerShop.getShopItems().size() - 1){
+                        p.sendMessage(Shopy.getInstance().getPrefix() + "Dein Item lager ist voll. Baue weiter ‚§9Item Lager‘ §7um diesen Platz zu erweitern.");
+                        return;
+                    }
+
                     /* Item Kosten */
                     boolean kostenvorhanden = true;
                     String fehlendeRessourecen = "";
@@ -132,7 +108,6 @@ public class InventoryClickListener implements Listener {
                         }
                     }
 
-
                     /* Wenn nicht alle Kosten vorhanden sind */
                     if(!kostenvorhanden) {
                         fehlendeRessourecen = fehlendeRessourecen.substring(0, fehlendeRessourecen.length() - 2);
@@ -140,6 +115,12 @@ public class InventoryClickListener implements Listener {
 
                         p.sendMessage(Shopy.getInstance().getPrefix() + "Dir fehlen noch Ressourcen um dieses Item bauen zu können: " + fehlendeRessourecen);
                         return;
+                    }
+
+                    /*Item Kosten abziehen*/
+                    for(ItemRessourecenKosten itk : realItem.getRessourecsKostenList()){
+                        int neueMenge = spielerShop.getRessourenShopManger().getRessourceValue(itk.getRessoure()) - itk.getMenge();
+                        spielerShop.getRessourenShopManger().setRessourcenValue(itk.getRessoure(), neueMenge);
                     }
 
                     spielerShop.getShopItems().add(new ShopItem(-1, realItem.getItemKategorie(), realItem.getName(), realItem.getBeschreibung(), realItem.getIcon(), realItem.getItemSeltenheit()));

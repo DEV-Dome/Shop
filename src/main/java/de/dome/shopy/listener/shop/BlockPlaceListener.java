@@ -39,13 +39,13 @@ public class BlockPlaceListener implements Listener {
                                 p.sendMessage(Shopy.getInstance().getPrefix() + "Durch das Platzieren des Item, wurde dein Ressourcenlager um 10 Plätze erweitert.");
                             }
                             if(e.getBlock().getType() == Material.TRAPPED_CHEST){
-                                if(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getItemLager() >= 55){
+                                if(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getItemLagerSize() >= 55){
                                     p.sendMessage(Shopy.getInstance().getPrefix() + "§cDu hast die maximale Anzahl, von diesem Itemtypen bereist verbaut.");
                                     e.setCancelled(true);
                                     return;
                                 }
 
-                                int newAmount = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getItemLager() + 10;
+                                int newAmount = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getItemLagerSize() + 10;
                                 Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).changeItemLager(newAmount);
 
                                 p.sendMessage(Shopy.getInstance().getPrefix() + "Durch das Platzieren des Item, wurde dein Itemlager um 10 Plätze erweitert.");

@@ -207,6 +207,45 @@ public class Shop {
                     }
                 }
             }
+            @Override
+            public void update(Player player, InventoryContents contents) {
+                int solt = 10;
+                int zaheler = 0;
+                for (Map.Entry<Ressoure, Integer> shopRessoure : Shopy.getInstance().getSpielerShops().get(owner.getUniqueId()).getRessourenShopManger().getShopRessoure().entrySet()) {
+                    Ressoure ressoure = shopRessoure.getKey();
+                    if(!ressoure.getType().equalsIgnoreCase("STANDART")) continue;
+
+                    /*
+                      Anzahl farbig markieren, damit man leichter erkennt wie der Stand ist:
+                      X < getRessourcenLager = §e (Gelb)
+                      X ==getRessourcenLager = §a (Grün)
+                      X > getRessourcenLager = §c (Rot)
+                    *  */
+                    String colorkey = "§e";
+                    if(shopRessoure.getValue() <  getRessourcenLager()) colorkey = "§e";
+                    if(shopRessoure.getValue() == getRessourcenLager()) colorkey = "§a";
+                    if(shopRessoure.getValue() >  getRessourcenLager()) colorkey = "§c";
+
+                    ArrayList<String> beschreibung = new ArrayList<>();
+                    beschreibung.add("§7Deine Menge: " + colorkey +  shopRessoure.getValue() + " §7/§e " + getRessourcenLager() + " §7" + ressoure.getName());
+                    beschreibung.add("§7Aktuelle Kosten: §e" + Math.round(ressoure.getAktuelleKosten()) + " §7€");
+                    beschreibung.add("");
+                    beschreibung.add("§6(Du hast " + shopRessourenManger.getRessourceValue(Ressoure.getRessoureByName("geld")) + " €)");
+                    beschreibung.add("");
+                    beschreibung.add("§5" + ressoure.getBeschreibung());
+
+                    contents.update(solt, Shopy.getInstance().createItemWithLore(ressoure.getIcon(), "§9" + ressoure.getName(), beschreibung));
+
+                    /* Items Anordenen */
+                    zaheler++;
+                    if (zaheler == 7) {
+                        solt += 3;
+                        zaheler = 0;
+                    } else {
+                        solt++;
+                    }
+                }
+            }
         }).build(Shopy.getInstance()).open(owner);
     }
     public void openMarkplatzWaffenInventar(int seite, ItemKategorie itemKategorie){
@@ -294,6 +333,50 @@ public class Shop {
             }
         }).build(Shopy.getInstance()).open(owner);
     }
+
+    public void openItemLagerInventar(int seite){
+        RyseInventory.builder().title("§9Item Lager Seite " + seite)
+                .rows(6)
+                .provider(new InventoryProvider() {
+                    @Override
+                    public void init(Player player, InventoryContents contents) {
+                        for(int i = 0; i <= (5 * 9) - 1 ;i++){
+                            if(i <= getShopItems().size() - 1){
+                                /* Item laden */
+                                ShopItem shopItem = getShopItems().get(i);
+                                ArrayList<String> beschreibung = new ArrayList<>();
+                                /* ID anzeigen*/
+                                beschreibung.add("§7Item-ID: " + shopItem.getId() + "");
+                                /* Actionen auflisten*/
+                                beschreibung.add("");
+                                beschreibung.add("§c- Rechtsklick zum Löschen");
+                                beschreibung.add("");
+
+                                String[] beschreibungsArray = shopItem.getBeschreibung().split("\n");
+
+                                for(String itemBeschreibung : beschreibungsArray){
+                                    beschreibung.add(itemBeschreibung.trim());
+                                }
+
+                                String itemName = "§9" + shopItem.getName() +  " " + shopItem.getItemSeltenheit().getFarbe() + " [" + shopItem.getItemSeltenheit().getName() + "]";
+                                contents.set(i, Shopy.getInstance().createItemWithLore(shopItem.getIcon(), "§9" + itemName, beschreibung));
+                            }else {
+                                if(i > getItemLagerSize() - 1){
+                                    ArrayList beschreibung = new ArrayList();
+                                    beschreibung.add("");
+                                    beschreibung.add("§7Du kannst diesen Solt freischalten, in dem du mehr Item Lager in deinem Shop aufbaust.");
+
+                                    contents.set(i, Shopy.getInstance().createItemWithLore(Material.GRAY_DYE, "§7Solt noch nicht freigeschaltet", beschreibung));
+                                }
+                            }
+                        }
+                        contents.set(45, Shopy.getInstance().createItem(Material.TRAPPED_CHEST, "§7zur Shopübersicht"));
+                        contents.set(46, Shopy.getInstance().createItem(Material.BARRIER, "§7Menü Schlissen"));
+                        contents.set(53, Shopy.getInstance().createItem(Material.ARROW, "§7Nächste Seite"));
+                    }
+                }).build(Shopy.getInstance()).open(owner);
+    }
+
     public void changeRessourcenLager(int newAmount){
         CompletableFuture.runAsync(() -> {
             Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET value = '"+ newAmount +"' WHERE wert = 'ressourcen_lager'");
@@ -335,12 +418,40 @@ public class Shop {
         return ressourcenLagerSize;
     }
 
-    public int getItemLager() {
+    public int getItemLagerSize() {
         return itemLagerSize;
     }
 
     public ArrayList<ShopItem> getShopItems() {
         return shopItems;
+    }
+
+    public ShopItem getShopItemById(int id){
+        ShopItem ret = null;
+
+        for(ShopItem shopItem : shopItems){
+            if(shopItem.getId() == id){
+                ret = shopItem;
+                break;
+            }
+        }
+
+        return ret;
+    }
+
+    public void delteShopItemById(int id){
+        for(int i = 0; i <= shopItems.size() - 1; i++){
+            ShopItem shopItem = shopItems.get(i);
+
+            if(shopItem.getId() == id){
+                CompletableFuture.runAsync(() -> {
+                    Shopy.getInstance().getMySQLConntion().query("DELETE FROM shop_item_lager WHERE ID = '" + id +"'");
+                });
+
+                shopItems.remove(i);
+                break;
+            }
+        }
     }
 
     //Location{world=CraftWorld{name=plugins/Shopy/shop_welten/sps_d202f2c8-d4e7-4cc8-94e5-285f3d026a6f_1},x=0.0,y=-60.0,z=-17.0,pitch=0.0,yaw=0.0}
