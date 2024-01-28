@@ -1,4 +1,4 @@
-package de.dome.shopy.listener.shop;
+package de.dome.shopy.listener.shop.clicklistener;
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.items.Item;
@@ -43,6 +43,10 @@ public class InventoryClickListenerWerkbank implements Listener {
         if (e.getView().getTitle().startsWith("§9Werkbank ")) {
             if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
                 Shop spielerShop = Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
+
+                String[] titleWorte = e.getView().getTitle().split(" ");
+                int AkkuelleSeite = Integer.parseInt(titleWorte[3]);
+
                 /*Statische Items*/
                 if(item.getItemMeta().getDisplayName().equals("§7Zurück zur Übersicht")){
                     spielerShop.openWerkbankInventar();
@@ -53,24 +57,20 @@ public class InventoryClickListenerWerkbank implements Listener {
                     return;
                 }
 
-                if(item.getItemMeta().getDisplayName().equals("§7Nach vorne")) {
-                    String[] titleWorte = e.getView().getTitle().split(" ");
-                    int AkkuelleSeite = Integer.parseInt(titleWorte[3]) + 1;
+                if(item.getItemMeta().getDisplayName().equals("§7Letzte Seite")) {
                     ItemKategorie itemKategorie = ItemKategorie.getItemKategorieByName(titleWorte[1]);
 
-                    Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openMarkplatzWaffenInventar(AkkuelleSeite, itemKategorie);
+                    Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openMarkplatzWaffenInventar(AkkuelleSeite - 1, itemKategorie);
                     return;
                 }
-                if(item.getItemMeta().getDisplayName().equals("§7Zurück")) {
-                    String[] titleWorte = e.getView().getTitle().split(" ");
-                    int AkkuelleSeite = Integer.parseInt(titleWorte[3]) - 1;
+
+                if(item.getItemMeta().getDisplayName().equals("§7Nächste Seite")) {
                     ItemKategorie itemKategorie = ItemKategorie.getItemKategorieByName(titleWorte[1]);
 
-                    if(AkkuelleSeite < 0) return;
-
-                    Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openMarkplatzWaffenInventar(AkkuelleSeite, itemKategorie);
+                    Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openMarkplatzWaffenInventar(AkkuelleSeite + 1, itemKategorie);
                     return;
                 }
+
 
                 /* Item herstellen */
                 String[] itemNameWorte = item.getItemMeta().getDisplayName().split(" ");

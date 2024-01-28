@@ -1,4 +1,4 @@
-package de.dome.shopy.listener.shop;
+package de.dome.shopy.listener.shop.clicklistener;
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.items.Item;
@@ -30,6 +30,9 @@ public class InventoryClickListenerItemLager implements Listener {
         if (e.getView().getTitle().startsWith("§9Item ")) {
             if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
                 Shop spielerShop = Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
+
+                String[] titleWorte = e.getView().getTitle().split(" ");
+                int AkkuelleSeite = Integer.parseInt(titleWorte[3]);
 //
                 if (item.getItemMeta().getDisplayName().equals("§7zur Shopübersicht")) {
                     Bukkit.dispatchCommand(p, "shop");
@@ -39,16 +42,26 @@ public class InventoryClickListenerItemLager implements Listener {
                     p.closeInventory();
                     return;
                 }
+                if (item.getItemMeta().getDisplayName().equals("§7Letzte Seite")) {
+                    spielerShop.openItemLagerInventar(AkkuelleSeite - 1);
+                    return;
+                }
+                if (item.getItemMeta().getDisplayName().equals("§7Nächste Seite")) {
+                    spielerShop.openItemLagerInventar(AkkuelleSeite + 1);
+                    return;
+                }
                 //Rechtklick zum Item löschen ausführen
                 if(e.isRightClick()){
                     if(item.getType() != Material.GRAY_DYE){
+
+
                         int itemID = Integer.parseInt(item.getItemMeta().getLore().get(0).split(":")[1].substring(1));
                         ShopItem shopItem = spielerShop.getShopItemById(itemID);
 
                         /* Check wurde das Item gefunden */
                         if(shopItem != null){
                             spielerShop.delteShopItemById(itemID);
-                            spielerShop.openItemLagerInventar(1);
+                            spielerShop.openItemLagerInventar(AkkuelleSeite);
                         }else {
                             p.sendMessage(Shopy.getInstance().getPrefix() + "§cBeim Ausführen dieser Aktion ist leider ein Fehler aufgetreten. Bitte versuche es später erneut oder Kontaktiere den Support.");
                         }
@@ -56,5 +69,6 @@ public class InventoryClickListenerItemLager implements Listener {
                 }
             }
         }
+
     }
 }

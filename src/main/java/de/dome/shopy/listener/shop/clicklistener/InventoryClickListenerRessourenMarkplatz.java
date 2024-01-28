@@ -1,4 +1,4 @@
-package de.dome.shopy.listener.shop;
+package de.dome.shopy.listener.shop.clicklistener;
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.Ressoure;
@@ -49,8 +49,6 @@ public class InventoryClickListenerRessourenMarkplatz  implements Listener {
 
                 p.sendMessage(Shopy.getInstance().getPrefix() + "Du hast dir ein §e" + name + " §7für §e" + kosten + " §7€ gekauft.");
 
-
-//                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openMarkplatzInventar();
                 p.updateInventory();
             }
         }

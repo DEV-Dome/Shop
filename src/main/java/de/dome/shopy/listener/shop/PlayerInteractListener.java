@@ -30,7 +30,7 @@ public class PlayerInteractListener implements Listener {
             }
             if(e.getClickedBlock().getType() == Material.TRAPPED_CHEST){
                 e.setCancelled(true);
-                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openItemLagerInventar(1);
+                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openItemLagerInventar(0);
             }
 
             if (e.getClickedBlock().getType() == Material.BARREL) {

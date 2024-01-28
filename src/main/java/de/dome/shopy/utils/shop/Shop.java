@@ -255,6 +255,9 @@ public class Shop {
                 int solt = 11;
                 int zaheler = 0;
                 int startBei = seite * 5;
+
+                boolean letztesItemGsetzt = false;
+
                 for(Item item : Item.itemList){
                     if(item.getItemKategorie().getId() != itemKategorie.getId()) continue;
                     if(startBei > zaheler){
@@ -289,13 +292,14 @@ public class Shop {
                     zaheler++;
                     solt += 1;
                     if (zaheler == 5) {
+                        letztesItemGsetzt = true;
                         break;
                     }
                 }
 
                 /*Menü Regeler */
-                contents.set(9, Shopy.getInstance().createItem(Material.ARROW, "§7Zurück"));
-                contents.set(17, Shopy.getInstance().createItem(Material.ARROW, "§7Nach vorne"));
+                if(seite != 0)  contents.set(9, Shopy.getInstance().createItem(Material.ARROW, "§7Letzte Seite"));
+                if(letztesItemGsetzt) contents.set(17, Shopy.getInstance().createItem(Material.ARROW, "§7Nächste Seite"));
 
                 contents.set(18, Shopy.getInstance().createItem(Material.CRAFTING_TABLE, "§7Zurück zur Übersicht"));
                 contents.set(26, Shopy.getInstance().createItem(Material.BARRIER, "§7Menü Schlissen"));
@@ -340,8 +344,15 @@ public class Shop {
                 .provider(new InventoryProvider() {
                     @Override
                     public void init(Player player, InventoryContents contents) {
-                        for(int i = 0; i <= (5 * 9) - 1 ;i++){
+                        boolean letztesItemGsetzt = false;
+
+                        for(int i = (0 + (seite * 44)); i <= 44 * (seite + 1);i++){
+                            /* Item Slot unabhängig der Shop Seite. Darf nicht größer 53 sein */
+                            int slot = i - (seite * 44);
+
                             if(i <= getShopItems().size() - 1){
+                                letztesItemGsetzt = true;
+
                                 /* Item laden */
                                 ShopItem shopItem = getShopItems().get(i);
                                 ArrayList<String> beschreibung = new ArrayList<>();
@@ -358,21 +369,28 @@ public class Shop {
                                     beschreibung.add(itemBeschreibung.trim());
                                 }
 
+
                                 String itemName = "§9" + shopItem.getName() +  " " + shopItem.getItemSeltenheit().getFarbe() + " [" + shopItem.getItemSeltenheit().getName() + "]";
-                                contents.set(i, Shopy.getInstance().createItemWithLore(shopItem.getIcon(), "§9" + itemName, beschreibung));
+
+                                contents.set(slot, Shopy.getInstance().createItemWithLore(shopItem.getIcon(), "§9" + itemName, beschreibung));
                             }else {
                                 if(i > getItemLagerSize() - 1){
+                                    letztesItemGsetzt = false;
+
                                     ArrayList beschreibung = new ArrayList();
                                     beschreibung.add("");
                                     beschreibung.add("§7Du kannst diesen Solt freischalten, in dem du mehr Item Lager in deinem Shop aufbaust.");
 
-                                    contents.set(i, Shopy.getInstance().createItemWithLore(Material.GRAY_DYE, "§7Solt noch nicht freigeschaltet", beschreibung));
+                                    contents.set(slot, Shopy.getInstance().createItemWithLore(Material.GRAY_DYE, "§7Solt noch nicht freigeschaltet", beschreibung));
                                 }
                             }
                         }
                         contents.set(45, Shopy.getInstance().createItem(Material.TRAPPED_CHEST, "§7zur Shopübersicht"));
                         contents.set(46, Shopy.getInstance().createItem(Material.BARRIER, "§7Menü Schlissen"));
-                        contents.set(53, Shopy.getInstance().createItem(Material.ARROW, "§7Nächste Seite"));
+
+                        if(seite != 0)          contents.set(52, Shopy.getInstance().createItem(Material.ARROW, "§7Letzte Seite"));
+                        if(letztesItemGsetzt)   contents.set(53, Shopy.getInstance().createItem(Material.ARROW, "§7Nächste Seite"));
+
                     }
                 }).build(Shopy.getInstance()).open(owner);
     }
@@ -454,7 +472,6 @@ public class Shop {
         }
     }
 
-    //Location{world=CraftWorld{name=plugins/Shopy/shop_welten/sps_d202f2c8-d4e7-4cc8-94e5-285f3d026a6f_1},x=0.0,y=-60.0,z=-17.0,pitch=0.0,yaw=0.0}
     private Location getLocationFromString(String locationString) {
         Location ret = null;
 
