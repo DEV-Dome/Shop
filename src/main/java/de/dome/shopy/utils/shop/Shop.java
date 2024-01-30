@@ -21,6 +21,7 @@ import java.util.concurrent.CompletableFuture;
 public class Shop {
 
     int shopId;
+    Shop instance;
     Player owner;
     int level;
     int ressourcenLagerSize;
@@ -38,6 +39,7 @@ public class Shop {
         zones = new ArrayList<>();
         shopItems = new ArrayList<>();
         itemKategorieLevel = new LinkedHashMap<>();
+        instance = this;
 
         CompletableFuture<Void> basisDaten = CompletableFuture.runAsync(() -> {
             try {
@@ -123,7 +125,7 @@ public class Shop {
                             xpZumNachstenLevel = resultItemKategorie.getInt("xp");
                         }
 
-                        itemKategorieLevel.put(itemKategorie.getName(), new ShopItemKategorieLevel(level, xpZumNachstenLevel, aktuelleXP));
+                        itemKategorieLevel.put(itemKategorie.getName(), new ShopItemKategorieLevel(level, xpZumNachstenLevel, aktuelleXP, itemKategorie, this));
                     }
 
                     Shopy.getInstance().getSpielerShops().put(ownerUUID, this);
@@ -163,7 +165,6 @@ public class Shop {
     public void unLoadWorld(){
         Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
             Bukkit.unloadWorld(world, true);
-            Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§5" + world.getName() + " wurde gespeicht und geunloaded");
         });
     }
 
@@ -257,7 +258,8 @@ public class Shop {
                 int zaheler = 0;
                 int startBei = seite * 5;
 
-                boolean letztesItemGsetzt = false;
+                boolean letztesItemGesetzt = false;
+                boolean erstesItemgesetzt = false;
 
                 for(Item item : Item.itemList){
                     if(item.getItemKategorie().getId() != itemKategorie.getId()) continue;
@@ -268,6 +270,7 @@ public class Shop {
                         zaheler = 0;
                         startBei = -1;
                     }
+                    if(!erstesItemgesetzt) erstesItemgesetzt = true;
 
                     ArrayList<String> beschreibung = new ArrayList<>();
                     beschreibung.add("");
@@ -293,25 +296,27 @@ public class Shop {
                     zaheler++;
                     solt += 1;
                     if (zaheler == 5) {
-                        letztesItemGsetzt = true;
+                        letztesItemGesetzt = true;
                         break;
                     }
+                }
+                if(!erstesItemgesetzt){
+                    openMarkplatzWaffenInventar(seite -1, itemKategorie);
+                    return;
                 }
 
                 /*Menü Regeler */
                 if(seite != 0)  contents.set(9, Shopy.getInstance().createItem(Material.ARROW, "§7Letzte Seite"));
-                if(letztesItemGsetzt) contents.set(17, Shopy.getInstance().createItem(Material.ARROW, "§7Nächste Seite"));
+                if(letztesItemGesetzt) contents.set(17, Shopy.getInstance().createItem(Material.ARROW, "§7Nächste Seite"));
 
                 contents.set(18, Shopy.getInstance().createItem(Material.CRAFTING_TABLE, "§7Zurück zur Übersicht"));
                 contents.set(26, Shopy.getInstance().createItem(Material.BARRIER, "§7Menü Schlissen"));
 
-                /* Statistk Item*/
-                ArrayList<String> beschreibung = new ArrayList<>();
-                beschreibung.add("");
-                beschreibung.add("§7Level: §e" + itemKategorieLevel.get(itemKategorie.getName()).getLevel());
-                beschreibung.add("§e" + itemKategorieLevel.get(itemKategorie.getName()).getAkeulleXP() + " §7XP /§e " + itemKategorieLevel.get(itemKategorie.getName()).getXpZumNachstenLevel() + " §7XP");
-
-                contents.set(4, Shopy.getInstance().createItemWithLore(itemKategorie.getIcon(), "§9" + itemKategorie.getName() + " Statistk", beschreibung));
+                contents.set(4, Shopy.getInstance().createItemWithLore(itemKategorie.getIcon(), "§9" + itemKategorie.getName() + " Statistk", itemKategorie.getAnzeigeBeschreibung(instance)));
+            }
+            @Override
+            public void update(Player player, InventoryContents contents) {
+                contents.update(4, Shopy.getInstance().createItemWithLore(itemKategorie.getIcon(), "§9" + itemKategorie.getName() + " Statistk", itemKategorie.getAnzeigeBeschreibung(instance)));
             }
         }).build(Shopy.getInstance()).open(this.owner);
     }
@@ -322,7 +327,8 @@ public class Shop {
                 int solt = 10;
                 int zaheler = 0;
                 for(ItemKategorie itemKategorie : ItemKategorie.itemKategorieList){
-                    ArrayList<String> beschreibung = new ArrayList<>();
+                    ArrayList<String> beschreibung = itemKategorie.getAnzeigeBeschreibung(instance);
+                    beschreibung.add("");
                     beschreibung.add(itemKategorie.getBeschreibung());
 
                     contents.set(solt, Shopy.getInstance().createItemWithLore(itemKategorie.getIcon(), "§9" + itemKategorie.getName(), beschreibung));
@@ -445,6 +451,10 @@ public class Shop {
         return shopItems;
     }
 
+    public Shop getInstance() {
+        return instance;
+    }
+
     public ShopItem getShopItemById(int id){
         ShopItem ret = null;
 
@@ -471,6 +481,10 @@ public class Shop {
                 break;
             }
         }
+    }
+
+    public Map<String, ShopItemKategorieLevel> getItemKategorieLevel() {
+        return itemKategorieLevel;
     }
 
     private Location getLocationFromString(String locationString) {

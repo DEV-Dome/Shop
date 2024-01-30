@@ -127,8 +127,16 @@ public class InventoryClickListenerWerkbank implements Listener {
                         Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_lager (shop, item) VALUES ('" + spielerShop.getShopId() + "', '" + realItem.getId() + "')");
                     });
 
+                    //XP verteilen
+                    boolean levelUP = spielerShop.getItemKategorieLevel().get(realItem.getItemKategorie().getName()).addXp(realItem.getKategorieXp());
+
+                    //Spieler Nachricht ausgeben.
                     p.sendMessage(Shopy.getInstance().getPrefix() + "Item herstellen ...");
-                    p.playSound(p, Sound.ENTITY_ITEM_PICKUP,  1,1);
+
+                   if(levelUP) p.playSound(p, Sound.ENTITY_PLAYER_LEVELUP,  1,1);
+                   else p.playSound(p, Sound.ENTITY_ITEM_PICKUP,  1,1);
+
+                    p.updateInventory();
                 }else {
                   p.sendMessage(Shopy.getInstance().getPrefix() + "§cBeim Ausführen dieser Aktion ist leider ein Fehler aufgetreten. Bitte versuche es später erneut oder Kontaktiere den Support.");
                 }

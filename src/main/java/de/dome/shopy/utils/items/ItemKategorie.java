@@ -1,6 +1,7 @@
 package de.dome.shopy.utils.items;
 
 import de.dome.shopy.Shopy;
+import de.dome.shopy.utils.shop.Shop;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
@@ -62,6 +63,15 @@ public class ItemKategorie {
         }).thenRun(() -> {
             ItemSeltenheit.registerItemStufen();
         });
+    }
+
+    public ArrayList<String> getAnzeigeBeschreibung(Shop shop){
+        ArrayList<String> beschreibung = new ArrayList<>();
+        beschreibung.add("");
+        beschreibung.add("§7Level: §e" + shop.getItemKategorieLevel().get(getName()).getLevel());
+        beschreibung.add("§e" + shop.getItemKategorieLevel().get(getName()).getAkeulleXP() + " §7XP /§e " + shop.getItemKategorieLevel().get(getName()).getXpZumNachstenLevel() + " §7XP");
+
+        return beschreibung;
     }
 
     public static ItemKategorie getItemKategorieById(int id){
