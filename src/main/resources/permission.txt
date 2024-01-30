@@ -3,6 +3,7 @@ shopy.cmd.loadDefaultValue
 shopy.cmd.setshopzone
 shopy.cmd.setnpcspawn
 shopy.cmd.setressource
+shopy.cmd.displayloadworlds
 
 shopy.bypass.buildOnOtherWorlds
 shopy.bypass.interactOnOtherWorlds

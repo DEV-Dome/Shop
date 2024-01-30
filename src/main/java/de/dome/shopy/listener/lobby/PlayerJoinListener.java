@@ -3,6 +3,7 @@ package de.dome.shopy.listener.lobby;
 import de.dome.shopy.Shopy;
 import de.dome.shopy.listener.shop.BlockBreakListener;
 import de.dome.shopy.utils.shop.Shop;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,6 +28,7 @@ public class PlayerJoinListener implements Listener {
         new Shop(p.getUniqueId(), false);
     }
 
+    @EventHandler
     public void playerQuit(PlayerQuitEvent e) {
         Player p = e.getPlayer();
 

@@ -80,7 +80,6 @@ public class InventoryClickListenerWerkbank implements Listener {
                 int zeahler = 0;
                 for(String wort : itemNameWorte){
                     if(itemNameWorte.length - 1 == zeahler) break;
-
                     itemName += " " + wort;
                     zeahler++;
                 }

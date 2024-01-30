@@ -13,10 +13,9 @@ import de.dome.shopy.utils.shop.Shop;
 import dev.sergiferry.playernpc.api.NPC;
 import dev.sergiferry.playernpc.api.NPCLib;
 import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
-import org.bukkit.Bukkit;
-import org.bukkit.Difficulty;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -56,6 +55,7 @@ public class Shopy extends JavaPlugin {
         Bukkit.getWorld("world").setDifficulty(Difficulty.PEACEFUL);
         Bukkit.getWorld("world").setClearWeatherDuration(0);
         Bukkit.getWorld("world").setTime(0);
+        Bukkit.getWorld("world").setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
 
         /* Lade serverspawn */
         File configFile = new File(getInstance().getDataFolder(), "spawn.yml");
@@ -64,6 +64,9 @@ public class Shopy extends JavaPlugin {
         if(config.isLocation("server.spawn")){
             serverSpawn = config.getLocation("server.spawn");
         }else serverSpawn = null;
+
+        /* Das nicht mit laden lassen, um leistung zu sparen */
+        if(Bukkit.getWorld("world_the_end") != null)  Bukkit.unloadWorld(Bukkit.getWorld("world_the_end"), false);
 
         mySQLConntion = new MySQL();
         MySQLDefault.getInstance().sqlStartUp();
@@ -80,7 +83,9 @@ public class Shopy extends JavaPlugin {
 
         /* Alle spieler beim Reload kicken */
         for(Player all : Bukkit.getOnlinePlayers()){
-            all.kick();
+            TextComponent component = Component.text("§7Der Server wird neu geladen, damit das ohne Umstände passieren kann wurdest du gekickt. Du kannst gleich weiter spielen.");
+
+            all.kick(component);
         }
 
         Bukkit.getConsoleSender().sendMessage(prefix + "§cPlugin getsoppt");
@@ -116,6 +121,7 @@ public class Shopy extends JavaPlugin {
         getCommand("money").setExecutor(new moneyCMD());
         getCommand("setRessource").setExecutor(new setRessourceCMD());
         getCommand("itemlager").setExecutor(new ItemLagerCMD());
+        getCommand("displayloadworlds").setExecutor(new DisplayLoadWorlds());
     }
 
     private void registerNPC(){

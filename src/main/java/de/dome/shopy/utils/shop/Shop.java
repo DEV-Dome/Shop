@@ -62,7 +62,7 @@ public class Shop {
                             creator.type(WorldType.NORMAL);
 
                             this.world = creator.createWorld();
-                            this.owner.teleport(this.world.getSpawnLocation());
+                            if(playerTeleport) this.owner.teleport(this.world.getSpawnLocation());
                         }else {
                             this.world = Bukkit.getWorld(world);
                         }
@@ -163,6 +163,7 @@ public class Shop {
     public void unLoadWorld(){
         Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
             Bukkit.unloadWorld(world, true);
+            Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§5" + world.getName() + " wurde gespeicht und geunloaded");
         });
     }
 
@@ -261,7 +262,7 @@ public class Shop {
                 for(Item item : Item.itemList){
                     if(item.getItemKategorie().getId() != itemKategorie.getId()) continue;
                     if(startBei > zaheler){
-                        zaheler++;
+                        zaheler = startBei;
                         continue;
                     }else if(startBei != -1){
                         zaheler = 0;
