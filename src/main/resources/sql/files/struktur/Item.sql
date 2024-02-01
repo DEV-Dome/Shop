@@ -5,7 +5,10 @@ CREATE TABLE IF NOT EXISTS item (
     icon VARCHAR(512) NOT NULL,
     name VARCHAR(512) NOT NULL,
     beschreibung TEXT NOT NULL,
+    freischalt_typ ENUM('STANDART', 'ITEM') NOT NULL,
+    freischalt_item INT DEFAULT NULL,
+    freischalt_menge INT DEFAULT NULL,
     reinfolge INT NOT NULL,
     FOREIGN KEY (item_kategorie) REFERENCES item_kategorie(id),
-    FOREIGN KEY (item_seltenheit) REFERENCES item_seltenheit(id)
+    FOREIGN KEY (item_kategorie) REFERENCES item_kategorie(id)
 );

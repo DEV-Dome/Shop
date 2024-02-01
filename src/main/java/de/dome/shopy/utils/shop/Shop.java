@@ -31,7 +31,8 @@ public class Shop {
     ShopRessourenManger shopRessourenManger;
     /* itemKategorieLevel auf den Shop bezogen */
     Map<String, ShopItemKategorieLevel> itemKategorieLevel;
-   ArrayList<ShopItem> shopItems;
+    ArrayList<ShopItem> shopItems;
+    ArrayList<ShopItemVorlage> shopItemVorlagen;
     /* Halte fest, ob überhaupt ein Spielershop gefunden wurde  */
     private boolean loadShop = false;
 
@@ -129,6 +130,24 @@ public class Shop {
                     }
 
                     Shopy.getInstance().getSpielerShops().put(ownerUUID, this);
+
+                    /* Item vorlagen laden */
+                    for(Item item : Item.itemList){
+                        String itemQuery = "SELECT * FROM shop_item_vorlage WHERE shop = '"+ shopId +"' AND item = '"+ item.getId() +"' LIMIT 1";
+                        ResultSet resultItem = Shopy.getInstance().getMySQLConntion().resultSet(itemQuery);
+                        ShopItemVorlage shopItemVorlage;
+
+                        if(resultItem.next()){
+                            boolean freigeschaltet = false;
+                            if(resultItem.getString("freigeschaltet").equalsIgnoreCase("JA")) freigeschaltet = true;
+
+                            shopItemVorlage = new ShopItemVorlage(resultItem.getInt("id"), this, item, resultItem.getInt("hergestellt"), freigeschaltet);
+                        }else {
+
+                        }
+
+                        /* item eintragen */
+                    }
 
                     String queryItemLager = "SELECT * From shop_item_lager JOIN item ON item.id = shop_item_lager.item";
                     ResultSet resultItemLager = Shopy.getInstance().getMySQLConntion().resultSet(queryItemLager);
@@ -481,6 +500,18 @@ public class Shop {
                 break;
             }
         }
+    }
+
+    public int getRessourcenLagerSize() {
+        return ressourcenLagerSize;
+    }
+
+    public ShopRessourenManger getShopRessourenManger() {
+        return shopRessourenManger;
+    }
+
+    public ArrayList<ShopItemVorlage> getShopItemVorlage() {
+        return shopItemVorlage;
     }
 
     public Map<String, ShopItemKategorieLevel> getItemKategorieLevel() {
