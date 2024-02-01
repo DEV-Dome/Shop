@@ -129,14 +129,20 @@ public class InventoryClickListenerWerkbank implements Listener {
 
                     //XP verteilen
                     boolean levelUP = spielerShop.getItemKategorieLevel().get(realItem.getItemKategorie().getName()).addXp(realItem.getKategorieXp());
+                    boolean herstellung = spielerShop.getShopItemVorlageByItem(realItem.getId()).addHerstellung();
 
                     //Spieler Nachricht ausgeben.
-                    p.sendMessage(Shopy.getInstance().getPrefix() + "Item herstellen ...");
+                    p.sendMessage(Shopy.getInstance().getPrefix() + "Dein Item wurde hergestellt und in deinem Itemlager verstaut!");
+                    if(herstellung){
+                        p.closeInventory();
+                        p.sendMessage(Shopy.getInstance().getPrefix() + "Herzlichen Glückwunsch, du hast ein neues Item zur Herstellung freigeschaltet.");
+                        p.playSound(p, Sound.ENTITY_PLAYER_LEVELUP,  1,1);
+                    }else {
+                        if(levelUP) p.playSound(p, Sound.ENTITY_PLAYER_LEVELUP,  1,1);
+                        else p.playSound(p, Sound.ENTITY_ITEM_PICKUP,  1,1);
 
-                   if(levelUP) p.playSound(p, Sound.ENTITY_PLAYER_LEVELUP,  1,1);
-                   else p.playSound(p, Sound.ENTITY_ITEM_PICKUP,  1,1);
-
-                    p.updateInventory();
+                        p.updateInventory();
+                    }
                 }else {
                   p.sendMessage(Shopy.getInstance().getPrefix() + "§cBeim Ausführen dieser Aktion ist leider ein Fehler aufgetreten. Bitte versuche es später erneut oder Kontaktiere den Support.");
                 }

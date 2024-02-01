@@ -39,6 +39,7 @@ public class Shop {
     public Shop(UUID ownerUUID, Boolean playerTeleport){
         zones = new ArrayList<>();
         shopItems = new ArrayList<>();
+        shopItemVorlagen = new ArrayList<>();
         itemKategorieLevel = new LinkedHashMap<>();
         instance = this;
 
@@ -132,6 +133,7 @@ public class Shop {
                     Shopy.getInstance().getSpielerShops().put(ownerUUID, this);
 
                     /* Item vorlagen laden */
+                    int lastID = 1;
                     for(Item item : Item.itemList){
                         String itemQuery = "SELECT * FROM shop_item_vorlage WHERE shop = '"+ shopId +"' AND item = '"+ item.getId() +"' LIMIT 1";
                         ResultSet resultItem = Shopy.getInstance().getMySQLConntion().resultSet(itemQuery);
@@ -142,11 +144,15 @@ public class Shop {
                             if(resultItem.getString("freigeschaltet").equalsIgnoreCase("JA")) freigeschaltet = true;
 
                             shopItemVorlage = new ShopItemVorlage(resultItem.getInt("id"), this, item, resultItem.getInt("hergestellt"), freigeschaltet);
+                            lastID = resultItem.getInt("id");
                         }else {
+                            Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_vorlage (shop, item) VALUES ('" + shopId + "', '"+ item.getId() +"')");
+                            shopItemVorlage = new ShopItemVorlage(lastID, this, item, 0,false);
 
+                            lastID++;
                         }
 
-                        /* item eintragen */
+                        shopItemVorlagen.add(shopItemVorlage);
                     }
 
                     String queryItemLager = "SELECT * From shop_item_lager JOIN item ON item.id = shop_item_lager.item";
@@ -271,6 +277,68 @@ public class Shop {
     }
     public void openMarkplatzWaffenInventar(int seite, ItemKategorie itemKategorie){
         RyseInventory.builder().title("§9Werkbank " + itemKategorie.getName() + " Seite " + seite).rows(3).provider(new InventoryProvider() {
+//            @Override
+//            public void init(Player player, InventoryContents contents) {
+//                int solt = 11;
+//                int zaheler = 0;
+//                int startBei = seite * 5;
+//
+//                boolean letztesItemGesetzt = false;
+//                boolean erstesItemgesetzt = false;
+//
+//                for(Item item : Item.itemList){
+//                    if(item.getItemKategorie().getId() != itemKategorie.getId()) continue;
+//                    if(startBei > zaheler){
+//                        zaheler = startBei;
+//                        continue;
+//                    }else if(startBei != -1){
+//                        zaheler = 0;
+//                        startBei = -1;
+//                    }
+//                    if(!erstesItemgesetzt) erstesItemgesetzt = true;
+//
+//                    ArrayList<String> beschreibung = new ArrayList<>();
+//                    beschreibung.add("");
+//
+//                    beschreibung.add("§7Kosten:");
+//                    for(ItemRessourecenKosten itr : item.getRessourecsKostenList()){
+//                        beschreibung.add("  §7- §e" + itr.getMenge() + " §7" + itr.getRessoure().getName());
+//                    }
+//                    beschreibung.add("");
+//                    beschreibung.add("§7Erfahrungspunkt:");
+//                    beschreibung.add("  §7- §e" + item.getShopXp() + " §7Shop Erfahrungspunkte");
+//                    beschreibung.add("  §7- §e" + item.getKategorieXp() + " §7Item-linien Erfahrungspunkte");
+//                    beschreibung.add("");
+//
+//                    String[] beschreibungsArray = item.getBeschreibung().split("\n");
+//                    for(String itemBeschreibung : beschreibungsArray){
+//                        beschreibung.add(itemBeschreibung.trim());
+//                    }
+//
+//                    String itemName = "§9" + item.getName() +  " " + item.getItemSeltenheit().getFarbe() + " [" + item.getItemSeltenheit().getName() + "]";
+//                    contents.set(solt, Shopy.getInstance().createItemWithLore(item.getIcon(), itemName, beschreibung));
+//
+//                    zaheler++;
+//                    solt += 1;
+//                    if (zaheler == 5) {
+//                        letztesItemGesetzt = true;
+//                        break;
+//                    }
+//                }
+//                if(!erstesItemgesetzt){
+//                    openMarkplatzWaffenInventar(seite -1, itemKategorie);
+//                    return;
+//                }
+//
+//                /*Menü Regeler */
+//                if(seite != 0)  contents.set(9, Shopy.getInstance().createItem(Material.ARROW, "§7Letzte Seite"));
+//                if(letztesItemGesetzt) contents.set(17, Shopy.getInstance().createItem(Material.ARROW, "§7Nächste Seite"));
+//
+//                contents.set(18, Shopy.getInstance().createItem(Material.CRAFTING_TABLE, "§7Zurück zur Übersicht"));
+//                contents.set(26, Shopy.getInstance().createItem(Material.BARRIER, "§7Menü Schlissen"));
+//
+//                contents.set(4, Shopy.getInstance().createItemWithLore(itemKategorie.getIcon(), "§9" + itemKategorie.getName() + " Statistk", itemKategorie.getAnzeigeBeschreibung(instance)));
+//            }
             @Override
             public void init(Player player, InventoryContents contents) {
                 int solt = 11;
@@ -280,7 +348,9 @@ public class Shop {
                 boolean letztesItemGesetzt = false;
                 boolean erstesItemgesetzt = false;
 
-                for(Item item : Item.itemList){
+                for(ShopItemVorlage shopItemVorlage : getShopItemVorlage()){
+                    Item item = shopItemVorlage.getItem();
+
                     if(item.getItemKategorie().getId() != itemKategorie.getId()) continue;
                     if(startBei > zaheler){
                         zaheler = startBei;
@@ -291,26 +361,45 @@ public class Shop {
                     }
                     if(!erstesItemgesetzt) erstesItemgesetzt = true;
 
-                    ArrayList<String> beschreibung = new ArrayList<>();
-                    beschreibung.add("");
+                    if(shopItemVorlage.isfreigeschaltet()){
+                        ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("");
 
-                    beschreibung.add("§7Kosten:");
-                    for(ItemRessourecenKosten itr : item.getRessourecsKostenList()){
-                        beschreibung.add("  §7- §e" + itr.getMenge() + " §7" + itr.getRessoure().getName());
+                        beschreibung.add("§7Kosten:");
+                        for(ItemRessourecenKosten itr : item.getRessourecsKostenList()){
+                            beschreibung.add("  §7- §e" + itr.getMenge() + " §7" + itr.getRessoure().getName());
+                        }
+                        beschreibung.add("");
+                        beschreibung.add("§7Erfahrungspunkt:");
+                        beschreibung.add("  §7- §e" + item.getShopXp() + " §7Shop Erfahrungspunkte");
+                        beschreibung.add("  §7- §e" + item.getKategorieXp() + " §7Item-linien Erfahrungspunkte");
+                        beschreibung.add("");
+
+                        String[] beschreibungsArray = item.getBeschreibung().split("\n");
+                        for(String itemBeschreibung : beschreibungsArray){
+                            beschreibung.add(itemBeschreibung.trim());
+                        }
+
+                        String itemName = "§9" + item.getName() +  " " + item.getItemSeltenheit().getFarbe() + " [" + item.getItemSeltenheit().getName() + "]";
+                        contents.set(solt, Shopy.getInstance().createItemWithLore(item.getIcon(), itemName, beschreibung));
+                    }else {
+                        String FreischlatTyp = "§cNicht bekannt";
+                        if(item.getFreischlatTyp().equalsIgnoreCase("STANDART")) FreischlatTyp = "Aufleveln von Items";
+                        if(item.getFreischlatTyp().equalsIgnoreCase("ITEM")) FreischlatTyp = "Benutzen eines Bauplans";
+
+                        ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("");
+                        beschreibung.add("§7wird Freigeschaltet durch:");
+                        beschreibung.add("§e" + FreischlatTyp);
+                        beschreibung.add("");
+                        beschreibung.add("§7Dieses Item wurde noch nicht freigeschaltet.");
+                        beschreibung.add("§7Schalte das Item frei, in dem du mehr Items");
+                        beschreibung.add("§7produzierst oder dir einen Bauplan, kaufst.");
+
+
+                        String itemName = "§7Item Freischalten.";
+                        contents.set(solt, Shopy.getInstance().createItemWithLore(Material.GRAY_DYE, itemName, beschreibung));
                     }
-                    beschreibung.add("");
-                    beschreibung.add("§7Erfahrungspunkt:");
-                    beschreibung.add("  §7- §e" + item.getShopXp() + " §7Shop Erfahrungspunkte");
-                    beschreibung.add("  §7- §e" + item.getKategorieXp() + " §7Item-linien Erfahrungspunkte");
-                    beschreibung.add("");
-
-                    String[] beschreibungsArray = item.getBeschreibung().split("\n");
-                    for(String itemBeschreibung : beschreibungsArray){
-                        beschreibung.add(itemBeschreibung.trim());
-                    }
-
-                    String itemName = "§9" + item.getName() +  " " + item.getItemSeltenheit().getFarbe() + " [" + item.getItemSeltenheit().getName() + "]";
-                    contents.set(solt, Shopy.getInstance().createItemWithLore(item.getIcon(), itemName, beschreibung));
 
                     zaheler++;
                     solt += 1;
@@ -486,6 +575,18 @@ public class Shop {
 
         return ret;
     }
+    public ShopItemVorlage getShopItemVorlageByItem(int id){
+        ShopItemVorlage ret = null;
+
+        for(ShopItemVorlage shopItemVorlage : shopItemVorlagen){
+            if(shopItemVorlage.getItem().getId() == id){
+                ret = shopItemVorlage;
+                break;
+            }
+        }
+
+        return ret;
+    }
 
     public void delteShopItemById(int id){
         for(int i = 0; i <= shopItems.size() - 1; i++){
@@ -511,7 +612,7 @@ public class Shop {
     }
 
     public ArrayList<ShopItemVorlage> getShopItemVorlage() {
-        return shopItemVorlage;
+        return shopItemVorlagen;
     }
 
     public Map<String, ShopItemKategorieLevel> getItemKategorieLevel() {

@@ -2,6 +2,7 @@ package de.dome.shopy.utils.items;
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.Ressoure;
+import de.dome.shopy.utils.shop.Shop;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
@@ -17,21 +18,32 @@ public class Item {
     String beschreibung;
     Material icon;
     ItemSeltenheit itemSeltenheit;
+    String freischlatTyp;
+    int freischaltItemID;
+    int freischaltMenge;
     int shopXp;
     int kategorieXp;
     public static ArrayList<Item> itemList;
     public ArrayList<ItemRessourecenKosten> ressourecsKostenList;
 
-    public Item(int id, ItemKategorie itemKategorie, String name, String beschreibung, Material icon) {
+    public Item(int id, ItemKategorie itemKategorie, String name, String beschreibung, Material icon,String freischlatTyp, int freischaltItemID, int freischaltMenge) {
         this.id = id;
         this.itemKategorie = itemKategorie;
         this.name = name;
         this.beschreibung = beschreibung;
         this.icon = icon;
+        this.freischlatTyp = freischlatTyp;
+        this.freischaltItemID = freischaltItemID;
+        this.freischaltMenge = freischaltMenge;
 
         ressourecsKostenList = new ArrayList<>();
     }
 
+    public void freischalten(Shop shop){
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_vorlage SET freigeschaltet='JA' WHERE item ='" + getId() +"' AND shop = '" + shop.getShopId() +"'");
+        });
+    }
     public int getId() {
         return id;
     }
@@ -50,6 +62,18 @@ public class Item {
 
     public Material getIcon() {
         return icon;
+    }
+
+    public String getFreischlatTyp() {
+        return freischlatTyp;
+    }
+
+    public int getFreischaltItemID() {
+        return freischaltItemID;
+    }
+
+    public int getFreischaltMenge() {
+        return freischaltMenge;
     }
 
     public ArrayList<ItemRessourecenKosten> getRessourecsKostenList() {
@@ -77,7 +101,7 @@ public class Item {
 
                 ResultSet resultItem = Shopy.getInstance().getMySQLConntion().resultSet(queryRessourecs);
                 while (resultItem.next()) {
-                    Item newItem = new Item(resultItem.getInt("id"), ItemKategorie.getItemKategorieById(resultItem.getInt("item_kategorie")), resultItem.getString("name"), resultItem.getString("beschreibung"), Material.getMaterial(resultItem.getString("icon")));
+                    Item newItem = new Item(resultItem.getInt("id"), ItemKategorie.getItemKategorieById(resultItem.getInt("item_kategorie")), resultItem.getString("name"), resultItem.getString("beschreibung"), Material.getMaterial(resultItem.getString("icon")), resultItem.getString("freischalt_typ"), resultItem.getInt("freischalt_item"), resultItem.getInt("freischalt_menge"));
 
                     /*Kosten Laden*/
                     String queryRessourecsKosten = "SELECT * FROM item_kosten WHERE item = " + newItem.getId();
@@ -110,6 +134,18 @@ public class Item {
 
         for(Item item : itemList){
             if(item.getName().equalsIgnoreCase(name)){
+                ret = item;
+                break;
+            }
+        }
+
+        return ret;
+    }
+    public static Item getItemById(int id){
+        Item ret = null;
+
+        for(Item item : itemList){
+            if(item.getId() == id){
                 ret = item;
                 break;
             }
