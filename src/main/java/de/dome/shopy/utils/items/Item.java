@@ -153,4 +153,16 @@ public class Item {
 
         return ret;
     }
+    public static Item getItemByFreischaltItem(Item freischaltItem){
+        Item ret = null;
+
+        for(Item item : itemList){
+            if(freischaltItem.getId() == item.getFreischaltItemID()){
+                ret = item;
+                break;
+            }
+        }
+
+        return ret;
+    }
 }

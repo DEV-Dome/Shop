@@ -62,6 +62,7 @@ public class InventoryClickListenerItemLager implements Listener {
                         if(shopItem != null){
                             spielerShop.delteShopItemById(itemID);
                             spielerShop.openItemLagerInventar(AkkuelleSeite);
+//                            p.updateInventory();
                         }else {
                             p.sendMessage(Shopy.getInstance().getPrefix() + "§cBeim Ausführen dieser Aktion ist leider ein Fehler aufgetreten. Bitte versuche es später erneut oder Kontaktiere den Support.");
                         }
