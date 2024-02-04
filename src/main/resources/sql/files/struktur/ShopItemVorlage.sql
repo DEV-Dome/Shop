@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS shop_item_vorlage (
     shop INT NOT NULL,
     item INT NOT NULL,
     hergestellt INT NOT NULL DEFAULT 0,
+    meisterung BOOL DEFAULT 0,
     freigeschaltet ENUM("JA", "NEIN") NOT NULL DEFAULT "NEIN",
 
     FOREIGN KEY (item) REFERENCES item(id),

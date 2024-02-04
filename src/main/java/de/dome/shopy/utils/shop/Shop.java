@@ -146,15 +146,15 @@ public class Shop {
                             boolean freigeschaltet = false;
                             if(resultItem.getString("freigeschaltet").equalsIgnoreCase("JA")) freigeschaltet = true;
 
-                            shopItemVorlage = new ShopItemVorlage(resultItem.getInt("id"), this, item, resultItem.getInt("hergestellt"), freigeschaltet);
+                            shopItemVorlage = new ShopItemVorlage(resultItem.getInt("id"), this, item, resultItem.getInt("hergestellt"), resultItem.getBoolean("meisterung"), freigeschaltet);
                             lastID = resultItem.getInt("id");
                         }else {
                             if(item.isImmerFreigeschaltet()) {
                                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_vorlage (shop, item, freigeschaltet) VALUES ('" + shopId + "', '"+ item.getId() +"', 'JA')");
-                                shopItemVorlage = new ShopItemVorlage(lastID, this, item, 0, true);
+                                shopItemVorlage = new ShopItemVorlage(lastID, this, item, 0, resultItem.getBoolean("meisterung"),true);
                             }else {
                                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_vorlage (shop, item) VALUES ('" + shopId + "', '"+ item.getId() +"')");
-                                shopItemVorlage = new ShopItemVorlage(lastID, this, item, 0, false);
+                                shopItemVorlage = new ShopItemVorlage(lastID, this, item, 0, resultItem.getBoolean("meisterung"),false);
                             }
 
 
@@ -305,7 +305,13 @@ public class Shop {
                         for (ItemRessourecenKosten itr : item.getRessourecsKostenList()) {
                             beschreibung.add("  §7- §e" + itr.getMenge() + " §7" + itr.getRessoure().getName());
                         }
+
                         beschreibung.add("");
+                        beschreibung.add("§7Herstellungen: §e" + shopItemVorlage.getHergestellt());
+                        if(shopItemVorlage.isMeisterung()) beschreibung.add("§7Diese gegenstand wurde §egemeistert!");
+                        else beschreibung.add("§7Meisterung: §e" + item.getMeisterMenge());
+                        beschreibung.add("");
+
                         beschreibung.add("§7Erfahrungspunkt:");
                         beschreibung.add("  §7- §e" + item.getShopXp() + " §7Shop Erfahrungspunkte");
                         beschreibung.add("  §7- §e" + item.getKategorieXp() + " §7Item-linien Erfahrungspunkte");
@@ -397,7 +403,13 @@ public class Shop {
                         for (ItemRessourecenKosten itr : item.getRessourecsKostenList()) {
                             beschreibung.add("  §7- §e" + itr.getMenge() + " §7" + itr.getRessoure().getName());
                         }
+
                         beschreibung.add("");
+                        beschreibung.add("§7Herstellungen: §e" + shopItemVorlage.getHergestellt());
+                        if(shopItemVorlage.isMeisterung()) beschreibung.add("§7Diese gegenstand wurde §egemeistert!");
+                        else beschreibung.add("§7Meisterung ab §e" + item.getMeisterMenge() + " §7herstellungen.");
+                        beschreibung.add("");
+
                         beschreibung.add("§7Erfahrungspunkt:");
                         beschreibung.add("  §7- §e" + item.getShopXp() + " §7Shop Erfahrungspunkte");
                         beschreibung.add("  §7- §e" + item.getKategorieXp() + " §7Item-linien Erfahrungspunkte");

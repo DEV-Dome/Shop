@@ -11,13 +11,16 @@ public class ShopItemVorlage {
     Shop shop;
     Item item;
     int hergestellt;
+    boolean meisterung;
     boolean freigeschaltet;
 
-    public ShopItemVorlage(int id, Shop shop, Item item, int hergestellt, boolean freigeschaltet) {
+
+    public ShopItemVorlage(int id, Shop shop, Item item, int hergestellt, boolean meisterung, boolean freigeschaltet) {
         this.id = id;
         this.shop = shop;
         this.item = item;
         this.hergestellt = hergestellt;
+        this.meisterung = meisterung;
         this.freigeschaltet = freigeschaltet;
     }
 
@@ -37,6 +40,14 @@ public class ShopItemVorlage {
         return hergestellt;
     }
 
+    public boolean isMeisterung() {
+        return meisterung;
+    }
+
+    public boolean isFreigeschaltet() {
+        return freigeschaltet;
+    }
+
     public boolean addHerstellung(){
         hergestellt++;
         boolean ret = false;
@@ -52,11 +63,26 @@ public class ShopItemVorlage {
             }
         }
 
+        if(hergestellt >= item.getMeisterMenge()){
+            Item meisterungsItem = Item.getItemById(item.getFreischaltItemID());
+            if(!isMeisterung()){
+               meisterung = true;
+
+               meisterung(shop);
+               ret = true;
+            }
+        }
+
         CompletableFuture.runAsync(() -> {
             Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_vorlage SET hergestellt='"+ hergestellt +"' WHERE item ='" + item.getId() +"' AND shop = '" + shop.getShopId() +"'");
         });
 
         return ret;
+    }
+    private void meisterung(Shop shop){
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_vorlage SET meisterung='1' WHERE item ='" + getId() +"' AND shop = '" + shop.getShopId() +"'");
+        });
     }
 
     public boolean isfreigeschaltet() {
