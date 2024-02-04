@@ -21,20 +21,19 @@ public class Item {
     String freischlatTyp;
     int freischaltItemID;
     int freischaltMenge;
+    boolean immerFreigeschaltet;
     int shopXp;
+    int meisterMenge;
     int kategorieXp;
     public static ArrayList<Item> itemList;
     public ArrayList<ItemRessourecenKosten> ressourecsKostenList;
 
-    public Item(int id, ItemKategorie itemKategorie, String name, String beschreibung, Material icon,String freischlatTyp, int freischaltItemID, int freischaltMenge) {
+    public Item(int id, ItemKategorie itemKategorie, String name, String beschreibung, Material icon) {
         this.id = id;
         this.itemKategorie = itemKategorie;
         this.name = name;
         this.beschreibung = beschreibung;
         this.icon = icon;
-        this.freischlatTyp = freischlatTyp;
-        this.freischaltItemID = freischaltItemID;
-        this.freischaltMenge = freischaltMenge;
 
         ressourecsKostenList = new ArrayList<>();
     }
@@ -92,6 +91,16 @@ public class Item {
         return kategorieXp;
     }
 
+    public boolean isImmerFreigeschaltet() {
+        return immerFreigeschaltet;
+    }
+
+    public int getMeisterMenge() {
+        return meisterMenge;
+    }
+
+
+
     public static void registerItem(){
         CompletableFuture.runAsync(() -> {
             itemList = new ArrayList<>();
@@ -101,7 +110,7 @@ public class Item {
 
                 ResultSet resultItem = Shopy.getInstance().getMySQLConntion().resultSet(queryRessourecs);
                 while (resultItem.next()) {
-                    Item newItem = new Item(resultItem.getInt("id"), ItemKategorie.getItemKategorieById(resultItem.getInt("item_kategorie")), resultItem.getString("name"), resultItem.getString("beschreibung"), Material.getMaterial(resultItem.getString("icon")), resultItem.getString("freischalt_typ"), resultItem.getInt("freischalt_item"), resultItem.getInt("freischalt_menge"));
+                    Item newItem = new Item(resultItem.getInt("id"), ItemKategorie.getItemKategorieById(resultItem.getInt("item_kategorie")), resultItem.getString("name"), resultItem.getString("beschreibung"), Material.getMaterial(resultItem.getString("icon")));
 
                     /*Kosten Laden*/
                     String queryRessourecsKosten = "SELECT * FROM item_kosten WHERE item = " + newItem.getId();
@@ -115,6 +124,16 @@ public class Item {
                     while (resultItemWerte.next()) {
                         if(resultItemWerte.getString("wert").equals("shop_xp")) newItem.shopXp = Integer.parseInt(resultItemWerte.getString("value"));
                         if(resultItemWerte.getString("wert").equals("kategorie_xp")) newItem.kategorieXp = Integer.parseInt(resultItemWerte.getString("value"));
+                        if(resultItemWerte.getString("wert").equals("meister_menge")) newItem.meisterMenge = Integer.parseInt(resultItemWerte.getString("value"));
+
+                        if(resultItemWerte.getString("wert").equals("freigeschlatet_typ")) newItem.freischlatTyp = resultItemWerte.getString("value");
+                        if(resultItemWerte.getString("wert").equals("freigeschlatet_item")) newItem.freischaltItemID = Integer.parseInt(resultItemWerte.getString("value"));
+                        if(resultItemWerte.getString("wert").equals("freigeschlatet_menge")) newItem.freischaltMenge = Integer.parseInt(resultItemWerte.getString("value"));
+
+                        if(resultItemWerte.getString("wert").equals("immer_freigeschlatet")){
+                            if(resultItemWerte.getString("value").equalsIgnoreCase("ja")) newItem.immerFreigeschaltet = true;
+                            else newItem.immerFreigeschaltet = false;
+                        }
                     }
                     /* Item Stufe */
                     newItem.itemSeltenheit = ItemSeltenheit.getItemStufeById(resultItem.getInt("item_seltenheit"));

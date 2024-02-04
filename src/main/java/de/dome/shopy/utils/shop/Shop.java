@@ -12,6 +12,7 @@ import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -66,6 +67,8 @@ public class Shop {
                             creator.type(WorldType.NORMAL);
 
                             this.world = creator.createWorld();
+                            this.world.setTime(0);
+                            this.world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
                             if(playerTeleport) this.owner.teleport(this.world.getSpawnLocation());
                         }else {
                             this.world = Bukkit.getWorld(world);
@@ -146,8 +149,15 @@ public class Shop {
                             shopItemVorlage = new ShopItemVorlage(resultItem.getInt("id"), this, item, resultItem.getInt("hergestellt"), freigeschaltet);
                             lastID = resultItem.getInt("id");
                         }else {
-                            Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_vorlage (shop, item) VALUES ('" + shopId + "', '"+ item.getId() +"')");
-                            shopItemVorlage = new ShopItemVorlage(lastID, this, item, 0,false);
+                            if(item.isImmerFreigeschaltet()) {
+                                Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_vorlage (shop, item, freigeschaltet) VALUES ('" + shopId + "', '"+ item.getId() +"', 'JA')");
+                                shopItemVorlage = new ShopItemVorlage(lastID, this, item, 0, true);
+                            }else {
+                                Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_vorlage (shop, item) VALUES ('" + shopId + "', '"+ item.getId() +"')");
+                                shopItemVorlage = new ShopItemVorlage(lastID, this, item, 0, false);
+                            }
+
+
 
                             lastID++;
                         }
@@ -478,29 +488,31 @@ public class Shop {
                             /* Item Slot unabhängig der Shop Seite. Darf nicht größer 53 sein */
                             int slot = i - (seite * 44);
 
-                            if(i <= getShopItems().size() - 1){
-                                letztesItemGsetzt = true;
+                            if(i <= getItemLagerSize() - 1){
+                                if(i <= getShopItems().size() - 1) {
+                                    letztesItemGsetzt = true;
 
-                                /* Item laden */
-                                ShopItem shopItem = getShopItems().get(i);
-                                ArrayList<String> beschreibung = new ArrayList<>();
-                                /* ID anzeigen*/
-                                beschreibung.add("§7Item-ID: " + shopItem.getId() + "");
-                                /* Actionen auflisten*/
-                                beschreibung.add("");
-                                beschreibung.add("§c- Rechtsklick zum Löschen");
-                                beschreibung.add("");
+                                    /* Item laden */
+                                    ShopItem shopItem = getShopItems().get(i);
+                                    ArrayList<String> beschreibung = new ArrayList<>();
+                                    /* ID anzeigen*/
+                                    beschreibung.add("§7Item-ID: " + shopItem.getId() + "");
+                                    /* Actionen auflisten*/
+                                    beschreibung.add("");
+                                    beschreibung.add("§c- Rechtsklick zum Löschen");
+                                    beschreibung.add("");
 
-                                String[] beschreibungsArray = shopItem.getBeschreibung().split("\n");
+                                    String[] beschreibungsArray = shopItem.getBeschreibung().split("\n");
 
-                                for(String itemBeschreibung : beschreibungsArray){
-                                    beschreibung.add(itemBeschreibung.trim());
+                                    for (String itemBeschreibung : beschreibungsArray) {
+                                        beschreibung.add(itemBeschreibung.trim());
+                                    }
+
+
+                                    String itemName = "§9" + shopItem.getName() + " " + shopItem.getItemSeltenheit().getFarbe() + " [" + shopItem.getItemSeltenheit().getName() + "]";
+
+                                    contents.set(slot, Shopy.getInstance().createItemWithLore(shopItem.getIcon(), "§9" + itemName, beschreibung));
                                 }
-
-
-                                String itemName = "§9" + shopItem.getName() +  " " + shopItem.getItemSeltenheit().getFarbe() + " [" + shopItem.getItemSeltenheit().getName() + "]";
-
-                                contents.set(slot, Shopy.getInstance().createItemWithLore(shopItem.getIcon(), "§9" + itemName, beschreibung));
                             }else {
                                 if(i > getItemLagerSize() - 1){
                                     letztesItemGsetzt = false;
@@ -528,14 +540,15 @@ public class Shop {
                             /* Item Slot unabhängig der Shop Seite. Darf nicht größer 53 sein */
                             int slot = i - (seite * 44);
 
-                            if(i <= getShopItems().size() - 1){
-                                letztesItemGsetzt = true;
+                            ItemStack itemStack = new ItemStack(Material.AIR);
+                            contents.update(i, itemStack);
 
-                                /* Item laden */
-                                ShopItem shopItem = getShopItems().get(i);
-                                if(shopItem == null){
-                                    contents.removeAdvancedSlot(slot);
-                                }else {
+                            if(i <= getItemLagerSize() - 1){
+                                letztesItemGsetzt = true;
+                                if(i <= getShopItems().size() - 1) {
+                                    /* Item laden */
+                                    ShopItem shopItem = getShopItems().get(i);
+
                                     ArrayList<String> beschreibung = new ArrayList<>();
                                     /* ID anzeigen*/
                                     beschreibung.add("§7Item-ID: " + shopItem.getId() + "");

@@ -6,6 +6,7 @@ import de.dome.shopy.utils.shop.Shop;
 import de.dome.shopy.utils.shop.ShopItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -59,10 +60,12 @@ public class InventoryClickListenerItemLager implements Listener {
                         ShopItem shopItem = spielerShop.getShopItemById(itemID);
 
                         /* Check wurde das Item gefunden */
-                        if(shopItem != null){
+                        if(shopItem != null && itemID != -1){
                             spielerShop.delteShopItemById(itemID);
-                            spielerShop.openItemLagerInventar(AkkuelleSeite);
-//                            p.updateInventory();
+                            //spielerShop.openItemLagerInventar(AkkuelleSeite);
+
+                            p.updateInventory();
+                            p.playSound(p, Sound.ENTITY_ITEM_BREAK,  1,1);
                         }else {
                             p.sendMessage(Shopy.getInstance().getPrefix() + "§cBeim Ausführen dieser Aktion ist leider ein Fehler aufgetreten. Bitte versuche es später erneut oder Kontaktiere den Support.");
                         }

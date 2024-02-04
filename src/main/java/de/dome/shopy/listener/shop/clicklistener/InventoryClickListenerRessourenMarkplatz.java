@@ -3,6 +3,7 @@ package de.dome.shopy.listener.shop.clicklistener;
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.Ressoure;
 import de.dome.shopy.utils.shop.Shop;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -49,6 +50,7 @@ public class InventoryClickListenerRessourenMarkplatz  implements Listener {
 
                 p.sendMessage(Shopy.getInstance().getPrefix() + "Du hast dir ein §e" + name + " §7für §e" + kosten + " §7€ gekauft.");
 
+                p.playSound(p, Sound.ENTITY_ITEM_PICKUP,  1,1);
                 p.updateInventory();
             }
         }

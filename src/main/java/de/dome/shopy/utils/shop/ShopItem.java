@@ -47,4 +47,8 @@ public class ShopItem {
     public ItemSeltenheit getItemSeltenheit() {
         return itemSeltenheit;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

@@ -14,6 +14,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 
 public class InventoryClickListenerWerkbank implements Listener {
@@ -122,9 +125,25 @@ public class InventoryClickListenerWerkbank implements Listener {
                         spielerShop.getRessourenShopManger().setRessourcenValue(itk.getRessoure(), neueMenge);
                     }
 
-                    spielerShop.getShopItems().add(new ShopItem(-1, realItem.getItemKategorie(), realItem.getName(), realItem.getBeschreibung(), realItem.getIcon(), realItem.getItemSeltenheit()));
+                    /*Platz halter ID erzeugen zwischen -100 und -1*/
+                    Random random = new Random();
+                    int platzhalterID = random.nextInt(95) - 100;
+
+                    spielerShop.getShopItems().add(new ShopItem(platzhalterID, realItem.getItemKategorie(), realItem.getName(), realItem.getBeschreibung(), realItem.getIcon(), realItem.getItemSeltenheit()));
                     CompletableFuture.runAsync(() -> {
                         Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_lager (shop, item) VALUES ('" + spielerShop.getShopId() + "', '" + realItem.getId() + "')");
+
+                        /* Item ID aus der Datenbank holen*/
+                        try {
+                            String queryGetItemId = "SELECT id FROM shop_item_lager ORDER BY id DESC LIMIT 1";
+                            ResultSet queryGetItemIdResult = Shopy.getInstance().getMySQLConntion().resultSet(queryGetItemId);
+
+                            if (queryGetItemIdResult.next()){
+                                spielerShop.getShopItemById(platzhalterID).setId(queryGetItemIdResult.getInt("id"));
+                            }
+                        } catch (SQLException ex) {
+                            throw new RuntimeException(ex);
+                        }
                     });
 
                     //XP verteilen
@@ -146,6 +165,7 @@ public class InventoryClickListenerWerkbank implements Listener {
                     }
                 }else if(item.getItemMeta().getDisplayName().equalsIgnoreCase("§7Item Freischalten.")){
                     p.sendMessage(Shopy.getInstance().getPrefix() + "Du hast dieses Item noch nicht freigeschaltet.");
+                    p.playSound(p, Sound.ENTITY_ITEM_BREAK,  1,1);
                 } else {
                   p.sendMessage(Shopy.getInstance().getPrefix() + "§cBeim Ausführen dieser Aktion ist leider ein Fehler aufgetreten. Bitte versuche es später erneut oder Kontaktiere den Support.");
                 }
