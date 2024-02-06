@@ -147,18 +147,15 @@ public class Shop {
                             if(resultItem.getString("freigeschaltet").equalsIgnoreCase("JA")) freigeschaltet = true;
 
                             shopItemVorlage = new ShopItemVorlage(resultItem.getInt("id"), this, item, resultItem.getInt("hergestellt"), resultItem.getBoolean("meisterung"), freigeschaltet);
-                            lastID = resultItem.getInt("id");
+                            lastID = resultItem.getInt("id") + 1;
                         }else {
                             if(item.isImmerFreigeschaltet()) {
                                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_vorlage (shop, item, freigeschaltet) VALUES ('" + shopId + "', '"+ item.getId() +"', 'JA')");
-                                shopItemVorlage = new ShopItemVorlage(lastID, this, item, 0, resultItem.getBoolean("meisterung"),true);
+                                shopItemVorlage = new ShopItemVorlage(lastID, this, item, 0, false,true);
                             }else {
                                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_vorlage (shop, item) VALUES ('" + shopId + "', '"+ item.getId() +"')");
-                                shopItemVorlage = new ShopItemVorlage(lastID, this, item, 0, resultItem.getBoolean("meisterung"),false);
+                                shopItemVorlage = new ShopItemVorlage(lastID, this, item, 0, false,false);
                             }
-
-
-
                             lastID++;
                         }
 
@@ -362,8 +359,10 @@ public class Shop {
                     }
                 }
                 if (!erstesItemgesetzt) {
-                    openMarkplatzWaffenInventar(seite - 1, itemKategorie);
-                    return;
+                    if(seite > 0){
+                        openMarkplatzWaffenInventar(seite - 1, itemKategorie);
+                        return;
+                    }
                 }
 
                 /*Menü Regeler */
@@ -548,12 +547,13 @@ public class Shop {
                     public void update(Player player, InventoryContents contents) {
                         boolean letztesItemGsetzt = false;
 
-                        for(int i = (0 + (seite * 44)); i <= 44 * (seite + 1);i++){
+                        for(int i = (seite * 44); i <= 44 * (seite + 1);i++){
                             /* Item Slot unabhängig der Shop Seite. Darf nicht größer 53 sein */
                             int slot = i - (seite * 44);
+//                            owner.sendMessage(Shopy.getInstance().getPrefix() + "§5Debug: " + slot + " : " + contents.get(slot).isPresent());
 
                             ItemStack itemStack = new ItemStack(Material.AIR);
-                            contents.update(i, itemStack);
+                            if(contents.get(slot).isPresent()) contents.update(slot, itemStack);
 
                             if(i <= getItemLagerSize() - 1){
                                 letztesItemGsetzt = true;
