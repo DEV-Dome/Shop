@@ -52,7 +52,14 @@ public class NPCInteractListener implements Listener {
             RyseInventory.builder().title("§5Dungeon Händler").rows(3).provider(new InventoryProvider() {
                 @Override
                 public void init(Player player, InventoryContents contents) {
-                    //contents.set(4, Shopy.getInstance().createItemWithLore(itemKategorie.getIcon(), "§9" + itemKategorie.getName() + " Statistk", itemKategorie.getAnzeigeBeschreibung(instance)));
+                    ArrayList beschreibung = new ArrayList<>();
+                    beschreibung.add("§7Hier findest du einen Shop, welcher in einer ganz normalen Umgebung ist.");
+
+                    contents.set(10, Shopy.getInstance().createItemWithLore(Material.ZOMBIE_SPAWN_EGG, "§5Dungeon Stufe 1", beschreibung));
+                    contents.set(12, Shopy.getInstance().createItemWithLore(Material.ZOMBIE_SPAWN_EGG, "§5Dungeon Stufe 2", beschreibung));
+                    contents.set(14, Shopy.getInstance().createItemWithLore(Material.ZOMBIE_SPAWN_EGG, "§5Dungeon Stufe 3", beschreibung));
+                    contents.set(16, Shopy.getInstance().createItemWithLore(Material.ZOMBIE_SPAWN_EGG, "§5Dungeon Stufe 4", beschreibung));
+
                 }
 
             }).build(Shopy.getInstance()).open(p);

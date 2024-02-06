@@ -550,7 +550,6 @@ public class Shop {
                         for(int i = (seite * 44); i <= 44 * (seite + 1);i++){
                             /* Item Slot unabhängig der Shop Seite. Darf nicht größer 53 sein */
                             int slot = i - (seite * 44);
-//                            owner.sendMessage(Shopy.getInstance().getPrefix() + "§5Debug: " + slot + " : " + contents.get(slot).isPresent());
 
                             ItemStack itemStack = new ItemStack(Material.AIR);
                             if(contents.get(slot).isPresent()) contents.update(slot, itemStack);
