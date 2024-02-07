@@ -1,4 +1,4 @@
-package de.dome.shopy.commands;
+package de.dome.shopy.commands.welt;
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.listener.shop.BlockBreakListener;

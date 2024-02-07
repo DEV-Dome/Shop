@@ -53,11 +53,57 @@ public class NPCInteractListener implements Listener {
                 @Override
                 public void init(Player player, InventoryContents contents) {
                     ArrayList beschreibung = new ArrayList<>();
-                    beschreibung.add("§7Hier findest du einen Shop, welcher in einer ganz normalen Umgebung ist.");
+                    beschreibung.add("§7Betrete einen Dungeon der Stufe 1,");
+                    beschreibung.add("§7um besondere Ausrüstung zu bekommen.");
+                    beschreibung.add("");
+                    beschreibung.add("§7Für einen Dungeon der Stufe 1");
+                    beschreibung.add("§7gelten folgende Bedingungen:");
+                    beschreibung.add("");
+                    beschreibung.add("§7  - 10 Monster (Dungeon Materialien Drop)");
+                    beschreibung.add("§7  - Kosten §e100§7 Euro");
 
                     contents.set(10, Shopy.getInstance().createItemWithLore(Material.ZOMBIE_SPAWN_EGG, "§5Dungeon Stufe 1", beschreibung));
+
+                    beschreibung.clear();
+                    beschreibung.add("§7Betrete einen Dungeon der Stufe 2,");
+                    beschreibung.add("§7um besondere Ausrüstung zu bekommen.");
+                    beschreibung.add("");
+                    beschreibung.add("§7Für einen Dungeon der Stufe 2");
+                    beschreibung.add("§7gelten folgende Bedingungen:");
+                    beschreibung.add("");
+                    beschreibung.add("§7  - 25 Monster (Dungeon Materialien Drop)");
+                    beschreibung.add("§7  - Chance auf einen Aufwertungsmatrial (10 %)");
+                    beschreibung.add("§7  - Kosten §e200§7 Euro");
+
                     contents.set(12, Shopy.getInstance().createItemWithLore(Material.ZOMBIE_SPAWN_EGG, "§5Dungeon Stufe 2", beschreibung));
+
+                    beschreibung.clear();
+                    beschreibung.add("§7Betrete einen Dungeon der Stufe 3,");
+                    beschreibung.add("§7um besondere Ausrüstung zu bekommen.");
+                    beschreibung.add("");
+                    beschreibung.add("§7Für einen Dungeon der Stufe 3");
+                    beschreibung.add("§7gelten folgende Bedingungen:");
+                    beschreibung.add("");
+                    beschreibung.add("§7  - 75 Monster (Dungeon Materialien Drop)");
+                    beschreibung.add("§7  - Chance auf einen Aufwertungsmatrial (25 %)");
+                    beschreibung.add("§7  - Chance auf einen Einhornkristall (20 %)");
+                    beschreibung.add("§7  - Kosten §e350§7 Euro");
+
                     contents.set(14, Shopy.getInstance().createItemWithLore(Material.ZOMBIE_SPAWN_EGG, "§5Dungeon Stufe 3", beschreibung));
+
+                    beschreibung.clear();
+                    beschreibung.add("§7Betrete einen Dungeon der Stufe 4,");
+                    beschreibung.add("§7um besondere Ausrüstung zu bekommen.");
+                    beschreibung.add("");
+                    beschreibung.add("§7Für einen Dungeon der Stufe 4");
+                    beschreibung.add("§7gelten folgende Bedingungen:");
+                    beschreibung.add("");
+                    beschreibung.add("§7  - 150 Monster (Dungeon Materialien Drop)");
+                    beschreibung.add("§7  - Chance auf einen Aufwertungsmatrial (40 %)");
+                    beschreibung.add("§7  - Chance auf einen Einhornkristall (25 %)");
+                    beschreibung.add("§7  - Chance auf Set Materialien (5 %)");
+                    beschreibung.add("§7  - Kosten §e500§7 Euro");
+
                     contents.set(16, Shopy.getInstance().createItemWithLore(Material.ZOMBIE_SPAWN_EGG, "§5Dungeon Stufe 4", beschreibung));
 
                 }

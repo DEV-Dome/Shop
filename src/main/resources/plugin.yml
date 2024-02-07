@@ -17,4 +17,6 @@ commands:
   money:
   setressource:
   itemlager:
-  displayloadworlds:
+  zeigewelten:
+  ladewelt:
+  welttp:

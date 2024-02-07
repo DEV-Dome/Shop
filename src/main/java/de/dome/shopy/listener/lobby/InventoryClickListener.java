@@ -58,7 +58,6 @@ public class InventoryClickListener implements Listener {
                                 File zu = new File(Shopy.getInstance().getDataFolder().getPath() + "/shop_welten/" + weltName);
 
                                 kopiereOrdner(von, zu);
-                                Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + " " + zu.toPath().toString());
 
                                 Shopy.getInstance().getMySQLConntion().query("UPDATE shop SET shop_ordner = '" + weltName +"' WHERE id = " + shop_id);
 
