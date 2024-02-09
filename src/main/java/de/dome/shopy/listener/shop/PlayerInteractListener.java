@@ -19,6 +19,7 @@ public class PlayerInteractListener implements Listener {
         Player p = e.getPlayer();
         if(e.getClickedBlock() == null) return;
         if(e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_AIR) return;
+        if(!Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())) return;
 
         if(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getWorld().getName().equalsIgnoreCase(e.getClickedBlock().getWorld().getName()) || p.hasPermission("shopy.bypass.interactOnOtherWorlds")) {
             if (e.getClickedBlock().getType() == Material.LECTERN) {

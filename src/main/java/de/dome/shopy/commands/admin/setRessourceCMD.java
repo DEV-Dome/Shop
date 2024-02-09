@@ -1,4 +1,4 @@
-package de.dome.shopy.commands;
+package de.dome.shopy.commands.admin;
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.Ressoure;

@@ -1,6 +1,8 @@
 package de.dome.shopy;
 
 import de.dome.shopy.commands.*;
+import de.dome.shopy.commands.admin.*;
+import de.dome.shopy.commands.dungeon.addDungeon;
 import de.dome.shopy.commands.welt.*;
 import de.dome.shopy.listener.lobby.*;
 import de.dome.shopy.listener.lobby.BlockBreakListener;
@@ -125,6 +127,7 @@ public class Shopy extends JavaPlugin {
         getCommand("zeigewelten").setExecutor(new ZeigeWeltenCMD());
         getCommand("ladewelt").setExecutor(new LadeWeltCMD());
         getCommand("welttp").setExecutor(new WeltTpCD());
+        getCommand("adddungeon").setExecutor(new addDungeon());
     }
 
     private void registerNPC(){

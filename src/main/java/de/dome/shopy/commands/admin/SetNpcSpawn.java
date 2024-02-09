@@ -1,4 +1,4 @@
-package de.dome.shopy.commands.welt;
+package de.dome.shopy.commands.admin;
 
 import de.dome.shopy.Shopy;
 import org.bukkit.command.Command;

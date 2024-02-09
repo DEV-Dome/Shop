@@ -38,6 +38,14 @@ public class PlayerJoinListener implements Listener {
 
         e.setQuitMessage("");
 
+        if(Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())) {
+            Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).unLoadWorld();
+            Shopy.getInstance().getSpielerShops().remove(p.getUniqueId());
+        }
+        if(de.dome.shopy.listener.shop.BlockBreakListener.shopszones.containsKey(p.getUniqueId())){
+            BlockBreakListener.shopszones.remove(p.getUniqueId());
+        }
+
         if(LadeWeltCMD.geladeneTempWelten.containsKey(p.getUniqueId())){
             for(World world : LadeWeltCMD.geladeneTempWelten.get(p.getUniqueId())){
                 File file = world.getWorldFolder();
@@ -49,14 +57,6 @@ public class PlayerJoinListener implements Listener {
                 });
             }
             LadeWeltCMD.geladeneTempWelten.remove(p.getUniqueId());
-        }
-
-        if(Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())) {
-            Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).unLoadWorld();
-            Shopy.getInstance().getSpielerShops().remove(p.getUniqueId());
-        }
-        if(de.dome.shopy.listener.shop.BlockBreakListener.shopszones.containsKey(p.getUniqueId())){
-            BlockBreakListener.shopszones.remove(p.getUniqueId());
         }
     }
 

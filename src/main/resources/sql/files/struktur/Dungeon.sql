@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS dungeon (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(150) NOT NULL,
+    dungeon_ordner VARCHAR(500)
+);
