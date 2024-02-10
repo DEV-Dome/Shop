@@ -6,7 +6,11 @@ shopy.cmd.setressource
 shopy.cmd.zeigewelten
 shopy.cmd.ladewelt
 shopy.cmd.welttp
+
 shopy.cmd.adddungeon
+shopy.cmd.setdungeonzone
+shopy.cmd.listdungeon
+
 
 shopy.bypass.buildOnOtherWorlds
 shopy.bypass.interactOnOtherWorlds

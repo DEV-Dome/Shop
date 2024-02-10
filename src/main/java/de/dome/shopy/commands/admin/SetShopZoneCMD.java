@@ -20,6 +20,11 @@ public class SetShopZoneCMD implements CommandExecutor {
                 if(args.length == 1){
                     if(BlockBreakListener.shopszones.containsKey(p.getUniqueId()) && BlockBreakListener.shopszones.get(p.getUniqueId()).getZone2() != null){
                         CompletableFuture.runAsync(() -> {
+                                if(!BlockBreakListener.shopszones.containsKey(p.getUniqueId())){
+                                    p.sendMessage(Shopy.getInstance().getPrefix() + "§cEs wurde keine Zone ausgewählt.");
+                                    return;
+                                }
+
                                 Location loc1 = BlockBreakListener.shopszones.get(p.getUniqueId()).getZone1();
                                 Location loc2 = BlockBreakListener.shopszones.get(p.getUniqueId()).getZone2();
 
@@ -34,11 +39,12 @@ public class SetShopZoneCMD implements CommandExecutor {
                     }
                 }else {
                     p.sendMessage(Shopy.getInstance().getPrefix() + "§cUngültige Parameter: /setshopzone <template>");
-
                 }
             }else {
                 p.sendMessage(Shopy.getInstance().getNoperm());
             }
+        }else {
+            sender.sendMessage(Shopy.getInstance().getPrefix() + "§cDas können nur Spieler ausführen!");
         }
         return true;
     }

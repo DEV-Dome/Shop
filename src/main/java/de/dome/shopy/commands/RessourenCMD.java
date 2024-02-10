@@ -53,6 +53,8 @@ public class RessourenCMD implements CommandExecutor {
             }else {
                 p.sendMessage(Shopy.getInstance().getPrefix() + "Du hast dir noch keinen Shop erstellt. Dieses kannst du beim §eWelten Ersteller§7 tun.");
             }
+        }else {
+            sender.sendMessage(Shopy.getInstance().getPrefix() + "§cDas können nur Spieler ausführen!");
         }
         return true;
     }
