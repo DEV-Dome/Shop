@@ -46,35 +46,16 @@ public class PlayerJoinListener implements Listener {
             BlockBreakListener.shopszones.remove(p.getUniqueId());
         }
 
-        if(LadeWeltCMD.geladeneTempWelten.containsKey(p.getUniqueId())){
-            for(World world : LadeWeltCMD.geladeneTempWelten.get(p.getUniqueId())){
+        if(Shopy.getInstance().getGeladeneTempWelten().containsKey(p.getUniqueId())){
+            for(World world : Shopy.getInstance().getGeladeneTempWelten().get(p.getUniqueId())){
                 File file = world.getWorldFolder();
                 Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
-                    Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + world.getName());
                     Bukkit.unloadWorld(world, true);
 
-                    rekursivLoeschen(file);
+                    Shopy.getInstance().rekursivLoeschen(file);
                 });
             }
-            LadeWeltCMD.geladeneTempWelten.remove(p.getUniqueId());
+            Shopy.getInstance().getGeladeneTempWelten().remove(p.getUniqueId());
         }
     }
-
-    public boolean rekursivLoeschen(File file) {
-        if (!file.exists()) {
-            return true;
-        }
-
-        if (file.isDirectory()) {
-            File[] files = file.listFiles();
-            if (files != null) {
-                for (File f : files) {
-                    rekursivLoeschen(f);
-                }
-            }
-        }
-
-        return file.delete();
-    }
-
 }

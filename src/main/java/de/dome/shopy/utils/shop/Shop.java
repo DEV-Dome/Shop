@@ -80,11 +80,11 @@ public class Shop {
 
                                 ResultSet resultZones = Shopy.getInstance().getMySQLConntion().resultSet(queryZones);
                                 while(resultZones.next()){
-                                    Location loc1 = getLocationFromString(resultZones.getString("locationen_1"));
+                                    Location loc1 = Shopy.getInstance().getLocationFromString(resultZones.getString("locationen_1"));
                                     loc1.setY(-63);
                                     loc1.setWorld(this.world);
 
-                                    Location loc2 = getLocationFromString(resultZones.getString("locationen_2"));
+                                    Location loc2 = Shopy.getInstance().getLocationFromString(resultZones.getString("locationen_2"));
                                     loc2.setY(-50);
                                     loc2.setWorld(this.world);
 
@@ -706,23 +706,5 @@ public class Shop {
         return itemKategorieLevel;
     }
 
-    private Location getLocationFromString(String locationString) {
-        Location ret = null;
 
-        String[] dataArray = locationString.split(",");
-
-        String worldname = dataArray[0].split("name=")[1];
-        worldname = worldname.substring(0, worldname.length() - 1);
-        World world = Bukkit.getWorld(worldname);
-
-        double x =      Double.parseDouble(dataArray[1].split("=")[1]);
-        double y =      Double.parseDouble(dataArray[2].split("=")[1]);
-        double z =      Double.parseDouble(dataArray[3].split("=")[1]);
-        float pitch =   Float.parseFloat(dataArray[3].split("=")[1]);
-        float yaw =     Float.parseFloat(dataArray[3].split("=")[1]);
-
-        ret = new Location(world, x,y,z,yaw,pitch);
-
-        return ret;
-    }
 }

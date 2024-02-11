@@ -11,9 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.concurrent.CompletableFuture;
 
-public class listDungeonCMD implements CommandExecutor {
+public class DungeonCMD implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(sender.hasPermission("shopy.cmd.listdungeon")){
+        if(sender.hasPermission("shopy.cmd.dungeon")){
             CompletableFuture.runAsync(() -> {
                 try {
                     String abfrageDungeons = "SELECT * FROM dungeon";

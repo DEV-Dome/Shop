@@ -8,8 +8,8 @@ shopy.cmd.ladewelt
 shopy.cmd.welttp
 
 shopy.cmd.adddungeon
-shopy.cmd.setdungeonzone
-shopy.cmd.listdungeon
+shopy.cmd.setdungeon
+shopy.cmd.dungeon
 
 
 shopy.bypass.buildOnOtherWorlds

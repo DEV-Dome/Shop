@@ -1,11 +1,16 @@
 package de.dome.shopy.commands;
 
 import de.dome.shopy.Shopy;
+import de.dome.shopy.commands.welt.LadeWeltCMD;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.io.File;
 
 public class SpawnCMD  implements CommandExecutor {
 
@@ -15,7 +20,6 @@ public class SpawnCMD  implements CommandExecutor {
 
             if(Shopy.getInstance().getServerSpawn() != null){
                 if (!Shopy.getInstance().getPlayersNotTeleport().contains(p)) {
-                    /* Countdown, damit Spieler erst nach 5 Sekunden zum Spawn teleportiert wird */
                     Shopy.getInstance().getPlayersNotTeleport().add(p);
 
                     new BukkitRunnable() {
@@ -28,6 +32,18 @@ public class SpawnCMD  implements CommandExecutor {
                                 p.teleport(Shopy.getInstance().getServerSpawn());
                                 p.sendMessage(Shopy.getInstance().getPrefix() + "§aDu wurdest zum Spawn Teleporiert.");
                                 if(Shopy.getInstance().getPlayersNotTeleport().contains(p)) Shopy.getInstance().getPlayersNotTeleport().remove(p);
+
+                                if(Shopy.getInstance().getGeladeneTempWelten().containsKey(p.getUniqueId())){
+                                    for(World world : Shopy.getInstance().getGeladeneTempWelten().get(p.getUniqueId())){
+                                        File file = world.getWorldFolder();
+                                        Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
+                                            Bukkit.unloadWorld(world, true);
+
+                                            Shopy.getInstance().rekursivLoeschen(file);
+                                        });
+                                    }
+                                    Shopy.getInstance().getGeladeneTempWelten().remove(p.getUniqueId());
+                                }
                             } else {
                                 p.sendMessage(Shopy.getInstance().getPrefix() + "Du wirst in " + countdownTime + " Sekunden zum Spawn Teleporiert.");
                                 countdownTime--;

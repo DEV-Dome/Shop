@@ -1,6 +1,7 @@
 package de.dome.shopy.listener.lobby;
 
 import de.dome.shopy.Shopy;
+import de.dome.shopy.utils.Dungeon;
 import de.dome.shopy.utils.Ressoure;
 import de.dome.shopy.utils.shop.Shop;
 import org.bukkit.*;
@@ -150,6 +151,15 @@ public class InventoryClickListener implements Listener {
                     Bukkit.dispatchCommand(p, "itemlager");
                 } else {
                     e.setCancelled(true);
+                }
+            }
+        }
+
+        if (e.getView().getTitle().equals("§5Dungeon Händler")) {
+            if(item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
+                if (item.getType() == Material.ZOMBIE_SPAWN_EGG) {
+
+                    new Dungeon(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()));
                 }
             }
         }

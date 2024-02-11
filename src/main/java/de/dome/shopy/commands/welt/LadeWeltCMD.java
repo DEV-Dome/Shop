@@ -19,7 +19,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class LadeWeltCMD implements CommandExecutor {
 
-    public static HashMap<UUID, ArrayList<World>> geladeneTempWelten = new HashMap<>();
+
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player){
@@ -35,7 +35,7 @@ public class LadeWeltCMD implements CommandExecutor {
                             File zu = new File(Shopy.getInstance().getDataFolder().getPath() + "/temp_welten/" + weltName);
 
                             try {
-                                kopiereOrdner(von, zu);
+                                Shopy.getInstance().kopiereOrdner(von, zu);
                                 Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
                                     WorldCreator creator = new WorldCreator(Shopy.getInstance().getDataFolder().getPath() + "/temp_welten/" + weltName);
 
@@ -49,13 +49,13 @@ public class LadeWeltCMD implements CommandExecutor {
                                     p.sendMessage(Shopy.getInstance().getPrefix() + "Die Welt §e" + weltName + " §7wurde geladen. Und du dort hin teleportiert");
                                     p.teleport(loadWorld.getSpawnLocation());
 
-                                    if(geladeneTempWelten.containsKey(p.getUniqueId())){
-                                        geladeneTempWelten.get(p.getUniqueId()).add(loadWorld);
+                                    if(Shopy.getInstance().getGeladeneTempWelten().containsKey(p.getUniqueId())){
+                                        Shopy.getInstance().getGeladeneTempWelten().get(p.getUniqueId()).add(loadWorld);
                                     }else {
                                         ArrayList<World> worlds = new ArrayList<>();
                                         worlds.add(loadWorld);
 
-                                        geladeneTempWelten.put(p.getUniqueId(), worlds);
+                                        Shopy.getInstance().getGeladeneTempWelten().put(p.getUniqueId(), worlds);
                                     }
                                 });
                             } catch (IOException e) {
@@ -76,28 +76,5 @@ public class LadeWeltCMD implements CommandExecutor {
         return true;
     }
 
-    public void kopiereOrdner(File quelle, File ziel) throws IOException {
-        // Prüfen, ob die Quelle ein Verzeichnis ist
-        if (quelle.isDirectory()) {
-            // Wenn das Zielverzeichnis nicht existiert, erstellen wir es
-            if (!ziel.exists()) {
-                ziel.mkdir();
-            }
 
-            // Liste der Dateien und Unterverzeichnisse im Quellverzeichnis abrufen
-            String[] dateien = quelle.list();
-
-            if (dateien != null) {
-                for (String datei : dateien) {
-                    // Rekursiv jeden Eintrag kopieren
-                    kopiereOrdner(new File(quelle, datei), new File(ziel, datei));
-                }
-            }
-        } else {
-            // Wenn die Quelle eine Datei ist, diese kopieren
-            Path quellePfad = quelle.toPath();
-            Path zielPfad = ziel.toPath();
-            Files.copy(quellePfad, zielPfad, StandardCopyOption.REPLACE_EXISTING);
-        }
-    }
 }

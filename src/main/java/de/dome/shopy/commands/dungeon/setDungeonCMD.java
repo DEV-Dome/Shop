@@ -12,12 +12,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.concurrent.CompletableFuture;
 
-public class setDungeonZoneCMD implements CommandExecutor {
+public class setDungeonCMD implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             Player p = (Player) sender;
 
-            if(p.hasPermission("shopy.cmd.setdungeonzone")){
+            if(p.hasPermission("shopy.cmd.setdungeon")){
                 if(args.length == 2){
                     CompletableFuture.runAsync(() -> {
                         try {
@@ -40,31 +40,41 @@ public class setDungeonZoneCMD implements CommandExecutor {
 
                             if(args[1].equalsIgnoreCase("dungeonzone")) wert = "dungeonzone";
                             if(args[1].equalsIgnoreCase("spawnzone")) wert = "spawnzone";
+                            if(args[1].equalsIgnoreCase("spawn")) wert = "spawn";
                             if(wert.equalsIgnoreCase("")) {
-                                p.sendMessage(Shopy.getInstance().getPrefix() + "§c/setdungeonzone <dungeonid> <dungeonzone/spawnzone>");
+                                p.sendMessage(Shopy.getInstance().getPrefix() + "§c/setdungeon <dungeonid> <dungeonzone/spawnzone/spawn>");
                                 return;
                             }
 
-                            if(!BlockBreakListener.shopszones.containsKey(p.getUniqueId())){
-                                p.sendMessage(Shopy.getInstance().getPrefix() + "§cEs wurde keine Zone ausgewählt.");
-                                return;
+
+
+                            if(wert.equalsIgnoreCase("spawn")){
+                                String queryPos1 = "INSERT INTO dungeon_positionen (dungeon, wert, value) VALUES (" + dungeonID +", '"+ wert +"', '"+ p.getLocation().toString() +"')";
+                                Shopy.getInstance().getMySQLConntion().query(queryPos1);
+                                p.sendMessage(Shopy.getInstance().getPrefix() + "Spawn erstellt erstellt!");
+                            }else {
+                                if(!BlockBreakListener.shopszones.containsKey(p.getUniqueId())){
+                                    p.sendMessage(Shopy.getInstance().getPrefix() + "§cEs wurde keine Zone ausgewählt.");
+                                    return;
+                                }
+
+                                Location loc1 = BlockBreakListener.shopszones.get(p.getUniqueId()).getZone1();
+                                Location loc2 = BlockBreakListener.shopszones.get(p.getUniqueId()).getZone2();
+
+                                String queryPos1 = "INSERT INTO dungeon_positionen (dungeon, wert, value) VALUES (" + dungeonID +", '"+ wert +".pos1', '"+ loc1.toString() +"')";
+                                String queryPos2 = "INSERT INTO dungeon_positionen (dungeon, wert, value) VALUES (" + dungeonID +", '"+ wert +".pos2', '"+ loc2.toString() +"')";
+
+                                Shopy.getInstance().getMySQLConntion().query(queryPos1);
+                                Shopy.getInstance().getMySQLConntion().query(queryPos2);
+                                p.sendMessage(Shopy.getInstance().getPrefix() + "Bereich erstellt!");
                             }
 
-                            Location loc1 = BlockBreakListener.shopszones.get(p.getUniqueId()).getZone1();
-                            Location loc2 = BlockBreakListener.shopszones.get(p.getUniqueId()).getZone2();
-
-                            String queryPos1 = "INSERT INTO dungeon_positionen (dungeon, wert, value) VALUES (" + dungeonID +", '"+ wert +".pos1', '"+ loc1.toString() +"')";
-                            String queryPos2 = "INSERT INTO dungeon_positionen (dungeon, wert, value) VALUES (" + dungeonID +", '"+ wert +".pos2', '"+ loc2.toString() +"')";
-
-                            Shopy.getInstance().getMySQLConntion().query(queryPos1);
-                            Shopy.getInstance().getMySQLConntion().query(queryPos2);
-                            p.sendMessage(Shopy.getInstance().getPrefix() + "Bereich erstellt!");
                         } catch (SQLException e) {
                             throw new RuntimeException(e);
                         }
                     });
                 }else {
-                    p.sendMessage(Shopy.getInstance().getPrefix() + "§c/setdungeonzone <dungeonid> <dungeonzone/spawnzone>");
+                    p.sendMessage(Shopy.getInstance().getPrefix() + "§c/setdungeon <dungeonid> <dungeonzone/spawnzone/spawn>");
                 }
             }else {
                 p.sendMessage(Shopy.getInstance().getNoperm());

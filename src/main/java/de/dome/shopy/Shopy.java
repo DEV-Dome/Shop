@@ -3,8 +3,8 @@ package de.dome.shopy;
 import de.dome.shopy.commands.*;
 import de.dome.shopy.commands.admin.*;
 import de.dome.shopy.commands.dungeon.addDungeonCMD;
-import de.dome.shopy.commands.dungeon.listDungeonCMD;
-import de.dome.shopy.commands.dungeon.setDungeonZoneCMD;
+import de.dome.shopy.commands.dungeon.DungeonCMD;
+import de.dome.shopy.commands.dungeon.setDungeonCMD;
 import de.dome.shopy.commands.welt.*;
 import de.dome.shopy.listener.lobby.*;
 import de.dome.shopy.listener.lobby.BlockBreakListener;
@@ -29,6 +29,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
@@ -43,6 +47,7 @@ public class Shopy extends JavaPlugin {
     HashMap<UUID, Shop> spielerShops;
     ArrayList<Player> playersNotTeleport;
     InventoryManager inventoryManager;
+    public static HashMap<UUID, ArrayList<World>> geladeneTempWelten;
 
     @Override
     public void onEnable() {
@@ -50,6 +55,7 @@ public class Shopy extends JavaPlugin {
         instance = this;
         playersNotTeleport = new ArrayList<>();
         spielerShops = new HashMap<>();
+        geladeneTempWelten = new HashMap<>();
         inventoryManager = new InventoryManager(getInstance());
         inventoryManager.invoke();
 
@@ -130,8 +136,8 @@ public class Shopy extends JavaPlugin {
         getCommand("ladewelt").setExecutor(new LadeWeltCMD());
         getCommand("welttp").setExecutor(new WeltTpCD());
         getCommand("adddungeon").setExecutor(new addDungeonCMD());
-        getCommand("setdungeonzone").setExecutor(new setDungeonZoneCMD());
-        getCommand("listdungeon").setExecutor(new listDungeonCMD());
+        getCommand("setdungeon").setExecutor(new setDungeonCMD());
+        getCommand("dungeon").setExecutor(new DungeonCMD());
     }
 
     private void registerNPC(){
@@ -246,5 +252,71 @@ public class Shopy extends JavaPlugin {
 
     public InventoryManager getInventoryManager() {
         return inventoryManager;
+    }
+
+    public static HashMap<UUID, ArrayList<World>> getGeladeneTempWelten() {
+        return geladeneTempWelten;
+    }
+
+    public Location getLocationFromString(String locationString) {
+        Location ret = null;
+
+        String[] dataArray = locationString.split(",");
+
+        String worldname = dataArray[0].split("name=")[1];
+        worldname = worldname.substring(0, worldname.length() - 1);
+        World world = Bukkit.getWorld(worldname);
+
+        double x =      Double.parseDouble(dataArray[1].split("=")[1]);
+        double y =      Double.parseDouble(dataArray[2].split("=")[1]);
+        double z =      Double.parseDouble(dataArray[3].split("=")[1]);
+        float pitch =   Float.parseFloat(dataArray[3].split("=")[1]);
+        float yaw =     Float.parseFloat(dataArray[3].split("=")[1]);
+
+        ret = new Location(world, x,y,z,yaw,pitch);
+
+        return ret;
+    }
+
+    public void kopiereOrdner(File quelle, File ziel) throws IOException {
+        // Prüfen, ob die Quelle ein Verzeichnis ist
+        if (quelle.isDirectory()) {
+            // Wenn das Zielverzeichnis nicht existiert, erstellen wir es
+            if (!ziel.exists()) {
+                ziel.mkdir();
+            }
+
+            // Liste der Dateien und Unterverzeichnisse im Quellverzeichnis abrufen
+            String[] dateien = quelle.list();
+
+            if (dateien != null) {
+                for (String datei : dateien) {
+                    // Rekursiv jeden Eintrag kopieren
+                    kopiereOrdner(new File(quelle, datei), new File(ziel, datei));
+                }
+            }
+        } else {
+            // Wenn die Quelle eine Datei ist, diese kopieren
+            Path quellePfad = quelle.toPath();
+            Path zielPfad = ziel.toPath();
+            Files.copy(quellePfad, zielPfad, StandardCopyOption.REPLACE_EXISTING);
+        }
+    }
+
+    public boolean rekursivLoeschen(File file) {
+        if (!file.exists()) {
+            return true;
+        }
+
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (files != null) {
+                for (File f : files) {
+                    rekursivLoeschen(f);
+                }
+            }
+        }
+
+        return file.delete();
     }
 }
