@@ -56,6 +56,10 @@ public class PlayerJoinListener implements Listener {
                 });
             }
             Shopy.getInstance().getGeladeneTempWelten().remove(p.getUniqueId());
+
+            if(Shopy.getInstance().getSpielerDungeon().containsKey(p.getUniqueId())){
+                Shopy.getInstance().getSpielerDungeon().remove(p.getUniqueId());
+            }
         }
     }
 }

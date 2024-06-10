@@ -12,6 +12,7 @@ import de.dome.shopy.listener.shop.*;
 import de.dome.shopy.listener.shop.clicklistener.InventoryClickListenerItemLager;
 import de.dome.shopy.listener.shop.clicklistener.InventoryClickListenerRessourenMarkplatz;
 import de.dome.shopy.listener.shop.clicklistener.InventoryClickListenerWerkbank;
+import de.dome.shopy.utils.Dungeon;
 import de.dome.shopy.utils.MySQL;
 import de.dome.shopy.utils.MySQLDefault;
 import de.dome.shopy.utils.shop.Shop;
@@ -48,6 +49,7 @@ public class Shopy extends JavaPlugin {
     ArrayList<Player> playersNotTeleport;
     InventoryManager inventoryManager;
     public static HashMap<UUID, ArrayList<World>> geladeneTempWelten;
+    private HashMap<UUID, Dungeon> spielerDungeon;
 
     @Override
     public void onEnable() {
@@ -56,6 +58,7 @@ public class Shopy extends JavaPlugin {
         playersNotTeleport = new ArrayList<>();
         spielerShops = new HashMap<>();
         geladeneTempWelten = new HashMap<>();
+        spielerDungeon = new HashMap<>();
         inventoryManager = new InventoryManager(getInstance());
         inventoryManager.invoke();
 
@@ -256,6 +259,10 @@ public class Shopy extends JavaPlugin {
 
     public static HashMap<UUID, ArrayList<World>> getGeladeneTempWelten() {
         return geladeneTempWelten;
+    }
+
+    public HashMap<UUID, Dungeon> getSpielerDungeon() {
+        return spielerDungeon;
     }
 
     public Location getLocationFromString(String locationString) {

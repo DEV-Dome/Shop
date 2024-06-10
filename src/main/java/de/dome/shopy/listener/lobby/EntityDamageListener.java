@@ -15,7 +15,10 @@ public class EntityDamageListener implements Listener {
     @EventHandler
     public void blockPlace(EntityDamageEvent e) {
         if(e.getEntity() instanceof Player){
-            e.setCancelled(true);
+            Player p = (Player) e.getEntity();
+            if(!Shopy.getInstance().getSpielerDungeon().containsKey(p.getUniqueId())){
+                e.setCancelled(true);
+            }
         }
     }
 

@@ -1,9 +1,5 @@
 package de.dome.shopy.utils;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -652,6 +648,17 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
 			}
 		}
 
+	}
+
+	public Location getRandomLocation() {
+		Random random = new Random();
+		int x = random.nextInt((x2 - x1) + 1) + x1;
+		int z = random.nextInt((z2 - z1) + 1) + z1;
+
+		// Bestimmen Sie die y-Koordinate des höchsten Blocks an der (x, z) Position
+		int y = getWorld().getHighestBlockYAt(x, z) + 1;
+
+		return new Location(getWorld(), x, y, z);
 	}
 
 }

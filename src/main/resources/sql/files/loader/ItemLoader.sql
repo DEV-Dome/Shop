@@ -97,8 +97,7 @@ INSERT INTO item_kategorie (icon, name, beschreibung, reinfolge) VALUES ('NETHER
 
         INSERT INTO item_werte (item, wert, value) VALUES (8, "freigeschlatet_typ", "STANDART");
         INSERT INTO item_werte (item, wert, value) VALUES (8, "freigeschlatet_item", 9);
-        INSERT INTO item_werte (item, wert, value) VALUES (8, "freigeschlatet_menge", 18);
-
+        INSERT INTO item_werte (item, wert, value) VALUES (8, "freigeschlatet_menge",
     INSERT INTO item (item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('1', 'STONE_AXE', 'Weiße Axt', 'Diese Axt aus Stein wurde ein \n einfach weiß angemalt.', 1, 9);
         INSERT INTO item_kosten (item, ressource, menge) VALUES (9, 1, 2);
         INSERT INTO item_kosten (item, ressource, menge) VALUES (9, 2, 4);

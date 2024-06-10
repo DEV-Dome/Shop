@@ -46,8 +46,6 @@ public class setDungeonCMD implements CommandExecutor {
                                 return;
                             }
 
-
-
                             if(wert.equalsIgnoreCase("spawn")){
                                 String queryPos1 = "INSERT INTO dungeon_positionen (dungeon, wert, value) VALUES (" + dungeonID +", '"+ wert +"', '"+ p.getLocation().toString() +"')";
                                 Shopy.getInstance().getMySQLConntion().query(queryPos1);
