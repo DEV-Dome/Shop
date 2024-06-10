@@ -5,6 +5,7 @@ import de.dome.shopy.commands.welt.LadeWeltCMD;
 import de.dome.shopy.utils.shop.Shop;
 import org.bukkit.*;
 import org.bukkit.entity.*;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,9 +34,12 @@ public class Dungeon {
     private Location spawnZonePos1 = null;
     private Location spawnZonePos2 = null;
 
+    private ArrayList<Entity> dungeonEntitys;
+
     public Dungeon(Shop shop, int level) {
         this.shop = shop;
-        dungeonLevel = level;
+        this.dungeonLevel = level;
+        this.dungeonEntitys = new ArrayList<>();
 
          CompletableFuture.runAsync(() -> {
 
@@ -116,6 +120,45 @@ public class Dungeon {
             }
         });
     }
+    public void DungeonAbschlissen(){
+        Player p = shop.getOwner();
+        p.sendMessage(Shopy.getInstance().getPrefix() + "Du hast es geschafft den Dungeon zu säubern. Dabei hast du folgenden Loot Erhalten: ");
+
+        if(Shopy.getInstance().getServerSpawn() != null){
+            if (!Shopy.getInstance().getPlayersNotTeleport().contains(p)) {
+                new BukkitRunnable() {
+                    int countdownTime = 3;
+                    @Override
+                    public void run() {
+                        if (countdownTime <= 0) {
+                            cancel();
+                            p.teleport(Shopy.getInstance().getServerSpawn());
+                            p.sendMessage(Shopy.getInstance().getPrefix() + "Du wurdest zum Spawn Teleporiert. ");
+                            if(Shopy.getInstance().getPlayersNotTeleport().contains(p)) Shopy.getInstance().getPlayersNotTeleport().remove(p);
+
+                            if(Shopy.getInstance().getGeladeneTempWelten().containsKey(p.getUniqueId())){
+                                for(World world : Shopy.getInstance().getGeladeneTempWelten().get(p.getUniqueId())){
+                                    File file = world.getWorldFolder();
+                                    Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
+                                        Bukkit.unloadWorld(world, true);
+
+                                        Shopy.getInstance().rekursivLoeschen(file);
+                                    });
+                                }
+                                Shopy.getInstance().getGeladeneTempWelten().remove(p.getUniqueId());
+                            }
+                            if(Shopy.getInstance().getSpielerDungeon().containsKey(p.getUniqueId())){
+                                Shopy.getInstance().getSpielerDungeon().remove(p.getUniqueId());
+                            }
+                        } else {
+                            p.sendMessage(Shopy.getInstance().getPrefix() + "Du wirst in " + countdownTime + " Sekunden zum Spawn Teleporiert.");
+                            countdownTime--;
+                        }
+                    }
+                }.runTaskTimer(Shopy.getInstance(), 0L, 20L);
+            }
+        }
+    }
 
     private void spawnManger(){
         ArrayList<Class> mobTypes = new ArrayList<>();
@@ -155,7 +198,7 @@ public class Dungeon {
         }
 
         /* Mob Spawnen */
-        for (int i = 0; i <= spawnMenge; i++){
+        for (int i = 1; i <= spawnMenge; i++){
             /*Type auswählen*/
             Class vorlageMonster = mobTypes.get(random.nextInt(mobTypes.size()));
 
@@ -169,28 +212,33 @@ public class Dungeon {
             spawnMonster.setCustomNameVisible(true);
             spawnMonster.setCustomName("§9" + generiereZufälligenGengerNamen());
 
+            dungeonEntitys.add(spawnMonster);
             /* Monster Spezifische sachen*/
             if(spawnMonster instanceof Zombie){
                 Zombie spawnMonsterDetailliert = (Zombie) spawnMonster;
                 spawnMonsterDetailliert.setCanPickupItems(false);
                 spawnMonsterDetailliert.setMaxHealth(random.nextInt(minLeben, maxLeben));
                 spawnMonsterDetailliert.setAdult();
+                spawnMonsterDetailliert.setJumping(false);
             }
             if(spawnMonster instanceof Skeleton){
                 Skeleton spawnMonsterDetailliert = (Skeleton) spawnMonster;
                 spawnMonsterDetailliert.setCanPickupItems(false);
                 spawnMonsterDetailliert.setMaxHealth(random.nextInt(minLeben, maxLeben));
+                spawnMonsterDetailliert.setJumping(false);
             }
             if(spawnMonster instanceof Spider){
                 Spider spawnMonsterDetailliert = (Spider) spawnMonster;
                 spawnMonsterDetailliert.setCanPickupItems(false);
                 spawnMonsterDetailliert.setMaxHealth(random.nextInt(minLeben, maxLeben));
+                spawnMonsterDetailliert.setJumping(false);
             }
             if(spawnMonster instanceof Drowned){
                 Drowned spawnMonsterDetailliert = (Drowned) spawnMonster;
                 spawnMonsterDetailliert.setCanPickupItems(false);
                 spawnMonsterDetailliert.setMaxHealth(random.nextInt(minLeben, maxLeben));
                 spawnMonsterDetailliert.setAdult();
+                spawnMonsterDetailliert.setJumping(false);
             }
         }
     }
@@ -220,5 +268,53 @@ public class Dungeon {
 
         // Kombinieren von Vor- und Nachname zu einem vollständigen Namen
         return adjektiv + " " + vorname;
+    }
+
+    public Shop getShop() {
+        return shop;
+    }
+
+    public int getDungeonId() {
+        return dungeonId;
+    }
+
+    public int getDungeonLevel() {
+        return dungeonLevel;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public Location getSpawn() {
+        return spawn;
+    }
+
+    public Cuboid getDungeonZone() {
+        return dungeonZone;
+    }
+
+    public Cuboid getSpawnZone() {
+        return spawnZone;
+    }
+
+    public Location getDungeonZonePos1() {
+        return dungeonZonePos1;
+    }
+
+    public Location getDungeonZonePos2() {
+        return dungeonZonePos2;
+    }
+
+    public Location getSpawnZonePos1() {
+        return spawnZonePos1;
+    }
+
+    public Location getSpawnZonePos2() {
+        return spawnZonePos2;
+    }
+
+    public ArrayList<Entity> getDungeonEntitys() {
+        return dungeonEntitys;
     }
 }

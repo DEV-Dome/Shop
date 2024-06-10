@@ -6,6 +6,8 @@ import de.dome.shopy.commands.dungeon.addDungeonCMD;
 import de.dome.shopy.commands.dungeon.DungeonCMD;
 import de.dome.shopy.commands.dungeon.setDungeonCMD;
 import de.dome.shopy.commands.welt.*;
+import de.dome.shopy.listener.dungeon.EntityCombustListener;
+import de.dome.shopy.listener.dungeon.EntityDeathListener;
 import de.dome.shopy.listener.lobby.*;
 import de.dome.shopy.listener.lobby.BlockBreakListener;
 import de.dome.shopy.listener.shop.*;
@@ -122,6 +124,10 @@ public class Shopy extends JavaPlugin {
         new InventoryClickListenerWerkbank();
         new InventoryClickListenerRessourenMarkplatz();
         new InventoryClickListenerItemLager();
+
+        /* Dungeon */
+        new EntityDeathListener();
+        new EntityCombustListener();
     }
 
     private void registerCommands(){

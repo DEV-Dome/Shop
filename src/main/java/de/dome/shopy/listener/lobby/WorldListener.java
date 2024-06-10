@@ -14,10 +14,7 @@ public class WorldListener implements Listener {
     public WorldListener() {
         Shopy.getInstance().getServer().getPluginManager().registerEvents(this, Shopy.getInstance());
     }
-    @EventHandler
-    public void EntityCombust(EntityCombustEvent e){
-        e.setCancelled(true);
-    }
+
 
     @EventHandler
     public void weatherChange(WeatherChangeEvent e) {
