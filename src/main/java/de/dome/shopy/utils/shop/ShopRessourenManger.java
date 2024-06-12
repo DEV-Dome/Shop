@@ -1,7 +1,7 @@
 package de.dome.shopy.utils.shop;
 
 import de.dome.shopy.Shopy;
-import de.dome.shopy.utils.Ressoure;
+import de.dome.shopy.utils.Ressource;
 import org.bukkit.Bukkit;
 
 import java.sql.ResultSet;
@@ -13,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
 public class ShopRessourenManger {
 
     Shop shop;
-    private Map<Ressoure, Integer> shopRessoure;
+    private Map<Ressource, Integer> shopRessoure;
 
     public ShopRessourenManger(Shop shop){
         this.shop = shop;
@@ -26,15 +26,15 @@ public class ShopRessourenManger {
         return shop;
     }
 
-    public Map<Ressoure, Integer> getShopRessoure() {
+    public Map<Ressource, Integer> getShopRessoure() {
         return shopRessoure;
     }
 
-    public int getRessourceValue(Ressoure ressoure){
+    public int getRessourceValue(Ressource ressource){
         int ret = -1;
 
-        for (Map.Entry<Ressoure, Integer> shopRessoure : shopRessoure.entrySet()) {
-            if(shopRessoure.getKey().getName().equalsIgnoreCase(ressoure.getName())){
+        for (Map.Entry<Ressource, Integer> shopRessoure : shopRessoure.entrySet()) {
+            if(shopRessoure.getKey().getName().equalsIgnoreCase(ressource.getName())){
                 ret = shopRessoure.getValue();
             }
         }
@@ -42,9 +42,9 @@ public class ShopRessourenManger {
         return ret;
     }
 
-    public void setRessourcenValue(Ressoure ressoure, int newValue){
+    public void setRessourcenValue(Ressource ressource, int newValue){
         CompletableFuture.runAsync(() -> {
-            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_ressource SET menge = '"+ newValue+"' WHERE shop = " + shop.shopId + " AND ressource = " + ressoure.getId());
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_ressource SET menge = '"+ newValue+"' WHERE shop = " + shop.shopId + " AND ressource = " + ressource.getId());
             ladeResscuren();
         });
 
@@ -59,7 +59,7 @@ public class ShopRessourenManger {
 
                 ResultSet resultRessourecs = Shopy.getInstance().getMySQLConntion().resultSet(queryRessourecs);
                 while(resultRessourecs.next()){
-                    Ressoure ressoure = Ressoure.getRessoureByName(resultRessourecs.getString("name"));
+                    Ressource ressource = Ressource.getRessoureByName(resultRessourecs.getString("name"));
 
                     String queryRessourecsShop = "SELECT * FROM shop_ressource WHERE shop = " + shop.getShopId() + " AND ressource = " + resultRessourecs.getInt("id") + " LIMIT 1";
                     ResultSet resultRessourecsShop = Shopy.getInstance().getMySQLConntion().resultSet(queryRessourecsShop);
@@ -68,12 +68,12 @@ public class ShopRessourenManger {
                     if(resultRessourecsShop.getRow() == 0) {
                         Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_ressource (shop, ressource, menge) VALUES ('" + shop.getShopId() +"','"+ resultRessourecs.getInt("id") +"', 0)");
 
-                        if(ressoure != null){
-                            shopRessoure.put(ressoure, 0);
+                        if(ressource != null){
+                            shopRessoure.put(ressource, 0);
                         }
                     }else {
-                        if(ressoure != null){
-                            shopRessoure.put(ressoure, resultRessourecsShop.getInt("menge"));
+                        if(ressource != null){
+                            shopRessoure.put(ressource, resultRessourecsShop.getInt("menge"));
                         }
                     }
                 }

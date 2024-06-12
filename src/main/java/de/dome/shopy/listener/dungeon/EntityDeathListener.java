@@ -1,20 +1,26 @@
 package de.dome.shopy.listener.dungeon;
 
 import de.dome.shopy.Shopy;
+import de.dome.shopy.utils.Cuboid;
 import de.dome.shopy.utils.Dungeon;
-import de.dome.shopy.utils.Ressoure;
+import de.dome.shopy.utils.Ressource;
 import de.dome.shopy.utils.shop.ShopRessourenManger;
+import me.filoghost.holographicdisplays.api.hologram.Hologram;
+import me.filoghost.holographicdisplays.api.hologram.line.TextHologramLine;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class EntityDeathListener implements Listener {
 
@@ -26,63 +32,201 @@ public class EntityDeathListener implements Listener {
     public void entityDeath(EntityDeathEvent e) {
         if(e.getEntity().getKiller() instanceof Player && Shopy.getInstance().getSpielerDungeon().containsKey(e.getEntity().getKiller().getUniqueId())){
             Player p = e.getEntity().getKiller();
+            Shopy.getInstance().getScoreboardManger().setScoreBoard(p);
             Dungeon spielerDungeon = Shopy.getInstance().getSpielerDungeon().get(p.getUniqueId());
 
             /* Spieler Loot ausgeben */
             if(spielerDungeon.getDungeonEntitys().contains(e.getEntity())){
+                ArrayList<Ressource> gedroppterLoot = null;
                 if(e.getEntity().getType() == EntityType.ZOMBIE){
-                    Ressoure ressource = Ressoure.getRessoureByName("Monsterhaut");
-                    if(ressource != null){
-                        ShopRessourenManger shopRessourenManger = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger();
-                        shopRessourenManger.setRessourcenValue(ressource, shopRessourenManger.getRessourceValue(ressource) + 1);
-                    }
+                    gedroppterLoot = dropLoot(spielerDungeon, "Monsterhaut");
                 }
 
                 if(e.getEntity().getType() == EntityType.SKELETON){
-                    Ressoure ressource = Ressoure.getRessoureByName("Skelett Arm");
-                    if(ressource != null){
-                        ShopRessourenManger shopRessourenManger = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger();
-                        shopRessourenManger.setRessourcenValue(ressource, shopRessourenManger.getRessourceValue(ressource) + 1);
-                    }
+                    gedroppterLoot = dropLoot(spielerDungeon, "Skelett Arm");
                 }
 
                 if(e.getEntity().getType() == EntityType.SPIDER){
-                    Ressoure ressource = Ressoure.getRessoureByName("Spinnenbein");
-                    if(ressource != null){
-                        ShopRessourenManger shopRessourenManger = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger();
-                        shopRessourenManger.setRessourcenValue(ressource, shopRessourenManger.getRessourceValue(ressource) + 1);
-                    }
+                    gedroppterLoot = dropLoot(spielerDungeon, "Spinnenbein");
                 }
                 if(e.getEntity().getType() == EntityType.DROWNED){
-                    Ressoure ressource = Ressoure.getRessoureByName("Seegras");
-                    if(ressource != null){
-                        ShopRessourenManger shopRessourenManger = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger();
-                        shopRessourenManger.setRessourcenValue(ressource, shopRessourenManger.getRessourceValue(ressource) + 1);
+                    gedroppterLoot = dropLoot(spielerDungeon, "Seegras");
+                }
+
+                /* Urspünglichen Monster Loot unterbinden*/
+                e.setDroppedExp(0);
+                e.getDrops().clear();
+
+                /* Hologram erzeugen, was anzeigent welcher Loot gefallen ist, */
+
+                Hologram hologram = Shopy.getInstance().getHolographicDisplaysAPI().createHologram(e.getEntity().getLocation().add(0,2,0));
+                hologram.getLines().appendText("§7Fallen gelassen:");
+                if(!gedroppterLoot.isEmpty()){
+                    hologram.getLines().appendText("");
+                    for (Ressource item : gedroppterLoot) {
+                        hologram.getLines().appendText("§e1x " + item.getName());
+                    }
+                }else hologram.delete();
+
+
+
+                /* Sicherstellen das alle Toten Monster auch tot sind */
+                /* Wenn es nur noch 5 Gegener gibt, aller Monster zum Spieler Teleportiren */
+
+                if(spielerDungeon.getLebendeGegner() <= 5){
+                    if(!spielerDungeon.isEndZoneSpawing()){
+                        p.sendMessage(Shopy.getInstance().getPrefix() + "Es leben nur noch " +  spielerDungeon.getLebendeGegner() + " Monster. Dieser haben sich zu dir Teleportiert um sich zu rächen.");
+
+                        /*Zone um den Spieler rum bauen (3 x 3)*/
+                        Cuboid mobSpawnEndZone = new Cuboid(p.getLocation().add(3,0,2), p.getLocation().add(-3,0,-2));
+
+                        for(Entity dungeonEntity : spielerDungeon.getDungeonEntitys()) {
+                            dungeonEntity.teleport(mobSpawnEndZone.getRandomLocation());
+                        }
+
+                        spielerDungeon.setEndZoneSpawing(true);
                     }
                 }
 
-                e.setDroppedExp(0);
-                e.getDrops().clear();
-                spielerDungeon.getDungeonEntitys().remove(e.getEntity());
-                p.sendMessage(Shopy.getInstance().getPrefix() + "§5DEBUG: " + spielerDungeon.getDungeonEntitys().size());
-
                 /* Prüfe on der Dungeon abgeschlossen ist */
-                if(spielerDungeon.getDungeonEntitys().size() == 0){
+                if(spielerDungeon.getLebendeGegner() == 0){
                     spielerDungeon.DungeonAbschlissen();
                 }
+
+                /* Hologram nach 3 Sekunden entfernen */
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        cancel();
+                        hologram.delete();
+                    }
+                }.runTaskTimer(Shopy.getInstance(), 60L, 60L);
             }
-        }
+        }else {
+            for (Dungeon dungeon : Shopy.getInstance().getSpielerDungeon().values()) {
+                if(dungeon.getDungeonEntitys().contains(e.getEntity())){
+                    Shopy.getInstance().getScoreboardManger().setScoreBoard(dungeon.getShop().getOwner());
+                    e.setDroppedExp(0);
+                    e.getDrops().clear();
 
-        for (Dungeon dungeon : Shopy.getInstance().getSpielerDungeon().values()) {
-            if(dungeon.getDungeonEntitys().contains(e.getEntity())){
-                dungeon.getDungeonEntitys().remove(e.getEntity());
-                e.setDroppedExp(0);
-                e.getDrops().clear();
-
-                if(dungeon.getDungeonEntitys().size() == 0){
-                    dungeon.DungeonAbschlissen();
+                    if(dungeon.getLebendeGegner() == 0){
+                        dungeon.DungeonAbschlissen();
+                    }
+                    break;
                 }
             }
         }
+    }
+
+    public  ArrayList<Ressource>  dropLoot(Dungeon spielerDungeon, String besondereLoot){
+        ArrayList<Ressource> gedroppterLoot = new ArrayList<>();
+        String[] loot = {"Monsterbeutel", "Monster beeren"};
+        Player p = spielerDungeon.getShop().getOwner();
+
+        if(Shopy.getInstance().isWahrscheinlichkeit(0.012)){
+            //Es Droppen 3 Items
+
+            /* Zusatz Loot 1 */
+            Ressource ressource = Ressource.getRessoureByName(besondereLoot);
+            if(ressource != null){
+                ShopRessourenManger shopRessourenManger = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger();
+                shopRessourenManger.setRessourcenValue(ressource, shopRessourenManger.getRessourceValue(ressource) + 1);
+
+                /* Loot speichern, für die zusamenfassung */
+                int anzahlLoot = 1;
+                if(spielerDungeon.getDungeonLoot().containsKey(ressource)){
+                    anzahlLoot = spielerDungeon.getDungeonLoot().get(ressource) + 1;
+                    spielerDungeon.getDungeonLoot().remove(ressource);
+                }
+                spielerDungeon.getDungeonLoot().put(ressource, anzahlLoot);
+                gedroppterLoot.add(ressource);
+            }
+
+            /* Zusatz Loot 2*/
+            ressource = Ressource.getRessoureByName(loot[0]);
+            if(ressource != null){
+                ShopRessourenManger shopRessourenManger = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger();
+                shopRessourenManger.setRessourcenValue(ressource, shopRessourenManger.getRessourceValue(ressource) + 1);
+
+                /* Loot speichern, für die zusamenfassung */
+                int anzahlLoot = 1;
+                if(spielerDungeon.getDungeonLoot().containsKey(ressource)){
+                    anzahlLoot = spielerDungeon.getDungeonLoot().get(ressource) + 1;
+                    spielerDungeon.getDungeonLoot().remove(ressource);
+                }
+                spielerDungeon.getDungeonLoot().put(ressource, anzahlLoot);
+                gedroppterLoot.add(ressource);
+            }
+
+            /* Normaler Loot */
+            ressource = Ressource.getRessoureByName(loot[1]);
+            if(ressource != null){
+                ShopRessourenManger shopRessourenManger = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger();
+                shopRessourenManger.setRessourcenValue(ressource, shopRessourenManger.getRessourceValue(ressource) + 1);
+
+                /* Loot speichern, für die zusamenfassung */
+                int anzahlLoot = 1;
+                if(spielerDungeon.getDungeonLoot().containsKey(ressource)){
+                    anzahlLoot = spielerDungeon.getDungeonLoot().get(ressource) + 1;
+                    spielerDungeon.getDungeonLoot().remove(ressource);
+                }
+                spielerDungeon.getDungeonLoot().put(ressource, anzahlLoot);
+                gedroppterLoot.add(ressource);
+            }
+        } else if(Shopy.getInstance().isWahrscheinlichkeit(0.045)){
+            //Es Droppen 2 Items
+            String lootZwei = loot[0];
+            if(Shopy.getInstance().isWahrscheinlichkeit(0.5))  lootZwei = loot[1];
+
+            /* Zusatz Loot */
+            Ressource ressource = Ressource.getRessoureByName(besondereLoot);
+            if(ressource != null){
+                ShopRessourenManger shopRessourenManger = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger();
+                shopRessourenManger.setRessourcenValue(ressource, shopRessourenManger.getRessourceValue(ressource) + 1);
+
+                /* Loot speichern, für die zusamenfassung */
+                int anzahlLoot = 1;
+                if(spielerDungeon.getDungeonLoot().containsKey(ressource)){
+                    anzahlLoot = spielerDungeon.getDungeonLoot().get(ressource) + 1;
+                    spielerDungeon.getDungeonLoot().remove(ressource);
+                }
+                spielerDungeon.getDungeonLoot().put(ressource, anzahlLoot);
+                gedroppterLoot.add(ressource);
+            }
+
+            /* Normaler Loot */
+            ressource = Ressource.getRessoureByName(lootZwei);
+            if(ressource != null){
+                ShopRessourenManger shopRessourenManger = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger();
+                shopRessourenManger.setRessourcenValue(ressource, shopRessourenManger.getRessourceValue(ressource) + 1);
+
+                /* Loot speichern, für die zusamenfassung */
+                int anzahlLoot = 1;
+                if(spielerDungeon.getDungeonLoot().containsKey(ressource)){
+                    anzahlLoot = spielerDungeon.getDungeonLoot().get(ressource) + 1;
+                    spielerDungeon.getDungeonLoot().remove(ressource);
+                }
+                spielerDungeon.getDungeonLoot().put(ressource, anzahlLoot);
+                gedroppterLoot.add(ressource);
+            }
+        } else if(Shopy.getInstance().isWahrscheinlichkeit(0.59)){
+            /* Es Droppen 1 Item */
+            Ressource ressource = Ressource.getRessoureByName(besondereLoot);
+            if(ressource != null){
+                ShopRessourenManger shopRessourenManger = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger();
+                shopRessourenManger.setRessourcenValue(ressource, shopRessourenManger.getRessourceValue(ressource) + 1);
+
+                /* Loot speichern, für die zusamenfassung */
+                int anzahlLoot = 1;
+                if(spielerDungeon.getDungeonLoot().containsKey(ressource)){
+                    anzahlLoot = spielerDungeon.getDungeonLoot().get(ressource) + 1;
+                    spielerDungeon.getDungeonLoot().remove(ressource);
+                }
+                spielerDungeon.getDungeonLoot().put(ressource, anzahlLoot);
+                gedroppterLoot.add(ressource);
+            }
+        }
+
+        return gedroppterLoot;
     }
 }

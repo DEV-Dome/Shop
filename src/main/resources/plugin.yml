@@ -4,7 +4,7 @@ main: de.dome.shopy.Shopy
 author: Dev_Dome
 description: Kommt später
 authors: [Dev_Dome]
-depend: [PlayerNPC]
+depend: [PlayerNPC, HolographicDisplays, RyseInventory]
 api-version: '1.20'
 commands:
   setspawn:

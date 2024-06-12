@@ -17,10 +17,12 @@ import de.dome.shopy.listener.shop.clicklistener.InventoryClickListenerWerkbank;
 import de.dome.shopy.utils.Dungeon;
 import de.dome.shopy.utils.MySQL;
 import de.dome.shopy.utils.MySQLDefault;
+import de.dome.shopy.utils.ScoreboardManger;
 import de.dome.shopy.utils.shop.Shop;
 import dev.sergiferry.playernpc.api.NPC;
 import dev.sergiferry.playernpc.api.NPCLib;
 import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
+import me.filoghost.holographicdisplays.api.HolographicDisplaysAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.*;
@@ -38,6 +40,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.UUID;
 
 public class Shopy extends JavaPlugin {
@@ -52,7 +55,8 @@ public class Shopy extends JavaPlugin {
     InventoryManager inventoryManager;
     public static HashMap<UUID, ArrayList<World>> geladeneTempWelten;
     private HashMap<UUID, Dungeon> spielerDungeon;
-
+    private ScoreboardManger scoreboardManger;
+    private HolographicDisplaysAPI holographicDisplaysAPI;
     @Override
     public void onEnable() {
         super.onEnable();
@@ -63,6 +67,8 @@ public class Shopy extends JavaPlugin {
         spielerDungeon = new HashMap<>();
         inventoryManager = new InventoryManager(getInstance());
         inventoryManager.invoke();
+
+        scoreboardManger = new ScoreboardManger();
 
         registerListener();
         registerCommands();
@@ -84,11 +90,16 @@ public class Shopy extends JavaPlugin {
         /* Das nicht mit laden lassen, um leistung zu sparen */
         if(Bukkit.getWorld("world_the_end") != null)  Bukkit.unloadWorld(Bukkit.getWorld("world_the_end"), false);
 
+        /* Verbindung zu datenbank*/
         mySQLConntion = new MySQL();
         MySQLDefault.getInstance().sqlStartUp();
 
+        /* NPC API*/
         NPCLib.getInstance().registerPlugin(getInstance());
         registerNPC();
+
+        /* Hologram API */
+        holographicDisplaysAPI  = HolographicDisplaysAPI.get(this);
 
         Bukkit.getConsoleSender().sendMessage(prefix + "§aPlugin gestartet");
     }
@@ -112,6 +123,7 @@ public class Shopy extends JavaPlugin {
         new BlockBreakListener();
         new EntityDamageListener();
         new PlayerJoinListener();
+        new PlayerQuitListener();
         new WorldListener();
         new NPCInteractListener();
         new InventoryClickListener();
@@ -271,6 +283,14 @@ public class Shopy extends JavaPlugin {
         return spielerDungeon;
     }
 
+    public ScoreboardManger getScoreboardManger() {
+        return scoreboardManger;
+    }
+
+    public HolographicDisplaysAPI getHolographicDisplaysAPI() {
+        return holographicDisplaysAPI;
+    }
+
     public Location getLocationFromString(String locationString) {
         Location ret = null;
 
@@ -331,5 +351,14 @@ public class Shopy extends JavaPlugin {
         }
 
         return file.delete();
+    }
+
+    public boolean isWahrscheinlichkeit(double wahrscheinlichkeit) {
+        if (wahrscheinlichkeit < 0 || wahrscheinlichkeit > 1) {
+            throw new IllegalArgumentException("wahrscheinlichkeit must be between 0 and 1");
+        }
+
+        Random random = new Random();
+        return random.nextDouble() <= wahrscheinlichkeit;
     }
 }

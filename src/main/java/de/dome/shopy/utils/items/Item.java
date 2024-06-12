@@ -1,7 +1,7 @@
 package de.dome.shopy.utils.items;
 
 import de.dome.shopy.Shopy;
-import de.dome.shopy.utils.Ressoure;
+import de.dome.shopy.utils.Ressource;
 import de.dome.shopy.utils.shop.Shop;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -116,7 +116,7 @@ public class Item {
                     String queryRessourecsKosten = "SELECT * FROM item_kosten WHERE item = " + newItem.getId();
                     ResultSet resultItemKosten = Shopy.getInstance().getMySQLConntion().resultSet(queryRessourecsKosten);
                     while (resultItemKosten.next()) {
-                        newItem.getRessourecsKostenList().add(new ItemRessourecenKosten(resultItemKosten.getInt("id"), newItem, Ressoure.getRessoureByID(resultItemKosten.getInt("ressource")), resultItemKosten.getInt("menge")));
+                        newItem.getRessourecsKostenList().add(new ItemRessourecenKosten(resultItemKosten.getInt("id"), newItem, Ressource.getRessoureByID(resultItemKosten.getInt("ressource")), resultItemKosten.getInt("menge")));
                     }
                     /*Werte Laden*/
                     String queryRessourecsWerte = "SELECT * FROM item_werte WHERE item = " + newItem.getId();

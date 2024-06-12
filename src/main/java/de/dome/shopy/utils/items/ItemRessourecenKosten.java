@@ -1,18 +1,18 @@
 package de.dome.shopy.utils.items;
 
-import de.dome.shopy.utils.Ressoure;
+import de.dome.shopy.utils.Ressource;
 
 public class ItemRessourecenKosten {
 
     int id;
     Item item;
-    Ressoure ressoure;
+    Ressource ressource;
     int menge;
 
-    public ItemRessourecenKosten(int id, Item item, Ressoure ressoure, int menge) {
+    public ItemRessourecenKosten(int id, Item item, Ressource ressource, int menge) {
         this.id = id;
         this.item = item;
-        this.ressoure = ressoure;
+        this.ressource = ressource;
         this.menge = menge;
     }
 
@@ -24,8 +24,8 @@ public class ItemRessourecenKosten {
         return item;
     }
 
-    public Ressoure getRessoure() {
-        return ressoure;
+    public Ressource getRessoure() {
+        return ressource;
     }
 
     public int getMenge() {

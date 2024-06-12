@@ -1,7 +1,7 @@
 package de.dome.shopy.commands.admin;
 
 import de.dome.shopy.Shopy;
-import de.dome.shopy.utils.Ressoure;
+import de.dome.shopy.utils.Ressource;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,7 +24,7 @@ public class setRessourceCMD implements CommandExecutor {
                         return true;
                     }
 
-                    Ressoure ressource = Ressoure.getRessoureByName(ressourcenName);
+                    Ressource ressource = Ressource.getRessoureByName(ressourcenName);
                     if(ressource == null){
                         p.sendMessage(Shopy.getInstance().getPrefix() + "§cEine Ressource mit diesem Namen gibt es nicht!");
                         return true;

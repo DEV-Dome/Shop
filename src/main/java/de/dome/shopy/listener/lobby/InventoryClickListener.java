@@ -2,7 +2,7 @@ package de.dome.shopy.listener.lobby;
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.Dungeon;
-import de.dome.shopy.utils.Ressoure;
+import de.dome.shopy.utils.Ressource;
 import de.dome.shopy.utils.shop.Shop;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -67,7 +67,7 @@ public class InventoryClickListener implements Listener {
                                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_werte (shop, wert, value) VALUES ('" + shop_id + "', 'item_lager', '10')");
 
                                 /*Start geld*/
-                                Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_ressource (shop, ressource, menge) VALUES ('" + shop_id + "', '" + Ressoure.getRessoureByName("Geld").getId() +"', '100')");
+                                Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_ressource (shop, ressource, menge) VALUES ('" + shop_id + "', '" + Ressource.getRessoureByName("Geld").getId() +"', '100')");
 
                             }else {
                                 p.sendMessage(Shopy.getInstance().getPrefix() + "§cBeim Erstellen deines Shops ist ein Fehler aufgetreten, wende dich bitte an den §eSupport§c.");
@@ -151,6 +151,16 @@ public class InventoryClickListener implements Listener {
                     Bukkit.dispatchCommand(p, "itemlager");
                 } else {
                     e.setCancelled(true);
+                }
+            }
+        }
+        if (e.getView().getTitle().equals("§9Shop - Ressourcen Übersicht")) {
+            if(item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName() &&  Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())) {
+                if (item.getType() == Material.OAK_WOOD) {
+                    Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openRessourenUbersicht("start");
+                }
+                if (item.getType() == Material.AMETHYST_SHARD) {
+                    Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openRessourenUbersicht("dungoenmaterialien");
                 }
             }
         }

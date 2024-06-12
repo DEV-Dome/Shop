@@ -2,7 +2,6 @@ package de.dome.shopy.utils;
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.items.ItemKategorie;
-import org.bukkit.Bukkit;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -141,7 +140,7 @@ public class MySQLDefault {
         }
 
         /* Ressouren und Items Laden */
-        Ressoure.registerRessouren();
+        Ressource.registerRessouren();
         ItemKategorie.registerItemKategorie();
     }
 

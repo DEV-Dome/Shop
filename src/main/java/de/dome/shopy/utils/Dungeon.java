@@ -1,7 +1,6 @@
 package de.dome.shopy.utils;
 
 import de.dome.shopy.Shopy;
-import de.dome.shopy.commands.welt.LadeWeltCMD;
 import de.dome.shopy.utils.shop.Shop;
 import org.bukkit.*;
 import org.bukkit.entity.*;
@@ -11,8 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class Dungeon {
@@ -34,12 +32,16 @@ public class Dungeon {
     private Location spawnZonePos1 = null;
     private Location spawnZonePos2 = null;
 
+    private boolean endZoneSpawing = false;
+
     private ArrayList<Entity> dungeonEntitys;
+    private HashMap<Ressource, Integer> dungeonLoot;
 
     public Dungeon(Shop shop, int level) {
         this.shop = shop;
         this.dungeonLevel = level;
         this.dungeonEntitys = new ArrayList<>();
+        this.dungeonLoot = new HashMap<>();
 
          CompletableFuture.runAsync(() -> {
 
@@ -95,12 +97,15 @@ public class Dungeon {
                             dungeonZone = new Cuboid(dungeonZonePos1, dungeonZonePos2);
                             spawnZone = new Cuboid(spawnZonePos1, spawnZonePos2);
 
-                            /* Nachricht an den Spieler senden */
+                            /* Nachricht an den Spieler senden & zum Spawn Teleportiren */
                             shop.getOwner().teleport(spawn);
                             shop.getOwner().sendMessage(Shopy.getInstance().getPrefix() + "Das Ziel ist alles hier gespawnten Monster zu töten!");
 
                             /* Monster Spawn */
                             spawnManger();
+
+                            /* Scoreboard Updateten */
+                             Shopy.getInstance().getScoreboardManger().setScoreBoard(shop.getOwner());
 
                             /* Welt als Tempör makieren */
                             if(Shopy.getInstance().getGeladeneTempWelten().containsKey(shop.getOwner().getUniqueId())){
@@ -123,6 +128,11 @@ public class Dungeon {
     public void DungeonAbschlissen(){
         Player p = shop.getOwner();
         p.sendMessage(Shopy.getInstance().getPrefix() + "Du hast es geschafft den Dungeon zu säubern. Dabei hast du folgenden Loot Erhalten: ");
+        for (Map.Entry<Ressource, Integer> entry : dungeonLoot.entrySet()) {
+            p.sendMessage(Shopy.getInstance().getPrefix() + "§e" + entry.getValue() + "x " + entry.getKey().getName());
+        }
+        p.sendMessage("");
+        p.sendMessage("");
 
         if(Shopy.getInstance().getServerSpawn() != null){
             if (!Shopy.getInstance().getPlayersNotTeleport().contains(p)) {
@@ -147,8 +157,10 @@ public class Dungeon {
                                 }
                                 Shopy.getInstance().getGeladeneTempWelten().remove(p.getUniqueId());
                             }
+
                             if(Shopy.getInstance().getSpielerDungeon().containsKey(p.getUniqueId())){
                                 Shopy.getInstance().getSpielerDungeon().remove(p.getUniqueId());
+                                Shopy.getInstance().getScoreboardManger().setScoreBoard(shop.getOwner());
                             }
                         } else {
                             p.sendMessage(Shopy.getInstance().getPrefix() + "Du wirst in " + countdownTime + " Sekunden zum Spawn Teleporiert.");
@@ -316,5 +328,37 @@ public class Dungeon {
 
     public ArrayList<Entity> getDungeonEntitys() {
         return dungeonEntitys;
+    }
+
+    public boolean isEndZoneSpawing() {
+        return endZoneSpawing;
+    }
+
+    public void setEndZoneSpawing(boolean endZoneSpawing) {
+        this.endZoneSpawing = endZoneSpawing;
+    }
+
+    public HashMap<Ressource, Integer> getDungeonLoot() {
+        return dungeonLoot;
+    }
+
+    public int getLebendeGegner(){
+        int dungeonEntityLebendig = 0;
+
+        for(Entity dungeonEntity : dungeonEntitys) {
+            if (!dungeonEntity.isDead()) dungeonEntityLebendig++;
+        }
+
+        return dungeonEntityLebendig;
+    }
+
+    public int getErhaltendenLoot(){
+        int loot = 0;
+
+        for (int lootAnzahl : dungeonLoot.values()){
+            loot += lootAnzahl;
+        }
+
+        return loot;
     }
 }

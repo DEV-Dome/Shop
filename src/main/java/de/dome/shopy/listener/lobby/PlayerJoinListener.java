@@ -29,37 +29,7 @@ public class PlayerJoinListener implements Listener {
         if(Shopy.getInstance().getServerSpawn() != null){
             p.teleport(Shopy.getInstance().getServerSpawn());
         }
+
         new Shop(p.getUniqueId(), false);
-    }
-
-    @EventHandler
-    public void playerQuit(PlayerQuitEvent e) {
-        Player p = e.getPlayer();
-
-        e.setQuitMessage("");
-
-        if(Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())) {
-            Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).unLoadWorld();
-            Shopy.getInstance().getSpielerShops().remove(p.getUniqueId());
-        }
-        if(de.dome.shopy.listener.shop.BlockBreakListener.shopszones.containsKey(p.getUniqueId())){
-            BlockBreakListener.shopszones.remove(p.getUniqueId());
-        }
-
-        if(Shopy.getInstance().getGeladeneTempWelten().containsKey(p.getUniqueId())){
-            for(World world : Shopy.getInstance().getGeladeneTempWelten().get(p.getUniqueId())){
-                File file = world.getWorldFolder();
-                Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
-                    Bukkit.unloadWorld(world, true);
-
-                    Shopy.getInstance().rekursivLoeschen(file);
-                });
-            }
-            Shopy.getInstance().getGeladeneTempWelten().remove(p.getUniqueId());
-
-            if(Shopy.getInstance().getSpielerDungeon().containsKey(p.getUniqueId())){
-                Shopy.getInstance().getSpielerDungeon().remove(p.getUniqueId());
-            }
-        }
     }
 }

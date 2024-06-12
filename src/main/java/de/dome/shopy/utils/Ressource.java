@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 
-public class Ressoure {
+public class Ressource {
 
     int id;
     String name;
@@ -21,9 +21,9 @@ public class Ressoure {
     Double maximaleKosten;
     Double aktuelleKosten;
 
-    private static ArrayList<Ressoure> ressoureList;
+    private static ArrayList<Ressource> ressourceList;
 
-    public Ressoure(int id, String name, String beschreibung, String type, String icon, Double minimaleKosten, Double maximaleKosten){
+    public Ressource(int id, String name, String beschreibung, String type, String icon, Double minimaleKosten, Double maximaleKosten){
         this.id = id;
         this.name = name;
         this.beschreibung = beschreibung;
@@ -70,16 +70,16 @@ public class Ressoure {
 
     public static void registerRessouren(){
         CompletableFuture.runAsync(() -> {
-            ressoureList = new ArrayList<>();
+            ressourceList = new ArrayList<>();
 
             try {
                 String queryRessourecs = "SELECT * FROM ressource ORDER BY reinfolge";
 
                 ResultSet resultRessourecs = Shopy.getInstance().getMySQLConntion().resultSet(queryRessourecs);
                 while (resultRessourecs.next()) {
-                    Ressoure newRessoure = new Ressoure(resultRessourecs.getInt("id"), resultRessourecs.getString("name"), resultRessourecs.getString("beschreibung"), resultRessourecs.getString("typ"), resultRessourecs.getString("icon"), resultRessourecs.getDouble("minimale_kosten"), resultRessourecs.getDouble("maximale_kosten"));
-                    Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§5Ressoursce geladen: " + newRessoure.getName());
-                    ressoureList.add(newRessoure);
+                    Ressource newRessource = new Ressource(resultRessourecs.getInt("id"), resultRessourecs.getString("name"), resultRessourecs.getString("beschreibung"), resultRessourecs.getString("typ"), resultRessourecs.getString("icon"), resultRessourecs.getDouble("minimale_kosten"), resultRessourecs.getDouble("maximale_kosten"));
+                    Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§5Ressoursce geladen: " + newRessource.getName());
+                    ressourceList.add(newRessource);
                 }
             }catch (SQLException e) {
                 Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
@@ -87,27 +87,27 @@ public class Ressoure {
         });
     }
 
-    public static Ressoure getRessoureByName(String name){
-        Ressoure ressoure = null;
+    public static Ressource getRessoureByName(String name){
+        Ressource ressource = null;
 
-        for (Ressoure res: ressoureList) {
+        for (Ressource res: ressourceList) {
             if(name.equalsIgnoreCase(res.getName())){
-                ressoure = res;
+                ressource = res;
             }
         }
 
-        return ressoure;
+        return ressource;
     }
-    public static Ressoure getRessoureByID(int id){
-        Ressoure ressoure = null;
+    public static Ressource getRessoureByID(int id){
+        Ressource ressource = null;
 
-        for (Ressoure res: ressoureList) {
+        for (Ressource res: ressourceList) {
             if(id == res.getId()){
-                ressoure = res;
+                ressource = res;
             }
         }
 
-        return ressoure;
+        return ressource;
     }
 
     private void ressourenRechner(){

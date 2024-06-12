@@ -3,7 +3,6 @@ package de.dome.shopy.listener.shop.clicklistener;
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.items.Item;
 import de.dome.shopy.utils.items.ItemKategorie;
-import de.dome.shopy.utils.Ressoure;
 import de.dome.shopy.utils.items.ItemRessourecenKosten;
 import de.dome.shopy.utils.shop.Shop;
 import de.dome.shopy.utils.shop.ShopItem;

@@ -2,7 +2,7 @@ package de.dome.shopy.utils.shop;
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.Cuboid;
-import de.dome.shopy.utils.Ressoure;
+import de.dome.shopy.utils.Ressource;
 import de.dome.shopy.utils.items.Item;
 import de.dome.shopy.utils.items.ItemKategorie;
 import de.dome.shopy.utils.items.ItemRessourecenKosten;
@@ -191,6 +191,10 @@ public class Shop {
                 }
 
             });
+
+            Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
+                Shopy.getInstance().getScoreboardManger().setScoreBoard(owner);
+            });
         });
     }
 
@@ -206,9 +210,9 @@ public class Shop {
             public void init(Player player, InventoryContents contents) {
                 int solt = 10;
                 int zaheler = 0;
-                for (Map.Entry<Ressoure, Integer> shopRessoure : Shopy.getInstance().getSpielerShops().get(owner.getUniqueId()).getRessourenShopManger().getShopRessoure().entrySet()) {
-                    Ressoure ressoure = shopRessoure.getKey();
-                    if(!ressoure.getType().equalsIgnoreCase("STANDART")) continue;
+                for (Map.Entry<Ressource, Integer> shopRessoure : Shopy.getInstance().getSpielerShops().get(owner.getUniqueId()).getRessourenShopManger().getShopRessoure().entrySet()) {
+                    Ressource ressource = shopRessoure.getKey();
+                    if(!ressource.getType().equalsIgnoreCase("STANDART")) continue;
 
                     String colorkey = "§e";
                     if(shopRessoure.getValue() <  getRessourcenLager()) colorkey = "§e";
@@ -216,14 +220,14 @@ public class Shop {
                     if(shopRessoure.getValue() >  getRessourcenLager()) colorkey = "§c";
 
                     ArrayList<String> beschreibung = new ArrayList<>();
-                    beschreibung.add("§7Deine Menge: " + colorkey +  shopRessoure.getValue() + " §7/§e " + getRessourcenLager() + " §7" + ressoure.getName());
-                    beschreibung.add("§7Aktuelle Kosten: §e" + Math.round(ressoure.getAktuelleKosten()) + " §7€");
+                    beschreibung.add("§7Deine Menge: " + colorkey +  shopRessoure.getValue() + " §7/§e " + getRessourcenLager() + " §7" + ressource.getName());
+                    beschreibung.add("§7Aktuelle Kosten: §e" + Math.round(ressource.getAktuelleKosten()) + " §7€");
                     beschreibung.add("");
-                    beschreibung.add("§6(Du hast " + shopRessourenManger.getRessourceValue(Ressoure.getRessoureByName("geld")) + " €)");
+                    beschreibung.add("§6(Du hast " + shopRessourenManger.getRessourceValue(Ressource.getRessoureByName("geld")) + " €)");
                     beschreibung.add("");
-                    beschreibung.add("§5" + ressoure.getBeschreibung());
+                    beschreibung.add("§5" + ressource.getBeschreibung());
 
-                    contents.set(solt, Shopy.getInstance().createItemWithLore(ressoure.getIcon(), "§9" + ressoure.getName(), beschreibung));
+                    contents.set(solt, Shopy.getInstance().createItemWithLore(ressource.getIcon(), "§9" + ressource.getName(), beschreibung));
 
                     /* Items Anordenen */
                     zaheler++;
@@ -239,9 +243,9 @@ public class Shop {
             public void update(Player player, InventoryContents contents) {
                 int solt = 10;
                 int zaheler = 0;
-                for (Map.Entry<Ressoure, Integer> shopRessoure : Shopy.getInstance().getSpielerShops().get(owner.getUniqueId()).getRessourenShopManger().getShopRessoure().entrySet()) {
-                    Ressoure ressoure = shopRessoure.getKey();
-                    if(!ressoure.getType().equalsIgnoreCase("STANDART")) continue;
+                for (Map.Entry<Ressource, Integer> shopRessoure : Shopy.getInstance().getSpielerShops().get(owner.getUniqueId()).getRessourenShopManger().getShopRessoure().entrySet()) {
+                    Ressource ressource = shopRessoure.getKey();
+                    if(!ressource.getType().equalsIgnoreCase("STANDART")) continue;
 
                     String colorkey = "§e";
                     if(shopRessoure.getValue() <  getRessourcenLager()) colorkey = "§e";
@@ -249,14 +253,14 @@ public class Shop {
                     if(shopRessoure.getValue() >  getRessourcenLager()) colorkey = "§c";
 
                     ArrayList<String> beschreibung = new ArrayList<>();
-                    beschreibung.add("§7Deine Menge: " + colorkey +  shopRessoure.getValue() + " §7/§e " + getRessourcenLager() + " §7" + ressoure.getName());
-                    beschreibung.add("§7Aktuelle Kosten: §e" + Math.round(ressoure.getAktuelleKosten()) + " §7€");
+                    beschreibung.add("§7Deine Menge: " + colorkey +  shopRessoure.getValue() + " §7/§e " + getRessourcenLager() + " §7" + ressource.getName());
+                    beschreibung.add("§7Aktuelle Kosten: §e" + Math.round(ressource.getAktuelleKosten()) + " §7€");
                     beschreibung.add("");
-                    beschreibung.add("§6(Du hast " + shopRessourenManger.getRessourceValue(Ressoure.getRessoureByName("geld")) + " €)");
+                    beschreibung.add("§6(Du hast " + shopRessourenManger.getRessourceValue(Ressource.getRessoureByName("geld")) + " €)");
                     beschreibung.add("");
-                    beschreibung.add("§5" + ressoure.getBeschreibung());
+                    beschreibung.add("§5" + ressource.getBeschreibung());
 
-                    contents.update(solt, Shopy.getInstance().createItemWithLore(ressoure.getIcon(), "§9" + ressoure.getName(), beschreibung));
+                    contents.update(solt, Shopy.getInstance().createItemWithLore(ressource.getIcon(), "§9" + ressource.getName(), beschreibung));
 
                     /* Items Anordenen */
                     zaheler++;
@@ -595,6 +599,83 @@ public class Shop {
                         if(letztesItemGsetzt)   contents.update(53, Shopy.getInstance().createItem(Material.ARROW, "§7Nächste Seite"));
                     }
                 }).build(Shopy.getInstance()).open(owner);
+    }
+    public void openRessourenUbersicht(String type){
+        switch (type){
+            case "dungoenmaterialien":
+                RyseInventory.builder().title("§9Shop - Ressourcen Übersicht")
+                        .rows(4)
+                        .provider(new InventoryProvider() {
+                            @Override
+                            public void init(Player player, InventoryContents contents) {
+                                int solt = 10;
+                                int zaheler = 0;
+                                for (Map.Entry<Ressource, Integer> shopRessoure : getRessourenShopManger().getShopRessoure().entrySet()) {
+                                    Ressource ressource = shopRessoure.getKey();
+                                    if(!ressource.getType().equalsIgnoreCase("DUNGEON-LOOT")) continue;
+
+                                    ArrayList<String> beschreibung = new ArrayList<>();
+                                    beschreibung.add("§7Menge: §e" + shopRessoure.getValue());
+                                    beschreibung.add("");
+                                    beschreibung.add("§5" + ressource.getBeschreibung());
+
+                                    contents.set(solt, Shopy.getInstance().createItemWithLore(ressource.getIcon(), "§9" + ressource.getName(), beschreibung));
+
+                                    /* Items Anordenen */
+                                    zaheler++;
+                                    if(zaheler == 7){
+                                        solt += 3;
+                                        zaheler = 0;
+                                    }else {
+                                        solt++;
+                                    }
+                                }
+
+                                ArrayList<String> beschreibung = new ArrayList<>();
+                                beschreibung.add("§7Zum Öffnen der Kategorie hier klicken");
+
+                                contents.set(29, Shopy.getInstance().createItemWithLore(Material.OAK_WOOD, "§e" + "Herstellungsmaterialien", beschreibung));
+                                contents.set(30, Shopy.getInstance().createItemWithLore(Material.AMETHYST_SHARD, "§e" + "Dungoenmaterialien", beschreibung));
+                            }
+                        }).build(Shopy.getInstance()).open(owner);
+                break;
+            default:
+                RyseInventory.builder().title("§9Shop - Ressourcen Übersicht")
+                        .rows(4)
+                        .provider(new InventoryProvider() {
+                            @Override
+                            public void init(Player player, InventoryContents contents) {
+                                int solt = 10;
+                                int zaheler = 0;
+                                for (Map.Entry<Ressource, Integer> shopRessoure : getRessourenShopManger().getShopRessoure().entrySet()) {
+                                    Ressource ressource = shopRessoure.getKey();
+                                    if(!ressource.getType().equalsIgnoreCase("STANDART")) continue;
+
+                                    ArrayList<String> beschreibung = new ArrayList<>();
+                                    beschreibung.add("§7Menge: §e" + shopRessoure.getValue());
+                                    beschreibung.add("");
+                                    beschreibung.add("§5" + ressource.getBeschreibung());
+
+                                    contents.set(solt, Shopy.getInstance().createItemWithLore(ressource.getIcon(), "§9" + ressource.getName(), beschreibung));
+
+                                    /* Items Anordenen */
+                                    zaheler++;
+                                    if(zaheler == 7){
+                                        solt += 3;
+                                        zaheler = 0;
+                                    }else {
+                                        solt++;
+                                    }
+                                }
+
+                                ArrayList<String> beschreibung = new ArrayList<>();
+                                beschreibung.add("§7Zum Öffnen der Kategorie hier klicken");
+
+                                contents.set(29, Shopy.getInstance().createItemWithLore(Material.OAK_WOOD, "§e" + "Herstellungsmaterialien", beschreibung));
+                                contents.set(30, Shopy.getInstance().createItemWithLore(Material.AMETHYST_SHARD, "§e" + "Dungoenmaterialien", beschreibung));
+                            }
+                        }).build(Shopy.getInstance()).open(owner);
+        }
     }
 
     public void changeRessourcenLager(int newAmount){
