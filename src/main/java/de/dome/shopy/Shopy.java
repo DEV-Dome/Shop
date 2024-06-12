@@ -8,6 +8,8 @@ import de.dome.shopy.commands.dungeon.setDungeonCMD;
 import de.dome.shopy.commands.welt.*;
 import de.dome.shopy.listener.dungeon.EntityCombustListener;
 import de.dome.shopy.listener.dungeon.EntityDeathListener;
+import de.dome.shopy.listener.dungeon.PlayerRespawnListener;
+import de.dome.shopy.listener.lobby.PlayerDeathListener;
 import de.dome.shopy.listener.lobby.*;
 import de.dome.shopy.listener.lobby.BlockBreakListener;
 import de.dome.shopy.listener.shop.*;
@@ -118,7 +120,7 @@ public class Shopy extends JavaPlugin {
     }
 
     private void registerListener(){
-        /* Lobby welt */
+        /* Lobby welt / Allgemeine Events */
         new BlockBreakListener();
         new EntityDamageListener();
         new PlayerJoinListener();
@@ -126,6 +128,8 @@ public class Shopy extends JavaPlugin {
         new WorldListener();
         new NPCInteractListener();
         new InventoryClickListener();
+        new PlayerDeathListener();
+        new de.dome.shopy.listener.lobby.PlayerRespawnListener();
 
         /* Shop Welt */
         new de.dome.shopy.listener.shop.BlockBreakListener();
@@ -139,6 +143,9 @@ public class Shopy extends JavaPlugin {
         /* Dungeon */
         new EntityDeathListener();
         new EntityCombustListener();
+        new PlayerRespawnListener();
+        new de.dome.shopy.listener.dungeon.EntityDamageListener();
+
     }
 
     private void registerCommands(){

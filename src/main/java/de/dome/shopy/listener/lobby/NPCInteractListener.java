@@ -75,7 +75,7 @@ public class NPCInteractListener implements Listener {
                     beschreibung.add("§7  - Chance auf einen Aufwertungsmatrial (10 %)");
                     beschreibung.add("§7  - Kosten §e200§7 Euro");
 
-                    contents.set(12, Shopy.getInstance().createItemWithLore(Material.ZOMBIE_SPAWN_EGG, "§5Dungeon Stufe 2", beschreibung));
+                    contents.set(12, Shopy.getInstance().createItemWithLore(Material.VINDICATOR_SPAWN_EGG, "§5Dungeon Stufe 2", beschreibung));
 
                     beschreibung.clear();
                     beschreibung.add("§7Betrete einen Dungeon der Stufe 3,");
@@ -89,7 +89,7 @@ public class NPCInteractListener implements Listener {
                     beschreibung.add("§7  - Chance auf einen Einhornkristall (20 %)");
                     beschreibung.add("§7  - Kosten §e350§7 Euro");
 
-                    contents.set(14, Shopy.getInstance().createItemWithLore(Material.ZOMBIE_SPAWN_EGG, "§5Dungeon Stufe 3", beschreibung));
+                    contents.set(14, Shopy.getInstance().createItemWithLore(Material.BLAZE_SPAWN_EGG, "§5Dungeon Stufe 3", beschreibung));
 
                     beschreibung.clear();
                     beschreibung.add("§7Betrete einen Dungeon der Stufe 4,");
@@ -104,7 +104,7 @@ public class NPCInteractListener implements Listener {
                     beschreibung.add("§7  - Chance auf Set Materialien (5 %)");
                     beschreibung.add("§7  - Kosten §e500§7 Euro");
 
-                    contents.set(16, Shopy.getInstance().createItemWithLore(Material.ZOMBIE_SPAWN_EGG, "§5Dungeon Stufe 4", beschreibung));
+                    contents.set(16, Shopy.getInstance().createItemWithLore(Material.EVOKER_SPAWN_EGG, "§5Dungeon Stufe 4", beschreibung));
 
                 }
 

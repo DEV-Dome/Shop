@@ -36,6 +36,7 @@ public class Dungeon {
 
     private ArrayList<Entity> dungeonEntitys;
     private HashMap<Ressource, Integer> dungeonLoot;
+    private boolean schutzPhase = true;
 
     public Dungeon(Shop shop, int level) {
         this.shop = shop;
@@ -89,7 +90,10 @@ public class Dungeon {
                             dungeonZonePos2.setWorld(world);
 
                             spawnZonePos1.setWorld(world);
+                            spawnZonePos1.setY(0);
+
                             spawnZonePos2.setWorld(world);
+                            spawnZonePos2.add(0, 100, 0);
 
                             spawn.setWorld(world);
 
@@ -99,11 +103,19 @@ public class Dungeon {
 
                             /* Nachricht an den Spieler senden & zum Spawn Teleportiren */
                             shop.getOwner().teleport(spawn);
-                            shop.getOwner().sendMessage(Shopy.getInstance().getPrefix() + "Das Ziel ist alles hier gespawnten Monster zu töten!");
+                            shop.getOwner().sendMessage(Shopy.getInstance().getPrefix() + "Das Ziel ist es, alle hier gespawnten Monster zu töten!");
+
+                            /* Schutzphase bennden */
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    cancel();
+                                    schutzPhase = false;
+                                }
+                            }.runTaskTimer(Shopy.getInstance(), 200L, 200L);
 
                             /* Monster Spawn */
                             spawnManger();
-//                            Material.
 
                             /* Scoreboard Updateten */
                              Shopy.getInstance().getScoreboardManger().setScoreBoard(shop.getOwner());
@@ -366,6 +378,10 @@ public class Dungeon {
         }
 
         return dungeonEntityLebendig;
+    }
+
+    public boolean isSchutzPhase() {
+        return schutzPhase;
     }
 
     public int getErhaltendenLoot(){
