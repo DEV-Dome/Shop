@@ -8,6 +8,8 @@ import de.dome.shopy.utils.shop.ShopRessourenManger;
 import me.filoghost.holographicdisplays.api.hologram.Hologram;
 import me.filoghost.holographicdisplays.api.hologram.line.TextHologramLine;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -21,6 +23,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Random;
 
 public class EntityDeathListener implements Listener {
 
@@ -32,33 +36,38 @@ public class EntityDeathListener implements Listener {
     public void entityDeath(EntityDeathEvent e) {
         if(e.getEntity().getKiller() instanceof Player && Shopy.getInstance().getSpielerDungeon().containsKey(e.getEntity().getKiller().getUniqueId())){
             Player p = e.getEntity().getKiller();
-            Shopy.getInstance().getScoreboardManger().setScoreBoard(p);
             Dungeon spielerDungeon = Shopy.getInstance().getSpielerDungeon().get(p.getUniqueId());
 
             /* Spieler Loot ausgeben */
             if(spielerDungeon.getDungeonEntitys().contains(e.getEntity())){
                 ArrayList<Ressource> gedroppterLoot = null;
                 if(e.getEntity().getType() == EntityType.ZOMBIE){
-                    gedroppterLoot = dropLoot(spielerDungeon, "Monsterhaut");
+                    String[] mobLoot = {"Zombiesleim", "Zombiedreck"};
+                    gedroppterLoot = Shopy.getInstance().getDropManger().dropMobLoot(spielerDungeon, mobLoot);
                 }
 
                 if(e.getEntity().getType() == EntityType.SKELETON){
-                    gedroppterLoot = dropLoot(spielerDungeon, "Skelett Arm");
+                    String[] mobLoot = {"Skelett Arm", "Pfeilreste"};
+                    gedroppterLoot = Shopy.getInstance().getDropManger().dropMobLoot(spielerDungeon, mobLoot);
                 }
 
                 if(e.getEntity().getType() == EntityType.SPIDER){
-                    gedroppterLoot = dropLoot(spielerDungeon, "Spinnenbein");
+                    String[] mobLoot = {"Spinnenauge", "Hasenfell"};
+                    gedroppterLoot = Shopy.getInstance().getDropManger().dropMobLoot(spielerDungeon, mobLoot);
                 }
                 if(e.getEntity().getType() == EntityType.DROWNED){
-                    gedroppterLoot = dropLoot(spielerDungeon, "Seegras");
+                    String[] mobLoot = {"Stab eines Dreistacks", "Sauerstoffkristall"};
+                    gedroppterLoot = Shopy.getInstance().getDropManger().dropMobLoot(spielerDungeon, mobLoot);
                 }
 
                 /* Urspünglichen Monster Loot unterbinden*/
                 e.setDroppedExp(0);
                 e.getDrops().clear();
 
-                /* Hologram erzeugen, was anzeigent welcher Loot gefallen ist, */
+                /* Scoreboard Aktualisieren */
+                Shopy.getInstance().getScoreboardManger().setScoreBoard(p);
 
+                /* Hologram erzeugen, was anzeigent welcher Loot gefallen ist, */
                 Hologram hologram = Shopy.getInstance().getHolographicDisplaysAPI().createHologram(e.getEntity().getLocation().add(0,2,0));
                 hologram.getLines().appendText("§7Fallen gelassen:");
                 if(!gedroppterLoot.isEmpty()){
@@ -67,7 +76,6 @@ public class EntityDeathListener implements Listener {
                         hologram.getLines().appendText("§e1x " + item.getName());
                     }
                 }else hologram.delete();
-
 
 
                 /* Sicherstellen das alle Toten Monster auch tot sind */
@@ -81,7 +89,10 @@ public class EntityDeathListener implements Listener {
                         Cuboid mobSpawnEndZone = new Cuboid(p.getLocation().add(3,0,2), p.getLocation().add(-3,0,-2));
 
                         for(Entity dungeonEntity : spielerDungeon.getDungeonEntitys()) {
-                            dungeonEntity.teleport(mobSpawnEndZone.getRandomLocation());
+                            Location teleportTo = mobSpawnEndZone.getRandomLocation();
+                            teleportTo.setY(p.getY());
+
+                            dungeonEntity.teleport(teleportTo);
                         }
 
                         spielerDungeon.setEndZoneSpawing(true);
@@ -118,115 +129,4 @@ public class EntityDeathListener implements Listener {
         }
     }
 
-    public  ArrayList<Ressource>  dropLoot(Dungeon spielerDungeon, String besondereLoot){
-        ArrayList<Ressource> gedroppterLoot = new ArrayList<>();
-        String[] loot = {"Monsterbeutel", "Monster beeren"};
-        Player p = spielerDungeon.getShop().getOwner();
-
-        if(Shopy.getInstance().isWahrscheinlichkeit(0.012)){
-            //Es Droppen 3 Items
-
-            /* Zusatz Loot 1 */
-            Ressource ressource = Ressource.getRessoureByName(besondereLoot);
-            if(ressource != null){
-                ShopRessourenManger shopRessourenManger = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger();
-                shopRessourenManger.setRessourcenValue(ressource, shopRessourenManger.getRessourceValue(ressource) + 1);
-
-                /* Loot speichern, für die zusamenfassung */
-                int anzahlLoot = 1;
-                if(spielerDungeon.getDungeonLoot().containsKey(ressource)){
-                    anzahlLoot = spielerDungeon.getDungeonLoot().get(ressource) + 1;
-                    spielerDungeon.getDungeonLoot().remove(ressource);
-                }
-                spielerDungeon.getDungeonLoot().put(ressource, anzahlLoot);
-                gedroppterLoot.add(ressource);
-            }
-
-            /* Zusatz Loot 2*/
-            ressource = Ressource.getRessoureByName(loot[0]);
-            if(ressource != null){
-                ShopRessourenManger shopRessourenManger = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger();
-                shopRessourenManger.setRessourcenValue(ressource, shopRessourenManger.getRessourceValue(ressource) + 1);
-
-                /* Loot speichern, für die zusamenfassung */
-                int anzahlLoot = 1;
-                if(spielerDungeon.getDungeonLoot().containsKey(ressource)){
-                    anzahlLoot = spielerDungeon.getDungeonLoot().get(ressource) + 1;
-                    spielerDungeon.getDungeonLoot().remove(ressource);
-                }
-                spielerDungeon.getDungeonLoot().put(ressource, anzahlLoot);
-                gedroppterLoot.add(ressource);
-            }
-
-            /* Normaler Loot */
-            ressource = Ressource.getRessoureByName(loot[1]);
-            if(ressource != null){
-                ShopRessourenManger shopRessourenManger = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger();
-                shopRessourenManger.setRessourcenValue(ressource, shopRessourenManger.getRessourceValue(ressource) + 1);
-
-                /* Loot speichern, für die zusamenfassung */
-                int anzahlLoot = 1;
-                if(spielerDungeon.getDungeonLoot().containsKey(ressource)){
-                    anzahlLoot = spielerDungeon.getDungeonLoot().get(ressource) + 1;
-                    spielerDungeon.getDungeonLoot().remove(ressource);
-                }
-                spielerDungeon.getDungeonLoot().put(ressource, anzahlLoot);
-                gedroppterLoot.add(ressource);
-            }
-        } else if(Shopy.getInstance().isWahrscheinlichkeit(0.045)){
-            //Es Droppen 2 Items
-            String lootZwei = loot[0];
-            if(Shopy.getInstance().isWahrscheinlichkeit(0.5))  lootZwei = loot[1];
-
-            /* Zusatz Loot */
-            Ressource ressource = Ressource.getRessoureByName(besondereLoot);
-            if(ressource != null){
-                ShopRessourenManger shopRessourenManger = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger();
-                shopRessourenManger.setRessourcenValue(ressource, shopRessourenManger.getRessourceValue(ressource) + 1);
-
-                /* Loot speichern, für die zusamenfassung */
-                int anzahlLoot = 1;
-                if(spielerDungeon.getDungeonLoot().containsKey(ressource)){
-                    anzahlLoot = spielerDungeon.getDungeonLoot().get(ressource) + 1;
-                    spielerDungeon.getDungeonLoot().remove(ressource);
-                }
-                spielerDungeon.getDungeonLoot().put(ressource, anzahlLoot);
-                gedroppterLoot.add(ressource);
-            }
-
-            /* Normaler Loot */
-            ressource = Ressource.getRessoureByName(lootZwei);
-            if(ressource != null){
-                ShopRessourenManger shopRessourenManger = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger();
-                shopRessourenManger.setRessourcenValue(ressource, shopRessourenManger.getRessourceValue(ressource) + 1);
-
-                /* Loot speichern, für die zusamenfassung */
-                int anzahlLoot = 1;
-                if(spielerDungeon.getDungeonLoot().containsKey(ressource)){
-                    anzahlLoot = spielerDungeon.getDungeonLoot().get(ressource) + 1;
-                    spielerDungeon.getDungeonLoot().remove(ressource);
-                }
-                spielerDungeon.getDungeonLoot().put(ressource, anzahlLoot);
-                gedroppterLoot.add(ressource);
-            }
-        } else if(Shopy.getInstance().isWahrscheinlichkeit(0.59)){
-            /* Es Droppen 1 Item */
-            Ressource ressource = Ressource.getRessoureByName(besondereLoot);
-            if(ressource != null){
-                ShopRessourenManger shopRessourenManger = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger();
-                shopRessourenManger.setRessourcenValue(ressource, shopRessourenManger.getRessourceValue(ressource) + 1);
-
-                /* Loot speichern, für die zusamenfassung */
-                int anzahlLoot = 1;
-                if(spielerDungeon.getDungeonLoot().containsKey(ressource)){
-                    anzahlLoot = spielerDungeon.getDungeonLoot().get(ressource) + 1;
-                    spielerDungeon.getDungeonLoot().remove(ressource);
-                }
-                spielerDungeon.getDungeonLoot().put(ressource, anzahlLoot);
-                gedroppterLoot.add(ressource);
-            }
-        }
-
-        return gedroppterLoot;
-    }
 }

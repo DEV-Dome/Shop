@@ -14,10 +14,7 @@ import de.dome.shopy.listener.shop.*;
 import de.dome.shopy.listener.shop.clicklistener.InventoryClickListenerItemLager;
 import de.dome.shopy.listener.shop.clicklistener.InventoryClickListenerRessourenMarkplatz;
 import de.dome.shopy.listener.shop.clicklistener.InventoryClickListenerWerkbank;
-import de.dome.shopy.utils.Dungeon;
-import de.dome.shopy.utils.MySQL;
-import de.dome.shopy.utils.MySQLDefault;
-import de.dome.shopy.utils.ScoreboardManger;
+import de.dome.shopy.utils.*;
 import de.dome.shopy.utils.shop.Shop;
 import dev.sergiferry.playernpc.api.NPC;
 import dev.sergiferry.playernpc.api.NPCLib;
@@ -56,6 +53,7 @@ public class Shopy extends JavaPlugin {
     public static HashMap<UUID, ArrayList<World>> geladeneTempWelten;
     private HashMap<UUID, Dungeon> spielerDungeon;
     private ScoreboardManger scoreboardManger;
+    private DropManger dropManger;
     private HolographicDisplaysAPI holographicDisplaysAPI;
     @Override
     public void onEnable() {
@@ -69,6 +67,7 @@ public class Shopy extends JavaPlugin {
         inventoryManager.invoke();
 
         scoreboardManger = new ScoreboardManger();
+        dropManger = new DropManger();
 
         registerListener();
         registerCommands();
@@ -286,10 +285,13 @@ public class Shopy extends JavaPlugin {
     public ScoreboardManger getScoreboardManger() {
         return scoreboardManger;
     }
-
+    public DropManger getDropManger() {
+        return dropManger;
+    }
     public HolographicDisplaysAPI getHolographicDisplaysAPI() {
         return holographicDisplaysAPI;
     }
+
 
     public Location getLocationFromString(String locationString) {
         Location ret = null;

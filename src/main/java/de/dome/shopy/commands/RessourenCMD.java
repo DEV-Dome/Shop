@@ -13,7 +13,7 @@ public class RessourenCMD implements CommandExecutor {
             Player p = (Player) sender;
 
             if(Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())){
-                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openRessourenUbersicht("start");
+                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openRessourenUbersicht("STANDART");
             }else {
                 p.sendMessage(Shopy.getInstance().getPrefix() + "Du hast dir noch keinen Shop erstellt. Dieses kannst du beim §eWelten Ersteller§7 tun.");
             }

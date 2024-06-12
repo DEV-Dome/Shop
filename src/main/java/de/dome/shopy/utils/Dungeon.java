@@ -103,6 +103,7 @@ public class Dungeon {
 
                             /* Monster Spawn */
                             spawnManger();
+//                            Material.
 
                             /* Scoreboard Updateten */
                              Shopy.getInstance().getScoreboardManger().setScoreBoard(shop.getOwner());
@@ -127,10 +128,25 @@ public class Dungeon {
     }
     public void DungeonAbschlissen(){
         Player p = shop.getOwner();
+        ArrayList<Ressource> abschlussLoot = Shopy.getInstance().getDropManger().dropAbschlussLoot(this);
+
         p.sendMessage(Shopy.getInstance().getPrefix() + "Du hast es geschafft den Dungeon zu säubern. Dabei hast du folgenden Loot Erhalten: ");
         for (Map.Entry<Ressource, Integer> entry : dungeonLoot.entrySet()) {
             p.sendMessage(Shopy.getInstance().getPrefix() + "§e" + entry.getValue() + "x " + entry.getKey().getName());
         }
+
+        String abschlussLootString = "";
+        for (Ressource res : abschlussLoot) {
+            if(abschlussLootString.equals("")){
+                abschlussLootString += res.getName();
+            }else {
+                abschlussLootString += ", " + res.getName();
+            }
+        }
+
+        p.sendMessage("");
+        p.sendMessage(Shopy.getInstance().getPrefix() + "Zusätzlich bekommst du, zur Belohnung folge des geschenkt: §a" + abschlussLootString);
+
         p.sendMessage("");
         p.sendMessage("");
 
