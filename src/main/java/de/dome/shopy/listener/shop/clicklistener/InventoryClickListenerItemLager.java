@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.concurrent.CompletableFuture;
@@ -21,12 +22,17 @@ public class InventoryClickListenerItemLager implements Listener {
         Shopy.getInstance().getServer().getPluginManager().registerEvents(this, Shopy.getInstance());
     }
 
+
+    public void onInventoryClose(InventoryCloseEvent e) {
+
+    }
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         if (!(e.getWhoClicked() instanceof Player)) return;
 
         Player p = (Player) e.getWhoClicked();
         ItemStack item = e.getCurrentItem();
+
 
         if (e.getView().getTitle().startsWith("§9Item ")) {
             if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
@@ -53,22 +59,35 @@ public class InventoryClickListenerItemLager implements Listener {
                 }
                 //Rechtklick zum Item löschen ausführen
                 if(e.isRightClick()){
-                    if(item.getType() != Material.GRAY_DYE){
+                    if(item.getType() != Material.GRAY_DYE) {
+                        if (!Shopy.getInstance().getSpielerDungeon().containsKey(p.getUniqueId())){
+                            int itemID = Integer.parseInt(item.getItemMeta().getLore().get(0).split(":")[1].substring(1));
+                            ShopItem shopItem = spielerShop.getShopItemById(itemID);
 
+                            /* Check wurde das Item gefunden */
+                            if(shopItem != null && itemID != -1){
+                                spielerShop.delteShopItemById(itemID);
+                                //spielerShop.openItemLagerInventar(AkkuelleSeite);
 
-                        int itemID = Integer.parseInt(item.getItemMeta().getLore().get(0).split(":")[1].substring(1));
-                        ShopItem shopItem = spielerShop.getShopItemById(itemID);
-
-                        /* Check wurde das Item gefunden */
-                        if(shopItem != null && itemID != -1){
-                            spielerShop.delteShopItemById(itemID);
-                            //spielerShop.openItemLagerInventar(AkkuelleSeite);
-
-                            p.updateInventory();
-                            p.playSound(p, Sound.ENTITY_ITEM_BREAK,  1,1);
-                        }else {
-                            p.sendMessage(Shopy.getInstance().getPrefix() + "§cBeim Ausführen dieser Aktion ist leider ein Fehler aufgetreten. Bitte versuche es später erneut oder Kontaktiere den Support.");
+                                p.updateInventory();
+                                p.playSound(p, Sound.ENTITY_ITEM_BREAK,  1,1);
+                            }else {
+                                p.sendMessage(Shopy.getInstance().getPrefix() + "§cBeim Ausführen dieser Aktion ist leider ein Fehler aufgetreten. Bitte versuche es später erneut oder Kontaktiere den Support.");
+                            }
                         }
+                    }
+                }else {
+                    if (Shopy.getInstance().getSpielerDungeon().containsKey(p.getUniqueId())){
+                        /* Wenn Itemlager im Dungeon geöffnet wurde */
+
+                        /* Check ob, dass Item schon genommen wurde */
+                        if(!p.getInventory().contains(item)){
+                            p.getInventory().addItem(item);
+                        }else {
+                            p.sendMessage(Shopy.getInstance().getPrefix() + "Du hast dir dieses Item bereits genommen!");
+                        }
+
+                        p.playSound(p, Sound.ENTITY_ITEM_PICKUP,  1,1);
                     }
                 }
             }

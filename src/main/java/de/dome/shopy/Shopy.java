@@ -6,9 +6,10 @@ import de.dome.shopy.commands.dungeon.addDungeonCMD;
 import de.dome.shopy.commands.dungeon.DungeonCMD;
 import de.dome.shopy.commands.dungeon.setDungeonCMD;
 import de.dome.shopy.commands.welt.*;
-import de.dome.shopy.listener.dungeon.EntityCombustListener;
-import de.dome.shopy.listener.dungeon.EntityDeathListener;
+import de.dome.shopy.listener.dungeon.*;
 import de.dome.shopy.listener.dungeon.PlayerRespawnListener;
+import de.dome.shopy.listener.lobby.EntityDamageListener;
+import de.dome.shopy.listener.lobby.NPCInteractListener;
 import de.dome.shopy.listener.lobby.PlayerDeathListener;
 import de.dome.shopy.listener.lobby.*;
 import de.dome.shopy.listener.lobby.BlockBreakListener;
@@ -114,6 +115,14 @@ public class Shopy extends JavaPlugin {
         for(Player all : Bukkit.getOnlinePlayers()){
             TextComponent component = Component.text("§7Der Server wird neu geladen, damit das ohne Umstände passieren kann wurdest du gekickt. Du kannst gleich weiter spielen.");
 
+            if(Shopy.getInstance().getSpielerDungeon().containsKey(all.getUniqueId())){
+                all.getInventory().clear();
+                for(ItemStack item : Shopy.getInstance().getSpielerDungeon().get(all.getUniqueId()).getSpielerInventrar()){
+                    if(item == null) continue;
+                    all.getInventory().addItem(item);
+                }
+            }
+
             all.kick(component);
         }
 
@@ -145,7 +154,10 @@ public class Shopy extends JavaPlugin {
         new EntityDeathListener();
         new EntityCombustListener();
         new PlayerRespawnListener();
+        new InventoryCloseListener();
+        new PlayerDropItemListener();
         new de.dome.shopy.listener.dungeon.EntityDamageListener();
+        new de.dome.shopy.listener.dungeon.NPCInteractListener();
 
     }
 

@@ -28,6 +28,9 @@ public class NPCInteractListener implements Listener {
         Player p = event.getPlayer();
         NPC npc = event.getNPC();
 
+        /* Wenn der NPC keinen namen hat, soll er ignoiert werden */
+        if(npc.getText().isEmpty()) return;
+
         if(npc.getText().get(0).equals("§aShop Verwalter")){
             if(!Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())) {
                 RyseInventory.builder().title("§aShop Erstellen").rows(3).provider(new InventoryProvider() {

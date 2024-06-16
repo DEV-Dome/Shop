@@ -136,8 +136,32 @@ public class InventoryClickListener implements Listener {
                                     p.teleport(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getWorld().getSpawnLocation());
                                     p.sendMessage(Shopy.getInstance().getPrefix() + "§aDu wurdest zu deinem Shop Teleporiert.");
                                     if(Shopy.getInstance().getPlayersNotTeleport().contains(p)) Shopy.getInstance().getPlayersNotTeleport().remove(p);
+
+                                    if(Shopy.getInstance().getGeladeneTempWelten().containsKey(p.getUniqueId())){
+                                        for(World world : Shopy.getInstance().getGeladeneTempWelten().get(p.getUniqueId())){
+                                            File file = world.getWorldFolder();
+                                            Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
+                                                Bukkit.unloadWorld(world, true);
+
+                                                Shopy.getInstance().rekursivLoeschen(file);
+                                            });
+                                        }
+                                        Shopy.getInstance().getGeladeneTempWelten().remove(p.getUniqueId());
+                                    }
+
+                                    /* Scoreboard Updateten */
+                                    Shopy.getInstance().getScoreboardManger().setScoreBoard(p);
+                                    if(Shopy.getInstance().getSpielerDungeon().containsKey(p.getUniqueId())){
+                                        p.getInventory().clear();
+                                        for(ItemStack item : Shopy.getInstance().getSpielerDungeon().get(p.getUniqueId()).getSpielerInventrar()){
+                                            if(item == null) continue;
+                                            p.getInventory().addItem(item);
+                                        }
+
+                                        Shopy.getInstance().getSpielerDungeon().remove(p.getUniqueId());
+                                    }
                                 } else {
-                                    p.sendMessage(Shopy.getInstance().getPrefix() + "Du wirst in " + countdownTime + " Sekunden zum Spawn Teleporiert.");
+                                    p.sendMessage(Shopy.getInstance().getPrefix() + "Du wirst in " + countdownTime + " Sekunden zu deinem Shop Teleporiert.");
                                     countdownTime--;
                                 }
                             }

@@ -21,6 +21,8 @@ public class setDungeonCMD implements CommandExecutor {
                 if(args.length == 2){
                     CompletableFuture.runAsync(() -> {
                         try {
+
+                            /* Überprüfen ob es die angebe dungeon ID gibt */
                             String dungeonID = args[0];
                             String wert = "";
 
@@ -38,18 +40,27 @@ public class setDungeonCMD implements CommandExecutor {
                                 return;
                             }
 
+                            /* Auswahl welches Sub Kommando ausgeführt werden soll */
                             if(args[1].equalsIgnoreCase("dungeonzone")) wert = "dungeonzone";
                             if(args[1].equalsIgnoreCase("spawnzone")) wert = "spawnzone";
                             if(args[1].equalsIgnoreCase("spawn")) wert = "spawn";
+                            if(args[1].equalsIgnoreCase("waffenlager")) wert = "waffenlager";
+
                             if(wert.equalsIgnoreCase("")) {
-                                p.sendMessage(Shopy.getInstance().getPrefix() + "§c/setdungeon <dungeonid> <dungeonzone/spawnzone/spawn>");
+                                p.sendMessage(Shopy.getInstance().getPrefix() + "§c/setdungeon <dungeonid> <dungeonzone/spawnzone/spawn/waffenlager>");
                                 return;
                             }
 
-                            if(wert.equalsIgnoreCase("spawn")){
-                                String queryPos1 = "INSERT INTO dungeon_positionen (dungeon, wert, value) VALUES (" + dungeonID +", '"+ wert +"', '"+ p.getLocation().toString() +"')";
-                                Shopy.getInstance().getMySQLConntion().query(queryPos1);
-                                p.sendMessage(Shopy.getInstance().getPrefix() + "Spawn erstellt erstellt!");
+                            if(wert.equalsIgnoreCase("spawn")) {
+                                String queryPosition = "INSERT INTO dungeon_positionen (dungeon, wert, value) VALUES (" + dungeonID + ", '" + wert + "', '" + p.getLocation().toString() + "')";
+                                Shopy.getInstance().getMySQLConntion().query(queryPosition);
+
+                                p.sendMessage(Shopy.getInstance().getPrefix() + "Spawn Postion erstellt!");
+                            }else if(wert.equalsIgnoreCase("waffenlager")){
+                                String queryPosition = "INSERT INTO dungeon_positionen (dungeon, wert, value) VALUES (" + dungeonID + ", '" + wert + "', '" + p.getLocation().toString() + "')";
+                                Shopy.getInstance().getMySQLConntion().query(queryPosition);
+
+                                p.sendMessage(Shopy.getInstance().getPrefix() + "Das waffenlager wurde erstellt!");
                             }else {
                                 if(!BlockBreakListener.shopszones.containsKey(p.getUniqueId())){
                                     p.sendMessage(Shopy.getInstance().getPrefix() + "§cEs wurde keine Zone ausgewählt.");
@@ -64,7 +75,7 @@ public class setDungeonCMD implements CommandExecutor {
 
                                 Shopy.getInstance().getMySQLConntion().query(queryPos1);
                                 Shopy.getInstance().getMySQLConntion().query(queryPos2);
-                                p.sendMessage(Shopy.getInstance().getPrefix() + "Bereich erstellt!");
+                                p.sendMessage(Shopy.getInstance().getPrefix() + "Dungeon bereich erstellt!");
                             }
 
                         } catch (SQLException e) {
@@ -72,7 +83,7 @@ public class setDungeonCMD implements CommandExecutor {
                         }
                     });
                 }else {
-                    p.sendMessage(Shopy.getInstance().getPrefix() + "§c/setdungeon <dungeonid> <dungeonzone/spawnzone/spawn>");
+                    p.sendMessage(Shopy.getInstance().getPrefix() + "§c/setdungeon <dungeonid> <dungeonzone/spawnzone/spawn/waffenlager>");
                 }
             }else {
                 p.sendMessage(Shopy.getInstance().getNoperm());

@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 
@@ -43,6 +44,12 @@ public class PlayerQuitListener implements Listener {
             Shopy.getInstance().getGeladeneTempWelten().remove(p.getUniqueId());
 
             if(Shopy.getInstance().getSpielerDungeon().containsKey(p.getUniqueId())){
+                p.getInventory().clear();
+                for(ItemStack item : Shopy.getInstance().getSpielerDungeon().get(p.getUniqueId()).getSpielerInventrar()){
+                    if(item == null) continue;
+                    p.getInventory().addItem(item);
+                }
+
                 Shopy.getInstance().getSpielerDungeon().remove(p.getUniqueId());
             }
         }

@@ -514,7 +514,14 @@ public class Shop {
                                     beschreibung.add("§7Item-ID: " + shopItem.getId() + "");
                                     /* Actionen auflisten*/
                                     beschreibung.add("");
-                                    beschreibung.add("§c- Rechtsklick zum Löschen");
+
+                                    /* Beschreibung angepassten, je nachdem ob man in einem Dungeon ist */
+                                    if(Shopy.getInstance().getSpielerDungeon().containsKey(owner.getUniqueId())) {
+                                        beschreibung.add("§a- Linksklick zum Item entnehmen");
+                                    }else {
+                                        beschreibung.add("§c- Rechtsklick zum Löschen");
+                                    }
+
                                     beschreibung.add("");
 
                                     String[] beschreibungsArray = shopItem.getBeschreibung().split("\n");
@@ -540,8 +547,12 @@ public class Shop {
                                 }
                             }
                         }
-                        contents.set(45, Shopy.getInstance().createItem(Material.TRAPPED_CHEST, "§7zur Shopübersicht"));
-                        contents.set(46, Shopy.getInstance().createItem(Material.BARRIER, "§7Menü Schlissen"));
+                        // Option nicht in einem Dungeon anbieten
+                        if(!Shopy.getInstance().getSpielerDungeon().containsKey(owner.getUniqueId())) {
+                            contents.set(45, Shopy.getInstance().createItem(Material.TRAPPED_CHEST, "§7zur Shopübersicht"));
+                            contents.set(46, Shopy.getInstance().createItem(Material.BARRIER, "§7Menü Schlissen"));
+                        }else contents.set(45, Shopy.getInstance().createItem(Material.BARRIER, "§7Menü Schlissen"));
+
 
                         if(seite != 0)          contents.set(52, Shopy.getInstance().createItem(Material.ARROW, "§7Letzte Seite"));
                         if(letztesItemGsetzt)   contents.set(53, Shopy.getInstance().createItem(Material.ARROW, "§7Nächste Seite"));
@@ -569,7 +580,13 @@ public class Shop {
                                     beschreibung.add("§7Item-ID: " + shopItem.getId() + "");
                                     /* Actionen auflisten*/
                                     beschreibung.add("");
-                                    beschreibung.add("§c- Rechtsklick zum Löschen");
+
+                                    /* Beschreibung angepassten, je nachdem ob man in einem Dungeon ist */
+                                    if(Shopy.getInstance().getSpielerDungeon().containsKey(owner.getUniqueId())) {
+                                        beschreibung.add("§a- Linksklick zum Item entnehmen");
+                                    }else {
+                                        beschreibung.add("§c- Rechtsklick zum Löschen");
+                                    }
                                     beschreibung.add("");
 
                                     String[] beschreibungsArray = shopItem.getBeschreibung().split("\n");

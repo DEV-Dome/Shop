@@ -2,8 +2,12 @@ package de.dome.shopy.utils;
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.shop.Shop;
+import dev.sergiferry.playernpc.api.NPC;
+import dev.sergiferry.playernpc.api.NPCLib;
 import org.bukkit.*;
 import org.bukkit.entity.*;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
@@ -33,10 +37,14 @@ public class Dungeon {
     private Location spawnZonePos2 = null;
 
     private boolean endZoneSpawing = false;
+    private Location waffenlagerPosition = null;
 
     private ArrayList<Entity> dungeonEntitys;
     private HashMap<Ressource, Integer> dungeonLoot;
+
     private boolean schutzPhase = true;
+    private NPC.Global waffenkammerNPC = null;
+    private ItemStack[] spielerInventrar;
 
     public Dungeon(Shop shop, int level) {
         this.shop = shop;
@@ -47,10 +55,12 @@ public class Dungeon {
          CompletableFuture.runAsync(() -> {
 
             try {
+                /* Zufälligen Dungeon in der DB auswählen*/
                 String queryDungeon = "SELECT * FROM dungeon ORDER BY RAND() LIMIT 1";
                 ResultSet resultDungeon = Shopy.getInstance().getMySQLConntion().resultSet(queryDungeon);
 
                 if (resultDungeon.next()){
+                    /* Dungeon Laden */
                     dungeonId = resultDungeon.getInt("id");
 
                     String weltName = resultDungeon.getString("dungeon_ordner");
@@ -59,11 +69,13 @@ public class Dungeon {
                     File zu = new File(Shopy.getInstance().getDataFolder().getPath() + "/temp_welten/_" + shop.getShopId() +"_"  + weltName);
                     Shopy.getInstance().kopiereOrdner(von, zu);
 
+                    /* Dungeon werte aus datenbank laden */
                     String queryDungeonWerte = "SELECT * FROM dungeon_positionen WHERE dungeon = '" + dungeonId + "'";
                     ResultSet resultDungeonWerte = Shopy.getInstance().getMySQLConntion().resultSet(queryDungeonWerte);
 
                     while(resultDungeonWerte.next()){
                         if(resultDungeonWerte.getString("wert").equalsIgnoreCase("spawn")) spawn = Shopy.getInstance().getLocationFromString(resultDungeonWerte.getString("value"));
+                        if(resultDungeonWerte.getString("wert").equalsIgnoreCase("waffenlager")) waffenlagerPosition = Shopy.getInstance().getLocationFromString(resultDungeonWerte.getString("value"));
 
                         if(resultDungeonWerte.getString("wert").equalsIgnoreCase("dungeonzone.pos1")) dungeonZonePos1 = Shopy.getInstance().getLocationFromString(resultDungeonWerte.getString("value"));
                         if(resultDungeonWerte.getString("wert").equalsIgnoreCase("dungeonzone.pos2")) dungeonZonePos2 = Shopy.getInstance().getLocationFromString(resultDungeonWerte.getString("value"));
@@ -96,6 +108,7 @@ public class Dungeon {
                             spawnZonePos2.add(0, 100, 0);
 
                             spawn.setWorld(world);
+                            waffenlagerPosition.setWorld(world);
 
                             /* Zonen erstellen */
                             dungeonZone = new Cuboid(dungeonZonePos1, dungeonZonePos2);
@@ -104,6 +117,23 @@ public class Dungeon {
                             /* Nachricht an den Spieler senden & zum Spawn Teleportiren */
                             shop.getOwner().teleport(spawn);
                             shop.getOwner().sendMessage(Shopy.getInstance().getPrefix() + "Das Ziel ist es, alle hier gespawnten Monster zu töten!");
+
+                            spielerInventrar = shop.getOwner().getInventory().getContents();
+                            shop.getOwner().getInventory().clear();
+
+                            /* NPC Spawn (Waffenlager) */
+                            ArrayList<String> npcText = new ArrayList<>();
+                            npcText.add("§9Waffenlager");
+                            npcText.add("§7Rüste eine deiner hergestellten Waffen aus");
+                            String npcId = "npc-waffenlager-d-" + shop.getOwner().getUniqueId() + "-" + System.currentTimeMillis();
+
+                            waffenkammerNPC = NPCLib.getInstance().generateGlobalNPC(Shopy.getInstance(), npcId, waffenlagerPosition);
+                            waffenkammerNPC.setText(npcText);
+                            waffenkammerNPC.setSkin("ewogICJ0aW1lc3RhbXAiIDogMTY3ODM1NjAzMjY1MiwKICAicHJvZmlsZUlkIiA6ICI3ZDJhY2YzOGQ3YTQ0YjU0YTliMGNkYTZhNzk1YmNmYyIsCiAgInByb2ZpbGVOYW1lIiA6ICJCb3VuY2luZXNzIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2E4MDI4YTVhNDI3MzdhOGVmNTNkMWZjMzQxZDU0YTVjNWJjN2EzNWZiNTk1Yjg0N2M1MDk3YzQ0M2FlNWI3OGMiCiAgICB9CiAgfQp9", "cK3OamDNeexBjQmBMKGy88j50zgeE82Y0+J4GYJgf7J2BYJ2TM2CaAgft08GWKW9YemEfqlznRhqk/eKtwPfpLffD0iNj2q9ZjdlEDfqDz1458eydT2dPIXh7jtU2xc0MCR+U5iySd7j/BNpGlg0nNC1wEWwcetyx8kx4R9sS8jJugvdMyHqHllDPkggiDIt81m0Uh8lDLjHYL9OdzWOHR7uykB/LcnStEnUh0kR7rqyKNKtgs6aGRQudbL2FJm9mUTga+mCkOnaXU/+BE57K8jxP/x50SzO43QiNrTuSCIJeBEW6EtZ5NlRbFY8rhsRcCzDDanTtkMvTH+Ss2fm2ftVfA9/2xf46/yFyWjp1cmwNqayeMFkEOBhZ5LuVEVmW9M427+ajogIEsyPXqfI9w2ePWp7IZ6LSfmWvArYfbw19ZDAfQSdz8u2G6hICCOcliwq7bNsFTCkzdCQxQIXgB7FNrwJevtU134zSFBbMCMzaMmpqeu6sSMAza+zIMcYDgZ1UY00LUsdqMsDHgGdr6CHnC1eZtBvNmloow4s/q9+7mBBBeg4X+9aRwW4UzdfJXdQoyARz1epJ04OvNJbfV8D2u1ME3EBfz4yl6MbAh+eJBtG/XZf2IeVk/41U1CN7fdILJ6KjmtQodf8OzUwzZUVz/CS1axqOE7r/1fAyEs=");
+                            waffenkammerNPC.lookAt(spawn);
+                            waffenkammerNPC.createAllPlayers();
+                            waffenkammerNPC.update();
+                            waffenkammerNPC.show();
 
                             /* Schutzphase bennden */
                             new BukkitRunnable() {
@@ -188,6 +218,12 @@ public class Dungeon {
 
                             if(Shopy.getInstance().getSpielerDungeon().containsKey(p.getUniqueId())){
                                 Shopy.getInstance().getSpielerDungeon().remove(p.getUniqueId());
+
+                                p.getInventory().clear();
+                                for(ItemStack item : spielerInventrar){
+                                    p.getInventory().addItem(item);
+                                }
+
                                 Shopy.getInstance().getScoreboardManger().setScoreBoard(shop.getOwner());
                             }
                         } else {
@@ -390,6 +426,18 @@ public class Dungeon {
         return dungeonLoot;
     }
 
+    public Location getWaffenlagerPosition() {
+        return waffenlagerPosition;
+    }
+
+    public NPC.Global getWaffenkammerNPC() {
+        return waffenkammerNPC;
+    }
+
+    public ItemStack[] getSpielerInventrar() {
+        return spielerInventrar;
+    }
+
     public int getLebendeGegner(){
         int dungeonEntityLebendig = 0;
 
@@ -413,4 +461,5 @@ public class Dungeon {
 
         return loot;
     }
+
 }
