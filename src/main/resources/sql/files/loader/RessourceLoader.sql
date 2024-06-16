@@ -28,6 +28,18 @@ INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten
 INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('STICK', 'Stab eines Dreistacks', 'Dieser Stab hat eines zu einem\n Mächtigen Dreistacks gehört.\n\n(Kann von Ertrunkenen fallen\n gelassen werden)', 'DUNGEON-LOOT', 12, '0', '0');
 INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('PRISMARINE_CRYSTALS', 'Sauerstoffkristall', 'In diesem Stein wird Sauerstoff gespeichert.\n(Kann von Ertrunkenen fallen gelassen werden)', 'DUNGEON-LOOT', 13, '0', '0');
 
+/* DUNGEON-LOOT Ressource: Vindicator Loot */
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('EGG', 'Ei', 'Dieses Ei wollte sein Meister frühstücken\n(Kann von Dienern fallen gelassen werden)', 'DUNGEON-LOOT', 14, '0', '0');
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('CLAY_BALL', 'Tonklumpen', 'Ein gewöhnlicher Ton klumpen,\n was sich daraus nur machen lässt?\n\n(Kann von Dienern fallen gelassen werden)', 'DUNGEON-LOOT',15, '0', '0');
+
+/* DUNGEON-LOOT Ressource: Balze Loot */
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('BLAZE_ROD', 'Feuerstab', 'Dieser Stab scheint noch zu brennen!\n(Kann von Blazes fallen gelassen werden)', 'DUNGEON-LOOT', 16, '0', '0');
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('COPPER_INGOT', 'Verbranntest Eisen','Ein Stück Erz welches,\n offensichtlich noch brennt\n\n(Kann von Blazes fallen gelassen werden)', 'DUNGEON-LOOT',17, '0', '0');
+
+/* DUNGEON-LOOT Ressource: EVOKER Loot */
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('GLOW_INK_SAC', 'Zauberstaub', 'Ein Magisterstaub, wer weiß,\n was man damit alles machen kann!\n\n(Kann von Magierinnen fallen gelassen werden)', 'DUNGEON-LOOT', 18, '0', '0');
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('DRAGON_BREATH', 'Drachenatem','Dieser Atem glüht immer noch\n(Kann von Magierinnen fallen gelassen werden)', 'DUNGEON-LOOT',19, '0', '0');
+
 
 
 /* SPECIAL Ressource */

@@ -27,6 +27,7 @@ import net.kyori.adventure.text.TextComponent;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -223,22 +224,25 @@ public class Shopy extends JavaPlugin {
 
         return item;
     }
-    public ItemStack createItemWithLore(Material m, String Name, ArrayList<String> lore) {
+    public ItemStack createItemWithLore(Material m, String name, ArrayList<String> lore) { return createItemWithLore(m, name, lore, false); }
+    public ItemStack createItemWithLore(Material m, String name, ArrayList<String> lore, boolean verzaubert) {
         ItemStack item = new ItemStack(m);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(Name);
+        meta.setDisplayName(name);
         meta.setLore(lore);
+        if(verzaubert) meta.addEnchant(Enchantment.ARROW_FIRE, 10, true);
 
         item.setItemMeta(meta);
 
         return item;
     }
-    public ItemStack createItemWithLore(Material m, String Name, ArrayList<String> lore, int menge) {
+
+    public ItemStack createItemWithLore(Material m, String name, ArrayList<String> lore, int menge) {
         ItemStack item = new ItemStack(m);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(Name);
+        meta.setDisplayName(name);
         meta.setLore(lore);
 
 

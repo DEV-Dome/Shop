@@ -638,10 +638,22 @@ public class Shop {
                         ArrayList<String> beschreibung = new ArrayList<>();
                         beschreibung.add("§7Zum Öffnen der Kategorie hier klicken");
 
-                        contents.set(47, Shopy.getInstance().createItemWithLore(Material.OAK_WOOD, "§e" + "Herstellungsmaterialien", beschreibung));
-                        contents.set(48, Shopy.getInstance().createItemWithLore(Material.AMETHYST_SHARD, "§e" + "Dungoenmaterialien", beschreibung));
-                        contents.set(49, Shopy.getInstance().createItemWithLore(Material.ECHO_SHARD, "§e" + "Specialmatrialen", beschreibung));
-                        contents.set(50, Shopy.getInstance().createItemWithLore(Material.BLUE_DYE, "§e" + "Aufwerter", beschreibung));
+                        /* Menü Items bauen. Sodass diese via Verzauberung anzeigen, welches Menü aktiv ist. */
+                        boolean aktivItem = false;
+                        if(type.equals("STANDART")) aktivItem = true;
+                        contents.set(47, Shopy.getInstance().createItemWithLore(Material.OAK_WOOD, "§e" + "Herstellungsmaterialien", beschreibung, aktivItem));
+
+                        aktivItem = false;
+                        if(type.equals("DUNGEON-LOOT")) aktivItem = true;
+                        contents.set(48, Shopy.getInstance().createItemWithLore(Material.AMETHYST_SHARD, "§e" + "Dungoenmaterialien", beschreibung, aktivItem));
+
+                        aktivItem = false;
+                        if(type.equals("SPECIAL")) aktivItem = true;
+                        contents.set(49, Shopy.getInstance().createItemWithLore(Material.ECHO_SHARD, "§e" + "Specialmatrialen", beschreibung, aktivItem));
+
+                        aktivItem = false;
+                        if(type.equals("AUFWERTER")) aktivItem = true;
+                        contents.set(50, Shopy.getInstance().createItemWithLore(Material.BLUE_DYE, "§e" + "Aufwerter", beschreibung, aktivItem));
                     }
                 }).build(Shopy.getInstance()).open(owner);
     }

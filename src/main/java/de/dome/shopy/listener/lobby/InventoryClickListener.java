@@ -165,19 +165,23 @@ public class InventoryClickListener implements Listener {
 
         if (e.getView().getTitle().equals("§5Dungeon Händler")) {
             if(item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
-                if (item.getType() == Material.ZOMBIE_SPAWN_EGG) {
-                    if(!Shopy.getInstance().getSpielerDungeon().containsKey(p.getUniqueId())){
+                switch (item.getType()){
+                    case ZOMBIE_SPAWN_EGG:
                         Shopy.getInstance().getSpielerDungeon().put(p.getUniqueId(), new Dungeon(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()), 1));
-                    }else {
-                        p.sendMessage(Shopy.getInstance().getPrefix() + "§cDu bist bereits in einem Dungeon!");
-                    }
-
+                        break;
+                    case VINDICATOR_SPAWN_EGG:
+                        Shopy.getInstance().getSpielerDungeon().put(p.getUniqueId(), new Dungeon(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()), 2));
+                        break;
+                    case BLAZE_SPAWN_EGG:
+                        Shopy.getInstance().getSpielerDungeon().put(p.getUniqueId(), new Dungeon(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()), 3));
+                        break;
+                    case EVOKER_SPAWN_EGG:
+                        Shopy.getInstance().getSpielerDungeon().put(p.getUniqueId(), new Dungeon(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()), 4));
+                        break;
                 }
             }
         }
     }
-
-
 
     public void kopiereOrdner(File quelle, File ziel) throws IOException {
         // Prüfen, ob die Quelle ein Verzeichnis ist

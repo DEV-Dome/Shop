@@ -59,8 +59,8 @@ public class NPCInteractListener implements Listener {
                     beschreibung.add("§7Für einen Dungeon der Stufe 1");
                     beschreibung.add("§7gelten folgende Bedingungen:");
                     beschreibung.add("");
-                    beschreibung.add("§7  - 10 Monster (Dungeon Materialien Drop)");
-                    beschreibung.add("§7  - Kosten §e100§7 Euro");
+                    beschreibung.add("§7  - 25 Monster (Monster Materialien Drop)");
+                    beschreibung.add("§7  - Abschlussbelohnung (Besondere Materialien)");
 
                     contents.set(10, Shopy.getInstance().createItemWithLore(Material.ZOMBIE_SPAWN_EGG, "§5Dungeon Stufe 1", beschreibung));
 
@@ -68,12 +68,15 @@ public class NPCInteractListener implements Listener {
                     beschreibung.add("§7Betrete einen Dungeon der Stufe 2,");
                     beschreibung.add("§7um besondere Ausrüstung zu bekommen.");
                     beschreibung.add("");
+                    beschreibung.add("§7(Alle Erhört angaben beziehen sich auf Stufe 1)");
+                    beschreibung.add("");
                     beschreibung.add("§7Für einen Dungeon der Stufe 2");
                     beschreibung.add("§7gelten folgende Bedingungen:");
                     beschreibung.add("");
-                    beschreibung.add("§7  - 25 Monster (Dungeon Materialien Drop)");
-                    beschreibung.add("§7  - Chance auf einen Aufwertungsmatrial (10 %)");
-                    beschreibung.add("§7  - Kosten §e200§7 Euro");
+                    beschreibung.add("§7  - 50 Monster (Monster Materialien Drop)");
+                    beschreibung.add("§7  - + Erhöhte Chance Monster Materialien zu dropen");
+                    beschreibung.add("§7  - Abschlussbelohnung (Besondere Materialien)");
+                    beschreibung.add("§7  - + Erhöhte Chance Abschlussbelohnung zu dropen");
 
                     contents.set(12, Shopy.getInstance().createItemWithLore(Material.VINDICATOR_SPAWN_EGG, "§5Dungeon Stufe 2", beschreibung));
 
@@ -81,13 +84,16 @@ public class NPCInteractListener implements Listener {
                     beschreibung.add("§7Betrete einen Dungeon der Stufe 3,");
                     beschreibung.add("§7um besondere Ausrüstung zu bekommen.");
                     beschreibung.add("");
+                    beschreibung.add("§7(Alle Erhört angaben beziehen sich auf Stufe 2)");
+                    beschreibung.add("");
                     beschreibung.add("§7Für einen Dungeon der Stufe 3");
                     beschreibung.add("§7gelten folgende Bedingungen:");
                     beschreibung.add("");
-                    beschreibung.add("§7  - 75 Monster (Dungeon Materialien Drop)");
-                    beschreibung.add("§7  - Chance auf einen Aufwertungsmatrial (25 %)");
-                    beschreibung.add("§7  - Chance auf einen Einhornkristall (20 %)");
-                    beschreibung.add("§7  - Kosten §e350§7 Euro");
+                    beschreibung.add("§7  - 100 Monster (Monster Materialien Drop)");
+                    beschreibung.add("§7  - + Erhöhte Chance Monster Materialien zu dropen");
+                    beschreibung.add("§7  - + Erhöhte Chance Speziale Materialien zu dropen");
+                    beschreibung.add("§7  - Abschlussbelohnung (Besondere Materialien)");
+                    beschreibung.add("§7  - + Erhöhte Chance Abschlussbelohnung zu dropen");
 
                     contents.set(14, Shopy.getInstance().createItemWithLore(Material.BLAZE_SPAWN_EGG, "§5Dungeon Stufe 3", beschreibung));
 
@@ -95,14 +101,17 @@ public class NPCInteractListener implements Listener {
                     beschreibung.add("§7Betrete einen Dungeon der Stufe 4,");
                     beschreibung.add("§7um besondere Ausrüstung zu bekommen.");
                     beschreibung.add("");
+                    beschreibung.add("§7(Alle Erhört angaben beziehen sich auf Stufe 3)");
+                    beschreibung.add("");
                     beschreibung.add("§7Für einen Dungeon der Stufe 4");
                     beschreibung.add("§7gelten folgende Bedingungen:");
                     beschreibung.add("");
-                    beschreibung.add("§7  - 150 Monster (Dungeon Materialien Drop)");
-                    beschreibung.add("§7  - Chance auf einen Aufwertungsmatrial (40 %)");
-                    beschreibung.add("§7  - Chance auf einen Einhornkristall (25 %)");
-                    beschreibung.add("§7  - Chance auf Set Materialien (5 %)");
-                    beschreibung.add("§7  - Kosten §e500§7 Euro");
+                    beschreibung.add("§7  - 200 Monster (Monster Materialien Drop)");
+                    beschreibung.add("§7  - + Erhöhte Chance Monster Materialien zu dropen");
+                    beschreibung.add("§7  - + Erhöhte Chance Speziale Materialien zu dropen");
+                    beschreibung.add("§7  - Abschlussbelohnung (Besondere Materialien)");
+                    beschreibung.add("§7  - + Erhöhte Chance Abschlussbelohnung zu dropen");
+                    beschreibung.add("§7  - Es ist möglich set Materialien zu finden");
 
                     contents.set(16, Shopy.getInstance().createItemWithLore(Material.EVOKER_SPAWN_EGG, "§5Dungeon Stufe 4", beschreibung));
 

@@ -33,6 +33,9 @@ public class SpawnCMD  implements CommandExecutor {
                                 p.sendMessage(Shopy.getInstance().getPrefix() + "§aDu wurdest zum Spawn Teleporiert.");
                                 if(Shopy.getInstance().getPlayersNotTeleport().contains(p)) Shopy.getInstance().getPlayersNotTeleport().remove(p);
 
+                                /* Scoreboard Updateten */
+                                Shopy.getInstance().getScoreboardManger().setScoreBoard(p);
+
                                 if(Shopy.getInstance().getGeladeneTempWelten().containsKey(p.getUniqueId())){
                                     for(World world : Shopy.getInstance().getGeladeneTempWelten().get(p.getUniqueId())){
                                         File file = world.getWorldFolder();

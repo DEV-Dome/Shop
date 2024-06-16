@@ -15,15 +15,15 @@ import java.util.concurrent.CompletableFuture;
 
 public class Dungeon {
 
-    Shop shop;
-    int dungeonId = -1;
-    int dungeonLevel = -1;
+    private Shop shop;
+    private int dungeonId = -1;
+    private int dungeonLevel = -1;
 
-    World world;
+    private World world;
 
-    Location spawn;
-    Cuboid dungeonZone;
-    Cuboid spawnZone;
+    private Location spawn;
+    private Cuboid dungeonZone;
+    private Cuboid spawnZone;
 
     /* private functionen, damit der conctur klappt*/
     private Location dungeonZonePos1 = null;
@@ -224,16 +224,36 @@ public class Dungeon {
                 spawnMenge = 50;
                 minLeben = 25;
                 maxLeben = 75;
+
+                /* zusätzliche Mob Typen Anpassen */
+                mobTypes.add(Vindicator.class);
+                mobTypes.remove(Zombie.class);
                 break;
             case 3:
                 spawnMenge = 100;
                 minLeben = 45;
                 maxLeben = 150;
+
+                /* zusätzliche Mob Typen Anpassen */
+                mobTypes.add(Vindicator.class);
+                mobTypes.add(Evoker.class);
+
+                mobTypes.remove(Zombie.class);
+                mobTypes.remove(Spider.class);
                 break;
             case 4:
-                spawnMenge = 250;
+                spawnMenge = 200;
                 minLeben = 75;
                 maxLeben = 200;
+
+                /*  Mob Typen Anpassen */
+                mobTypes.add(Vindicator.class);
+                mobTypes.add(Blaze.class);
+                mobTypes.add(Evoker.class);
+
+                mobTypes.remove(Zombie.class);
+                mobTypes.remove(Skeleton.class);
+                mobTypes.remove(Spider.class);
                 break;
         }
 

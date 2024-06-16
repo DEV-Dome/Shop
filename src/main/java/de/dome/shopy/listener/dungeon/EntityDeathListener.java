@@ -60,6 +60,18 @@ public class EntityDeathListener implements Listener {
                     String[] mobLoot = {"Stab eines Dreistacks", "Sauerstoffkristall"};
                     gedroppterLoot = Shopy.getInstance().getDropManger().dropMobLoot(spielerDungeon, mobLoot);
                 }
+                if(e.getEntity().getType() == EntityType.VINDICATOR){
+                    String[] mobLoot = {"Ei", "Tonklumpen"};
+                    gedroppterLoot = Shopy.getInstance().getDropManger().dropMobLoot(spielerDungeon, mobLoot);
+                }
+                if(e.getEntity().getType() == EntityType.BLAZE){
+                    String[] mobLoot = {"Feuerstab", "Verbranntest Eisen"};
+                    gedroppterLoot = Shopy.getInstance().getDropManger().dropMobLoot(spielerDungeon, mobLoot);
+                }
+                if(e.getEntity().getType() == EntityType.EVOKER){
+                    String[] mobLoot = {"Zauberstaub", "Drachenatem"};
+                    gedroppterLoot = Shopy.getInstance().getDropManger().dropMobLoot(spielerDungeon, mobLoot);
+                }
 
                 /* Urspünglichen Monster Loot unterbinden*/
                 e.setDroppedExp(0);

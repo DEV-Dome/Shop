@@ -17,17 +17,55 @@ public class DropManger {
         String[] StandardLoot = {"Monsterhaut", "Monsterbeeren", "Monsterfaden", "Monsteraugen", "Monsterfleisch"};
         int dropItem = 0;
 
+        /* Wahrscheinlichkeit je Dungeon Level ermitteln */
+        double wahrscheinlichkeitDrop3 = 0.0110;
+        double wahrscheinlichkeitDrop2 = 0.020;
+        double wahrscheinlichkeitDrop1 = 0.40;
+        double wahrscheinlichkeitStandartItem = 0;
+
+        switch (spielerDungeon.getDungeonLevel()){
+            case 1:
+                wahrscheinlichkeitDrop3 = 0.0115;
+                wahrscheinlichkeitDrop2 = 0.030;
+                wahrscheinlichkeitDrop1 = 0.41;
+
+                wahrscheinlichkeitStandartItem = 0.68;
+                break;
+            case 2:
+                wahrscheinlichkeitDrop3 = 0.02;
+                wahrscheinlichkeitDrop2 = 0.045;
+                wahrscheinlichkeitDrop1 = 0.5;
+
+                wahrscheinlichkeitStandartItem = 0.68;
+                break;
+            case 3:
+                wahrscheinlichkeitDrop3 = 0.025;
+                wahrscheinlichkeitDrop2 = 0.05;
+                wahrscheinlichkeitDrop1 = 0.6;
+
+                wahrscheinlichkeitStandartItem = 0.60;
+                break;
+            case 4:
+                wahrscheinlichkeitDrop3 = 0.048;
+                wahrscheinlichkeitDrop2 = 0.1;
+                wahrscheinlichkeitDrop1 = 0.75;
+
+                wahrscheinlichkeitStandartItem = 0.5;
+                break;
+        }
+
+
         /* Item Anzahl auswählen, aufgrundlage von warscheinlichkeiten */
-        if(Shopy.getInstance().isWahrscheinlichkeit(0.0115)) dropItem = 3;
-        else if(Shopy.getInstance().isWahrscheinlichkeit(0.030)) dropItem = 2;
-        else if(Shopy.getInstance().isWahrscheinlichkeit(0.41)) dropItem = 1;
+        if(Shopy.getInstance().isWahrscheinlichkeit(wahrscheinlichkeitDrop3)) dropItem = 3;
+        else if(Shopy.getInstance().isWahrscheinlichkeit(wahrscheinlichkeitDrop2)) dropItem = 2;
+        else if(Shopy.getInstance().isWahrscheinlichkeit(wahrscheinlichkeitDrop1)) dropItem = 1;
 
         /* Schliefe zur auswahl des Items */
         for(int i = 1; i <= dropItem; i++){
             String dropItemString = "";
 
             /* Endscheiden welche art von Item fällt */
-            if(Shopy.getInstance().isWahrscheinlichkeit(0.68)){
+            if(Shopy.getInstance().isWahrscheinlichkeit(wahrscheinlichkeitStandartItem)){
                 /* Standard item */
                 int zufallsIndex = random.nextInt(StandardLoot.length);
                 dropItemString = StandardLoot[zufallsIndex];
@@ -65,26 +103,74 @@ public class DropManger {
         String[] mobLoot = {"Zombiesleim", "Zombiedreck", "Skelett Arm", "Pfeilreste", "Spinnenauge", "Hasenfell", "Sauerstoffkristall", "Stab eines Dreistacks" };
         String[] aufwerterLoot = {"Aufwärtspulver Stufe 1", "Aufwärtspulver Stufe 2", "Dungeon Schüssel der Stufe 1" };
         String[] specialLoot = {"Mondkristall", "Schriftrollenpapier", "Aufwärtspulver Stufe 3"};
+
+        double wahrscheinlichkeitDrop4 = 0.0090;
+        double wahrscheinlichkeitDrop3 = 0.020;
+        double wahrscheinlichkeitDrop2 = 0.4;
+
+        double wahrscheinlichkeitSpecialLoot = 0.02;
+        double wahrscheinlichkeitAufwerterLoot = 0.05;
+        double wahrscheinlichkeitMoblLoot = 0.3;
+
+        switch (spielerDungeon.getDungeonLevel()){
+            case 1:
+                wahrscheinlichkeitDrop4 = 0.0098;
+                wahrscheinlichkeitDrop3 = 0.027;
+                wahrscheinlichkeitDrop2 = 0.5;
+
+                wahrscheinlichkeitSpecialLoot = 0.05;
+                wahrscheinlichkeitAufwerterLoot = 0.1;
+                wahrscheinlichkeitMoblLoot = 0.4;
+                break;
+            case 2:
+                wahrscheinlichkeitDrop4 = 0.0015;
+                wahrscheinlichkeitDrop3 = 0.035;
+                wahrscheinlichkeitDrop2 = 0.55;
+
+                wahrscheinlichkeitSpecialLoot = 0.07;
+                wahrscheinlichkeitAufwerterLoot = 0.25;
+                wahrscheinlichkeitMoblLoot = 0.5;
+                break;
+            case 3:
+                wahrscheinlichkeitDrop4 = 0.02;
+                wahrscheinlichkeitDrop3 = 0.05;
+                wahrscheinlichkeitDrop2 = 0.65;
+
+                wahrscheinlichkeitSpecialLoot = 0.85;
+                wahrscheinlichkeitAufwerterLoot = 0.3;
+                wahrscheinlichkeitMoblLoot = 0.55;
+                break;
+            case 4:
+                wahrscheinlichkeitDrop4 = 0.03;
+                wahrscheinlichkeitDrop3 = 0.10;
+                wahrscheinlichkeitDrop2 = 0.75;
+
+                wahrscheinlichkeitSpecialLoot = 0.1;
+                wahrscheinlichkeitAufwerterLoot = 0.45;
+                wahrscheinlichkeitMoblLoot = 0.6;
+                break;
+        }
+
         int dropItem = 1;
-        if(Shopy.getInstance().isWahrscheinlichkeit(0.0098)) dropItem = 4;
-        else if(Shopy.getInstance().isWahrscheinlichkeit(0.027)) dropItem = 3;
-        else if(Shopy.getInstance().isWahrscheinlichkeit(0.5)) dropItem = 2;
+        if(Shopy.getInstance().isWahrscheinlichkeit(wahrscheinlichkeitDrop4)) dropItem = 4;
+        else if(Shopy.getInstance().isWahrscheinlichkeit(wahrscheinlichkeitDrop3)) dropItem = 3;
+        else if(Shopy.getInstance().isWahrscheinlichkeit(wahrscheinlichkeitDrop2)) dropItem = 2;
 
         for(int i = 1; i <= dropItem; i++){
             String dropItemString = "";
 
             /* Endscheiden welche art von Item fällt */
-            if(Shopy.getInstance().isWahrscheinlichkeit(0.05)){
+            if(Shopy.getInstance().isWahrscheinlichkeit(wahrscheinlichkeitSpecialLoot)){
                 /* Special  loot */
 
                 int zufallsIndex = random.nextInt(specialLoot.length);
                 dropItemString = specialLoot[zufallsIndex];
-            }else if(Shopy.getInstance().isWahrscheinlichkeit(0.1)){
+            }else if(Shopy.getInstance().isWahrscheinlichkeit(wahrscheinlichkeitAufwerterLoot)){
                 /* Aufwerter Loot  */
 
                 int zufallsIndex = random.nextInt(aufwerterLoot.length);
                 dropItemString = aufwerterLoot[zufallsIndex];
-            }else if(Shopy.getInstance().isWahrscheinlichkeit(0.4)){
+            }else if(Shopy.getInstance().isWahrscheinlichkeit(wahrscheinlichkeitMoblLoot)){
                 /* Mob Loot  */
 
                 int zufallsIndex = random.nextInt(mobLoot.length);
