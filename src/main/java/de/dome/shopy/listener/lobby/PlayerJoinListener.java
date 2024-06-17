@@ -30,6 +30,6 @@ public class PlayerJoinListener implements Listener {
             p.teleport(Shopy.getInstance().getServerSpawn());
         }
 
-        new Shop(p.getUniqueId(), false);
+        new Shop(p, false);
     }
 }

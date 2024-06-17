@@ -122,16 +122,16 @@ public class Item {
                     String queryRessourecsWerte = "SELECT * FROM item_werte WHERE item = " + newItem.getId();
                     ResultSet resultItemWerte = Shopy.getInstance().getMySQLConntion().resultSet(queryRessourecsWerte);
                     while (resultItemWerte.next()) {
-                        if(resultItemWerte.getString("wert").equals("shop_xp")) newItem.shopXp = Integer.parseInt(resultItemWerte.getString("value"));
-                        if(resultItemWerte.getString("wert").equals("kategorie_xp")) newItem.kategorieXp = Integer.parseInt(resultItemWerte.getString("value"));
-                        if(resultItemWerte.getString("wert").equals("meister_menge")) newItem.meisterMenge = Integer.parseInt(resultItemWerte.getString("value"));
+                        if(resultItemWerte.getString("schlussel").equals("shop_xp")) newItem.shopXp = Integer.parseInt(resultItemWerte.getString("inhalt"));
+                        if(resultItemWerte.getString("schlussel").equals("kategorie_xp")) newItem.kategorieXp = Integer.parseInt(resultItemWerte.getString("inhalt"));
+                        if(resultItemWerte.getString("schlussel").equals("meister_menge")) newItem.meisterMenge = Integer.parseInt(resultItemWerte.getString("inhalt"));
 
-                        if(resultItemWerte.getString("wert").equals("freigeschlatet_typ")) newItem.freischlatTyp = resultItemWerte.getString("value");
-                        if(resultItemWerte.getString("wert").equals("freigeschlatet_item")) newItem.freischaltItemID = Integer.parseInt(resultItemWerte.getString("value"));
-                        if(resultItemWerte.getString("wert").equals("freigeschlatet_menge")) newItem.freischaltMenge = Integer.parseInt(resultItemWerte.getString("value"));
+                        if(resultItemWerte.getString("schlussel").equals("freigeschlatet_typ")) newItem.freischlatTyp = resultItemWerte.getString("inhalt");
+                        if(resultItemWerte.getString("schlussel").equals("freigeschlatet_item")) newItem.freischaltItemID = Integer.parseInt(resultItemWerte.getString("inhalt"));
+                        if(resultItemWerte.getString("schlussel").equals("freigeschlatet_menge")) newItem.freischaltMenge = Integer.parseInt(resultItemWerte.getString("inhalt"));
 
-                        if(resultItemWerte.getString("wert").equals("immer_freigeschlatet")){
-                            if(resultItemWerte.getString("value").equalsIgnoreCase("ja")) newItem.immerFreigeschaltet = true;
+                        if(resultItemWerte.getString("schlussel").equals("immer_freigeschlatet")){
+                            if(resultItemWerte.getString("inhalt").equalsIgnoreCase("ja")) newItem.immerFreigeschaltet = true;
                             else newItem.immerFreigeschaltet = false;
                         }
                     }

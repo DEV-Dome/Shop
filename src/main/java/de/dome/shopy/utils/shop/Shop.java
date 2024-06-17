@@ -37,7 +37,8 @@ public class Shop {
     /* Halte fest, ob überhaupt ein Spielershop gefunden wurde  */
     private boolean loadShop = false;
 
-    public Shop(UUID ownerUUID, Boolean playerTeleport){
+    public Shop(Player owner, Boolean playerTeleport){
+        this.owner = owner;
         zones = new ArrayList<>();
         shopItems = new ArrayList<>();
         shopItemVorlagen = new ArrayList<>();
@@ -46,7 +47,7 @@ public class Shop {
 
         CompletableFuture<Void> basisDaten = CompletableFuture.runAsync(() -> {
             try {
-                String query = "SELECT * FROM shop WHERE owner = '" + ownerUUID + "' LIMIT 1";
+                String query = "SELECT * FROM shop WHERE owner = '" + owner.getUniqueId() + "' LIMIT 1";
                 ResultSet result = Shopy.getInstance().getMySQLConntion().resultSet(query);
 
                 /* Shop daten aus datenbank laden*/
@@ -103,23 +104,23 @@ public class Shop {
                         int xpZumNachstenLevel = -1;
                         int aktuelleXP = -1;
 
-                        String itemKategorieQuery = "SELECT * FROM shop_werte WHERE wert = 'itemKategorie_" + itemKategorie.getName() + "_level' LIMIT 1";
+                        String itemKategorieQuery = "SELECT * FROM shop_werte WHERE schlussel = 'itemKategorie_" + itemKategorie.getName() + "_level' LIMIT 1";
                         ResultSet resultItemKategorie= Shopy.getInstance().getMySQLConntion().resultSet(itemKategorieQuery);
 
                         if(resultItemKategorie.next()){
-                            level = Integer.parseInt(resultItemKategorie.getString("value"));
+                            level = Integer.parseInt(resultItemKategorie.getString("inhalt"));
                         }else {
-                            Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_werte (shop, wert, value) VALUES ('" + shopId + "', 'itemKategorie_" + itemKategorie.getName() + "_level', '1')");
+                            Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_werte (shop, schlussel, inhalt) VALUES ('" + shopId + "', 'itemKategorie_" + itemKategorie.getName() + "_level', '1')");
                             level = 1;
                         }
 
-                        itemKategorieQuery = "SELECT * FROM shop_werte WHERE wert = 'itemKategorie_" + itemKategorie.getName() + "_xp' LIMIT 1";
+                        itemKategorieQuery = "SELECT * FROM shop_werte WHERE schlussel = 'itemKategorie_" + itemKategorie.getName() + "_xp' LIMIT 1";
                         resultItemKategorie= Shopy.getInstance().getMySQLConntion().resultSet(itemKategorieQuery);
 
                         if(resultItemKategorie.next()){
-                            aktuelleXP = Integer.parseInt(resultItemKategorie.getString("value"));
+                            aktuelleXP = Integer.parseInt(resultItemKategorie.getString("inhalt"));
                         }else {
-                            Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_werte (shop, wert, value) VALUES ('" + shopId + "', 'itemKategorie_" + itemKategorie.getName() + "_xp', '0')");
+                            Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_werte (shop, schlussel, inhalt) VALUES ('" + shopId + "', 'itemKategorie_" + itemKategorie.getName() + "_xp', '0')");
                             aktuelleXP = 0;
                         }
 
@@ -133,7 +134,7 @@ public class Shop {
                         itemKategorieLevel.put(itemKategorie.getName(), new ShopItemKategorieLevel(level, xpZumNachstenLevel, aktuelleXP, itemKategorie, this));
                     }
 
-                    Shopy.getInstance().getSpielerShops().put(ownerUUID, this);
+                    Shopy.getInstance().getSpielerShops().put(owner.getUniqueId(), this);
 
                     /* Item vorlagen laden */
                     int lastID = 1;
@@ -162,10 +163,10 @@ public class Shop {
                         shopItemVorlagen.add(shopItemVorlage);
                     }
 
-                    String queryItemLager = "SELECT * From shop_item_lager JOIN item ON item.id = shop_item_lager.item";
+                    String queryItemLager = "SELECT * From shop_item JOIN item ON item.id = shop_item.item";
                     ResultSet resultItemLager = Shopy.getInstance().getMySQLConntion().resultSet(queryItemLager);
                     while(resultItemLager.next()){
-                        ShopItem newItem = new ShopItem(resultItemLager.getInt("shop_item_lager.id"), ItemKategorie.getItemKategorieById(resultItemLager.getInt("item_kategorie")), resultItemLager.getString("name"), resultItemLager.getString("beschreibung"), Material.getMaterial(resultItemLager.getString("icon")), ItemSeltenheit.getItemStufeById(resultItemLager.getInt("item_seltenheit")));
+                        ShopItem newItem = new ShopItem(resultItemLager.getInt("shop_item.id"), ItemKategorie.getItemKategorieById(resultItemLager.getInt("item_kategorie")), resultItemLager.getString("name"), resultItemLager.getString("beschreibung"), Material.getMaterial(resultItemLager.getString("icon")), ItemSeltenheit.getItemStufeById(resultItemLager.getInt("item_seltenheit")));
                         shopItems.add(newItem);
                     }
                 }
@@ -183,8 +184,8 @@ public class Shop {
                 /* Shop werte daten aus datenbank laden*/
                 try {
                     while (result.next()){
-                        if(result.getString("wert").equals("ressourcen_lager")) ressourcenLagerSize = Integer.parseInt(result.getString("value"));
-                        if(result.getString("wert").equals("item_lager")) itemLagerSize = Integer.parseInt(result.getString("value"));
+                        if(result.getString("schlussel").equals("ressourcen_lager")) ressourcenLagerSize = Integer.parseInt(result.getString("inhalt"));
+                        if(result.getString("schlussel").equals("item_lager")) itemLagerSize = Integer.parseInt(result.getString("inhalt"));
                     }
                 } catch (SQLException e) {
                     Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
@@ -234,6 +235,12 @@ public class Shop {
                     if (zaheler == 7) {
                         solt += 3;
                         zaheler = 0;
+                    }else if(solt == 14 ){
+                        solt += 5;
+                        zaheler = 0;
+                    }else if(solt == 20){
+                        solt += 8;
+                        zaheler = 0;
                     } else {
                         solt++;
                     }
@@ -266,6 +273,12 @@ public class Shop {
                     zaheler++;
                     if (zaheler == 7) {
                         solt += 3;
+                        zaheler = 0;
+                    }else if(solt == 14 ){
+                        solt += 5;
+                        zaheler = 0;
+                    }else if(solt == 20){
+                        solt += 8;
                         zaheler = 0;
                     } else {
                         solt++;
@@ -467,7 +480,7 @@ public class Shop {
         }).build(Shopy.getInstance()).open(this.owner);
     }
     public void openWerkbankInventar(){
-        RyseInventory.builder().title("§9Werkbank-Kategorie").rows(3).provider(new InventoryProvider() {
+        RyseInventory.builder().title("§9Werkbank-Kategorie").rows(5).provider(new InventoryProvider() {
             @Override
             public void init(Player player, InventoryContents contents) {
                 int solt = 10;
@@ -644,8 +657,14 @@ public class Shop {
                             if(zaheler == 7){
                                 solt += 3;
                                 zaheler = 0;
+                            }else if(solt == 14 && type.equals("STANDART")){
+                                solt += 5;
+                                zaheler = 0;
                             }else if(solt == 14 && type.equals("DUNGEON-LOOT")){
                                 solt += 5;
+                                zaheler = 0;
+                            }else if(solt == 20 && type.equals("STANDART")){
+                                solt += 8;
                                 zaheler = 0;
                             }else {
                                 solt++;
@@ -677,13 +696,13 @@ public class Shop {
 
     public void changeRessourcenLager(int newAmount){
         CompletableFuture.runAsync(() -> {
-            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET value = '"+ newAmount +"' WHERE wert = 'ressourcen_lager'");
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET inhalt = '"+ newAmount +"' WHERE schlussel = 'ressourcen_lager'");
         });
         ressourcenLagerSize = newAmount;
     }
     public void changeItemLager(int newAmount){
         CompletableFuture.runAsync(() -> {
-            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET value = '"+ newAmount +"' WHERE wert = 'item_lager'");
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET inhalt = '"+ newAmount +"' WHERE schlussel = 'item_lager'");
         });
         itemLagerSize = newAmount;
     }
@@ -759,7 +778,7 @@ public class Shop {
 
             if(shopItem.getId() == id){
                 CompletableFuture.runAsync(() -> {
-                    Shopy.getInstance().getMySQLConntion().query("DELETE FROM shop_item_lager WHERE ID = '" + id +"'");
+                    Shopy.getInstance().getMySQLConntion().query("DELETE FROM shop_item WHERE ID = '" + id +"'");
                 });
 
                 shopItems.remove(i);

@@ -80,6 +80,12 @@ public class ShopRessourenManger {
             } catch (SQLException e) {
                 Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
             }
+        }).thenRun(() -> {
+            /* Scoreboard anpassen nach geld änderung  */
+            Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
+                Shopy.getInstance().getScoreboardManger().setScoreBoard(shop.getOwner());
+            });
+
         });
     }
 }

@@ -63,8 +63,8 @@ public class InventoryClickListener implements Listener {
                                 Shopy.getInstance().getMySQLConntion().query("UPDATE shop SET shop_ordner = '" + weltName +"' WHERE id = " + shop_id);
 
                                 /*Shop werte */
-                                Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_werte (shop, wert, value) VALUES ('" + shop_id + "', 'ressourcen_lager', '5')");
-                                Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_werte (shop, wert, value) VALUES ('" + shop_id + "', 'item_lager', '10')");
+                                Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_werte (shop, schlussel, inhalt) VALUES ('" + shop_id + "', 'ressourcen_lager', '5')");
+                                Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_werte (shop, schlussel, inhalt) VALUES ('" + shop_id + "', 'item_lager', '10')");
 
                                 /*Start geld*/
                                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_ressource (shop, ressource, menge) VALUES ('" + shop_id + "', '" + Ressource.getRessoureByName("Geld").getId() +"', '100')");
@@ -76,7 +76,7 @@ public class InventoryClickListener implements Listener {
                     });
                     /* Wenn neue Shop Kopiert und gerneriert wurde, kann weiters passiern */
                     shopErstellen.thenRun(() -> {
-                        new Shop(p.getUniqueId(), true);
+                        new Shop(p, true);
                         p.sendMessage(Shopy.getInstance().getPrefix() + "Dein Shop wurde erstellt. Du kannst nun Loslegen.");
 
                         /* Starter Itemes geben */

@@ -52,6 +52,7 @@ public class MySQLDefault {
 
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ShopItemVorlage.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ShopItemLager.sql"));
+                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ShopItemWerte.sql"));
 
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/Dungeon.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/DungeonPositionen.sql"));
@@ -162,12 +163,7 @@ public class MySQLDefault {
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
-                /* Items Äxte */
-                if(kategorie_axte != -1) {
-                    Shopy.getInstance().getMySQLConntion().query("INSERT INTO item (item_kategorie, icon, name, beschreibung, reinfolge) VALUES ('"+ kategorie_axte +"', 'WOODEN_AXE', 'Anfänger Axt I',   'Diese Axt wurde von einem Schreiner Lehrling hergestellt. Und dient nun dem Zweck das Schreinerhandwerk zu erlernen.', 1)" );
-                    Shopy.getInstance().getMySQLConntion().query("INSERT INTO item (item_kategorie, icon, name, beschreibung, reinfolge) VALUES ('"+ kategorie_axte +"', 'WOODEN_AXE', 'Anfänger Axt II',  'Diese Axt wurde von einem Schreiner Lehrling hergestellt. Und dient nun dem Zweck das Schreinerhandwerk zu erlernen.', 2)" );
-                    Shopy.getInstance().getMySQLConntion().query("INSERT INTO item (item_kategorie, icon, name, beschreibung, reinfolge) VALUES ('"+ kategorie_axte +"', 'WOODEN_AXE', 'Anfänger Axt III', 'Diese Axt wurde von einem Schreiner Lehrling hergestellt. Und dient nun dem Zweck das Schreinerhandwerk zu erlernen.', 3)" );
-                }
+
             }
         });
     }

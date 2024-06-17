@@ -39,7 +39,7 @@ public class ShopItemKategorieLevel {
         }
 
         CompletableFuture.runAsync(() -> {
-            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET value='"+ aktuelleXP +"' WHERE wert='itemKategorie_"+ itemKategorie.getName() +"_xp' AND shop = '" + shop.getShopId() +"'");
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET inhalt='"+ aktuelleXP +"' WHERE schlussel='itemKategorie_"+ itemKategorie.getName() +"_xp' AND shop = '" + shop.getShopId() +"'");
         });
         return false;
     }
@@ -56,13 +56,13 @@ public class ShopItemKategorieLevel {
                         aktuelleXP = aktuelleXP - xpZumNachstenLevel;
                         xpZumNachstenLevel = result.getInt("xp");
 
-                        Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET value='"+ aktuelleXP +"' WHERE wert='itemKategorie_"+ itemKategorie.getName() +"_xp' AND shop = '" + shop.getShopId() +"'");
-                        Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET value='"+ level +"' WHERE wert='itemKategorie_"+ itemKategorie.getName() +"_level' AND shop = '" + shop.getShopId() +"'");
+                        Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET inhalt='"+ aktuelleXP +"' WHERE schlussel='itemKategorie_"+ itemKategorie.getName() +"_xp' AND shop = '" + shop.getShopId() +"'");
+                        Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET inhalt='"+ level +"' WHERE schlussel='itemKategorie_"+ itemKategorie.getName() +"_level' AND shop = '" + shop.getShopId() +"'");
                     }else {
                         level--;
 
                         aktuelleXP = xpZumNachstenLevel;
-                        Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET value='"+ aktuelleXP +"' WHERE wert='itemKategorie_"+ itemKategorie.getName() +"_xp' AND shop = '" + shop.getShopId() +"'");
+                        Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET inhalt='"+ aktuelleXP +"' WHERE schlussel='itemKategorie_"+ itemKategorie.getName() +"_xp' AND shop = '" + shop.getShopId() +"'");
                     }
                 } catch (SQLException e) { }
             });

@@ -1,8 +1,18 @@
 /* STANDART Ressource */
-INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('OAK_WOOD', 'Holz', 'Ein grundlegendes Material', 'STANDART', 1, '5', '15');
-INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('STONE', 'Stein', 'Ein grundlegendes Material', 'STANDART', 2, '8', '20');
-INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('IRON_INGOT', 'Eisen', 'Ein grundlegendes Material', 'STANDART', 3, '12', '22');
-INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('GOLD_INGOT', 'Geld', 'Geld, zum Handeln auf der ganzen Welt', 'WAHRUNG', 100, '0', '0');
+
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('IRON_INGOT', 'Eisen', 'Ein grundlegendes Material', 'STANDART', 1, '12', '22');
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('COPPER_INGOT', 'Kupfer', 'Ein grundlegendes Material', 'STANDART', 2, '15', '30');
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('GOLD_INGOT', 'Gold', 'Ein grundlegendes Material', 'STANDART', 3, '17', '35');
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('DIAMOND', 'Diamanten', 'Ein grundlegendes Material', 'STANDART', 4, '30', '50');
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('NETHERITE_INGOT', 'Netherite', 'Ein grundlegendes Material', 'STANDART', 5, '45', '70');
+
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('OAK_WOOD', 'Holz', 'Ein grundlegendes Material', 'STANDART', 6, '5', '15');
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('STONE', 'Stein', 'Ein grundlegendes Material', 'STANDART', 7, '8', '18');
+
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('LEATHER', 'Leder', 'Ein grundlegendes Material', 'STANDART', 8, '8', '18');
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('RABBIT_HIDE', 'Besonders Leder', 'Ein grundlegendes Material', 'STANDART', 9, '12', '24');
+
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('NETHER_STAR', 'Geld', 'Geld, zum Handeln auf der ganzen Welt', 'WAHRUNG', 100, '0', '0');
 
 
 /* DUNGEON-LOOT Ressource: Standart Loot */

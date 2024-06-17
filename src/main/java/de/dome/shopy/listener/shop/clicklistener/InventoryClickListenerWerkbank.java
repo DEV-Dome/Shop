@@ -130,11 +130,11 @@ public class InventoryClickListenerWerkbank implements Listener {
 
                     spielerShop.getShopItems().add(new ShopItem(platzhalterID, realItem.getItemKategorie(), realItem.getName(), realItem.getBeschreibung(), realItem.getIcon(), realItem.getItemSeltenheit()));
                     CompletableFuture.runAsync(() -> {
-                        Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_lager (shop, item) VALUES ('" + spielerShop.getShopId() + "', '" + realItem.getId() + "')");
+                        Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item (shop, item) VALUES ('" + spielerShop.getShopId() + "', '" + realItem.getId() + "')");
 
                         /* Item ID aus der Datenbank holen*/
                         try {
-                            String queryGetItemId = "SELECT id FROM shop_item_lager ORDER BY id DESC LIMIT 1";
+                            String queryGetItemId = "SELECT id FROM shop_item ORDER BY id DESC LIMIT 1";
                             ResultSet queryGetItemIdResult = Shopy.getInstance().getMySQLConntion().resultSet(queryGetItemId);
 
                             if (queryGetItemIdResult.next()){
