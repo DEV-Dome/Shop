@@ -11,8 +11,13 @@ import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -75,7 +80,7 @@ public class Shop {
                             this.world = Bukkit.getWorld(world);
                         }
 
-                        CompletableFuture<Void> ladeShopGrundStucke = CompletableFuture.runAsync(() -> {
+                        CompletableFuture.runAsync(() -> {
                             try {
                                 String queryZones = "SELECT * FROM shop_template_zonen WHERE template = " + result.getInt("template") +" LIMIT " + result.getInt("shop_zones");
 
@@ -98,6 +103,7 @@ public class Shop {
                             }
                         });
                     });
+
                     //Item Kategorie Level Eintragen
                     for(ItemKategorie  itemKategorie : ItemKategorie.itemKategorieList){
                         int level = -1;
@@ -163,10 +169,18 @@ public class Shop {
                         shopItemVorlagen.add(shopItemVorlage);
                     }
 
-                    String queryItemLager = "SELECT * From shop_item JOIN item ON item.id = shop_item.item";
+                    String queryItemLager = "SELECT *,shop_item.id AS 'sid' From shop_item JOIN item ON item.id = shop_item.item";
                     ResultSet resultItemLager = Shopy.getInstance().getMySQLConntion().resultSet(queryItemLager);
                     while(resultItemLager.next()){
-                        ShopItem newItem = new ShopItem(resultItemLager.getInt("shop_item.id"), ItemKategorie.getItemKategorieById(resultItemLager.getInt("item_kategorie")), resultItemLager.getString("name"), resultItemLager.getString("beschreibung"), Material.getMaterial(resultItemLager.getString("icon")), ItemSeltenheit.getItemStufeById(resultItemLager.getInt("item_seltenheit")));
+                        double schaden = 0;
+
+                        String queryItemLagerItemWerte = "SELECT * FROM shop_item_werte WHERE item = " + resultItemLager.getInt("sid");
+                        ResultSet resultItemLagerItemWerte = Shopy.getInstance().getMySQLConntion().resultSet(queryItemLagerItemWerte);
+                        while(resultItemLagerItemWerte.next()){
+                            if(resultItemLagerItemWerte.getString("schlussel").equals("schaden")) schaden = Double.parseDouble(resultItemLagerItemWerte.getString("inhalt"));
+                        }
+
+                        ShopItem newItem = new ShopItem(resultItemLager.getInt("shop_item.id"), ItemKategorie.getItemKategorieById(resultItemLager.getInt("item_kategorie")), resultItemLager.getString("name"), resultItemLager.getString("beschreibung"), Material.getMaterial(resultItemLager.getString("icon")), ItemSeltenheit.getItemStufeById(resultItemLager.getInt("item_seltenheit")), schaden);
                         shopItems.add(newItem);
                     }
                 }
@@ -287,7 +301,7 @@ public class Shop {
             }
         }).build(Shopy.getInstance()).open(owner);
     }
-    public void openMarkplatzWaffenInventar(int seite, ItemKategorie itemKategorie){
+    public void openWaffenCraftInventar(int seite, ItemKategorie itemKategorie){
         RyseInventory.builder().title("§9Werkbank " + itemKategorie.getName() + " Seite " + seite).rows(3).provider(new InventoryProvider() {
             @Override
             public void init(Player player, InventoryContents contents) {
@@ -377,7 +391,7 @@ public class Shop {
                 }
                 if (!erstesItemgesetzt) {
                     if(seite > 0){
-                        openMarkplatzWaffenInventar(seite - 1, itemKategorie);
+                        openWaffenCraftInventar(seite - 1, itemKategorie);
                         return;
                     }
                 }
@@ -525,6 +539,8 @@ public class Shop {
                                     ArrayList<String> beschreibung = new ArrayList<>();
                                     /* ID anzeigen*/
                                     beschreibung.add("§7Item-ID: " + shopItem.getId() + "");
+                                    beschreibung.add("");
+                                    beschreibung.add("§7Schaden: " + shopItem.getSchaden() + "");
                                     /* Actionen auflisten*/
                                     beschreibung.add("");
 
@@ -543,10 +559,18 @@ public class Shop {
                                         beschreibung.add(itemBeschreibung.trim());
                                     }
 
+                                    String itemName = "§9" + shopItem.getName() +  " " + shopItem.getItemSeltenheit().getFarbe() + " [" + shopItem.getItemSeltenheit().getName() + "]";
 
-                                    String itemName = "§9" + shopItem.getName() + " " + shopItem.getItemSeltenheit().getFarbe() + " [" + shopItem.getItemSeltenheit().getName() + "]";
+                                    ItemStack item = Shopy.getInstance().createItemWithLore(shopItem.getIcon(), "§9" + itemName, beschreibung);
+                                    ItemMeta meta = item.getItemMeta();
 
-                                    contents.set(slot, Shopy.getInstance().createItemWithLore(shopItem.getIcon(), "§9" + itemName, beschreibung));
+                                    /* itemschaden mideifiziren */
+                                    AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", shopItem.getSchaden(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+                                    meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
+
+                                    item.setItemMeta(meta);
+
+                                    contents.update(slot, item);
                                 }
                             }else {
                                 if(i > getItemLagerSize() - 1){
@@ -591,6 +615,8 @@ public class Shop {
                                     ArrayList<String> beschreibung = new ArrayList<>();
                                     /* ID anzeigen*/
                                     beschreibung.add("§7Item-ID: " + shopItem.getId() + "");
+                                    beschreibung.add("");
+                                    beschreibung.add("§7Schaden: " + shopItem.getSchaden() + "");
                                     /* Actionen auflisten*/
                                     beschreibung.add("");
 
@@ -607,9 +633,17 @@ public class Shop {
                                         beschreibung.add(itemBeschreibung.trim());
                                     }
 
-
                                     String itemName = "§9" + shopItem.getName() +  " " + shopItem.getItemSeltenheit().getFarbe() + " [" + shopItem.getItemSeltenheit().getName() + "]";
-                                    contents.update(slot, Shopy.getInstance().createItemWithLore(shopItem.getIcon(), "§9" + itemName, beschreibung));
+
+                                    ItemStack item = Shopy.getInstance().createItemWithLore(shopItem.getIcon(), "§9" + itemName, beschreibung);
+                                    ItemMeta meta = item.getItemMeta();
+
+                                    /* itemschaden mideifiziren */
+                                    AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", shopItem.getSchaden(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+                                    meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
+                                    item.setItemMeta(meta);
+
+                                    contents.update(slot, item);
                                 }
                             }else {
                                 if(i > getItemLagerSize() - 1){
@@ -778,7 +812,7 @@ public class Shop {
 
             if(shopItem.getId() == id){
                 CompletableFuture.runAsync(() -> {
-                    Shopy.getInstance().getMySQLConntion().query("DELETE FROM shop_item WHERE ID = '" + id +"'");
+                    Shopy.getInstance().getMySQLConntion().query("DELETE FROM shop_item WHERE id = '" + id +"'");
                 });
 
                 shopItems.remove(i);

@@ -15,14 +15,16 @@ public class ShopItem {
     String beschreibung;
     Material icon;
     ItemSeltenheit itemSeltenheit;
+    double schaden = 0;
 
-    public ShopItem(int id, ItemKategorie itemKategorie, String name, String beschreibung, Material icon, ItemSeltenheit itemSeltenheit) {
+    public ShopItem(int id, ItemKategorie itemKategorie, String name, String beschreibung, Material icon, ItemSeltenheit itemSeltenheit, double schaden) {
         this.id = id;
         this.itemKategorie = itemKategorie;
         this.name = name;
         this.beschreibung = beschreibung;
         this.icon = icon;
         this.itemSeltenheit = itemSeltenheit;
+        this.schaden = Math.round(schaden);
     }
 
     public int getId() {
@@ -46,6 +48,10 @@ public class ShopItem {
     }
     public ItemSeltenheit getItemSeltenheit() {
         return itemSeltenheit;
+    }
+
+    public double getSchaden() {
+        return schaden;
     }
 
     public void setId(int id) {

@@ -25,6 +25,8 @@ public class Item {
     int shopXp;
     int meisterMenge;
     int kategorieXp;
+    double minSchaden = 0;
+    double maxSchaden = 0;
     public static ArrayList<Item> itemList;
     public ArrayList<ItemRessourecenKosten> ressourecsKostenList;
 
@@ -99,7 +101,13 @@ public class Item {
         return meisterMenge;
     }
 
+    public double getMinSchaden() {
+        return minSchaden;
+    }
 
+    public double getMaxSchaden() {
+        return maxSchaden;
+    }
 
     public static void registerItem(){
         CompletableFuture.runAsync(() -> {
@@ -129,6 +137,9 @@ public class Item {
                         if(resultItemWerte.getString("schlussel").equals("freigeschlatet_typ")) newItem.freischlatTyp = resultItemWerte.getString("inhalt");
                         if(resultItemWerte.getString("schlussel").equals("freigeschlatet_item")) newItem.freischaltItemID = Integer.parseInt(resultItemWerte.getString("inhalt"));
                         if(resultItemWerte.getString("schlussel").equals("freigeschlatet_menge")) newItem.freischaltMenge = Integer.parseInt(resultItemWerte.getString("inhalt"));
+
+                        if(resultItemWerte.getString("schlussel").equals("min_schaden")) newItem.minSchaden = Double.parseDouble(resultItemWerte.getString("inhalt"));
+                        if(resultItemWerte.getString("schlussel").equals("max_schaden")) newItem.maxSchaden = Double.parseDouble(resultItemWerte.getString("inhalt"));
 
                         if(resultItemWerte.getString("schlussel").equals("immer_freigeschlatet")){
                             if(resultItemWerte.getString("inhalt").equalsIgnoreCase("ja")) newItem.immerFreigeschaltet = true;
