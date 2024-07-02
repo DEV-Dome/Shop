@@ -27,6 +27,8 @@ public class Item {
     int kategorieXp;
     double minSchaden = 0;
     double maxSchaden = 0;
+    double minAngriffsgeschwindigkeit = 0;
+    double maxAngriffsgeschwindigkeit = 0;
     public static ArrayList<Item> itemList;
     public ArrayList<ItemRessourecenKosten> ressourecsKostenList;
 
@@ -109,6 +111,14 @@ public class Item {
         return maxSchaden;
     }
 
+    public double getMinAngriffsgeschwindigkeit() {
+        return minAngriffsgeschwindigkeit;
+    }
+
+    public double getMaxAngriffsgeschwindigkeit() {
+        return maxAngriffsgeschwindigkeit;
+    }
+
     public static void registerItem(){
         CompletableFuture.runAsync(() -> {
             itemList = new ArrayList<>();
@@ -139,7 +149,10 @@ public class Item {
                         if(resultItemWerte.getString("schlussel").equals("freigeschlatet_menge")) newItem.freischaltMenge = Integer.parseInt(resultItemWerte.getString("inhalt"));
 
                         if(resultItemWerte.getString("schlussel").equals("min_schaden")) newItem.minSchaden = Double.parseDouble(resultItemWerte.getString("inhalt"));
-                        if(resultItemWerte.getString("schlussel").equals("max_schaden")) newItem.maxSchaden = Double.parseDouble(resultItemWerte.getString("inhalt"));
+                        if(resultItemWerte.getString("schlussel").equals("min_schaden")) newItem.minSchaden = Double.parseDouble(resultItemWerte.getString("inhalt"));
+
+                        if(resultItemWerte.getString("schlussel").equals("min_angriffsgeschwindigkeit")) newItem.minAngriffsgeschwindigkeit = Double.parseDouble(resultItemWerte.getString("inhalt"));
+                        if(resultItemWerte.getString("schlussel").equals("max_angriffsgeschwindigkeit")) newItem.maxAngriffsgeschwindigkeit = Double.parseDouble(resultItemWerte.getString("inhalt"));
 
                         if(resultItemWerte.getString("schlussel").equals("immer_freigeschlatet")){
                             if(resultItemWerte.getString("inhalt").equalsIgnoreCase("ja")) newItem.immerFreigeschaltet = true;

@@ -13,10 +13,10 @@ import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.sql.ResultSet;
@@ -173,14 +173,16 @@ public class Shop {
                     ResultSet resultItemLager = Shopy.getInstance().getMySQLConntion().resultSet(queryItemLager);
                     while(resultItemLager.next()){
                         double schaden = 0;
+                        double angriffsgeschwindigkeit = 0;
 
                         String queryItemLagerItemWerte = "SELECT * FROM shop_item_werte WHERE item = " + resultItemLager.getInt("sid");
                         ResultSet resultItemLagerItemWerte = Shopy.getInstance().getMySQLConntion().resultSet(queryItemLagerItemWerte);
                         while(resultItemLagerItemWerte.next()){
                             if(resultItemLagerItemWerte.getString("schlussel").equals("schaden")) schaden = Double.parseDouble(resultItemLagerItemWerte.getString("inhalt"));
+                            if(resultItemLagerItemWerte.getString("schlussel").equals("angriffsgeschwindigkeit")) angriffsgeschwindigkeit = Double.parseDouble(resultItemLagerItemWerte.getString("inhalt"));
                         }
 
-                        ShopItem newItem = new ShopItem(resultItemLager.getInt("shop_item.id"), ItemKategorie.getItemKategorieById(resultItemLager.getInt("item_kategorie")), resultItemLager.getString("name"), resultItemLager.getString("beschreibung"), Material.getMaterial(resultItemLager.getString("icon")), ItemSeltenheit.getItemStufeById(resultItemLager.getInt("item_seltenheit")), schaden);
+                        ShopItem newItem = new ShopItem(resultItemLager.getInt("shop_item.id"), ItemKategorie.getItemKategorieById(resultItemLager.getInt("item_kategorie")), resultItemLager.getString("name"), resultItemLager.getString("beschreibung"), Material.getMaterial(resultItemLager.getString("icon")), ItemSeltenheit.getItemStufeById(resultItemLager.getInt("item_seltenheit")), schaden, angriffsgeschwindigkeit);
                         shopItems.add(newItem);
                     }
                 }
@@ -539,8 +541,6 @@ public class Shop {
                                     ArrayList<String> beschreibung = new ArrayList<>();
                                     /* ID anzeigen*/
                                     beschreibung.add("§7Item-ID: " + shopItem.getId() + "");
-                                    beschreibung.add("");
-                                    beschreibung.add("§7Schaden: " + shopItem.getSchaden() + "");
                                     /* Actionen auflisten*/
                                     beschreibung.add("");
 
@@ -559,18 +559,25 @@ public class Shop {
                                         beschreibung.add(itemBeschreibung.trim());
                                     }
 
+
                                     String itemName = "§9" + shopItem.getName() +  " " + shopItem.getItemSeltenheit().getFarbe() + " [" + shopItem.getItemSeltenheit().getName() + "]";
 
                                     ItemStack item = Shopy.getInstance().createItemWithLore(shopItem.getIcon(), "§9" + itemName, beschreibung);
                                     ItemMeta meta = item.getItemMeta();
 
-                                    /* itemschaden mideifiziren */
+                                    // Entferne alle existierenden Attribute
+                                    meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE);
+
+                                    // Füge einen neuen Angriffsschaden-Modifier hinzu
                                     AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", shopItem.getSchaden(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
                                     meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
 
+                                    AttributeModifier speedModifier = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", shopItem.getAngriffsgeschwindigkeit(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+                                    meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, speedModifier);
+
                                     item.setItemMeta(meta);
 
-                                    contents.update(slot, item);
+                                    contents.set(slot, Shopy.getInstance().createItemWithLore(shopItem.getIcon(), "§9" + itemName, beschreibung));
                                 }
                             }else {
                                 if(i > getItemLagerSize() - 1){
@@ -615,8 +622,6 @@ public class Shop {
                                     ArrayList<String> beschreibung = new ArrayList<>();
                                     /* ID anzeigen*/
                                     beschreibung.add("§7Item-ID: " + shopItem.getId() + "");
-                                    beschreibung.add("");
-                                    beschreibung.add("§7Schaden: " + shopItem.getSchaden() + "");
                                     /* Actionen auflisten*/
                                     beschreibung.add("");
 
@@ -638,9 +643,16 @@ public class Shop {
                                     ItemStack item = Shopy.getInstance().createItemWithLore(shopItem.getIcon(), "§9" + itemName, beschreibung);
                                     ItemMeta meta = item.getItemMeta();
 
-                                    /* itemschaden mideifiziren */
+                                    // Entferne alle existierenden Attribute
+                                    meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE);
+
+                                    // Füge einen neuen Angriffsschaden-Modifier hinzu
                                     AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", shopItem.getSchaden(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
                                     meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
+
+                                    AttributeModifier speedModifier = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", shopItem.getAngriffsgeschwindigkeit(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+                                    meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, speedModifier);
+
                                     item.setItemMeta(meta);
 
                                     contents.update(slot, item);
@@ -812,6 +824,7 @@ public class Shop {
 
             if(shopItem.getId() == id){
                 CompletableFuture.runAsync(() -> {
+                    Shopy.getInstance().getMySQLConntion().query("DELETE FROM shop_item_werte WHERE item  = '" + id +"'");
                     Shopy.getInstance().getMySQLConntion().query("DELETE FROM shop_item WHERE id = '" + id +"'");
                 });
 

@@ -127,10 +127,12 @@ public class InventoryClickListenerWerkbank implements Listener {
                     /*Platz halter ID erzeugen zwischen -100 und -1*/
                     Random random = new Random();
                     int platzhalterID = random.nextInt(95) - 100;
-                    double waffenSchaden = random.nextDouble( realItem.getMaxSchaden() - realItem.getMinSchaden() + 1) + realItem.getMinSchaden();
+
+                    double waffenSchaden = realItem.getMinSchaden() + (realItem.getMaxSchaden() - realItem.getMinSchaden()) * random.nextDouble();
+                    double waffenAngriffsgeschwindigkeit = realItem.getMinAngriffsgeschwindigkeit() + (realItem.getMaxAngriffsgeschwindigkeit() - realItem.getMinAngriffsgeschwindigkeit()) * random.nextDouble();
 
 
-                    spielerShop.getShopItems().add(new ShopItem(platzhalterID, realItem.getItemKategorie(), realItem.getName(), realItem.getBeschreibung(), realItem.getIcon(), realItem.getItemSeltenheit(), waffenSchaden));
+                    spielerShop.getShopItems().add(new ShopItem(platzhalterID, realItem.getItemKategorie(), realItem.getName(), realItem.getBeschreibung(), realItem.getIcon(), realItem.getItemSeltenheit(), waffenSchaden, waffenAngriffsgeschwindigkeit));
                     CompletableFuture.runAsync(() -> {
                         Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item (shop, item) VALUES ('" + spielerShop.getShopId() + "', '" + realItem.getId() + "')");
 
@@ -143,7 +145,7 @@ public class InventoryClickListenerWerkbank implements Listener {
                                 spielerShop.getShopItemById(platzhalterID).setId(queryGetItemIdResult.getInt("id"));
 
                                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_werte (item, schlussel, inhalt) VALUES ('" + queryGetItemIdResult.getInt("id") + "', 'schaden','" + waffenSchaden + "')");
-
+                                Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_werte (item, schlussel, inhalt) VALUES ('" + queryGetItemIdResult.getInt("id") + "', 'angriffsgeschwindigkeit','" + waffenAngriffsgeschwindigkeit + "')");
                             }
                         } catch (SQLException ex) {
                             throw new RuntimeException(ex);

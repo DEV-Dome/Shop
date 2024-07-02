@@ -5,6 +5,8 @@ import de.dome.shopy.utils.items.ItemKategorie;
 import de.dome.shopy.utils.items.ItemSeltenheit;
 import org.bukkit.Material;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 public class ShopItem {
@@ -16,15 +18,17 @@ public class ShopItem {
     Material icon;
     ItemSeltenheit itemSeltenheit;
     double schaden = 0;
+    double angriffsgeschwindigkeit = 0;
 
-    public ShopItem(int id, ItemKategorie itemKategorie, String name, String beschreibung, Material icon, ItemSeltenheit itemSeltenheit, double schaden) {
+    public ShopItem(int id, ItemKategorie itemKategorie, String name, String beschreibung, Material icon, ItemSeltenheit itemSeltenheit, double schaden, double angriffsgeschwindigkeit) {
         this.id = id;
         this.itemKategorie = itemKategorie;
         this.name = name;
         this.beschreibung = beschreibung;
         this.icon = icon;
         this.itemSeltenheit = itemSeltenheit;
-        this.schaden = Math.round(schaden);
+        this.schaden = roundToTwoDecimalPlaces(schaden);
+        this.angriffsgeschwindigkeit = roundToTwoDecimalPlaces(angriffsgeschwindigkeit);
     }
 
     public int getId() {
@@ -56,5 +60,15 @@ public class ShopItem {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public double getAngriffsgeschwindigkeit() {
+        return angriffsgeschwindigkeit;
+    }
+
+    private double roundToTwoDecimalPlaces(double value) {
+        BigDecimal bd = new BigDecimal(Double.toString(value));
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 }
