@@ -64,6 +64,7 @@ public class InventoryClickListenerItemLager implements Listener {
                             int itemID = Integer.parseInt(item.getItemMeta().getLore().get(0).split(":")[1].substring(1));
                             ShopItem shopItem = spielerShop.getShopItemById(itemID);
 
+
                             /* Check wurde das Item gefunden */
                             if(shopItem != null && itemID != -1){
                                 spielerShop.delteShopItemById(itemID);
@@ -83,11 +84,21 @@ public class InventoryClickListenerItemLager implements Listener {
                         /* Check ob, dass Item schon genommen wurde */
                         if(!p.getInventory().contains(item)){
                             p.getInventory().addItem(item);
+
+                            /* ShopItem holen und haltbarkeit um 1 runtersetzten */
+                            int itemID = Integer.parseInt(item.getItemMeta().getLore().get(0).split(":")[1].substring(1));
+                            ShopItem shopItem = spielerShop.getShopItemById(itemID);
+
+                            if(shopItem.HaltbarkeitVerringern()){
+                                /* Item wurde zerstört */
+                                p.sendMessage(Shopy.getInstance().getPrefix() + "Die Haltbarkeit dieses Items ist auf 0 gekommen. Deswegen wurde es zerstört!");
+                                p.playSound(p, Sound.ENTITY_ITEM_BREAK,  1,1);
+                            }else {
+                                p.playSound(p, Sound.ENTITY_ITEM_PICKUP,  1,1);
+                            }
                         }else {
                             p.sendMessage(Shopy.getInstance().getPrefix() + "Du hast dir dieses Item bereits genommen!");
                         }
-
-                        p.playSound(p, Sound.ENTITY_ITEM_PICKUP,  1,1);
                     }
                 }
             }

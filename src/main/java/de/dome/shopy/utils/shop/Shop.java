@@ -174,15 +174,17 @@ public class Shop {
                     while(resultItemLager.next()){
                         double schaden = 0;
                         double angriffsgeschwindigkeit = 0;
+                        int haltbarkeit = 0;
 
                         String queryItemLagerItemWerte = "SELECT * FROM shop_item_werte WHERE item = " + resultItemLager.getInt("sid");
                         ResultSet resultItemLagerItemWerte = Shopy.getInstance().getMySQLConntion().resultSet(queryItemLagerItemWerte);
                         while(resultItemLagerItemWerte.next()){
                             if(resultItemLagerItemWerte.getString("schlussel").equals("schaden")) schaden = Double.parseDouble(resultItemLagerItemWerte.getString("inhalt"));
                             if(resultItemLagerItemWerte.getString("schlussel").equals("angriffsgeschwindigkeit")) angriffsgeschwindigkeit = Double.parseDouble(resultItemLagerItemWerte.getString("inhalt"));
+                            if(resultItemLagerItemWerte.getString("schlussel").equals("haltbarkeit")) haltbarkeit = Integer.parseInt(resultItemLagerItemWerte.getString("inhalt"));
                         }
 
-                        ShopItem newItem = new ShopItem(resultItemLager.getInt("shop_item.id"), ItemKategorie.getItemKategorieById(resultItemLager.getInt("item_kategorie")), resultItemLager.getString("name"), resultItemLager.getString("beschreibung"), Material.getMaterial(resultItemLager.getString("icon")), ItemSeltenheit.getItemStufeById(resultItemLager.getInt("item_seltenheit")), schaden, angriffsgeschwindigkeit);
+                        ShopItem newItem = new ShopItem(resultItemLager.getInt("shop_item.id"), ItemKategorie.getItemKategorieById(resultItemLager.getInt("item_kategorie")), resultItemLager.getString("name"), resultItemLager.getString("beschreibung"), Material.getMaterial(resultItemLager.getString("icon")), ItemSeltenheit.getItemStufeById(resultItemLager.getInt("item_seltenheit")), schaden, angriffsgeschwindigkeit, haltbarkeit);
                         shopItems.add(newItem);
                     }
                 }
@@ -538,9 +540,12 @@ public class Shop {
 
                                     /* Item laden */
                                     ShopItem shopItem = getShopItems().get(i);
+                                    if(shopItem.getHaltbarkeit() <= 0) continue;
+
                                     ArrayList<String> beschreibung = new ArrayList<>();
                                     /* ID anzeigen*/
                                     beschreibung.add("§7Item-ID: " + shopItem.getId() + "");
+                                    beschreibung.add("§7Haltbarkeit: §e" + shopItem.getHaltbarkeit() + "");
                                     /* Actionen auflisten*/
                                     beschreibung.add("");
 
@@ -567,6 +572,7 @@ public class Shop {
 
                                     // Entferne alle existierenden Attribute
                                     meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE);
+                                    meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_SPEED);
 
                                     // Füge einen neuen Angriffsschaden-Modifier hinzu
                                     AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", shopItem.getSchaden(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
@@ -574,7 +580,6 @@ public class Shop {
 
                                     AttributeModifier speedModifier = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", shopItem.getAngriffsgeschwindigkeit(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
                                     meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, speedModifier);
-
                                     item.setItemMeta(meta);
 
                                     contents.set(slot, Shopy.getInstance().createItemWithLore(shopItem.getIcon(), "§9" + itemName, beschreibung));
@@ -618,10 +623,12 @@ public class Shop {
                                 if(i <= getShopItems().size() - 1) {
                                     /* Item laden */
                                     ShopItem shopItem = getShopItems().get(i);
+                                    if(shopItem.getHaltbarkeit() <= 0) continue;
 
                                     ArrayList<String> beschreibung = new ArrayList<>();
                                     /* ID anzeigen*/
                                     beschreibung.add("§7Item-ID: " + shopItem.getId() + "");
+                                    beschreibung.add("§7Haltbarkeit: §e" + shopItem.getHaltbarkeit() + "");
                                     /* Actionen auflisten*/
                                     beschreibung.add("");
 
@@ -645,6 +652,7 @@ public class Shop {
 
                                     // Entferne alle existierenden Attribute
                                     meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE);
+                                    meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_SPEED);
 
                                     // Füge einen neuen Angriffsschaden-Modifier hinzu
                                     AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", shopItem.getSchaden(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
@@ -652,7 +660,6 @@ public class Shop {
 
                                     AttributeModifier speedModifier = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", shopItem.getAngriffsgeschwindigkeit(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
                                     meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, speedModifier);
-
                                     item.setItemMeta(meta);
 
                                     contents.update(slot, item);

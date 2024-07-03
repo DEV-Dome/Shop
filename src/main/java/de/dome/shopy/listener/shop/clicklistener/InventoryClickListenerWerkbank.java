@@ -132,7 +132,7 @@ public class InventoryClickListenerWerkbank implements Listener {
                     double waffenAngriffsgeschwindigkeit = realItem.getMinAngriffsgeschwindigkeit() + (realItem.getMaxAngriffsgeschwindigkeit() - realItem.getMinAngriffsgeschwindigkeit()) * random.nextDouble();
 
 
-                    spielerShop.getShopItems().add(new ShopItem(platzhalterID, realItem.getItemKategorie(), realItem.getName(), realItem.getBeschreibung(), realItem.getIcon(), realItem.getItemSeltenheit(), waffenSchaden, waffenAngriffsgeschwindigkeit));
+                    spielerShop.getShopItems().add(new ShopItem(platzhalterID, realItem.getItemKategorie(), realItem.getName(), realItem.getBeschreibung(), realItem.getIcon(), realItem.getItemSeltenheit(), waffenSchaden, waffenAngriffsgeschwindigkeit, 3));
                     CompletableFuture.runAsync(() -> {
                         Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item (shop, item) VALUES ('" + spielerShop.getShopId() + "', '" + realItem.getId() + "')");
 
@@ -146,6 +146,7 @@ public class InventoryClickListenerWerkbank implements Listener {
 
                                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_werte (item, schlussel, inhalt) VALUES ('" + queryGetItemIdResult.getInt("id") + "', 'schaden','" + waffenSchaden + "')");
                                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_werte (item, schlussel, inhalt) VALUES ('" + queryGetItemIdResult.getInt("id") + "', 'angriffsgeschwindigkeit','" + waffenAngriffsgeschwindigkeit + "')");
+                                Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_werte (item, schlussel, inhalt) VALUES ('" + queryGetItemIdResult.getInt("id") + "', 'haltbarkeit','3')");
                             }
                         } catch (SQLException ex) {
                             throw new RuntimeException(ex);

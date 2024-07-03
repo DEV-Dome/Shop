@@ -149,7 +149,7 @@ public class Item {
                         if(resultItemWerte.getString("schlussel").equals("freigeschlatet_menge")) newItem.freischaltMenge = Integer.parseInt(resultItemWerte.getString("inhalt"));
 
                         if(resultItemWerte.getString("schlussel").equals("min_schaden")) newItem.minSchaden = Double.parseDouble(resultItemWerte.getString("inhalt"));
-                        if(resultItemWerte.getString("schlussel").equals("min_schaden")) newItem.minSchaden = Double.parseDouble(resultItemWerte.getString("inhalt"));
+                        if(resultItemWerte.getString("schlussel").equals("max_schaden")) newItem.maxSchaden = Double.parseDouble(resultItemWerte.getString("inhalt"));
 
                         if(resultItemWerte.getString("schlussel").equals("min_angriffsgeschwindigkeit")) newItem.minAngriffsgeschwindigkeit = Double.parseDouble(resultItemWerte.getString("inhalt"));
                         if(resultItemWerte.getString("schlussel").equals("max_angriffsgeschwindigkeit")) newItem.maxAngriffsgeschwindigkeit = Double.parseDouble(resultItemWerte.getString("inhalt"));
