@@ -355,7 +355,9 @@ public class Shop {
                         }
 
                         String itemName = "§9" + item.getName() + " " + item.getItemSeltenheit().getFarbe() + " [" + item.getItemSeltenheit().getName() + "]";
-                        contents.set(solt, Shopy.getInstance().createItemWithLore(item.getIcon(), itemName, beschreibung));
+
+
+                        contents.set(solt, Shopy.getInstance().createItemWithLore(item.getIcon(), itemName, beschreibung, false, true));
                     } else {
                         String FreischlatTyp = "§cNicht bekannt";
                         Item freischaltItem = Item.getItemByFreischaltItem(item);
@@ -388,7 +390,8 @@ public class Shop {
 
                     zaheler++;
                     solt += 1;
-                    if (zaheler == ((seite + 1) * 5)) {
+
+                    if (zaheler >= 5) {
                         letztesItemGesetzt = true;
                         break;
                     }
@@ -402,8 +405,7 @@ public class Shop {
 
                 /*Menü Regeler */
                 if (seite != 0) contents.set(9, Shopy.getInstance().createItem(Material.ARROW, "§7Letzte Seite"));
-                if (letztesItemGesetzt)
-                    contents.set(17, Shopy.getInstance().createItem(Material.ARROW, "§7Nächste Seite"));
+                if (letztesItemGesetzt) contents.set(17, Shopy.getInstance().createItem(Material.ARROW, "§7Nächste Seite"));
 
                 contents.set(18, Shopy.getInstance().createItem(Material.CRAFTING_TABLE, "§7Zurück zur Übersicht"));
                 contents.set(26, Shopy.getInstance().createItem(Material.BARRIER, "§7Menü Schlissen"));
@@ -455,7 +457,7 @@ public class Shop {
                         }
 
                         String itemName = "§9" + item.getName() + " " + item.getItemSeltenheit().getFarbe() + " [" + item.getItemSeltenheit().getName() + "]";
-                        contents.update(solt, Shopy.getInstance().createItemWithLore(item.getIcon(), itemName, beschreibung));
+                        contents.set(solt, Shopy.getInstance().createItemWithLore(item.getIcon(), itemName, beschreibung, false, true));
                     } else {
                         String FreischlatTyp = "§cNicht bekannt";
                         Item freischaltItem = Item.getItemByFreischaltItem(item);
@@ -488,7 +490,8 @@ public class Shop {
 
                     zaheler++;
                     solt += 1;
-                    if (zaheler == ((seite + 1) * 5)) {
+
+                    if (zaheler >= 5) {
                         break;
                     }
                 }
@@ -730,19 +733,19 @@ public class Shop {
                         /* Menü Items bauen. Sodass diese via Verzauberung anzeigen, welches Menü aktiv ist. */
                         boolean aktivItem = false;
                         if(type.equals("STANDART")) aktivItem = true;
-                        contents.set(47, Shopy.getInstance().createItemWithLore(Material.OAK_WOOD, "§e" + "Herstellungsmaterialien", beschreibung, aktivItem));
+                        contents.set(47, Shopy.getInstance().createItemWithLore(Material.OAK_WOOD, "§e" + "Herstellungsmaterialien", beschreibung, aktivItem, false));
 
                         aktivItem = false;
                         if(type.equals("DUNGEON-LOOT")) aktivItem = true;
-                        contents.set(48, Shopy.getInstance().createItemWithLore(Material.AMETHYST_SHARD, "§e" + "Dungoenmaterialien", beschreibung, aktivItem));
+                        contents.set(48, Shopy.getInstance().createItemWithLore(Material.AMETHYST_SHARD, "§e" + "Dungoenmaterialien", beschreibung, aktivItem, false));
 
                         aktivItem = false;
                         if(type.equals("SPECIAL")) aktivItem = true;
-                        contents.set(49, Shopy.getInstance().createItemWithLore(Material.ECHO_SHARD, "§e" + "Specialmatrialen", beschreibung, aktivItem));
+                        contents.set(49, Shopy.getInstance().createItemWithLore(Material.ECHO_SHARD, "§e" + "Specialmatrialen", beschreibung, aktivItem, false));
 
                         aktivItem = false;
                         if(type.equals("AUFWERTER")) aktivItem = true;
-                        contents.set(50, Shopy.getInstance().createItemWithLore(Material.BLUE_DYE, "§e" + "Aufwerter", beschreibung, aktivItem));
+                        contents.set(50, Shopy.getInstance().createItemWithLore(Material.BLUE_DYE, "§e" + "Aufwerter", beschreibung, aktivItem, false));
                     }
                 }).build(Shopy.getInstance()).open(owner);
     }

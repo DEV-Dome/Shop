@@ -26,6 +26,7 @@ import me.filoghost.holographicdisplays.api.HolographicDisplaysAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -121,6 +122,9 @@ public class Shopy extends JavaPlugin {
                     if(item == null) continue;
                     all.getInventory().addItem(item);
                 }
+                all.getActivePotionEffects().clear();
+                all.setHealth(all.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                all.setFireTicks(0);
             }
 
             all.kick(component);
@@ -235,14 +239,18 @@ public class Shopy extends JavaPlugin {
 
         return item;
     }
-    public ItemStack createItemWithLore(Material m, String name, ArrayList<String> lore) { return createItemWithLore(m, name, lore, false); }
-    public ItemStack createItemWithLore(Material m, String name, ArrayList<String> lore, boolean verzaubert) {
+    public ItemStack createItemWithLore(Material m, String name, ArrayList<String> lore) { return createItemWithLore(m, name, lore, false, false); }
+    public ItemStack createItemWithLore(Material m, String name, ArrayList<String> lore, boolean verzaubert, boolean ohneSchaden) {
         ItemStack item = new ItemStack(m);
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(name);
         meta.setLore(lore);
         if(verzaubert) meta.addEnchant(Enchantment.ARROW_FIRE, 10, true);
+        if(ohneSchaden){
+            meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE);
+            meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_SPEED);
+        }
 
         item.setItemMeta(meta);
 

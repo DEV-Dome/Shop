@@ -253,13 +253,13 @@ public class Dungeon {
         switch (dungeonLevel){
             case 1:
                 spawnMenge = 25;
-                minLeben = 10;
+                minLeben = 15;
                 maxLeben = 35;
                 break;
             case 2:
                 spawnMenge = 50;
-                minLeben = 25;
-                maxLeben = 75;
+                minLeben = 40;
+                maxLeben = 50;
 
                 /* zusätzliche Mob Typen Anpassen */
                 mobTypes.add(Vindicator.class);
@@ -267,8 +267,8 @@ public class Dungeon {
                 break;
             case 3:
                 spawnMenge = 100;
-                minLeben = 45;
-                maxLeben = 150;
+                minLeben = 70;
+                maxLeben = 100;
 
                 /* zusätzliche Mob Typen Anpassen */
                 mobTypes.add(Vindicator.class);
@@ -279,8 +279,8 @@ public class Dungeon {
                 break;
             case 4:
                 spawnMenge = 200;
-                minLeben = 75;
-                maxLeben = 200;
+                minLeben = 100;
+                maxLeben = 125;
 
                 /*  Mob Typen Anpassen */
                 mobTypes.add(Vindicator.class);
@@ -309,30 +309,37 @@ public class Dungeon {
             spawnMonster.setCustomName("§9" + generiereZufälligenGengerNamen());
 
             dungeonEntitys.add(spawnMonster);
+
+            int monsterleben = minLeben + random.nextInt(maxLeben - minLeben + 1);
+
             /* Monster Spezifische sachen*/
             if(spawnMonster instanceof Zombie){
                 Zombie spawnMonsterDetailliert = (Zombie) spawnMonster;
                 spawnMonsterDetailliert.setCanPickupItems(false);
-                spawnMonsterDetailliert.setMaxHealth(random.nextInt(minLeben, maxLeben));
+                spawnMonsterDetailliert.setMaxHealth(monsterleben);
+                spawnMonsterDetailliert.setHealth(monsterleben);
                 spawnMonsterDetailliert.setAdult();
                 spawnMonsterDetailliert.setJumping(false);
             }
             if(spawnMonster instanceof Skeleton){
                 Skeleton spawnMonsterDetailliert = (Skeleton) spawnMonster;
                 spawnMonsterDetailliert.setCanPickupItems(false);
-                spawnMonsterDetailliert.setMaxHealth(random.nextInt(minLeben, maxLeben));
+                spawnMonsterDetailliert.setMaxHealth(monsterleben);
+                spawnMonsterDetailliert.setHealth(monsterleben);
                 spawnMonsterDetailliert.setJumping(false);
             }
             if(spawnMonster instanceof Spider){
                 Spider spawnMonsterDetailliert = (Spider) spawnMonster;
                 spawnMonsterDetailliert.setCanPickupItems(false);
-                spawnMonsterDetailliert.setMaxHealth(random.nextInt(minLeben, maxLeben));
+                spawnMonsterDetailliert.setMaxHealth(monsterleben);
+                spawnMonsterDetailliert.setHealth(monsterleben);
                 spawnMonsterDetailliert.setJumping(false);
             }
             if(spawnMonster instanceof Drowned){
                 Drowned spawnMonsterDetailliert = (Drowned) spawnMonster;
                 spawnMonsterDetailliert.setCanPickupItems(false);
-                spawnMonsterDetailliert.setMaxHealth(random.nextInt(minLeben, maxLeben));
+                spawnMonsterDetailliert.setMaxHealth(monsterleben);
+                spawnMonsterDetailliert.setHealth(monsterleben);
                 spawnMonsterDetailliert.setAdult();
                 spawnMonsterDetailliert.setJumping(false);
             }

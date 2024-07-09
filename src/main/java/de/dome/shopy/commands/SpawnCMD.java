@@ -4,6 +4,7 @@ import de.dome.shopy.Shopy;
 import de.dome.shopy.commands.welt.LadeWeltCMD;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -46,6 +47,10 @@ public class SpawnCMD  implements CommandExecutor {
                                             Shopy.getInstance().rekursivLoeschen(file);
                                         });
                                     }
+                                    p.getActivePotionEffects().clear();
+                                    p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                                    p.setFireTicks(0);
+
                                     Shopy.getInstance().getGeladeneTempWelten().remove(p.getUniqueId());
                                 }
                                 if(Shopy.getInstance().getSpielerDungeon().containsKey(p.getUniqueId())){

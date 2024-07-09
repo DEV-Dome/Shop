@@ -1,5 +1,3 @@
-INSERT INTO item_kategorie (icon, name, beschreibung, reinfolge) VALUES ('NETHERITE_AXE', 'Äxte', 'Baue und erforsche die mächtigsten Äxte', 1);
-
     INSERT INTO item (item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('1', 'WOODEN_AXE', 'Anfänger Axt I', 'Diese Axt wurde von einem Schreinerlehrling \n hergestellt und dient nun dem Zweck, \n das Schreinerhandwerk zu erlernen.', 1, 1);
         INSERT INTO item_kosten (item, ressource, menge) VALUES (1, 6, 3);
 
@@ -160,7 +158,7 @@ INSERT INTO item_kategorie (icon, name, beschreibung, reinfolge) VALUES ('NETHER
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (9, "freigeschlatet_item", 10);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (9, "freigeschlatet_menge", 20);
 
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (9, "min_schaden", .2.75);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (9, "min_schaden", 2.75);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (9, "max_schaden", 3.25);
 
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (9, "min_angriffsgeschwindigkeit", 0.23);
@@ -184,15 +182,3 @@ INSERT INTO item_kategorie (icon, name, beschreibung, reinfolge) VALUES ('NETHER
 
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (10, "min_angriffsgeschwindigkeit", 0.3);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (10, "max_angriffsgeschwindigkeit", 0.45);
-
-INSERT INTO item_kategorie (icon, name, beschreibung, reinfolge) VALUES ('NETHERITE_SWORD', 'Schwerter', 'Baue und erforsche die mächtigsten Schwerter', 2);
-
-INSERT INTO item_kategorie (icon, name, beschreibung, reinfolge) VALUES ('NETHERITE_HOE', 'Hacken', 'Baue und erforsche die mächtigsten Schaufeln', 3);
-
-INSERT INTO item_kategorie (icon, name, beschreibung, reinfolge) VALUES ('NETHERITE_HELMET', 'Helme', 'Baue und erforsche die mächtigsten Helme', 4);
-
-INSERT INTO item_kategorie (icon, name, beschreibung, reinfolge) VALUES ('NETHERITE_CHESTPLATE', 'Brustplatten', 'Baue und erforsche die mächtigsten Brustplatten', 5);
-
-INSERT INTO item_kategorie (icon, name, beschreibung, reinfolge) VALUES ('NETHERITE_LEGGINGS', 'Hosen', 'Baue und erforsche die mächtigsten Hosen', 6);
-
-INSERT INTO item_kategorie (icon, name, beschreibung, reinfolge) VALUES ('NETHERITE_BOOTS', 'Schuhe', 'Baue und erforsche die mächtigsten Schuhe', 6);

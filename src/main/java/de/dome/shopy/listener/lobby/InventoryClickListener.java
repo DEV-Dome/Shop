@@ -5,6 +5,7 @@ import de.dome.shopy.utils.Dungeon;
 import de.dome.shopy.utils.Ressource;
 import de.dome.shopy.utils.shop.Shop;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -157,6 +158,9 @@ public class InventoryClickListener implements Listener {
                                             if(item == null) continue;
                                             p.getInventory().addItem(item);
                                         }
+                                        p.getActivePotionEffects().clear();
+                                        p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                                        p.setFireTicks(0);
 
                                         Shopy.getInstance().getSpielerDungeon().remove(p.getUniqueId());
                                     }
