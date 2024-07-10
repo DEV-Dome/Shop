@@ -10,6 +10,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
@@ -47,7 +48,10 @@ public class SpawnCMD  implements CommandExecutor {
                                             Shopy.getInstance().rekursivLoeschen(file);
                                         });
                                     }
-                                    p.getActivePotionEffects().clear();
+                                    for (PotionEffect effect : p.getActivePotionEffects()) {
+                                        p.removePotionEffect(effect.getType());
+                                    }
+
                                     p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
                                     p.setFireTicks(0);
 

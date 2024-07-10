@@ -335,6 +335,7 @@ public class Shop {
 
                         beschreibung.add("§7Kosten:");
                         for (ItemRessourecenKosten itr : item.getRessourecsKostenList()) {
+                            if(itr == null) continue;
                             beschreibung.add("  §7- §e" + itr.getMenge() + " §7" + itr.getRessoure().getName());
                         }
 

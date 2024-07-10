@@ -27,13 +27,16 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
 
 import java.io.File;
 import java.io.IOException;
@@ -122,7 +125,10 @@ public class Shopy extends JavaPlugin {
                     if(item == null) continue;
                     all.getInventory().addItem(item);
                 }
-                all.getActivePotionEffects().clear();
+                for (PotionEffect effect : all.getActivePotionEffects()) {
+                    all.removePotionEffect(effect.getType());
+                }
+
                 all.setHealth(all.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
                 all.setFireTicks(0);
             }
@@ -250,6 +256,12 @@ public class Shopy extends JavaPlugin {
         if(ohneSchaden){
             meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE);
             meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_SPEED);
+
+            AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
+
+            AttributeModifier speedModifier = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, speedModifier);
         }
 
         item.setItemMeta(meta);

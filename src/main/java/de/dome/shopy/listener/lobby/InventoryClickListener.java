@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
@@ -158,7 +159,10 @@ public class InventoryClickListener implements Listener {
                                             if(item == null) continue;
                                             p.getInventory().addItem(item);
                                         }
-                                        p.getActivePotionEffects().clear();
+                                        for (PotionEffect effect : p.getActivePotionEffects()) {
+                                            p.removePotionEffect(effect.getType());
+                                        }
+
                                         p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
                                         p.setFireTicks(0);
 

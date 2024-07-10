@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 public class Item {
     int id;
     ItemKategorie itemKategorie;
-    String name;
+    String name = "Nicht geladen ....";
     String beschreibung;
     Material icon;
     ItemSeltenheit itemSeltenheit;

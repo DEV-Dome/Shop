@@ -1,8 +1,9 @@
+-- SEITE 1: Holz Schwerter
 INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('100', '2', 'WOODEN_SWORD', 'Knappen Schwert', 'Dieses Schert wird mal einen Ritter gehören!', 1, 1);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (100, 6, 3);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (100, "shop_xp", 1);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (100, "kategorie_xp", 5);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (100, "kategorie_xp", 2);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (100, "meister_menge", 500);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (100, "immer_freigeschlatet", "ja");
 
@@ -13,14 +14,14 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (100, "min_schaden", 1);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (100, "max_schaden", 2);
 
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (100, "min_angriffsgeschwindigkeit", 0.2);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (100, "max_angriffsgeschwindigkeit", 0.4);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (100, "min_angriffsgeschwindigkeit", 0.15);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (100, "max_angriffsgeschwindigkeit", 0.3);
 
 INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('102', '2', 'WOODEN_SWORD', 'Holzschafft', 'Ein langes Stückholz!', 1, 2);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (102, 6, 5);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (102, "shop_xp", 1);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (102, "kategorie_xp", 7);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (102, "kategorie_xp", 5);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (102, "meister_menge", 500);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (102, "immer_freigeschlatet", "nein");
 
@@ -39,7 +40,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_kosten (item, ressource, menge) VALUES (103, 13, 2);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (103, "shop_xp", 1);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (103, "kategorie_xp", 3);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (103, "kategorie_xp", 2);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (103, "meister_menge", 500);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (103, "immer_freigeschlatet", "nein");
 
@@ -57,7 +58,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_kosten (item, ressource, menge) VALUES (104, 6, 6);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (104, "shop_xp", 1);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (104, "kategorie_xp", 7);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (104, "kategorie_xp", 3);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (104, "meister_menge", 500);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (104, "immer_freigeschlatet", "nein");
 
@@ -76,7 +77,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_kosten (item, ressource, menge) VALUES (105, 11, 1);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (105, "shop_xp", 1);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (105, "kategorie_xp", 8);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (105, "kategorie_xp", 5);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (105, "meister_menge", 500);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (105, "immer_freigeschlatet", "nein");
 
@@ -414,7 +415,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (120, "min_angriffsgeschwindigkeit", 0.61);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (120, "max_angriffsgeschwindigkeit", 0.75);
 
--- SEITE 5: Diamnd Schwerter
+-- SEITE 5: Diamanten Schwerter
 INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('121', '2', 'DIAMOND_SWORD', 'Das Prachtstück', 'Dieses Schwert beinhaltet\n jeden möglichen Edelstein! ', 2, 21);
         INSERT INTO item_kosten (item, ressource, menge) VALUES (121, 6, 3);
         INSERT INTO item_kosten (item, ressource, menge) VALUES (121, 1, 5);
@@ -424,7 +425,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
         INSERT INTO item_kosten (item, ressource, menge) VALUES (121, 27, 1);
 
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (121, "shop_xp", 1);
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (121, "kategorie_xp", 20);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (121, "kategorie_xp", 22);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (121, "meister_menge", 500);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (121, "immer_freigeschlatet", "nein");
 
