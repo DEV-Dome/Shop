@@ -8,7 +8,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (100, "immer_freigeschlatet", "ja");
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (100, "freigeschlatet_typ", "STANDART");
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (100, "freigeschlatet_item", 101);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (100, "freigeschlatet_item", 102);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (100, "freigeschlatet_menge", 10);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (100, "min_schaden", 1);
