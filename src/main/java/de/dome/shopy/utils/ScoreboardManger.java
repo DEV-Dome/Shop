@@ -12,7 +12,7 @@ public class ScoreboardManger {
 
     public void setScoreBoard(Player p) {
         Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
-        Objective obj = board.registerNewObjective("SlowMC", "shopy", "§eSlowMC - Shopy");
+        Objective obj = board.registerNewObjective("shopy", "shopy", "§9Shopy");
         obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 
         Score text = obj.getScore("§1");

@@ -1,4 +1,4 @@
--- SEITE 1: Holz Schwerter
+-- SEITE 1: Holz Schwerter (Schaden)
 INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('100', '2', 'WOODEN_SWORD', 'Knappen Schwert', 'Dieses Schert wird mal einen Ritter gehören!', 1, 1);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (100, 6, 3);
 
@@ -21,7 +21,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_kosten (item, ressource, menge) VALUES (102, 6, 5);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (102, "shop_xp", 1);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (102, "kategorie_xp", 5);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (102, "kategorie_xp", 2);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (102, "meister_menge", 500);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (102, "immer_freigeschlatet", "nein");
 

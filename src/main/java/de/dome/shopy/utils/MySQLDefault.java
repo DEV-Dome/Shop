@@ -134,7 +134,7 @@ public class MySQLDefault {
                     }
 
                     /* Äxte */
-                    querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/loader/ItemLoaderAxte.sql").split(";");
+                    querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/loader/items/ItemLoaderAxte.sql").split(";");
                     for(String query : querys){
                         query = query.trim();
                         if(query.equals("") || query.equals(" ")) continue;
@@ -143,7 +143,16 @@ public class MySQLDefault {
                     }
 
                     /* Schwerter */
-                    querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/loader/ItemLoaderSchwerter.sql").split(";");
+                    querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/loader/items/ItemLoaderSchwerter.sql").split(";");
+                    for(String query : querys){
+                        query = query.trim();
+                        if(query.equals("") || query.equals(" ")) continue;
+
+                        Shopy.getInstance().getMySQLConntion().query(query);
+                    }
+
+                    /* Hacke */
+                    querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/loader/items/ItemLoaderHacke.sql").split(";");
                     for(String query : querys){
                         query = query.trim();
                         if(query.equals("") || query.equals(" ")) continue;

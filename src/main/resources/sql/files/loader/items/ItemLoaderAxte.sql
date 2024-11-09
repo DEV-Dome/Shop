@@ -1,4 +1,4 @@
--- SEITE 2: Holz Axt
+-- SEITE 2: Holz Axt (Ausgeglichen)
 INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('1', '1', 'WOODEN_AXE', 'Anfänger Axt I', 'Diese Axt wurde von einem Schreinerlehrling \n hergestellt und dient nun dem Zweck, \n das Schreinerhandwerk zu erlernen.', 1, 1);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (1, 6, 3);
 
@@ -353,7 +353,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
 INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('18', '1', 'GOLDEN_AXE', 'Kunstgold Axt', 'Diese Axt besteht nicht aus echtem Gold!', 1, 18);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (18, 6, 2);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (18, 1, 2);
-    INSERT INTO item_kosten (item, ressource, menge) VALUES (20, 2, 2);
+    INSERT INTO item_kosten (item, ressource, menge) VALUES (18, 2, 2);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (18, 3, 5);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (18, 12, 2);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (18, 16, 1);
@@ -373,7 +373,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (18, "min_angriffsgeschwindigkeit", 0.78);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (18, "max_angriffsgeschwindigkeit", 0.85);
 
-INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('19', '1', 'GOLDEN_AXE', 'Sparschwein schlachter', 'Kann jedes Sparschwein tötem.', 1, 19);
+INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('19', '1', 'GOLDEN_AXE', 'Sparschwein schlachter', 'Kann jedes Sparschwein töten.', 1, 19);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (19, 6, 3);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (19, 1, 3);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (20, 2, 2);
