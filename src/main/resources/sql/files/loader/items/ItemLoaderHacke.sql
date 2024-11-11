@@ -12,7 +12,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (200, "freigeschlatet_menge", 10);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (200, "min_schaden", 0.1);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (200, "max_schaden", 0.2);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (200, "max_schaden", 0.25);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (200, "min_angriffsgeschwindigkeit", 0.6);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (200, "max_angriffsgeschwindigkeit", 0.75);
@@ -30,7 +30,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (202, "freigeschlatet_menge", 15);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (202, "min_schaden", 0.15);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (202, "max_schaden", 0.25);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (202, "max_schaden", 0.4);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (202, "min_angriffsgeschwindigkeit", 0.65);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (202, "max_angriffsgeschwindigkeit", 0.75);
@@ -49,7 +49,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (3, "freigeschlatet_menge", 0);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (203, "min_schaden", 0.1);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (203, "max_schaden", 0.1);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (203, "max_schaden", 0.2);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (203, "min_angriffsgeschwindigkeit", 0.3);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (203, "max_angriffsgeschwindigkeit", 0.45);
@@ -66,8 +66,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (204, "freigeschlatet_item", 205);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (204, "freigeschlatet_menge", 20);
 
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (204, "min_schaden", 0.19);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (204, "max_schaden", 0.4);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (204, "min_schaden", 0.2);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (204, "max_schaden", 0.6);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (204, "min_angriffsgeschwindigkeit", 0.5);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (204, "max_angriffsgeschwindigkeit", 0.8);
@@ -85,8 +85,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (205, "freigeschlatet_item", 206);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (205, "freigeschlatet_menge", 20);
 
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (205, "min_schaden", 0.3);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (205, "max_schaden", 0.65);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (205, "min_schaden", 0.45);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (205, "max_schaden", 0.8);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (205, "min_angriffsgeschwindigkeit", 0.65);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (205, "max_angriffsgeschwindigkeit", 1);
@@ -104,8 +104,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (206, "freigeschlatet_item", 207);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (206, "freigeschlatet_menge", 22);
 
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (206, "min_schaden", 0.65);
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (206, "max_schaden", 0.7);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (206, "min_schaden", 0.85);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (206, "max_schaden", 1);
 
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (206, "min_angriffsgeschwindigkeit", 0.8);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (206, "max_angriffsgeschwindigkeit", 1.2);
@@ -124,8 +124,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (207, "freigeschlatet_item", 208);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (207, "freigeschlatet_menge", 23);
 
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (207, "min_schaden", 0.5);
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (207, "max_schaden", 0.8);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (207, "min_schaden", 0.9);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (207, "max_schaden", 1.25);
 
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (207, "min_angriffsgeschwindigkeit", 1.2);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (207, "max_angriffsgeschwindigkeit", 1.5);
@@ -145,8 +145,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (208, "freigeschlatet_item", 210);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (208, "freigeschlatet_menge", 25);
 
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (208, "min_schaden", 0.6);
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (208, "max_schaden", 0.75);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (208, "min_schaden", 1);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (208, "max_schaden", 1.4);
 
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (208, "min_angriffsgeschwindigkeit", 0.95);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (208, "max_angriffsgeschwindigkeit", 1.3);
@@ -165,8 +165,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (209, "freigeschlatet_item", ,0);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (209, "freigeschlatet_menge", 0);
 
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (209, "min_schaden", 0.6);
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (209, "max_schaden", 0.8);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (209, "min_schaden", 1.3);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (209, "max_schaden", 1.7);
 
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (209, "min_angriffsgeschwindigkeit", 1);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (209, "max_angriffsgeschwindigkeit", 1.4);
@@ -186,8 +186,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (210, "freigeschlatet_item", 212);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (210, "freigeschlatet_menge", 30);
 
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (210, "min_schaden", 0.75);
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (210, "max_schaden", 0.9);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (210, "min_schaden", 1.25);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (210, "max_schaden", 1.8);
 
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (210, "min_angriffsgeschwindigkeit", 1);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (210, "max_angriffsgeschwindigkeit", 1.5);
@@ -208,8 +208,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (211, "freigeschlatet_item", ,0);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (211, "freigeschlatet_menge", 0);
 
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (211, "min_schaden", 1);
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (211, "max_schaden", 1.3);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (211, "min_schaden", 1.9);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (211, "max_schaden", 2.1);
 
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (211, "min_angriffsgeschwindigkeit", 1.85);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (211, "max_angriffsgeschwindigkeit", 2.1);
@@ -229,8 +229,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (212, "freigeschlatet_item", 213);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (212, "freigeschlatet_menge", 34);
 
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (212, "min_schaden", 0.8);
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (212, "max_schaden", 1);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (212, "min_schaden", 1.95);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (212, "max_schaden", 2.3);
 
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (212, "min_angriffsgeschwindigkeit", 1.1);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (212, "max_angriffsgeschwindigkeit", 1.7);
@@ -250,8 +250,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (213, "freigeschlatet_item", 214);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (213, "freigeschlatet_menge", 35);
 
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (213, "min_schaden", 0.85);
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (213, "max_schaden", 1);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (213, "min_schaden", 2);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (213, "max_schaden", 2.8);
 
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (213, "min_angriffsgeschwindigkeit", 1.25);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (213, "max_angriffsgeschwindigkeit", 1.75);
@@ -271,8 +271,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (214, "freigeschlatet_item", 215);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (214, "freigeschlatet_menge", 37);
 
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (214, "min_schaden", 0.75);
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (214, "max_schaden", 1.2);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (214, "min_schaden", 2.3);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (214, "max_schaden", 2.5);
 
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (214, "min_angriffsgeschwindigkeit", 1.45);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (214, "max_angriffsgeschwindigkeit", 1.85);
@@ -292,8 +292,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (215, "freigeschlatet_item", 216);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (215, "freigeschlatet_menge", 40);
 
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (215, "min_schaden", 0.95);
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (215, "max_schaden", 1.35);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (215, "min_schaden", 2.2);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (215, "max_schaden", 2.7);
 
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (215, "min_angriffsgeschwindigkeit", 1.6);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (215, "max_angriffsgeschwindigkeit", 2);
@@ -315,8 +315,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (216, "freigeschlatet_item", 217);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (216, "freigeschlatet_menge", 42);
 
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (216, "min_schaden", 1);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (216, "max_schaden", 1.35);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (216, "min_schaden", 2.5);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (216, "max_schaden", 2.8);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (216, "min_angriffsgeschwindigkeit", 1.8);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (216, "max_angriffsgeschwindigkeit", 2);
@@ -337,8 +337,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (217, "freigeschlatet_item", 218);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (217, "freigeschlatet_menge", 43);
 
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (217, "min_schaden", 1);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (217, "max_schaden", 1.4);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (217, "min_schaden", 2.6);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (217, "max_schaden", 2.9);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (217, "min_angriffsgeschwindigkeit", 1.9);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (217, "max_angriffsgeschwindigkeit", 2.15);
@@ -359,11 +359,11 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (218, "freigeschlatet_item", 219);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (218, "freigeschlatet_menge", 45);
 
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (218, "min_schaden", 1.2);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (218, "max_schaden", 1.5);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (218, "min_schaden", 2.65);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (218, "max_schaden", 3);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (218, "min_angriffsgeschwindigkeit", 2);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (218, "max_angriffsgeschwindigkeit", 2.2);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (218, "max_angriffsgeschwindigkeit", 2);
 
 INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('219', '3', 'GOLDEN_HOE', 'Hacke des Goblins', 'Diese Hacke wurde von einem\n Goblin geschmiedet!', 1, 19);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (219, 6, 3);
@@ -384,8 +384,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (219, "min_schaden", 1.3);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (219, "max_schaden", 1.55);
 
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (219, "min_angriffsgeschwindigkeit", 2);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (219, "max_angriffsgeschwindigkeit", 2.35);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (219, "min_angriffsgeschwindigkeit", 2.8);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (219, "max_angriffsgeschwindigkeit", 3.1);
 
 INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('220', '3', 'GOLDEN_HOE', 'Hacke des Königs', 'Mit dieser Hacke wurde eins das Gemüse\n für einen König angebaut!', 1, 20);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (220, 6, 3);
@@ -404,8 +404,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (220, "freigeschlatet_item", 221);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (220, "freigeschlatet_menge", 50);
 
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (220, "min_schaden", 1.5);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (220, "max_schaden", 1.7);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (220, "min_schaden", 2.8);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (220, "max_schaden", 3.3);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (220, "min_angriffsgeschwindigkeit", 2.4);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (220, "max_angriffsgeschwindigkeit", 2.5);
@@ -428,8 +428,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (221, "freigeschlatet_item", 222);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (221, "freigeschlatet_menge", 52);
 
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (221, "min_schaden", 1.5);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (221, "max_schaden", 1.8);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (221, "min_schaden", 3);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (221, "max_schaden", 3.55);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (221, "min_angriffsgeschwindigkeit", 2.5);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (221, "max_angriffsgeschwindigkeit", 2.6);
@@ -451,8 +451,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (222, "freigeschlatet_item", 224);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (222, "freigeschlatet_menge", 55);
 
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (222, "min_schaden", 1.55);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (222, "max_schaden", 1.85);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (222, "min_schaden", 3.05);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (222, "max_schaden", 3.7);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (222, "min_angriffsgeschwindigkeit", 2.6);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (222, "max_angriffsgeschwindigkeit", 2.9);
@@ -474,8 +474,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (223, "freigeschlatet_item", 0);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (223, "freigeschlatet_menge", 0);
 
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (225, "min_schaden", 1.7);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (225, "max_schaden", 2);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (225, "min_schaden", 3.8);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (225, "max_schaden", 4);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (225, "min_angriffsgeschwindigkeit", 2.8);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (225, "max_angriffsgeschwindigkeit", 3.6);
@@ -497,8 +497,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (224, "freigeschlatet_item", 225);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (224, "freigeschlatet_menge", 57);
 
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (224, "min_schaden", 1.7);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (224, "max_schaden", 2);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (224, "min_schaden", 3.5);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (224, "max_schaden", 3.9);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (224, "min_angriffsgeschwindigkeit", 3);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (224, "max_angriffsgeschwindigkeit", 3.25);
@@ -520,8 +520,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (225, "freigeschlatet_item", 225);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (225, "freigeschlatet_menge", 60);
 
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (225, "min_schaden", 1.8);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (225, "max_schaden", 2);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (225, "min_schaden", 3.6);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (225, "max_schaden", 4.1);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (225, "min_angriffsgeschwindigkeit", 2.9);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (225, "max_angriffsgeschwindigkeit", 3.5);
@@ -544,8 +544,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (226, "freigeschlatet_item", 228);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (226, "freigeschlatet_menge", 62);
 
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (226, "min_schaden", 2);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (226, "max_schaden", 2.2);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (226, "min_schaden", 3.9);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (226, "max_schaden", 4.15);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (226, "min_angriffsgeschwindigkeit", 3.2);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (226, "max_angriffsgeschwindigkeit", 3.75);
@@ -569,8 +569,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (227, "freigeschlatet_item", 0);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (227, "freigeschlatet_menge", 0);
 
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (227, "min_schaden", 2);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (227, "max_schaden", 2.75);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (227, "min_schaden", 4.2);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (227, "max_schaden", 4.7);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (227, "min_angriffsgeschwindigkeit", 3.8);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (227, "max_angriffsgeschwindigkeit", 4.1);
@@ -593,8 +593,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (228, "freigeschlatet_item", 230);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (228, "freigeschlatet_menge", 65);
 
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (228, "min_schaden", 2);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (228, "max_schaden", 2.25);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (228, "min_schaden", 3.7);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (228, "max_schaden", 4.3);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (228, "min_angriffsgeschwindigkeit", 3.5);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (228, "max_angriffsgeschwindigkeit", 3.85);
@@ -618,8 +618,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (229, "freigeschlatet_item", 0);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (229, "freigeschlatet_menge", 0);
 
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (229, "min_schaden", 1.9);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (229, "max_schaden", 2.1);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (229, "min_schaden", 4);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (229, "max_schaden", 4.6);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (229, "min_angriffsgeschwindigkeit", 4);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (229, "max_angriffsgeschwindigkeit", 4.5);
@@ -642,8 +642,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (230, "freigeschlatet_item", 0);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (230, "freigeschlatet_menge", 0);
 
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (230, "min_schaden", 2.1);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (230, "max_schaden", 2.3);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (230, "min_schaden", 4.2);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (230, "max_schaden", 4.6);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (230, "min_angriffsgeschwindigkeit", 3.7);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (230, "max_angriffsgeschwindigkeit", 4);

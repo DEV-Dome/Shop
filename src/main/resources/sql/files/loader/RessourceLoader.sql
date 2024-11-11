@@ -23,7 +23,7 @@ INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten
 INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('ROTTEN_FLESH', 'Monsterfleisch', 'Das Fleisch eines Monsters ist\n keine geeignete Mahlzeit.\n\n(Kann von allen Monstern fallen gelassen werden)', 'DUNGEON-LOOT', 5, '0', '0');
 
 /* DUNGEON-LOOT Ressource: Zombie Loot */
-INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('SLIME_BALL', 'Zombiesleim', 'Ein ätzender Schleim der alles zersetzten kann.\n(Kann von Zombies fallen gelassen werden)', 'DUNGEON-LOOT', 6, '0', '0');
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('SLIME_BALL', 'Zombieschleim', 'Ein ätzender Schleim der alles zersetzten kann.\n(Kann von Zombies fallen gelassen werden)', 'DUNGEON-LOOT', 6, '0', '0');
 INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('CHARCOAL', 'Zombiedreck', 'Die Hinterlassenschaften eines Zombies.\n(Kann von Zombies fallen gelassen werden)', 'DUNGEON-LOOT', 7, '0', '0');
 
 /* DUNGEON-LOOT Ressource: Skelett Loot */

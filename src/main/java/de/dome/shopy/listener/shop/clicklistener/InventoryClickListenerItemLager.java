@@ -1,18 +1,19 @@
 package de.dome.shopy.listener.shop.clicklistener;
 
 import de.dome.shopy.Shopy;
-import de.dome.shopy.utils.items.Item;
 import de.dome.shopy.utils.shop.Shop;
 import de.dome.shopy.utils.shop.ShopItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -83,6 +84,10 @@ public class InventoryClickListenerItemLager implements Listener {
 
                         /* Check ob, dass Item schon genommen wurde */
                         if(!p.getInventory().contains(item)){
+                            ItemMeta im = item.getItemMeta();
+                            im.setUnbreakable(true);
+                            item.setItemMeta(im);
+
                             p.getInventory().addItem(item);
 
                             /* ShopItem holen und haltbarkeit um 1 runtersetzten */

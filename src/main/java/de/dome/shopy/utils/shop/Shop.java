@@ -458,7 +458,7 @@ public class Shop {
                         }
 
                         String itemName = "§9" + item.getName() + " " + item.getItemSeltenheit().getFarbe() + " [" + item.getItemSeltenheit().getName() + "]";
-                        contents.set(solt, Shopy.getInstance().createItemWithLore(item.getIcon(), itemName, beschreibung, false, true));
+                        contents.update(solt, Shopy.getInstance().createItemWithLore(item.getIcon(), itemName, beschreibung, false, true));
                     } else {
                         String FreischlatTyp = "§cNicht bekannt";
                         Item freischaltItem = Item.getItemByFreischaltItem(item);
@@ -508,9 +508,15 @@ public class Shop {
                 int solt = 10;
                 int zaheler = 0;
                 for(ItemKategorie itemKategorie : ItemKategorie.itemKategorieList){
+
                     ArrayList<String> beschreibung = itemKategorie.getAnzeigeBeschreibung(instance);
+
                     beschreibung.add("");
-                    beschreibung.add(itemKategorie.getBeschreibung());
+                    String[] beschreibungsArray = itemKategorie.getBeschreibung().split("\n");
+                    for (String itemBeschreibung : beschreibungsArray) {
+                        beschreibung.add(itemBeschreibung.trim());
+                    }
+                    beschreibung.add("");
 
                     contents.set(solt, Shopy.getInstance().createItemWithLore(itemKategorie.getIcon(), "§9" + itemKategorie.getName(), beschreibung));
 
