@@ -11,6 +11,8 @@ import org.bukkit.scoreboard.Scoreboard;
 public class ScoreboardManger {
 
     public void setScoreBoard(Player p) {
+        if(!Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())) return;
+
         Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
         Objective obj = board.registerNewObjective("shopy", "shopy", "§9Shopy");
         obj.setDisplaySlot(DisplaySlot.SIDEBAR);

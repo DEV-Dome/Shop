@@ -1,4 +1,4 @@
--- SEITE 2: Holz Axt (Ausgeglichen)
+-- SEITE 1: Holz Axt (Ausgeglichen)
 INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('1', '1', 'WOODEN_AXE', 'Anfänger Axt I', 'Diese Axt wurde von einem Schreinerlehrling \n hergestellt und dient nun dem Zweck, \n das Schreinerhandwerk zu erlernen.', 1, 1);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (1, 6, 3);
 

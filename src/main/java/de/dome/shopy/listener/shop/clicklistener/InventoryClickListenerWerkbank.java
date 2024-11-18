@@ -130,9 +130,10 @@ public class InventoryClickListenerWerkbank implements Listener {
 
                     double waffenSchaden = realItem.getMinSchaden() + (realItem.getMaxSchaden() - realItem.getMinSchaden()) * random.nextDouble();
                     double waffenAngriffsgeschwindigkeit = realItem.getMinAngriffsgeschwindigkeit() + (realItem.getMaxAngriffsgeschwindigkeit() - realItem.getMinAngriffsgeschwindigkeit()) * random.nextDouble();
+                    double ruestung = realItem.getMinRuestung() + (realItem.getMaxRuestung() - realItem.getMinRuestung()) * random.nextDouble();
 
 
-                    spielerShop.getShopItems().add(new ShopItem(platzhalterID, realItem.getItemKategorie(), realItem.getName(), realItem.getBeschreibung(), realItem.getIcon(), realItem.getItemSeltenheit(), waffenSchaden, waffenAngriffsgeschwindigkeit, 3));
+                    spielerShop.getShopItems().add(new ShopItem(platzhalterID, realItem.getItemKategorie(), realItem.getName(), realItem.getBeschreibung(), realItem.getIcon(), realItem.getItemSeltenheit(), waffenSchaden, waffenAngriffsgeschwindigkeit, ruestung, 3));
                     CompletableFuture.runAsync(() -> {
                         Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item (shop, item) VALUES ('" + spielerShop.getShopId() + "', '" + realItem.getId() + "')");
 
@@ -146,6 +147,7 @@ public class InventoryClickListenerWerkbank implements Listener {
 
                                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_werte (item, schlussel, inhalt) VALUES ('" + queryGetItemIdResult.getInt("id") + "', 'schaden','" + waffenSchaden + "')");
                                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_werte (item, schlussel, inhalt) VALUES ('" + queryGetItemIdResult.getInt("id") + "', 'angriffsgeschwindigkeit','" + waffenAngriffsgeschwindigkeit + "')");
+                                Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_werte (item, schlussel, inhalt) VALUES ('" + queryGetItemIdResult.getInt("id") + "', 'ruestung','" + ruestung + "')");
                                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_werte (item, schlussel, inhalt) VALUES ('" + queryGetItemIdResult.getInt("id") + "', 'haltbarkeit','3')");
                             }
                         } catch (SQLException ex) {

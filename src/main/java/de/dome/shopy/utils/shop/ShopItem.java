@@ -21,10 +21,11 @@ public class ShopItem {
     ItemSeltenheit itemSeltenheit;
     double schaden = 0;
     double angriffsgeschwindigkeit = 0;
+    double rustung = 0;
 
     int haltbarkeit = 0;
 
-    public ShopItem(int id, ItemKategorie itemKategorie, String name, String beschreibung, Material icon, ItemSeltenheit itemSeltenheit, double schaden, double angriffsgeschwindigkeit, int haltbarkeit) {
+    public ShopItem(int id, ItemKategorie itemKategorie, String name, String beschreibung, Material icon, ItemSeltenheit itemSeltenheit, double schaden, double angriffsgeschwindigkeit, double rustung, int haltbarkeit) {
         this.id = id;
         this.itemKategorie = itemKategorie;
         this.name = name;
@@ -33,6 +34,7 @@ public class ShopItem {
         this.itemSeltenheit = itemSeltenheit;
         this.schaden = roundToTwoDecimalPlaces(schaden);
         this.angriffsgeschwindigkeit = roundToTwoDecimalPlaces(angriffsgeschwindigkeit);
+        this.rustung = roundToTwoDecimalPlaces(rustung);
         this.haltbarkeit = haltbarkeit;
     }
 
@@ -61,6 +63,10 @@ public class ShopItem {
 
     public double getSchaden() {
         return schaden;
+    }
+
+    public double getRustung() {
+        return rustung;
     }
 
     public void setId(int id) {

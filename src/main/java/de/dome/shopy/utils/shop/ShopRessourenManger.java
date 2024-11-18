@@ -47,9 +47,6 @@ public class ShopRessourenManger {
             Shopy.getInstance().getMySQLConntion().query("UPDATE shop_ressource SET menge = '"+ newValue+"' WHERE shop = " + shop.shopId + " AND ressource = " + ressource.getId());
             ladeResscuren();
         });
-
-//        shopRessoure.remove(ressoure);
-//        shopRessoure.put(ressoure, newValue);
     }
 
     private void ladeResscuren(){
