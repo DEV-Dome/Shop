@@ -160,6 +160,14 @@ public class MySQLDefault {
                         Shopy.getInstance().getMySQLConntion().query(query);
                     }
 
+                    /* Rüstung (Helm) */
+                    querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/loader/items/ItemLoaderHelm.sql").split(";");
+                    for(String query : querys){
+                        query = query.trim();
+                        if(query.equals("") || query.equals(" ")) continue;
+
+                        Shopy.getInstance().getMySQLConntion().query(query);
+                    }
                     /* Rüstung (Brust) */
                     querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/loader/items/ItemLoaderRuestung.sql").split(";");
                     for(String query : querys){

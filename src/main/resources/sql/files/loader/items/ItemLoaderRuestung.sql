@@ -24,7 +24,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (501, "freigeschlatet_typ", "STANDART");
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (501, "freigeschlatet_item", 502);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (501, "freigeschlatet_menge", 15);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (501, "freigeschlatet_menge", 8);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (501, "min_ruestung", 0.4);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (501, "max_ruestung", 0.7);
@@ -40,7 +40,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (502, "freigeschlatet_typ", "STANDART");
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (502, "freigeschlatet_item", 504);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (502, "freigeschlatet_menge", 17);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (502, "freigeschlatet_menge", 13);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (502, "min_ruestung", 0.6);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (502, "max_ruestung", 0.8);
