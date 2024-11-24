@@ -144,7 +144,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (608, "min_ruestung", 1);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (608, "max_ruestung", 1.4);
 
-INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('609', '4', 'IRON_HELMET', 'Assassinen Helm', 'Diese Rüstung schütz nicht nur\n jeder ist in ihr auch schnell!', 1, 10);
+INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('609', '4', 'IRON_HELMET', 'Assassinen Helm', 'Diese Helm schützt nicht nur\n jeder ist in ihr auch schnell!', 1, 10);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (609, 8, 3);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (609, 9, 2);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (609, 1, 6);

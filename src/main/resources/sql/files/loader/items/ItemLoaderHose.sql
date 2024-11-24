@@ -247,7 +247,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (713, "min_ruestung", 2.87);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (713, "max_ruestung", 3.45);
 
-INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('714', '6', 'GOLDEN_LEGGINGS', 'Assassinen Hose', 'Diese Hose schütz nicht nur\n jeder ist in ihr auch schnell!', 1, 15);
+INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('714', '6', 'GOLDEN_LEGGINGS', 'Assassinen Hose', 'Diese Hose schützt nicht nur\n jeder ist in ihr auch schnell!', 1, 15);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (714, 8, 3);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (714, 9, 2);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (714, 1, 2);
