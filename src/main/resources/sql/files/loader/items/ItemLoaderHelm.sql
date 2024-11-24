@@ -1,4 +1,4 @@
--- SEITE 1: Leader Rüstung
+-- SEITE 1: Leader Helm
 INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('600', '4', 'LEATHER_HELMET', 'Leaderfetzen', 'Dieses Stück Leader wird einfach auf den Kopf gelegt!', 1, 1);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (600, 8, 2);
 
@@ -14,7 +14,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (600, "min_ruestung", 0.1);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (600, "max_ruestung", 0.2);
 
-INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('601', '4', 'LEATHER_HELMET', 'Betters Hut', 'In diesen Hut werden Spenden gesammelt', 1, 2);
+INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('601', '4', 'LEATHER_HELMET', 'Bettlers Hut', 'In diesen Hut werden Spenden gesammelt', 1, 2);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (601, 8, 4);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (601, "shop_xp", 1);
@@ -217,7 +217,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (612, "freigeschlatet_typ", "STANDART");
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (612, "freigeschlatet_item", 615);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (612, "freigeschlatet_menge", 10);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (612, "freigeschlatet_menge", 40);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (612, "min_ruestung", 2.1);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (612, "max_ruestung", 2.8);

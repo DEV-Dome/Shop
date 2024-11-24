@@ -176,6 +176,14 @@ public class MySQLDefault {
 
                         Shopy.getInstance().getMySQLConntion().query(query);
                     }
+                    /* Rüstung (Hose) */
+                    querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/loader/items/ItemLoaderHose.sql").split(";");
+                    for(String query : querys){
+                        query = query.trim();
+                        if(query.equals("") || query.equals(" ")) continue;
+
+                        Shopy.getInstance().getMySQLConntion().query(query);
+                    }
                 }
             }
 
