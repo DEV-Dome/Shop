@@ -50,7 +50,7 @@ public class MySQL {
     public boolean connect() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            this.connection = DriverManager.getConnection("jdbc:mysql://" + host + "/" + database, username, password);
+            this.connection = DriverManager.getConnection("jdbc:mysql://" + host + "/" + database + "?autoReconnect=true&useSSL=false", username, password);
             return true;
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();

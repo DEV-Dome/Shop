@@ -80,6 +80,9 @@ public class Shop {
                             this.world = Bukkit.getWorld(world);
                         }
 
+                        //test!
+                        new ShopKunden(this.world.getSpawnLocation());
+
                         CompletableFuture.runAsync(() -> {
                             try {
                                 String queryZones = "SELECT * FROM shop_template_zonen WHERE template = " + result.getInt("template") +" LIMIT " + result.getInt("shop_zones");

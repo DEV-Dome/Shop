@@ -19,6 +19,7 @@ import de.dome.shopy.listener.shop.clicklistener.InventoryClickListenerRessouren
 import de.dome.shopy.listener.shop.clicklistener.InventoryClickListenerWerkbank;
 import de.dome.shopy.utils.*;
 import de.dome.shopy.utils.shop.Shop;
+import de.dome.shopy.utils.shop.ShopKunden;
 import dev.sergiferry.playernpc.api.NPC;
 import dev.sergiferry.playernpc.api.NPCLib;
 import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
@@ -101,6 +102,7 @@ public class Shopy extends JavaPlugin {
         /* Verbindung zu datenbank*/
         mySQLConntion = new MySQL();
         MySQLDefault.getInstance().sqlStartUp();
+        ShopKunden.ladeKunden();
 
         /* NPC API*/
         NPCLib.getInstance().registerPlugin(getInstance());
