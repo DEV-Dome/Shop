@@ -78,7 +78,6 @@ public class Ressource {
                 ResultSet resultRessourecs = Shopy.getInstance().getMySQLConntion().resultSet(queryRessourecs);
                 while (resultRessourecs.next()) {
                     Ressource newRessource = new Ressource(resultRessourecs.getInt("id"), resultRessourecs.getString("name"), resultRessourecs.getString("beschreibung"), resultRessourecs.getString("typ"), resultRessourecs.getString("icon"), resultRessourecs.getDouble("minimale_kosten"), resultRessourecs.getDouble("maximale_kosten"));
-                    Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§5Ressource geladen: " + newRessource.getName());
                     ressourceList.add(newRessource);
                 }
             }catch (SQLException e) {

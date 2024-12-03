@@ -64,6 +64,8 @@ public class SpawnCMD  implements CommandExecutor {
                                         p.getInventory().addItem(item);
                                     }
 
+                                    Shopy.getInstance().getSpielerDungeon().get(p.getUniqueId()).getWaffenkammerNPC().despawn();
+                                    Shopy.getInstance().getSpielerDungeon().get(p.getUniqueId()).getWaffenkammerNPC().destroy();
                                     Shopy.getInstance().getSpielerDungeon().remove(p.getUniqueId());
                                 }
 

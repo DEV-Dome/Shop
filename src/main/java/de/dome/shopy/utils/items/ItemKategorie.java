@@ -53,8 +53,6 @@ public class ItemKategorie {
                 while (resultItemKategorie.next()) {
                     ItemKategorie newItemKategorie = new ItemKategorie(resultItemKategorie.getInt("id"), resultItemKategorie.getString("name"), resultItemKategorie.getString("beschreibung"), Material.getMaterial(resultItemKategorie.getString("icon")));
 
-                    Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§5Itemkategorie geladen: " + newItemKategorie.getName());
-
                     itemKategorieList.add(newItemKategorie);
                 }
             }catch (SQLException e) {

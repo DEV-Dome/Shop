@@ -4,10 +4,7 @@ import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.Cuboid;
 import de.dome.shopy.utils.Dungeon;
 import de.dome.shopy.utils.Ressource;
-import de.dome.shopy.utils.shop.ShopRessourenManger;
-import me.filoghost.holographicdisplays.api.hologram.Hologram;
-import me.filoghost.holographicdisplays.api.hologram.line.TextHologramLine;
-import org.bukkit.Bukkit;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -17,15 +14,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
+
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.File;
+
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Random;
+
 
 public class EntityDeathListener implements Listener {
 
@@ -81,14 +75,14 @@ public class EntityDeathListener implements Listener {
                 Shopy.getInstance().getScoreboardManger().setScoreBoard(p);
 
                 /* Hologram erzeugen, was anzeigent welcher Loot gefallen ist, */
-                Hologram hologram = Shopy.getInstance().getHolographicDisplaysAPI().createHologram(e.getEntity().getLocation().add(0,2,0));
-                hologram.getLines().appendText("§7Fallen gelassen:");
-                if(!gedroppterLoot.isEmpty()){
-                    hologram.getLines().appendText("");
-                    for (Ressource item : gedroppterLoot) {
-                        hologram.getLines().appendText("§e1x " + item.getName());
-                    }
-                }else hologram.delete();
+//                Hologram hologram = Shopy.getInstance().getHolographicDisplaysAPI().createHologram(e.getEntity().getLocation().add(0,2,0));
+//                hologram.getLines().appendText("§7Fallen gelassen:");
+//                if(!gedroppterLoot.isEmpty()){
+//                    hologram.getLines().appendText("");
+//                    for (Ressource item : gedroppterLoot) {
+//                        hologram.getLines().appendText("§e1x " + item.getName());
+//                    }
+//                }else hologram.delete();
 
 
                 /* Sicherstellen das alle Toten Monster auch tot sind */
@@ -122,7 +116,7 @@ public class EntityDeathListener implements Listener {
                     @Override
                     public void run() {
                         cancel();
-                        hologram.delete();
+//                        hologram.delete();
                     }
                 }.runTaskTimer(Shopy.getInstance(), 60L, 60L);
             }

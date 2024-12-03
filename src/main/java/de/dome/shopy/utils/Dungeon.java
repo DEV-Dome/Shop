@@ -2,11 +2,10 @@ package de.dome.shopy.utils;
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.shop.Shop;
-import dev.sergiferry.playernpc.api.NPC;
-import dev.sergiferry.playernpc.api.NPCLib;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.trait.SkinTrait;
 import org.bukkit.*;
 import org.bukkit.entity.*;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -43,7 +42,7 @@ public class Dungeon {
     private HashMap<Ressource, Integer> dungeonLoot;
 
     private boolean schutzPhase = true;
-    private NPC.Global waffenkammerNPC = null;
+    private net.citizensnpcs.api.npc.NPC waffenkammerNPC = null;
     private ItemStack[] spielerInventrar;
 
     public Dungeon(Shop shop, int level) {
@@ -122,20 +121,15 @@ public class Dungeon {
                             shop.getOwner().getInventory().clear();
 
                             /* NPC Spawn (Waffenlager) */
-                            ArrayList<String> npcText = new ArrayList<>();
-                            npcText.add("§9Waffenlager");
-                            npcText.add("§7Rüste eine deiner hergestellten Waffen aus");
-                            String npcId = "npc-waffenlager-d-" + shop.getOwner().getUniqueId() + "-" + System.currentTimeMillis();
+                            net.citizensnpcs.api.npc.NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "§9Waffenlager");
+                            npc.getOrAddTrait(SkinTrait.class).setSkinPersistent("Waffenlager", "GPq+uXXGSSUJFX/cTZ113+AkzjIkBy4COtXeke/xSUyHLIGzjvJUL0ZdIKPx5MsF0+MpSPGPonNCEaHVz7tKFzujkmxDO+ZTayspycVtcILmQy9KF1Fqh9FstA892eMQnuGH2ABBR2Q07QfDgTUy3XWew1roqv2s+Tz8ChCiew+E2TUe6hgzEOLhsNzmgmNxDZUJ3bBnBH0TYfN3pc4uwQX3m/YJQFFjw+T4gtXjN3JwU4xAKZ3Qdq027Q3jN4m4Gb2TfRLmCrL8ZyiMwqh+LIIGmYqa9wOubqwUwAv/2ch747BRzG0UUssOelcqDW5hVKK6wSSwzhqJoc5vt+cZ1G2qTRoJsWBbn7UzsrZF5GXvt7bz+70QnegUKIJfiV8oNow7ouhVF1HgUuCH5F3nPMzYGbO8ysiblHe4wLRLftIIuf5QUDTI/Fvp6GO3klVAW7XO1rlusESLfwLAwcoNO71IFgW+bstv2+HaqfaMJy4ombSRkDYRgBYgLw+cOoLu6c9+wA6JunQbZBbrpnejR2t1ZjkwXxw1ETlBQ+QSC6ouoLoOKykeHaf7K3yn/u6pIt4l058lIxlTQHCxIVq5WEilayR8qbEjBg/kUe+heHUt/vJFF8QhQVeEQ7OALYndjFFs4WPwQbV7tE6IkqEZ5fpxN83stqpj9YCNKyZIYF4=", "ewogICJ0aW1lc3RhbXAiIDogMTYxMzIyNTAxMDY4NSwKICAicHJvZmlsZUlkIiA6ICIzZjM4YmViZGYwMWQ0MjNkYWI4MjczZjUwNGFiNGEyNyIsCiAgInByb2ZpbGVOYW1lIiA6ICJjazM0Nzk0MjM1NzUzNzMxIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2E2ZWU0MzQ3NTE4M2MyYTY0NzAxNTYxNTc5ODVjYjEzNzAyMDY3MGY2MTE0Nzg2ZjRkNzI4YjlkZThmMjk0ODAiCiAgICB9CiAgfQp9");
+                            npc.spawn(waffenlagerPosition);
+                            npc.faceLocation(spawn);
+                            this.waffenkammerNPC = npc;
 
-                            waffenkammerNPC = NPCLib.getInstance().generateGlobalNPC(Shopy.getInstance(), npcId, waffenlagerPosition);
-                            waffenkammerNPC.setText(npcText);
-                            waffenkammerNPC.setSkin("ewogICJ0aW1lc3RhbXAiIDogMTY3ODM1NjAzMjY1MiwKICAicHJvZmlsZUlkIiA6ICI3ZDJhY2YzOGQ3YTQ0YjU0YTliMGNkYTZhNzk1YmNmYyIsCiAgInByb2ZpbGVOYW1lIiA6ICJCb3VuY2luZXNzIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2E4MDI4YTVhNDI3MzdhOGVmNTNkMWZjMzQxZDU0YTVjNWJjN2EzNWZiNTk1Yjg0N2M1MDk3YzQ0M2FlNWI3OGMiCiAgICB9CiAgfQp9", "cK3OamDNeexBjQmBMKGy88j50zgeE82Y0+J4GYJgf7J2BYJ2TM2CaAgft08GWKW9YemEfqlznRhqk/eKtwPfpLffD0iNj2q9ZjdlEDfqDz1458eydT2dPIXh7jtU2xc0MCR+U5iySd7j/BNpGlg0nNC1wEWwcetyx8kx4R9sS8jJugvdMyHqHllDPkggiDIt81m0Uh8lDLjHYL9OdzWOHR7uykB/LcnStEnUh0kR7rqyKNKtgs6aGRQudbL2FJm9mUTga+mCkOnaXU/+BE57K8jxP/x50SzO43QiNrTuSCIJeBEW6EtZ5NlRbFY8rhsRcCzDDanTtkMvTH+Ss2fm2ftVfA9/2xf46/yFyWjp1cmwNqayeMFkEOBhZ5LuVEVmW9M427+ajogIEsyPXqfI9w2ePWp7IZ6LSfmWvArYfbw19ZDAfQSdz8u2G6hICCOcliwq7bNsFTCkzdCQxQIXgB7FNrwJevtU134zSFBbMCMzaMmpqeu6sSMAza+zIMcYDgZ1UY00LUsdqMsDHgGdr6CHnC1eZtBvNmloow4s/q9+7mBBBeg4X+9aRwW4UzdfJXdQoyARz1epJ04OvNJbfV8D2u1ME3EBfz4yl6MbAh+eJBtG/XZf2IeVk/41U1CN7fdILJ6KjmtQodf8OzUwzZUVz/CS1axqOE7r/1fAyEs=");
-                            waffenkammerNPC.lookAt(spawn);
-                            waffenkammerNPC.createAllPlayers();
-                            waffenkammerNPC.update();
-                            waffenkammerNPC.show();
 
-                            /* Schutzphase bennden */
+
+                        /* Schutzphase bennden */
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
@@ -213,6 +207,8 @@ public class Dungeon {
                                         Shopy.getInstance().rekursivLoeschen(file);
                                     });
                                 }
+                                waffenkammerNPC.despawn();
+                                waffenkammerNPC.destroy();
                                 Shopy.getInstance().getGeladeneTempWelten().remove(p.getUniqueId());
                             }
 
@@ -437,7 +433,7 @@ public class Dungeon {
         return waffenlagerPosition;
     }
 
-    public NPC.Global getWaffenkammerNPC() {
+    public net.citizensnpcs.api.npc.NPC getWaffenkammerNPC() {
         return waffenkammerNPC;
     }
 

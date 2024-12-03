@@ -41,6 +41,7 @@ public class Shop {
     ArrayList<ShopItemVorlage> shopItemVorlagen;
     /* Halte fest, ob überhaupt ein Spielershop gefunden wurde  */
     private boolean loadShop = false;
+    ShopKunden shopKunden = null;
 
     public Shop(Player owner, Boolean playerTeleport){
         this.owner = owner;
@@ -49,7 +50,7 @@ public class Shop {
         shopItemVorlagen = new ArrayList<>();
         itemKategorieLevel = new LinkedHashMap<>();
         instance = this;
-
+        
         CompletableFuture<Void> basisDaten = CompletableFuture.runAsync(() -> {
             try {
                 String query = "SELECT * FROM shop WHERE owner = '" + owner.getUniqueId() + "' LIMIT 1";
@@ -80,17 +81,15 @@ public class Shop {
                             this.world = Bukkit.getWorld(world);
                         }
 
-                        //test!
-                        new ShopKunden(this.world.getSpawnLocation());
 
-                        CompletableFuture.runAsync(() -> {
+                         CompletableFuture.runAsync(() -> {
                             try {
                                 String queryZones = "SELECT * FROM shop_template_zonen WHERE template = " + result.getInt("template") +" LIMIT " + result.getInt("shop_zones");
 
                                 ResultSet resultZones = Shopy.getInstance().getMySQLConntion().resultSet(queryZones);
                                 while(resultZones.next()){
                                     Location loc1 = Shopy.getInstance().getLocationFromString(resultZones.getString("locationen_1"));
-                                    loc1.setY(-63);
+                                    loc1.setY(-70);
                                     loc1.setWorld(this.world);
 
                                     Location loc2 = Shopy.getInstance().getLocationFromString(resultZones.getString("locationen_2"));
@@ -101,6 +100,11 @@ public class Shop {
 
                                     zones.add(add);
                                 }
+
+                                /* Shop Kunden  */
+                                Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
+                                    this.shopKunden = new ShopKunden(this);
+                                });
                             } catch (SQLException e) {
                                 Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
                             }
@@ -225,6 +229,11 @@ public class Shop {
     public void unLoadWorld(){
         Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
             Bukkit.unloadWorld(world, true);
+
+            if(shopKunden != null){
+//                shopKunden.setGoshopKundenManger(false);
+//                shopKunden.loescheAlleKunden();
+            }
         });
     }
 

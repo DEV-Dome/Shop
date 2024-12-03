@@ -172,11 +172,9 @@ public class Item {
                             else newItem.immerFreigeschaltet = false;
                         }
                     }
+
                     /* Item Stufe */
                     newItem.itemSeltenheit = ItemSeltenheit.getItemStufeById(resultItem.getInt("item_seltenheit"));
-
-                    Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + newItem.getItemSeltenheit().getFarbe() +"Item geladen: " + newItem.getName());
-
                     itemList.add(newItem);
                 }
             }catch (SQLException e) {

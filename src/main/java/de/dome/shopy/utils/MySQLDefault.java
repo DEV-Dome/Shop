@@ -2,6 +2,7 @@ package de.dome.shopy.utils;
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.items.ItemKategorie;
+import de.dome.shopy.utils.shop.ShopKunden;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -209,6 +210,7 @@ public class MySQLDefault {
         /* Ressouren und Items Laden */
         Ressource.registerRessouren();
         ItemKategorie.registerItemKategorie();
+        ShopKunden.ladeKunden();
     }
 
     private void sqlDefaultValue(){
