@@ -39,9 +39,11 @@ public class Shop {
     Map<String, ShopItemKategorieLevel> itemKategorieLevel;
     ArrayList<ShopItem> shopItems;
     ArrayList<ShopItemVorlage> shopItemVorlagen;
+    ArrayList<ShopKunden> shopKunden;
+
+
     /* Halte fest, ob überhaupt ein Spielershop gefunden wurde  */
     private boolean loadShop = false;
-    ShopKunden shopKunden = null;
 
     public Shop(Player owner, Boolean playerTeleport){
         this.owner = owner;
@@ -49,6 +51,7 @@ public class Shop {
         shopItems = new ArrayList<>();
         shopItemVorlagen = new ArrayList<>();
         itemKategorieLevel = new LinkedHashMap<>();
+        shopKunden = new ArrayList<>();
         instance = this;
         
         CompletableFuture<Void> basisDaten = CompletableFuture.runAsync(() -> {
@@ -100,11 +103,6 @@ public class Shop {
 
                                     zones.add(add);
                                 }
-
-                                /* Shop Kunden  */
-                                Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
-                                    this.shopKunden = new ShopKunden(this);
-                                });
                             } catch (SQLException e) {
                                 Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
                             }
@@ -223,17 +221,18 @@ public class Shop {
             Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
                 Shopy.getInstance().getScoreboardManger().setScoreBoard(owner);
             });
+            kundenManger();
         });
     }
 
     public void unLoadWorld(){
         Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
-            Bukkit.unloadWorld(world, true);
-
-            if(shopKunden != null){
-//                shopKunden.setGoshopKundenManger(false);
-//                shopKunden.loescheAlleKunden();
+            for(ShopKunden shopKunden : shopKunden){
+                shopKunden.npc.despawn();
+                shopKunden.npc.destroy();
             }
+
+            Bukkit.unloadWorld(world, true);
         });
     }
 
@@ -566,11 +565,7 @@ public class Shop {
                                     ShopItem shopItem = getShopItems().get(i);
                                     if(shopItem.getHaltbarkeit() <= 0) continue;
 
-                                    ArrayList<String> beschreibung = new ArrayList<>();
-                                    /* ID anzeigen*/
-                                    beschreibung.add("§7Item-ID: " + shopItem.getId() + "");
-                                    beschreibung.add("§7Haltbarkeit: §e" + shopItem.getHaltbarkeit() + "");
-                                    /* Actionen auflisten*/
+                                    ArrayList<String> beschreibung = shopItem.getVolleBeschreibung();
                                     beschreibung.add("");
 
                                     /* Beschreibung angepassten, je nachdem ob man in einem Dungeon ist */
@@ -580,16 +575,8 @@ public class Shop {
                                         beschreibung.add("§c- Rechtsklick zum Löschen");
                                     }
 
-                                    beschreibung.add("");
 
-                                    String[] beschreibungsArray = shopItem.getBeschreibung().split("\n");
-
-                                    for (String itemBeschreibung : beschreibungsArray) {
-                                        beschreibung.add(itemBeschreibung.trim());
-                                    }
-
-
-                                    String itemName = "§9" + shopItem.getName() +  " " + shopItem.getItemSeltenheit().getFarbe() + " [" + shopItem.getItemSeltenheit().getName() + "]";
+                                    String itemName = shopItem.getVollenName();
 
                                     ItemStack item = Shopy.getInstance().createItemWithLore(shopItem.getIcon(), "§9" + itemName, beschreibung);
                                     ItemMeta meta = item.getItemMeta();
@@ -653,11 +640,7 @@ public class Shop {
                                     ShopItem shopItem = getShopItems().get(i);
                                     if(shopItem.getHaltbarkeit() <= 0) continue;
 
-                                    ArrayList<String> beschreibung = new ArrayList<>();
-                                    /* ID anzeigen*/
-                                    beschreibung.add("§7Item-ID: " + shopItem.getId() + "");
-                                    beschreibung.add("§7Haltbarkeit: §e" + shopItem.getHaltbarkeit() + "");
-                                    /* Actionen auflisten*/
+                                    ArrayList<String> beschreibung = shopItem.getVolleBeschreibung();
                                     beschreibung.add("");
 
                                     /* Beschreibung angepassten, je nachdem ob man in einem Dungeon ist */
@@ -666,14 +649,9 @@ public class Shop {
                                     }else {
                                         beschreibung.add("§c- Rechtsklick zum Löschen");
                                     }
-                                    beschreibung.add("");
 
-                                    String[] beschreibungsArray = shopItem.getBeschreibung().split("\n");
-                                    for(String itemBeschreibung : beschreibungsArray){
-                                        beschreibung.add(itemBeschreibung.trim());
-                                    }
 
-                                    String itemName = "§9" + shopItem.getName() +  " " + shopItem.getItemSeltenheit().getFarbe() + " [" + shopItem.getItemSeltenheit().getName() + "]";
+                                    String itemName = shopItem.getVollenName();
 
                                     ItemStack item = Shopy.getInstance().createItemWithLore(shopItem.getIcon(), "§9" + itemName, beschreibung);
                                     ItemMeta meta = item.getItemMeta();
@@ -778,6 +756,21 @@ public class Shop {
                         contents.set(50, Shopy.getInstance().createItemWithLore(Material.BLUE_DYE, "§e" + "Aufwerter", beschreibung, aktivItem, false));
                     }
                 }).build(Shopy.getInstance()).open(owner);
+    }
+    public void kundenManger(){
+        Shop shop = this;
+        int maxKunden = zones.size() * 2;
+
+        Bukkit.getScheduler().runTaskTimer(Shopy.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                if(shopKunden.size() < maxKunden) {
+                    shopKunden.add(new ShopKunden(shop));
+                }
+
+            }
+        }, 20L, 1200L); // Startet nach 1 Sekunde (20 Ticks) und wiederholt sich alle 5 Sekunden (100 Ticks)
+
     }
 
     public void changeRessourcenLager(int newAmount){
@@ -890,5 +883,7 @@ public class Shop {
         return itemKategorieLevel;
     }
 
-
+    public ArrayList<ShopKunden> getShopKunden() {
+        return shopKunden;
+    }
 }

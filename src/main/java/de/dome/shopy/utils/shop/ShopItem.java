@@ -49,9 +49,31 @@ public class ShopItem {
     public String getName() {
         return name;
     }
+    public String getVollenName() {
+        return "§9" + getName() +  " " + getItemSeltenheit().getFarbe() + " [" + getItemSeltenheit().getName() + "]";
+    }
+
+
 
     public String getBeschreibung() {
         return beschreibung;
+    }
+    public ArrayList<String> getVolleBeschreibung() {
+        ArrayList<String> volleBeschreibung = new ArrayList<>();
+
+        /* ID anzeigen*/
+        volleBeschreibung.add("§7Item-ID: " + getId() + "");
+        volleBeschreibung.add("§7Haltbarkeit: §e" + getHaltbarkeit() + "");
+
+        volleBeschreibung.add("");
+
+        String[] beschreibungsArray = getBeschreibung().split("\n");
+
+        for (String itemBeschreibung : beschreibungsArray) {
+            volleBeschreibung.add(itemBeschreibung.trim());
+        }
+
+        return volleBeschreibung;
     }
 
     public Material getIcon() {

@@ -44,9 +44,9 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (203, "meister_menge", 500);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (203, "immer_freigeschlatet", "nein");
 
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (3, "freigeschlatet_typ", "ITEM");
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (3, "freigeschlatet_item", 0);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (3, "freigeschlatet_menge", 0);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (203, "freigeschlatet_typ", "ITEM");
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (203, "freigeschlatet_item", 0);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (203, "freigeschlatet_menge", 0);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (203, "min_schaden", 0.1);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (203, "max_schaden", 0.2);
@@ -201,7 +201,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
 
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (211, "shop_xp", 1);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (211, "kategorie_xp", 12);
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (211,1, "meister_menge", 500);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (211, "meister_menge", 500);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (211, "immer_freigeschlatet", "nein");
 
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (211, "freigeschlatet_typ", "ITEM");
@@ -474,11 +474,11 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (223, "freigeschlatet_item", 0);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (223, "freigeschlatet_menge", 0);
 
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (225, "min_schaden", 3.8);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (225, "max_schaden", 4);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (223, "min_schaden", 3.8);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (223, "max_schaden", 4);
 
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (225, "min_angriffsgeschwindigkeit", 2.8);
-    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (225, "max_angriffsgeschwindigkeit", 3.6);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (223, "min_angriffsgeschwindigkeit", 2.8);
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (223, "max_angriffsgeschwindigkeit", 3.6);
 
 INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('224', '3', 'DIAMOND_HOE', 'Minen Hacke', 'Diese Hacke wurde in einer\n Verlassen Mine gefunden.', 1, 24);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (224, 6, 2);

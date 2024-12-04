@@ -128,7 +128,6 @@ public class Dungeon {
                             this.waffenkammerNPC = npc;
 
 
-
                         /* Schutzphase bennden */
                             new BukkitRunnable() {
                                 @Override
