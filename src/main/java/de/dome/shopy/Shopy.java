@@ -15,6 +15,7 @@ import de.dome.shopy.listener.lobby.*;
 import de.dome.shopy.listener.lobby.BlockBreakListener;
 import de.dome.shopy.listener.shop.*;
 import de.dome.shopy.listener.shop.clicklistener.InventoryClickListenerItemLager;
+import de.dome.shopy.listener.shop.clicklistener.InventoryClickListenerKundenKauf;
 import de.dome.shopy.listener.shop.clicklistener.InventoryClickListenerRessourenMarkplatz;
 import de.dome.shopy.listener.shop.clicklistener.InventoryClickListenerWerkbank;
 import de.dome.shopy.utils.*;
@@ -164,6 +165,7 @@ public class Shopy extends JavaPlugin {
         new InventoryClickListenerWerkbank();
         new InventoryClickListenerRessourenMarkplatz();
         new InventoryClickListenerItemLager();
+        new InventoryClickListenerKundenKauf();
 
         new de.dome.shopy.listener.shop.NPCInteractListener();
 

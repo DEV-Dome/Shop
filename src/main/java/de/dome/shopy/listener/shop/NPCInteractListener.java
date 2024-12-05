@@ -13,6 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class NPCInteractListener implements Listener {
             if (Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())) {
                 if (Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getWorld().getName().equalsIgnoreCase(npc.getStoredLocation().getWorld().getName())) {
 
-                    RyseInventory.builder().title("§9Kundenansicht").rows(4).provider(new InventoryProvider() {
+                    RyseInventory.builder().title("§9Kundenansicht von " + npc.getFullName()).rows(4).provider(new InventoryProvider() {
                         @Override
                         public void init(Player player, InventoryContents contents) {
                             ShopKunden shopKunden = null;
@@ -47,15 +48,36 @@ public class NPCInteractListener implements Listener {
                             contents.set(13, Shopy.getInstance().createItemWithLore(Material.WHITE_CANDLE, "§eInteressante Items", new ArrayList<>(), false, false));
 
                             int zeahler = 21;
+                            if(shopKunden.getGesuchteItems().size() >= 5) zeahler--;
+
                             for(ShopItem shopItem : shopKunden.getGesuchteItems()){
-                                contents.set(zeahler, Shopy.getInstance().createItemWithLore(shopItem.getIcon(), shopItem.getVollenName(), shopItem.getVolleBeschreibung(), false, false));
-                                zeahler++;
+                                if(shopItem != null){
+                                    ArrayList<String> beschreibung = shopItem.getVolleBeschreibung();
+                                    beschreibung.add("");
+                                    beschreibung.add("§7Dieser Kunde bietet: §e" + shopItem.getItemPreis() + "€ §7für das Item!");
+
+                                    ItemStack item = shopItem.buildBaseItem();
+                                    item.setLore(beschreibung);
+
+                                    contents.set(zeahler, item);
+                                    zeahler++;
+                                }else {
+                                    ArrayList<String> beschreibung = new ArrayList<>();
+                                    beschreibung.add("");
+                                    beschreibung.add("§7Leider hat der Kunde");
+                                    beschreibung.add("§7nichts passendes gefunden!");
+
+                                    ItemStack item = Shopy.getInstance().createItemWithLore(Material.MAP, "§cKein Passendes Item!", beschreibung);
+
+                                    contents.set(zeahler, item);
+                                    zeahler++;
+                                }
                             }
 
-                            contents.set(27, Shopy.getInstance().createItemWithLore(Material.OAK_DOOR, "§7Kunden Weg schicken", new ArrayList<>(), false, false));
-                            contents.set(28, Shopy.getInstance().createItemWithLore(Material.BARRIER, "§7Menü schlissen", new ArrayList<>(), false, false));
+                            contents.set(27, Shopy.getInstance().createItemWithLore(Material.OAK_DOOR, "§9Kunden Weg schicken", new ArrayList<>(), false, false));
+                            contents.set(35, Shopy.getInstance().createItemWithLore(Material.BARRIER, "§7Menü schlissen", new ArrayList<>(), false, false));
 
-                            contents.set(35, Shopy.getInstance().createItemWithLore(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE, "§7Kunden Beraten", new ArrayList<>(), false, false));
+//                            contents.set(35, Shopy.getInstance().createItemWithLore(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE, "§9Kunden Beraten", new ArrayList<>(), false, false));
                         }
                     }).build(Shopy.getInstance()).open(p);
                 }

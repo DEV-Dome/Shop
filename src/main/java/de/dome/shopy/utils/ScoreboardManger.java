@@ -26,7 +26,7 @@ public class ScoreboardManger {
         text = obj.getScore(" §7Geld    §a▶ §e" + Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger().getRessourceValue(Ressource.getRessoureByName("Geld")) + " §7€");
         text.setScore(14);
 
-        text = obj.getScore(" §7Kunden §a▶ §e" + "§cComing Soon" + " §7");
+        text = obj.getScore(" §7Kunden §a▶ §e" + Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopKunden().size());
         text.setScore(12);
 
         if(Shopy.getInstance().getSpielerDungeon().containsKey(p.getUniqueId())){

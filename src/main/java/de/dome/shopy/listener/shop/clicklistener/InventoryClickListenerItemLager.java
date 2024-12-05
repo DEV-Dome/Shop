@@ -69,7 +69,6 @@ public class InventoryClickListenerItemLager implements Listener {
                             /* Check wurde das Item gefunden */
                             if(shopItem != null && itemID != -1){
                                 spielerShop.delteShopItemById(itemID);
-                                //spielerShop.openItemLagerInventar(AkkuelleSeite);
 
                                 p.updateInventory();
                                 p.playSound(p, Sound.ENTITY_ITEM_BREAK,  1,1);

@@ -174,7 +174,7 @@ public class Shop {
                         shopItemVorlagen.add(shopItemVorlage);
                     }
 
-                    String queryItemLager = "SELECT *,shop_item.id AS 'sid' From shop_item JOIN item ON item.id = shop_item.item";
+                    String queryItemLager = "SELECT *,shop_item.id AS 'sid',item.id AS 'iid' From shop_item JOIN item ON item.id = shop_item.item";
                     ResultSet resultItemLager = Shopy.getInstance().getMySQLConntion().resultSet(queryItemLager);
                     while(resultItemLager.next()){
                         double schaden = 0;
@@ -191,7 +191,7 @@ public class Shop {
                             if(resultItemLagerItemWerte.getString("schlussel").equals("ruestung")) rustung = Double.parseDouble(resultItemLagerItemWerte.getString("inhalt"));
                         }
 
-                        ShopItem newItem = new ShopItem(resultItemLager.getInt("shop_item.id"), ItemKategorie.getItemKategorieById(resultItemLager.getInt("item_kategorie")), resultItemLager.getString("name"), resultItemLager.getString("beschreibung"), Material.getMaterial(resultItemLager.getString("icon")), ItemSeltenheit.getItemStufeById(resultItemLager.getInt("item_seltenheit")), schaden, angriffsgeschwindigkeit, rustung, haltbarkeit);
+                        ShopItem newItem = new ShopItem(resultItemLager.getInt("sid"), resultItemLager.getInt("iid"),ItemKategorie.getItemKategorieById(resultItemLager.getInt("item_kategorie")), resultItemLager.getString("name"), resultItemLager.getString("beschreibung"), Material.getMaterial(resultItemLager.getString("icon")), ItemSeltenheit.getItemStufeById(resultItemLager.getInt("item_seltenheit")), schaden, angriffsgeschwindigkeit, rustung, haltbarkeit);
                         shopItems.add(newItem);
                     }
                 }
@@ -575,29 +575,10 @@ public class Shop {
                                         beschreibung.add("§c- Rechtsklick zum Löschen");
                                     }
 
+                                    ItemStack item = shopItem.buildBaseItem();
+                                    item.setLore(beschreibung);
 
-                                    String itemName = shopItem.getVollenName();
-
-                                    ItemStack item = Shopy.getInstance().createItemWithLore(shopItem.getIcon(), "§9" + itemName, beschreibung);
-                                    ItemMeta meta = item.getItemMeta();
-
-                                    // Entferne alle existierenden Attribute
-                                    meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE);
-                                    meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_SPEED);
-
-                                    // Füge einen neuen Angriffsschaden-Modifier hinzu
-                                    AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", shopItem.getSchaden(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-                                    meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
-
-                                    AttributeModifier speedModifier = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", shopItem.getAngriffsgeschwindigkeit(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-                                    meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, speedModifier);
-                                    item.setItemMeta(meta);
-
-                                    AttributeModifier ruestungModifier = new AttributeModifier(UUID.randomUUID(), "generic.ARMOR", shopItem.getRustung(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST);
-                                    meta.addAttributeModifier(Attribute.GENERIC_ARMOR, ruestungModifier);
-                                    item.setItemMeta(meta);
-
-                                    contents.set(slot, Shopy.getInstance().createItemWithLore(shopItem.getIcon(), "§9" + itemName, beschreibung));
+                                    contents.set(slot, item);
                                 }
                             }else {
                                 if(i > getItemLagerSize() - 1){
@@ -650,28 +631,8 @@ public class Shop {
                                         beschreibung.add("§c- Rechtsklick zum Löschen");
                                     }
 
-
-                                    String itemName = shopItem.getVollenName();
-
-                                    ItemStack item = Shopy.getInstance().createItemWithLore(shopItem.getIcon(), "§9" + itemName, beschreibung);
-                                    ItemMeta meta = item.getItemMeta();
-
-                                    // Entferne alle existierenden Attribute
-                                    meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE);
-                                    meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_SPEED);
-
-                                    // Füge einen neuen Angriffsschaden-Modifier hinzu
-                                    AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", shopItem.getSchaden(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-                                    meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
-
-                                    AttributeModifier speedModifier = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", shopItem.getAngriffsgeschwindigkeit(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-                                    meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, speedModifier);
-                                    item.setItemMeta(meta);
-
-                                    AttributeModifier ruestungModifier = new AttributeModifier(UUID.randomUUID(), "generic.ARMOR", shopItem.getRustung(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST);
-                                    meta.addAttributeModifier(Attribute.GENERIC_ARMOR, ruestungModifier);
-                                    item.setItemMeta(meta);
-
+                                    ItemStack item = shopItem.buildBaseItem();
+                                    item.setLore(beschreibung);
 
                                     contents.update(slot, item);
                                 }
@@ -766,6 +727,10 @@ public class Shop {
             public void run() {
                 if(shopKunden.size() < maxKunden) {
                     shopKunden.add(new ShopKunden(shop));
+
+                    Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
+                        Shopy.getInstance().getScoreboardManger().setScoreBoard(shop.getOwner());
+                    });
                 }
 
             }

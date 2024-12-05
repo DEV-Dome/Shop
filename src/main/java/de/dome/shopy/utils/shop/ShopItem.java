@@ -3,12 +3,19 @@ package de.dome.shopy.utils.shop;
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.items.Item;
 import de.dome.shopy.utils.items.ItemKategorie;
+import de.dome.shopy.utils.items.ItemRessourecenKosten;
 import de.dome.shopy.utils.items.ItemSeltenheit;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class ShopItem {
@@ -24,8 +31,9 @@ public class ShopItem {
     double rustung = 0;
 
     int haltbarkeit = 0;
+    Item baseItem;
 
-    public ShopItem(int id, ItemKategorie itemKategorie, String name, String beschreibung, Material icon, ItemSeltenheit itemSeltenheit, double schaden, double angriffsgeschwindigkeit, double rustung, int haltbarkeit) {
+    public ShopItem(int id, int baseItemID, ItemKategorie itemKategorie, String name, String beschreibung, Material icon, ItemSeltenheit itemSeltenheit, double schaden, double angriffsgeschwindigkeit, double rustung, int haltbarkeit) {
         this.id = id;
         this.itemKategorie = itemKategorie;
         this.name = name;
@@ -36,6 +44,51 @@ public class ShopItem {
         this.angriffsgeschwindigkeit = roundToTwoDecimalPlaces(angriffsgeschwindigkeit);
         this.rustung = roundToTwoDecimalPlaces(rustung);
         this.haltbarkeit = haltbarkeit;
+        baseItem = Item.getItemById(baseItemID);
+    }
+
+    public double getItemPreis(){
+        double preis = 0;
+
+        for(ItemRessourecenKosten irk : baseItem.getRessourecsKostenList()){
+            double durschnittlicheKosten = (irk.getRessoure().getMinimaleKosten() + irk.getRessoure().getMaximaleKosten()) / 2;
+            if(irk.getRessoure().getType().equalsIgnoreCase("DUNGEON-LOOT")) durschnittlicheKosten = 25.0;
+
+            preis += (durschnittlicheKosten * irk.getMenge());
+        }
+
+        return preis;
+    }
+
+    public ItemStack buildBaseItem(){
+        ItemStack item = Shopy.getInstance().createItemWithLore(getIcon(), getVollenName(), getVolleBeschreibung());
+        ItemMeta meta = item.getItemMeta();
+
+        // Entferne alle existierenden Attribute
+        meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE);
+        meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_SPEED);
+        meta.removeAttributeModifier(Attribute.GENERIC_ARMOR);
+
+        // Füge einen neuen Angriffsschaden-Modifier hinzu
+        if(schaden != 0){
+            AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", schaden, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
+            item.setItemMeta(meta);
+        }
+
+        if(angriffsgeschwindigkeit != 0){
+            AttributeModifier speedModifier = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", angriffsgeschwindigkeit, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, speedModifier);
+            item.setItemMeta(meta);
+        }
+
+        if(rustung != 0){
+            AttributeModifier ruestungModifier = new AttributeModifier(UUID.randomUUID(), "generic.ARMOR", rustung, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST);
+            meta.addAttributeModifier(Attribute.GENERIC_ARMOR, ruestungModifier);
+            item.setItemMeta(meta);
+        }
+
+        return item;
     }
 
     public int getId() {

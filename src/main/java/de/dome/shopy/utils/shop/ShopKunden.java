@@ -27,28 +27,32 @@ public class ShopKunden {
     ArrayList<ItemKategorie> itemKategories = new ArrayList<>();
     ArrayList<ShopItem> interessanteItems = new ArrayList<>();
     ArrayList<ShopItem> gesuchteItems = new ArrayList<>();
-
+    Shop shop;
 
     public ShopKunden (Shop shop){
-        /* Werte ermittelen */
+        this.shop = shop;
+
         // Random-Objekt erstellen
         Random random = new Random();
         int skinIndex = random.nextInt(kundenSkins.size());
-        npcName = kundenName[ random.nextInt(100)];
+        npcName = kundenName[ random.nextInt(94)];
 
         /* Kunden Spawnen */
         npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "§9" + npcName);
         npc.getOrAddTrait(SkinTrait.class).setSkinPersistent("Test", kundenSkins.get(skinIndex)[1], kundenSkins.get(skinIndex)[0]);
 
-        npc.spawn(shop.getZones().get(0).getRandomLocation());
+        Location spawn = shop.getZones().get(0).getRandomLocation();
+        npc.spawn(spawn);
 
         /* Kauf Wunsch deffiniern */
-        itemKategories.add(ItemKategorie.itemKategorieList.get(random.nextInt(ItemKategorie.itemKategorieList.size())));
-        while(itemKategories.size() <= 1){
-            ItemKategorie option = ItemKategorie.itemKategorieList.get(random.nextInt(ItemKategorie.itemKategorieList.size()));
-            if(!itemKategories.contains(option)) itemKategories.add(option);
+        int interessanteKategorieMenge = 2;
+        if(Shopy.getInstance().isWahrscheinlichkeit(0.25)) interessanteKategorieMenge = 3;
+        for(int i = 0; i < interessanteKategorieMenge; i++){
+            if(itemKategories.size() >= i){
+                ItemKategorie option = ItemKategorie.itemKategorieList.get(random.nextInt(ItemKategorie.itemKategorieList.size()));
+                if(!itemKategories.contains(option)) itemKategories.add(option);
+            }
         }
-
 
         for(ShopItem item : shop.getShopItems()){
             if(itemKategories.contains(item.getItemKategorie())){
@@ -56,15 +60,23 @@ public class ShopKunden {
             }
         }
 
+        /* zu Kaufende Items aussuchen */
         if(interessanteItems.size() != 0){
-            gesuchteItems.add(interessanteItems.get(random.nextInt(interessanteItems.size())));
-            gesuchteItems.add(interessanteItems.get(random.nextInt(interessanteItems.size())));
-            gesuchteItems.add(interessanteItems.get(random.nextInt(interessanteItems.size())));
-        }else {
-            // wenn kein Item Intressant ist
+            int interessanteItemsMenge = 3;
+            if(Shopy.getInstance().isWahrscheinlichkeit(0.1)) interessanteItemsMenge = 5;
+
+            for(int i = 0; i < interessanteItemsMenge; i++){
+                if(Shopy.getInstance().isWahrscheinlichkeit(0.37)){
+                    gesuchteItems.add(null);
+                }else {
+                    ShopItem randomShopItem = interessanteItems.get(random.nextInt(interessanteItems.size()));
+                    if(!gesuchteItems.contains(randomShopItem)) gesuchteItems.add(randomShopItem);
+                    else gesuchteItems.add(null);
+                }
+
+            }
+
         }
-
-
     }
 
 
@@ -94,6 +106,17 @@ public class ShopKunden {
                                 "Sven", "Celine", "Katrin", "Tom", "Eva", "Ricarda"};
 
             } catch (SQLException e) { }
+        });
+    }
+
+    public void loescheKunden(){
+        npc.despawn();
+        npc.destroy();
+
+        shop.getShopKunden().remove(this);
+
+        Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
+            Shopy.getInstance().getScoreboardManger().setScoreBoard(shop.getOwner());
         });
     }
 

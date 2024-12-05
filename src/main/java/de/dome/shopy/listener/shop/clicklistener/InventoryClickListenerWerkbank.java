@@ -133,7 +133,7 @@ public class InventoryClickListenerWerkbank implements Listener {
                     double ruestung = realItem.getMinRuestung() + (realItem.getMaxRuestung() - realItem.getMinRuestung()) * random.nextDouble();
 
 
-                    spielerShop.getShopItems().add(new ShopItem(platzhalterID, realItem.getItemKategorie(), realItem.getName(), realItem.getBeschreibung(), realItem.getIcon(), realItem.getItemSeltenheit(), waffenSchaden, waffenAngriffsgeschwindigkeit, ruestung, 3));
+                    spielerShop.getShopItems().add(new ShopItem(platzhalterID, realItem.getId(), realItem.getItemKategorie(), realItem.getName(), realItem.getBeschreibung(), realItem.getIcon(), realItem.getItemSeltenheit(), waffenSchaden, waffenAngriffsgeschwindigkeit, ruestung, 3));
                     CompletableFuture.runAsync(() -> {
                         Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item (shop, item) VALUES ('" + spielerShop.getShopId() + "', '" + realItem.getId() + "')");
 
