@@ -6,6 +6,7 @@ shopy.cmd.setressource
 shopy.cmd.zeigewelten
 shopy.cmd.ladewelt
 shopy.cmd.welttp
+shopy.cmd.setshopposition
 
 shopy.cmd.adddungeon
 shopy.cmd.setdungeon

@@ -135,7 +135,7 @@ public class InventoryClickListener implements Listener {
                             public void run() {
                                 if (countdownTime <= 0) {
                                     cancel();
-                                    p.teleport(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getWorld().getSpawnLocation());
+                                    p.teleport(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopSpawn());
                                     p.sendMessage(Shopy.getInstance().getPrefix() + "§aDu wurdest zu deinem Shop Teleporiert.");
                                     if(Shopy.getInstance().getPlayersNotTeleport().contains(p)) Shopy.getInstance().getPlayersNotTeleport().remove(p);
 

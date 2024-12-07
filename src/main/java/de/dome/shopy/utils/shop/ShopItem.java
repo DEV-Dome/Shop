@@ -57,6 +57,8 @@ public class ShopItem {
             preis += (durschnittlicheKosten * irk.getMenge());
         }
 
+        if(haltbarkeit < 3) preis/=4;
+
         return preis;
     }
 

@@ -5,11 +5,14 @@ import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.items.ItemKategorie;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.api.trait.trait.Equipment;
 import net.citizensnpcs.trait.SkinTrait;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,7 +27,7 @@ public class ShopKunden {
     private static String[] kundenName;
     NPC npc = null;
     String npcName;
-    ArrayList<ItemKategorie> itemKategories = new ArrayList<>();
+    ArrayList<ItemKategorie>  interessanteKategorien = new ArrayList<>();
     ArrayList<ShopItem> interessanteItems = new ArrayList<>();
     ArrayList<ShopItem> gesuchteItems = new ArrayList<>();
     Shop shop;
@@ -40,22 +43,32 @@ public class ShopKunden {
         /* Kunden Spawnen */
         npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "§9" + npcName);
         npc.getOrAddTrait(SkinTrait.class).setSkinPersistent("Test", kundenSkins.get(skinIndex)[1], kundenSkins.get(skinIndex)[0]);
+        npc.spawn(shop.getShopSpawn());
 
-        Location spawn = shop.getZones().get(0).getRandomLocation();
-        npc.spawn(spawn);
+        /* NPC Bewegung */
+        int versuche = 0;
+        Location ziel = null;
+        while (versuche <= 3){
+            ziel = shop.getZones().get(0).getRandomLocation();
+            if(npc.getNavigator().canNavigateTo(ziel)) break;
+            versuche++;
+        }
+
+        if(ziel != null) npc.getNavigator().setTarget(ziel);
+        else npc.teleport(ziel, PlayerTeleportEvent.TeleportCause.UNKNOWN);
 
         /* Kauf Wunsch deffiniern */
         int interessanteKategorieMenge = 2;
         if(Shopy.getInstance().isWahrscheinlichkeit(0.25)) interessanteKategorieMenge = 3;
         for(int i = 0; i < interessanteKategorieMenge; i++){
-            if(itemKategories.size() >= i){
+            if(interessanteKategorien.size() >= i){
                 ItemKategorie option = ItemKategorie.itemKategorieList.get(random.nextInt(ItemKategorie.itemKategorieList.size()));
-                if(!itemKategories.contains(option)) itemKategories.add(option);
+                if(!interessanteKategorien.contains(option)) interessanteKategorien.add(option);
             }
         }
 
         for(ShopItem item : shop.getShopItems()){
-            if(itemKategories.contains(item.getItemKategorie())){
+            if(interessanteKategorien.contains(item.getItemKategorie())){
                 interessanteItems.add(item);
             }
         }
@@ -73,10 +86,26 @@ public class ShopKunden {
                     if(!gesuchteItems.contains(randomShopItem)) gesuchteItems.add(randomShopItem);
                     else gesuchteItems.add(null);
                 }
-
             }
-
+        }else {
+            if(shop.getShopItems().size() != 0 && shop.getShopItems().size() <= 10){
+                gesuchteItems.add(shop.getShopItems().get(0));
+            }
         }
+
+        /* Passendes Item ausrüsten */
+        for(ItemKategorie optionAusgruestet : interessanteKategorien){
+            for(ShopItemVorlage shopItemVorlage : shop.getShopItemVorlage()){
+                if(!shopItemVorlage.isfreigeschaltet() && shopItemVorlage.getItem().getItemKategorie() == optionAusgruestet){
+                    Equipment.EquipmentSlot equipmentSlot = Shopy.getInstance().getEquipmentSlot(shopItemVorlage.getItem().getIcon());
+                    if(equipmentSlot != null){
+                        npc.getOrAddTrait(Equipment.class).set(equipmentSlot, new ItemStack(shopItemVorlage.getItem().getIcon()));
+                        break;
+                    }
+                }
+            }
+        }
+
     }
 
 
@@ -110,14 +139,19 @@ public class ShopKunden {
     }
 
     public void loescheKunden(){
-        npc.despawn();
-        npc.destroy();
+        if(npc.getNavigator().canNavigateTo(shop.getShopSpawn())) npc.getNavigator().setTarget(shop.shopSpawn);
 
-        shop.getShopKunden().remove(this);
+        Bukkit.getScheduler().runTaskLater(Shopy.getInstance(), () -> {
+            npc.despawn();
+            npc.destroy();
 
-        Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
-            Shopy.getInstance().getScoreboardManger().setScoreBoard(shop.getOwner());
-        });
+            shop.getShopKunden().remove(this);
+
+            Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
+                Shopy.getInstance().getScoreboardManger().setScoreBoard(shop.getOwner());
+            });
+        }, 7 * 20L);
+
     }
 
     public NPC getNpc() {
@@ -128,8 +162,8 @@ public class ShopKunden {
         return npcName;
     }
 
-    public ArrayList<ItemKategorie> getItemKategories() {
-        return itemKategories;
+    public ArrayList<ItemKategorie> getInteressanteKategorien() {
+        return interessanteKategorien;
     }
 
     public ArrayList<ShopItem> getInteressanteItems() {

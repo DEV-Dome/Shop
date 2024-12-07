@@ -31,7 +31,7 @@ public class NPCInteractListener implements Listener {
 
         if(npc.getFullName().equals("§aShop Verwalter")){
             if(!Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())) {
-                RyseInventory.builder().title("Shop Erstellen").rows(3).provider(new InventoryProvider() {
+                RyseInventory.builder().title("§aShop Erstellen").rows(3).provider(new InventoryProvider() {
                     @Override
                     public void init(Player player, InventoryContents contents) {
                         ArrayList beschreibungNormalerShop = new ArrayList<>();

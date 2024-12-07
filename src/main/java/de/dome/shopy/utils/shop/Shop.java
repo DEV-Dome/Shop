@@ -32,7 +32,9 @@ public class Shop {
     int level;
     int ressourcenLagerSize;
     int itemLagerSize;
+    int taskIdSpawnManger = -1;
     World world;
+    Location shopSpawn;
     ArrayList<Cuboid> zones;
     ShopRessourenManger shopRessourenManger;
     /* itemKategorieLevel auf den Shop bezogen */
@@ -40,6 +42,7 @@ public class Shop {
     ArrayList<ShopItem> shopItems;
     ArrayList<ShopItemVorlage> shopItemVorlagen;
     ArrayList<ShopKunden> shopKunden;
+
 
 
     /* Halte fest, ob überhaupt ein Spielershop gefunden wurde  */
@@ -102,6 +105,16 @@ public class Shop {
                                     Cuboid add = new Cuboid(loc1, loc2);
 
                                     zones.add(add);
+                                }
+
+                                String queryPosition = "SELECT * FROM shop_template_werte WHERE template = " + result.getInt("template") +" LIMIT 1";
+
+                                ResultSet resultPosition = Shopy.getInstance().getMySQLConntion().resultSet(queryPosition);
+                                while(resultPosition.next()){
+                                    if(resultPosition.getString("schlussel").equals("shop_spawn")){
+                                        this.shopSpawn =  Shopy.getInstance().getLocationFromString(resultPosition.getString("inhalt"));
+                                        this.shopSpawn.setWorld(this.world);
+                                    }
                                 }
                             } catch (SQLException e) {
                                 Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
@@ -227,7 +240,10 @@ public class Shop {
 
     public void unLoadWorld(){
         Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
+            if(taskIdSpawnManger != -1) Bukkit.getScheduler().cancelTask(taskIdSpawnManger);
+
             for(ShopKunden shopKunden : shopKunden){
+                shopKunden.npc.getNavigator().cancelNavigation();
                 shopKunden.npc.despawn();
                 shopKunden.npc.destroy();
             }
@@ -722,7 +738,7 @@ public class Shop {
         Shop shop = this;
         int maxKunden = zones.size() * 2;
 
-        Bukkit.getScheduler().runTaskTimer(Shopy.getInstance(), new Runnable() {
+        taskIdSpawnManger = Bukkit.getScheduler().runTaskTimer(Shopy.getInstance(), new Runnable() {
             @Override
             public void run() {
                 if(shopKunden.size() < maxKunden) {
@@ -734,7 +750,7 @@ public class Shop {
                 }
 
             }
-        }, 20L, 1200L); // Startet nach 1 Sekunde (20 Ticks) und wiederholt sich alle 5 Sekunden (100 Ticks)
+        }, 20L, 1200L).getTaskId(); // Startet nach 1 Sekunde (20 Ticks) und wiederholt sich alle 5 Sekunden (100 Ticks)
 
     }
 
@@ -850,5 +866,9 @@ public class Shop {
 
     public ArrayList<ShopKunden> getShopKunden() {
         return shopKunden;
+    }
+
+    public Location getShopSpawn() {
+        return shopSpawn;
     }
 }
