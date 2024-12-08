@@ -2,6 +2,7 @@ package de.dome.shopy.listener.shop;
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.Ressource;
+import de.dome.shopy.utils.shop.Shop;
 import de.dome.shopy.utils.shop.ShopItem;
 import de.dome.shopy.utils.shop.ShopKunden;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
@@ -29,6 +30,9 @@ public class NPCInteractListener implements Listener {
         Player p = e.getClicker();
         NPC npc = e.getNPC();
 
+        Shop kundenShop = Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
+
+
         if (!npc.getStoredLocation().getWorld().getName().equals("world")) {
             if (Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())) {
                 if (Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getWorld().getName().equalsIgnoreCase(npc.getStoredLocation().getWorld().getName())) {
@@ -50,14 +54,28 @@ public class NPCInteractListener implements Listener {
                             int zeahler = 21;
                             if(shopKunden.getGesuchteItems().size() >= 5) zeahler--;
 
+
                             for(ShopItem shopItem : shopKunden.getGesuchteItems()){
-                                if(shopItem != null){
+                                /* Überprüfe ob, dass ausgewählte Item noch im Lager ist */
+                                boolean itemNochAufLager = kundenShop.getShopItems().contains(shopItem);
+
+                                if(shopItem != null && itemNochAufLager){
                                     ArrayList<String> beschreibung = shopItem.getVolleBeschreibung();
                                     beschreibung.add("");
                                     beschreibung.add("§7Dieser Kunde bietet: §e" + shopItem.getItemPreis() + "€ §7für das Item!");
 
                                     ItemStack item = shopItem.buildBaseItem();
                                     item.setLore(beschreibung);
+
+                                    contents.set(zeahler, item);
+                                    zeahler++;
+                                }else if(!itemNochAufLager) {
+                                    ArrayList<String> beschreibung = new ArrayList<>();
+                                    beschreibung.add("");
+                                    beschreibung.add("§7Leider ist das Item");
+                                    beschreibung.add("§7nicht mehr auf Lager!");
+
+                                    ItemStack item = Shopy.getInstance().createItemWithLore(Material.MAP, "§cKein Passendes Item!", beschreibung);
 
                                     contents.set(zeahler, item);
                                     zeahler++;

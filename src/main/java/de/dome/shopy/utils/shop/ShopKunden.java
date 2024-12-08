@@ -35,7 +35,6 @@ public class ShopKunden {
     public ShopKunden (Shop shop){
         this.shop = shop;
 
-        // Random-Objekt erstellen
         Random random = new Random();
         int skinIndex = random.nextInt(kundenSkins.size());
         npcName = kundenName[ random.nextInt(94)];
@@ -49,7 +48,7 @@ public class ShopKunden {
         int versuche = 0;
         Location ziel = null;
         while (versuche <= 3){
-            ziel = shop.getZones().get(0).getRandomLocation();
+            ziel = shop.getZones().get(random.nextInt(shop.getZones().size())).getRandomLocation();
             if(npc.getNavigator().canNavigateTo(ziel)) break;
             versuche++;
         }

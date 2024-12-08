@@ -11,13 +11,9 @@ import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import org.bukkit.*;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.entity.SpawnCategory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,12 +29,14 @@ public class Shop {
     int ressourcenLagerSize;
     int itemLagerSize;
     int taskIdSpawnManger = -1;
+    int shopTemplate;
+    int shopTemplateMaxGroße;
     World world;
     Location shopSpawn;
     ArrayList<Cuboid> zones;
     ShopRessourenManger shopRessourenManger;
     /* itemKategorieLevel auf den Shop bezogen */
-    Map<String, ShopItemKategorieLevel> itemKategorieLevel;
+    Map<String, ShopItemKategorie> shopItemKategorie;
     ArrayList<ShopItem> shopItems;
     ArrayList<ShopItemVorlage> shopItemVorlagen;
     ArrayList<ShopKunden> shopKunden;
@@ -53,7 +51,7 @@ public class Shop {
         zones = new ArrayList<>();
         shopItems = new ArrayList<>();
         shopItemVorlagen = new ArrayList<>();
-        itemKategorieLevel = new LinkedHashMap<>();
+        shopItemKategorie = new LinkedHashMap<>();
         shopKunden = new ArrayList<>();
         instance = this;
         
@@ -81,6 +79,12 @@ public class Shop {
 
                             this.world = creator.createWorld();
                             this.world.setTime(0);
+
+                            this.world.setSpawnLimit(SpawnCategory.ANIMAL, 0);
+                            this.world.setSpawnLimit(SpawnCategory.AMBIENT, 0);
+                            this.world.setSpawnLimit(SpawnCategory.AXOLOTL, 0);
+                            this.world.setSpawnLimit(SpawnCategory.MONSTER, 0);
+
                             this.world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
                             if(playerTeleport) this.owner.teleport(this.world.getSpawnLocation());
                         }else {
@@ -90,7 +94,8 @@ public class Shop {
 
                          CompletableFuture.runAsync(() -> {
                             try {
-                                String queryZones = "SELECT * FROM shop_template_zonen WHERE template = " + result.getInt("template") +" LIMIT " + result.getInt("shop_zones");
+                                this.shopTemplate = result.getInt("template");
+                                String queryZones = "SELECT * FROM shop_template_zonen WHERE template = " + this.shopTemplate +" LIMIT " + result.getInt("shop_zones");
 
                                 ResultSet resultZones = Shopy.getInstance().getMySQLConntion().resultSet(queryZones);
                                 while(resultZones.next()){
@@ -112,10 +117,15 @@ public class Shop {
                                 ResultSet resultPosition = Shopy.getInstance().getMySQLConntion().resultSet(queryPosition);
                                 while(resultPosition.next()){
                                     if(resultPosition.getString("schlussel").equals("shop_spawn")){
-                                        this.shopSpawn =  Shopy.getInstance().getLocationFromString(resultPosition.getString("inhalt"));
+                                        this.shopSpawn = Shopy.getInstance().getLocationFromString(resultPosition.getString("inhalt"));
                                         this.shopSpawn.setWorld(this.world);
                                     }
                                 }
+
+                                String queryMaxGroße = "SELECT COUNT(id) AS 'anzahl' FROM shop_template_zonen WHERE template = " + this.shopTemplate;
+
+                                ResultSet resultMaxGroße = Shopy.getInstance().getMySQLConntion().resultSet(queryMaxGroße);
+                                if(resultMaxGroße.next()) this.shopTemplateMaxGroße = resultMaxGroße.getInt("anzahl");
                             } catch (SQLException e) {
                                 Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
                             }
@@ -128,6 +138,7 @@ public class Shop {
                         int xpZumNachstenLevel = -1;
                         int aktuelleXP = -1;
 
+                        /* Vorhandes Level */
                         String itemKategorieQuery = "SELECT * FROM shop_werte WHERE schlussel = 'itemKategorie_" + itemKategorie.getName() + "_level' LIMIT 1";
                         ResultSet resultItemKategorie= Shopy.getInstance().getMySQLConntion().resultSet(itemKategorieQuery);
 
@@ -138,6 +149,26 @@ public class Shop {
                             level = 1;
                         }
 
+                        /* ist Item Freigeschlatet */
+                        boolean freigeschaltet = false;
+
+                        itemKategorieQuery = "SELECT * FROM shop_werte WHERE schlussel = 'itemKategorie_" + itemKategorie.getName() + "_freigeschaltet' LIMIT 1";
+                        resultItemKategorie= Shopy.getInstance().getMySQLConntion().resultSet(itemKategorieQuery);
+
+                        if(resultItemKategorie.next()){
+                            int tmpFreigeschaltet = Integer.parseInt(resultItemKategorie.getString("inhalt"));
+                            if(tmpFreigeschaltet == 1) freigeschaltet = true;
+                        }else {
+                            if(itemKategorie.getId() == 3 || itemKategorie.getId() == 5){
+                                Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_werte (shop, schlussel, inhalt) VALUES ('" + shopId + "', 'itemKategorie_" + itemKategorie.getName() + "_freigeschaltet', '1')");
+                                freigeschaltet = true;
+                            }else {
+                                Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_werte (shop, schlussel, inhalt) VALUES ('" + shopId + "', 'itemKategorie_" + itemKategorie.getName() + "_freigeschaltet', '0')");
+                                freigeschaltet = false;
+                            }
+                        }
+
+                        /* Vorhande XP */
                         itemKategorieQuery = "SELECT * FROM shop_werte WHERE schlussel = 'itemKategorie_" + itemKategorie.getName() + "_xp' LIMIT 1";
                         resultItemKategorie= Shopy.getInstance().getMySQLConntion().resultSet(itemKategorieQuery);
 
@@ -148,6 +179,7 @@ public class Shop {
                             aktuelleXP = 0;
                         }
 
+                        /* XP zum nächten Level */
                         itemKategorieQuery = "SELECT * FROM item_kategorie_level WHERE level = '" + level +"' LIMIT 1";
                         resultItemKategorie= Shopy.getInstance().getMySQLConntion().resultSet(itemKategorieQuery);
 
@@ -155,7 +187,7 @@ public class Shop {
                             xpZumNachstenLevel = resultItemKategorie.getInt("xp");
                         }
 
-                        itemKategorieLevel.put(itemKategorie.getName(), new ShopItemKategorieLevel(level, xpZumNachstenLevel, aktuelleXP, itemKategorie, this));
+                        shopItemKategorie.put(itemKategorie.getName(), new ShopItemKategorie(level, xpZumNachstenLevel, aktuelleXP, itemKategorie, this, freigeschaltet));
                     }
 
                     Shopy.getInstance().getSpielerShops().put(owner.getUniqueId(), this);
@@ -233,8 +265,9 @@ public class Shop {
 
             Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
                 Shopy.getInstance().getScoreboardManger().setScoreBoard(owner);
+                kundenManger();
             });
-            kundenManger();
+
         });
     }
 
@@ -414,7 +447,7 @@ public class Shop {
                         beschreibung.add("§7produzierst oder dir einen Bauplan, kaufst.");
 
 
-                        String itemName = "§7Item Freischalten.";
+                        String itemName = "§eItem Freischalten.";
                         contents.set(solt, Shopy.getInstance().createItemWithLore(Material.GRAY_DYE, itemName, beschreibung));
                     }
 
@@ -514,7 +547,7 @@ public class Shop {
                         beschreibung.add("§7produzierst oder dir einen Bauplan, kaufst.");
 
 
-                        String itemName = "§7Item Freischalten.";
+                        String itemName = "§eItem noch nicht Freischalten.";
                         contents.update(solt, Shopy.getInstance().createItemWithLore(Material.GRAY_DYE, itemName, beschreibung));
                     }
 
@@ -536,18 +569,28 @@ public class Shop {
             public void init(Player player, InventoryContents contents) {
                 int solt = 10;
                 int zaheler = 0;
-                for(ItemKategorie itemKategorie : ItemKategorie.itemKategorieList){
+                for(ShopItemKategorie shopItemKategorie : shopItemKategorie.values()){
 
-                    ArrayList<String> beschreibung = itemKategorie.getAnzeigeBeschreibung(instance);
+                    if(shopItemKategorie.isFreigeschaltet()){
+                        ArrayList<String> beschreibung = shopItemKategorie.getItemKategorie().getAnzeigeBeschreibung(instance);
 
-                    beschreibung.add("");
-                    String[] beschreibungsArray = itemKategorie.getBeschreibung().split("\n");
-                    for (String itemBeschreibung : beschreibungsArray) {
-                        beschreibung.add(itemBeschreibung.trim());
+                        beschreibung.add("");
+                        String[] beschreibungsArray = shopItemKategorie.getItemKategorie().getBeschreibung().split("\n");
+                        for (String itemBeschreibung : beschreibungsArray) {
+                            beschreibung.add(itemBeschreibung.trim());
+                        }
+
+                        contents.updateOrSet(solt, Shopy.getInstance().createItemWithLore(shopItemKategorie.getItemKategorie().getIcon(), "§9" + shopItemKategorie.getItemKategorie().getName(), beschreibung));
+                    }else {
+                        ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("");
+                        beschreibung.add("§7Diese Kategorie wurde noch nicht freigeschaltet.");
+                        beschreibung.add("§7Die Kategorie kann freigeschaltet werden, in dem");
+                        beschreibung.add("§7sie bei Mona gekauft wird!");
+
+                        String itemName = "§eKategorie noch nicht Freischalten.";
+                        contents.updateOrSet(solt, Shopy.getInstance().createItemWithLore(Material.GRAY_DYE, itemName, beschreibung));
                     }
-                    beschreibung.add("");
-
-                    contents.set(solt, Shopy.getInstance().createItemWithLore(itemKategorie.getIcon(), "§9" + itemKategorie.getName(), beschreibung));
 
                     zaheler+=2;
                     if (zaheler <= 7) {
@@ -736,22 +779,76 @@ public class Shop {
     }
     public void kundenManger(){
         Shop shop = this;
-        int maxKunden = zones.size() * 2;
 
         taskIdSpawnManger = Bukkit.getScheduler().runTaskTimer(Shopy.getInstance(), new Runnable() {
             @Override
             public void run() {
-                if(shopKunden.size() < maxKunden) {
-                    shopKunden.add(new ShopKunden(shop));
+                int maxKunden = zones.size() * 2;
 
-                    Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
-                        Shopy.getInstance().getScoreboardManger().setScoreBoard(shop.getOwner());
-                    });
+                if(shopKunden.size() < maxKunden) {
+                    if(Shopy.getInstance().isWahrscheinlichkeit(0.55)){
+                        shopKunden.add(new ShopKunden(shop));
+
+                        Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
+                            Shopy.getInstance().getScoreboardManger().setScoreBoard(shop.getOwner());
+                        });
+                    }
                 }
 
             }
-        }, 20L, 1200L).getTaskId(); // Startet nach 1 Sekunde (20 Ticks) und wiederholt sich alle 5 Sekunden (100 Ticks)
+        }, 1200L, 1200L).getTaskId();
 
+    }
+
+    public void addShopZone(){
+        CompletableFuture.runAsync(() -> {
+            try {
+                String queryUpateZones = "UPDATE shop SET shop_zones = '"+ (zones.size() + 1) +"' WHERE id = " + shopId;
+                Shopy.getInstance().getMySQLConntion().query(queryUpateZones);
+
+
+                String queryZones = "SELECT * FROM shop_template_zonen WHERE template = " + this.shopTemplate +" LIMIT " + (zones.size() + 1);
+                ResultSet resultZones = Shopy.getInstance().getMySQLConntion().resultSet(queryZones);
+
+                zones = new ArrayList<>();
+                while(resultZones.next()){
+                    Location loc1 = Shopy.getInstance().getLocationFromString(resultZones.getString("locationen_1"));
+                    loc1.setY(-70);
+                    loc1.setWorld(this.world);
+
+                    Location loc2 = Shopy.getInstance().getLocationFromString(resultZones.getString("locationen_2"));
+                    loc2.setY(-50);
+                    loc2.setWorld(this.world);
+
+                    Cuboid add = new Cuboid(loc1, loc2);
+
+                    zones.add(add);
+                }
+            } catch (SQLException e) {
+                Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
+            }
+        });
+    }
+    public ShopItemKategorie schalteZufaelligeItemKategorieFrei(){
+        ShopItemKategorie freischlaten = null;
+        ArrayList<ShopItemKategorie> nichtFreigeschlatet = new ArrayList<>();
+
+        for(ShopItemKategorie shopItemKategorie : getShopItemKategorie().values()){
+            if(!shopItemKategorie.isFreigeschaltet()){
+                nichtFreigeschlatet.add(shopItemKategorie);
+            }
+        }
+
+        Random random = new Random();
+        freischlaten = nichtFreigeschlatet.get(random.nextInt(nichtFreigeschlatet.size()));
+        freischlaten.setFreigeschaltet(true);
+
+        ShopItemKategorie finalFreischlaten = freischlaten;
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET inhalt = '1' WHERE schlussel = 'itemKategorie_"+ finalFreischlaten.itemKategorie.getName() +"_freigeschaltet'");
+        });
+
+        return freischlaten;
     }
 
     public void changeRessourcenLager(int newAmount){
@@ -860,8 +957,8 @@ public class Shop {
         return shopItemVorlagen;
     }
 
-    public Map<String, ShopItemKategorieLevel> getItemKategorieLevel() {
-        return itemKategorieLevel;
+    public Map<String, ShopItemKategorie> getShopItemKategorie() {
+        return shopItemKategorie;
     }
 
     public ArrayList<ShopKunden> getShopKunden() {
@@ -870,5 +967,13 @@ public class Shop {
 
     public Location getShopSpawn() {
         return shopSpawn;
+    }
+
+    public int getShopTemplate() {
+        return shopTemplate;
+    }
+
+    public int getShopTemplateMaxGroße() {
+        return shopTemplateMaxGroße;
     }
 }

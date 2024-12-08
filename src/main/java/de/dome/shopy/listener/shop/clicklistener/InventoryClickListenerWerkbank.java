@@ -34,7 +34,7 @@ public class InventoryClickListenerWerkbank implements Listener {
 
         /* Werkbank Übersicht*/
         if (e.getView().getTitle().equals("§9Werkbank-Kategorie")) {
-            if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
+            if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName() && !item.getItemMeta().getDisplayName().equals("§eKategorie noch nicht Freischalten.")) {
                 String kategorieName = item.getItemMeta().getDisplayName().substring(2);
                 ItemKategorie itemKategorie = ItemKategorie.getItemKategorieByName(kategorieName);
 
@@ -156,7 +156,7 @@ public class InventoryClickListenerWerkbank implements Listener {
                     });
 
                     //XP verteilen
-                    boolean levelUP = spielerShop.getItemKategorieLevel().get(realItem.getItemKategorie().getName()).addXp(realItem.getKategorieXp());
+                    boolean levelUP = spielerShop.getShopItemKategorie().get(realItem.getItemKategorie().getName()).addXp(realItem.getKategorieXp());
                     boolean herstellung = spielerShop.getShopItemVorlageByItem(realItem.getId()).addHerstellung();
 
                     //Spieler feedback ausgeben.

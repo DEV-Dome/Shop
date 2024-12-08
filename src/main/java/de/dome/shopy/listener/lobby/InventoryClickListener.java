@@ -4,6 +4,7 @@ import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.Dungeon;
 import de.dome.shopy.utils.Ressource;
 import de.dome.shopy.utils.shop.Shop;
+import de.dome.shopy.utils.shop.ShopItemKategorie;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -210,6 +211,41 @@ public class InventoryClickListener implements Listener {
                     case EVOKER_SPAWN_EGG:
                         Shopy.getInstance().getSpielerDungeon().put(p.getUniqueId(), new Dungeon(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()), 4));
                         break;
+                }
+            }
+        }
+        if (e.getView().getTitle().equals("§dEinhorn Prinessin Mona")) {
+            if(item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
+                Shop spielerShop =  Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
+                int spielerMondKristalle = spielerShop.getRessourenShopManger().getRessourceValue(Ressource.getRessoureByName("Mondkristall"));
+
+
+                if(item.getItemMeta().getDisplayName().equals("§5Shop Erweitern")){
+                    if(spielerMondKristalle < 1){
+                        int zuWenig = 1 - spielerMondKristalle;
+                        p.sendMessage(Shopy.getInstance().getPrefix() + "Leider reichen deine Mondkristalle dafür nicht aus! Dir fehlt noch §e" + zuWenig + " §7Mondkristall.");
+                        return;
+                    }
+                    Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger().setRessourcenValue(Ressource.getRessoureByName("Mondkristall"), (spielerMondKristalle - 1));
+
+                    spielerShop.addShopZone();
+
+                    p.sendMessage(Shopy.getInstance().getPrefix() + "Dein Shop Grundstück wurde erweitert!");
+                    p.updateInventory();
+                }
+
+                if(item.getItemMeta().getDisplayName().equals("§5Crafting Kategorie Freischalten")){
+                    if(spielerMondKristalle < 1){
+                        int zuWenig = 1 - spielerMondKristalle;
+                        p.sendMessage(Shopy.getInstance().getPrefix() + "Leider reichen deine Mondkristalle dafür nicht aus! Dir fehlt noch §e" + zuWenig + " §7Mondkristall.");
+                        return;
+                    }
+                    Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger().setRessourcenValue(Ressource.getRessoureByName("Mondkristall"), (spielerMondKristalle - 1));
+
+                    ShopItemKategorie shopItemKategorie = spielerShop.schalteZufaelligeItemKategorieFrei();
+
+                    p.sendMessage(Shopy.getInstance().getPrefix() + "Du hast die Kategorie §e" + shopItemKategorie.getItemKategorie().getName() + " §7freigeschaltet!");
+                    p.updateInventory();
                 }
             }
         }

@@ -2,26 +2,27 @@ package de.dome.shopy.utils.shop;
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.items.ItemKategorie;
-import org.bukkit.Bukkit;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.concurrent.CompletableFuture;
 
-public class ShopItemKategorieLevel {
+public class ShopItemKategorie {
 
     int level;
+    boolean freigeschaltet;
     int xpZumNachstenLevel;
     int aktuelleXP;
     ItemKategorie itemKategorie;
     Shop shop;
 
-    public ShopItemKategorieLevel(int level, int xpZumNachstenLevel, int aktuelleXP, ItemKategorie itemKategorie, Shop shop) {
+    public ShopItemKategorie(int level, int xpZumNachstenLevel, int aktuelleXP, ItemKategorie itemKategorie, Shop shop, boolean freigeschaltet) {
         this.level = level;
         this.xpZumNachstenLevel = xpZumNachstenLevel;
         this.aktuelleXP = aktuelleXP;
         this.itemKategorie = itemKategorie;
         this.shop = shop;
+        this.freigeschaltet = freigeschaltet;
     }
 
     /* git zurück, ob es ein LevelUp gabe */
@@ -78,5 +79,21 @@ public class ShopItemKategorieLevel {
 
     public int getAkeulleXP() {
         return aktuelleXP;
+    }
+
+    public boolean isFreigeschaltet() {
+        return freigeschaltet;
+    }
+
+    public int getAktuelleXP() {
+        return aktuelleXP;
+    }
+
+    public ItemKategorie getItemKategorie() {
+        return itemKategorie;
+    }
+
+    public void setFreigeschaltet(boolean freigeschaltet) {
+        this.freigeschaltet = freigeschaltet;
     }
 }
