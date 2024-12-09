@@ -162,11 +162,143 @@ public class NPCInteractListener implements Listener {
                         ArrayList<String> beschreibung = new ArrayList<>();
                         beschreibung.add("§7Du hast, alle Kategorien freigeschaltet!");
 
-                        contents.updateOrSet(11, Shopy.getInstance().createItemWithLore(Material.CRAFTING_TABLE, "§aGlückwunsch", beschreibung));
+                        contents.updateOrSet(11, Shopy.getInstance().createItemWithLore(Material.CALIBRATED_SCULK_SENSOR, "§aGlückwunsch", beschreibung));
                     }
 
 
-                    contents.set(12, Shopy.getInstance().createItem(Material.NETHERITE_SWORD, "§5Neue Item Stufe Freischalten"));
+                    contents.updateOrSet(12, Shopy.getInstance().createItem(Material.NETHERITE_SWORD, "§5Neue Item Stufe Freischalten"));
+
+                    /* Kunden Perks */
+                    /* Spawnzeit Reduzieren */
+                    if(spielerShop.getReduzierteKundenSpawnZeit() == 15){
+                        ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("§7Du hast die Maximal Spawnzeit Reduzierung erreicht!");
+                        beschreibung.add("");
+                        beschreibung.add("§7Spawnzeit (in Sekunden): §e" + (60 - spielerShop.getReduzierteKundenSpawnZeit()) + " §7/ §e45");
+
+                        contents.updateOrSet(19, Shopy.getInstance().createItemWithLore(Material.CLOCK, "§aGlückwunsch", beschreibung));
+                    }else {
+                        ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("§7Hier kannst du die Spawnzeit der Kunden Verbessern:");
+                        beschreibung.add("");
+                        beschreibung.add("§7Spawnzeit (in Sekunden): §e" + (60 - spielerShop.getReduzierteKundenSpawnZeit()) + " §7/ §e45");
+
+                        contents.updateOrSet(19, Shopy.getInstance().createItemWithLore(Material.CLOCK, "§5Spawnzeit Reduzieren", beschreibung));
+                    }
+
+                    /* Kunden Menge pro Grundstück */
+                    if(spielerShop.getZusaetzlicheKundenProGrunstueck() == 2 ){
+                        ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("§7Du hast die Maximalen Kunden");
+                        beschreibung.add("§7pro Grundstück erreicht!");
+                        beschreibung.add("");
+                        beschreibung.add("§7Kunden pro Grundstück: §e" + (spielerShop.getZusaetzlicheKundenProGrunstueck() + 2) + " §7/ §e4");
+
+                        contents.updateOrSet(20, Shopy.getInstance().createItemWithLore(Material.ARMOR_STAND, "§aGlückwunsch", beschreibung));
+                    }else {
+                        ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("§7Erhöhe die Maximal anzahl an kunden,");
+                        beschreibung.add("");
+                        beschreibung.add("§7Kunden pro Grundstück: §e" + (spielerShop.getZusaetzlicheKundenProGrunstueck() + 2) + " §7/ §e4");
+
+                        contents.updateOrSet(20, Shopy.getInstance().createItemWithLore(Material.ARMOR_STAND, "§5Maximale Kunden Menge pro Grundstück", beschreibung));
+                    }
+
+                    /* Wahrscheinlichkeit das Kunden kommen */
+                    if(spielerShop.getZusaetzlicheKundenWahrscheinlichkeit() == 15){
+                        ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("§7Du hast die Maximale Wahrscheinlichkeit");
+                        beschreibung.add("§7das Kunden kommen erreicht!");
+                        beschreibung.add("");
+                        beschreibung.add("§7Wahrscheinlichkeit: §e" + (spielerShop.getZusaetzlicheKundenWahrscheinlichkeit() + 55) + "% §7/ §e70 %");
+
+                        contents.updateOrSet(21, Shopy.getInstance().createItemWithLore(Material.FIREWORK_ROCKET, "§aGlückwunsch", beschreibung));
+                    }else {
+                        ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("§7Erhöhe die Wahrscheinlichkeit dass");
+                        beschreibung.add("§7kunden kommen:");
+                        beschreibung.add("");
+                        beschreibung.add("§7Wahrscheinlichkeit: §e" + (spielerShop.getZusaetzlicheKundenWahrscheinlichkeit() + 55) + "% §7/ §e70 %");
+
+                        contents.updateOrSet(21, Shopy.getInstance().createItemWithLore(Material.FIREWORK_ROCKET, "§5Wahrscheinlichkeit das Kunden kommen", beschreibung));
+                    }
+
+                    /* Wahrscheinlichkeit auf zusätzliches Item*/
+                    if(spielerShop.getZusaetzlichesItemWahrscheinlichkeit() == 15){
+                        ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("§7Du hast die Maximale Wahrscheinlichkeit");
+                        beschreibung.add("§7auf zusätzliches Item erreicht!");
+                        beschreibung.add("");
+                        beschreibung.add("§7Wahrscheinlichkeit: §e" + (spielerShop.getZusaetzlichesItemWahrscheinlichkeit() + 10) + "% §7/ §e25 %");
+
+                        contents.updateOrSet(22, Shopy.getInstance().createItemWithLore(Material.TOTEM_OF_UNDYING, "§aGlückwunsch", beschreibung));
+                    }else {
+                        ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("§7Erhöhe die Wahrscheinlichkeit dass");
+                        beschreibung.add("§7kunden Mehrere Item kaufen:");
+                        beschreibung.add("");
+                        beschreibung.add("§7Wahrscheinlichkeit: §e" + (spielerShop.getZusaetzlichesItemWahrscheinlichkeit() + 10) + "% §7/ §e25 %");
+
+                        contents.updateOrSet(22, Shopy.getInstance().createItemWithLore(Material.TOTEM_OF_UNDYING, "§5Wahrscheinlichkeit auf zusätzliches Item", beschreibung));
+                    }
+
+                    /* Wahrscheinlichkeit auf zusätzliche Kategorie*/
+                    if(spielerShop.getZusaetzlicheKategorieWahrscheinlichkeit() == 15){
+                        ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("§7Du hast die Maximale Wahrscheinlichkeit");
+                        beschreibung.add("§7auf zusätzliche Kategorie erreicht!");
+                        beschreibung.add("");
+                        beschreibung.add("§7Wahrscheinlichkeit: §e" + (spielerShop.getZusaetzlicheKategorieWahrscheinlichkeit() + 25) + "% §7/ §e40 %");
+
+                        contents.updateOrSet(23, Shopy.getInstance().createItemWithLore(Material.BRUSH, "§aGlückwunsch", beschreibung));
+                    }else {
+                        ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("§7Erhöhe die Wahrscheinlichkeit dass kunden");
+                        beschreibung.add("§7an Mehrere Kategorien Intresse haben:");
+                        beschreibung.add("");
+                        beschreibung.add("§7Wahrscheinlichkeit: §e" + (spielerShop.getZusaetzlicheKategorieWahrscheinlichkeit() + 25) + "% §7/ §e40 %");
+
+                        contents.updateOrSet(23, Shopy.getInstance().createItemWithLore(Material.BRUSH, "§5Wahrscheinlichkeit auf zusätzliche Kategorie", beschreibung));
+                    }
+
+                    /* Mehr Verkaufs erlöse */
+                    if(spielerShop.getZusaetzlicherVerkaufserlös() == 15){
+                        ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("§7Du hast die Maximale anzahl am");
+                        beschreibung.add("§7erhöhten Verkaufs erlöse erreicht!");
+                        beschreibung.add("");
+                        beschreibung.add("§7Wahrscheinlichkeit: §e" + spielerShop.getZusaetzlicherVerkaufserlös() + "% §7/ §e15 %");
+
+                        contents.updateOrSet(24, Shopy.getInstance().createItemWithLore(Material.NETHERITE_CHESTPLATE, "§aGlückwunsch", beschreibung));
+                    }else {
+                        ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("§7Erhöhe den Gewinn beim Verkauf");
+                        beschreibung.add("§7von Item an kunden");
+                        beschreibung.add("");
+                        beschreibung.add("§7Wahrscheinlichkeit: §e" + spielerShop.getZusaetzlicherVerkaufserlös() + "% §7/ §e15 %");
+
+                        contents.updateOrSet(24, Shopy.getInstance().createItemWithLore(Material.STONE_SWORD, "§5Mehr Verkaufs erlöse", beschreibung));
+                    }
+
+                    /* Materialien Kosten reduzieren */
+                    if(spielerShop.getReduzierteMaterialienKosten() == 15){
+                        ArrayList<String>beschreibung = new ArrayList<>();
+                        beschreibung.add("§7Du hast die Maximale anzahl an");
+                        beschreibung.add("§7Materialien Kosten reduzieren erreicht!");
+                        beschreibung.add("");
+                        beschreibung.add("§7Wahrscheinlichkeit: §e" + spielerShop.getReduzierteMaterialienKosten() + "% §7/ §e15 %");
+
+                        contents.updateOrSet(25, Shopy.getInstance().createItemWithLore(Material.NETHERITE_INGOT, "§aGlückwunsch", beschreibung));
+                    }else {
+                        ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("§7Reduziere die Kosten");
+                        beschreibung.add("§7von Materialien");
+                        beschreibung.add("");
+                        beschreibung.add("§7Wahrscheinlichkeit: §e" + spielerShop.getReduzierteMaterialienKosten() + "% §7/ §e15 %");
+
+                        contents.updateOrSet(25, Shopy.getInstance().createItemWithLore(Material.COPPER_INGOT, "§5Materialien Kosten reduzieren", beschreibung));
+                    }
+
                 }
 
                 @Override
@@ -178,5 +310,4 @@ public class NPCInteractListener implements Listener {
         }
 
     }
-
 }

@@ -34,6 +34,8 @@ public class InventoryClickListenerRessourenMarkplatz  implements Listener {
                 int newAmount = ressoureValue + 1;
 
                 double kosten = Math.round(ressource.getAktuelleKosten());
+                if(spielerShop.getReduzierteMaterialienKosten() != 0) kosten-= kosten * (spielerShop.getReduzierteMaterialienKosten() / 100);
+
                 int spielerGeld = spielerShop.getRessourenShopManger().getRessourceValue(Ressource.getRessoureByName("Geld"));
 
                 if(spielerGeld < kosten){

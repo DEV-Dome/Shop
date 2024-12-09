@@ -54,7 +54,9 @@ public class InventoryClickListenerKundenKauf implements Listener {
 
                 int itemID = Integer.parseInt(item.getItemMeta().getLore().get(0).split(":")[1].substring(1));
                 ShopItem shopItem = spielerShop.getShopItemById(itemID);
-                double Itempreis = shopItem.getItemPreis();
+
+                double itempreis = shopItem.getItemPreis();
+                if(spielerShop.getZusaetzlicherVerkaufserlös() != 0) itempreis += itempreis * (spielerShop.getZusaetzlicherVerkaufserlös() / 100);
 
                 /* Check wurde das Item gefunden */
                 if(shopItem != null && itemID != -1){
@@ -62,14 +64,14 @@ public class InventoryClickListenerKundenKauf implements Listener {
 
                     /* Geld gutschreiben */
                     int spielerGeld = spielerShop.getRessourenShopManger().getRessourceValue(Ressource.getRessoureByName("Geld"));
-                    Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger().setRessourcenValue(Ressource.getRessoureByName("Geld"), (int) (spielerGeld + Itempreis));
+                    Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger().setRessourcenValue(Ressource.getRessoureByName("Geld"), (int) (spielerGeld + itempreis));
 
                     /* NPC Entfernen */
                     if(shopKunde != null) shopKunde.loescheKunden();
 
                     p.closeInventory();
                     p.playSound(p, Sound.ENTITY_ITEM_PICKUP,  1,1);
-                    p.sendMessage(Shopy.getInstance().getPrefix() + "Du hast das Item für §e" + Itempreis + "€ §7verkauft!");
+                    p.sendMessage(Shopy.getInstance().getPrefix() + "Du hast das Item für §e" + itempreis + "€ §7verkauft!");
                 }else {
                     p.sendMessage(Shopy.getInstance().getPrefix() + "§cBeim Ausführen dieser Aktion ist leider ein Fehler aufgetreten. Bitte versuche es später erneut oder Kontaktiere den Support.");
                 }

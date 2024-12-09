@@ -58,7 +58,14 @@ public class ShopKunden {
 
         /* Kauf Wunsch deffiniern */
         int interessanteKategorieMenge = 2;
-        if(Shopy.getInstance().isWahrscheinlichkeit(0.25)) interessanteKategorieMenge = 3;
+
+        double wahrscheinlichkeit = 0.1;
+        if(shop.getZusaetzlichesItemWahrscheinlichkeit() == 5) wahrscheinlichkeit = 0.25;
+        if(shop.getZusaetzlichesItemWahrscheinlichkeit() == 10) wahrscheinlichkeit = 0.30;
+        if(shop.getZusaetzlichesItemWahrscheinlichkeit() == 15) wahrscheinlichkeit = 0.35;
+
+        if(Shopy.getInstance().isWahrscheinlichkeit(wahrscheinlichkeit)) interessanteKategorieMenge = 3;
+
         for(int i = 0; i < interessanteKategorieMenge; i++){
             if(interessanteKategorien.size() >= i){
                 ItemKategorie option = ItemKategorie.itemKategorieList.get(random.nextInt(ItemKategorie.itemKategorieList.size()));
@@ -75,7 +82,13 @@ public class ShopKunden {
         /* zu Kaufende Items aussuchen */
         if(interessanteItems.size() != 0){
             int interessanteItemsMenge = 3;
-            if(Shopy.getInstance().isWahrscheinlichkeit(0.1)) interessanteItemsMenge = 5;
+
+            wahrscheinlichkeit = 0.1;
+            if(shop.getZusaetzlichesItemWahrscheinlichkeit() == 5) wahrscheinlichkeit = 0.15;
+            if(shop.getZusaetzlichesItemWahrscheinlichkeit() == 10) wahrscheinlichkeit = 0.2;
+            if(shop.getZusaetzlichesItemWahrscheinlichkeit() == 15) wahrscheinlichkeit = 0.25;
+
+            if(Shopy.getInstance().isWahrscheinlichkeit(wahrscheinlichkeit)) interessanteItemsMenge = 5;
 
             for(int i = 0; i < interessanteItemsMenge; i++){
                 if(Shopy.getInstance().isWahrscheinlichkeit(0.37)){

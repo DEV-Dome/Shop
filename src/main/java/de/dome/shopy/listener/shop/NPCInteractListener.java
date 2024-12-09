@@ -60,9 +60,12 @@ public class NPCInteractListener implements Listener {
                                 boolean itemNochAufLager = kundenShop.getShopItems().contains(shopItem);
 
                                 if(shopItem != null && itemNochAufLager){
+                                    double itempreis = shopItem.getItemPreis();
+                                    if(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getZusaetzlicherVerkaufserlös() != 0) itempreis += itempreis * (Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getZusaetzlicherVerkaufserlös() / 100);
+
                                     ArrayList<String> beschreibung = shopItem.getVolleBeschreibung();
                                     beschreibung.add("");
-                                    beschreibung.add("§7Dieser Kunde bietet: §e" + shopItem.getItemPreis() + "€ §7für das Item!");
+                                    beschreibung.add("§7Dieser Kunde bietet: §e" + itempreis + "€ §7für das Item!");
 
                                     ItemStack item = shopItem.buildBaseItem();
                                     item.setLore(beschreibung);

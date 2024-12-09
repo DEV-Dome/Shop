@@ -31,6 +31,15 @@ public class Shop {
     int taskIdSpawnManger = -1;
     int shopTemplate;
     int shopTemplateMaxGroße;
+
+    int reduzierteKundenSpawnZeit;
+    int zusaetzlicheKundenProGrunstueck;
+    int zusaetzlicheKundenWahrscheinlichkeit;
+    int zusaetzlichesItemWahrscheinlichkeit;
+    int zusaetzlicheKategorieWahrscheinlichkeit;
+    int zusaetzlicherVerkaufserlös;
+    int reduzierteMaterialienKosten;
+
     World world;
     Location shopSpawn;
     ArrayList<Cuboid> zones;
@@ -256,6 +265,13 @@ public class Shop {
                     while (result.next()){
                         if(result.getString("schlussel").equals("ressourcen_lager")) ressourcenLagerSize = Integer.parseInt(result.getString("inhalt"));
                         if(result.getString("schlussel").equals("item_lager")) itemLagerSize = Integer.parseInt(result.getString("inhalt"));
+                        if(result.getString("schlussel").equals("zusätzliche_kunden_spawn_zeit")) reduzierteKundenSpawnZeit = Integer.parseInt(result.getString("inhalt"));
+                        if(result.getString("schlussel").equals("zusätzliche_kunden_pro_grundstück")) zusaetzlicheKundenProGrunstueck = Integer.parseInt(result.getString("inhalt"));
+                        if(result.getString("schlussel").equals("zusätzliche_kunden_wahrscheinlichkeit")) zusaetzlicheKundenWahrscheinlichkeit = Integer.parseInt(result.getString("inhalt"));
+                        if(result.getString("schlussel").equals("zusätzliches_item_wahrscheinlichkeit")) zusaetzlichesItemWahrscheinlichkeit = Integer.parseInt(result.getString("inhalt"));
+                        if(result.getString("schlussel").equals("zusätzliche_kategorie_wahrscheinlichkeit")) zusaetzlicheKategorieWahrscheinlichkeit = Integer.parseInt(result.getString("inhalt"));
+                        if(result.getString("schlussel").equals("zusätzlicher_verkaufserlös")) zusaetzlicherVerkaufserlös = Integer.parseInt(result.getString("inhalt"));
+                        if(result.getString("schlussel").equals("reduzierte_materialien_kosten")) reduzierteMaterialienKosten = Integer.parseInt(result.getString("inhalt"));
                     }
                 } catch (SQLException e) {
                     Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
@@ -300,9 +316,12 @@ public class Shop {
                     if(shopRessoure.getValue() == getRessourcenLager()) colorkey = "§a";
                     if(shopRessoure.getValue() >  getRessourcenLager()) colorkey = "§c";
 
+                    double kosten = Math.round(ressource.getAktuelleKosten());
+                    if(reduzierteMaterialienKosten != 0) kosten-= kosten * (reduzierteMaterialienKosten / 100);
+
                     ArrayList<String> beschreibung = new ArrayList<>();
                     beschreibung.add("§7Deine Menge: " + colorkey +  shopRessoure.getValue() + " §7/§e " + getRessourcenLager() + " §7" + ressource.getName());
-                    beschreibung.add("§7Aktuelle Kosten: §e" + Math.round(ressource.getAktuelleKosten()) + " §7€");
+                    beschreibung.add("§7Aktuelle Kosten: §e" + Math.round(kosten) + " §7€");
                     beschreibung.add("");
                     beschreibung.add("§6(Du hast " + shopRessourenManger.getRessourceValue(Ressource.getRessoureByName("geld")) + " €)");
                     beschreibung.add("");
@@ -783,10 +802,15 @@ public class Shop {
         taskIdSpawnManger = Bukkit.getScheduler().runTaskTimer(Shopy.getInstance(), new Runnable() {
             @Override
             public void run() {
-                int maxKunden = zones.size() * 2;
+                int maxKunden = zones.size() * (2 + zusaetzlicheKundenProGrunstueck);
+
+                double wahrscheinlichkeit = 0.55;
+                if(zusaetzlicheKategorieWahrscheinlichkeit == 5) wahrscheinlichkeit = 0.60;
+                if(zusaetzlicheKategorieWahrscheinlichkeit == 10) wahrscheinlichkeit = 0.65;
+                if(zusaetzlicheKategorieWahrscheinlichkeit == 15) wahrscheinlichkeit = 0.70;
 
                 if(shopKunden.size() < maxKunden) {
-                    if(Shopy.getInstance().isWahrscheinlichkeit(0.55)){
+                    if(Shopy.getInstance().isWahrscheinlichkeit(wahrscheinlichkeit)){
                         shopKunden.add(new ShopKunden(shop));
 
                         Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
@@ -796,7 +820,7 @@ public class Shop {
                 }
 
             }
-        }, 1200L, 1200L).getTaskId();
+        }, 1200L, (1200 - (20 * reduzierteKundenSpawnZeit))).getTaskId();
 
     }
 
@@ -976,4 +1000,89 @@ public class Shop {
     public int getShopTemplateMaxGroße() {
         return shopTemplateMaxGroße;
     }
+
+    public int getReduzierteKundenSpawnZeit() {
+        return reduzierteKundenSpawnZeit;
+    }
+
+    public int getZusaetzlicheKundenProGrunstueck() {
+        return zusaetzlicheKundenProGrunstueck;
+    }
+
+    public int getZusaetzlicheKundenWahrscheinlichkeit() {
+        return zusaetzlicheKundenWahrscheinlichkeit;
+    }
+
+    public int getZusaetzlichesItemWahrscheinlichkeit() {
+        return zusaetzlichesItemWahrscheinlichkeit;
+    }
+
+    public int getZusaetzlicheKategorieWahrscheinlichkeit() {
+        return zusaetzlicheKategorieWahrscheinlichkeit;
+    }
+
+    public int getZusaetzlicherVerkaufserlös() {
+        return zusaetzlicherVerkaufserlös;
+    }
+
+    public int getReduzierteMaterialienKosten() {
+        return reduzierteMaterialienKosten;
+    }
+
+    public void setReduzierteKundenSpawnZeit(int reduzierteKundenSpawnZeit) {
+        this.reduzierteKundenSpawnZeit = reduzierteKundenSpawnZeit;
+
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET inhalt = '"+ reduzierteKundenSpawnZeit +"' WHERE shop  = '" + shopId +"' AND schlussel = 'zusätzliche_kunden_spawn_zeit'");
+        });
+    }
+
+    public void setZusaetzlicheKundenProGrunstueck(int zusaetzlicheKundenProGrunstueck) {
+        this.zusaetzlicheKundenProGrunstueck = zusaetzlicheKundenProGrunstueck;
+
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET inhalt = '"+ zusaetzlicheKundenProGrunstueck +"' WHERE shop  = '" + shopId +"' AND schlussel = 'zusätzliche_kunden_pro_grundstück'");
+        });
+    }
+
+    public void setZusaetzlicheKundenWahrscheinlichkeit(int zusaetzlicheKundenWahrscheinlichkeit) {
+        this.zusaetzlicheKundenWahrscheinlichkeit = zusaetzlicheKundenWahrscheinlichkeit;
+
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET inhalt = '"+ zusaetzlicheKundenWahrscheinlichkeit +"' WHERE shop  = '" + shopId +"' AND schlussel = 'zusätzliche_kunden_wahrscheinlichkeit'");
+        });
+    }
+
+    public void setZusaetzlichesItemWahrscheinlichkeit(int zusaetzlichesItemWahrscheinlichkeit) {
+        this.zusaetzlichesItemWahrscheinlichkeit = zusaetzlichesItemWahrscheinlichkeit;
+
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET inhalt = '"+ zusaetzlichesItemWahrscheinlichkeit +"' WHERE shop  = '" + shopId +"' AND schlussel = 'zusätzliches_item_wahrscheinlichkeit'");
+        });
+    }
+
+    public void setZusaetzlicheKategorieWahrscheinlichkeit(int zusaetzlicheKategorieWahrscheinlichkeit) {
+        this.zusaetzlicheKategorieWahrscheinlichkeit = zusaetzlicheKategorieWahrscheinlichkeit;
+
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET inhalt = '"+ zusaetzlicheKategorieWahrscheinlichkeit +"' WHERE shop  = '" + shopId +"' AND schlussel = 'zusätzliche_kategorie_wahrscheinlichkeit'");
+        });
+    }
+
+    public void setZusaetzlicherVerkaufserlös(int zusaetzlicherVerkaufserlös) {
+        this.zusaetzlicherVerkaufserlös = zusaetzlicherVerkaufserlös;
+
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET inhalt = '"+ zusaetzlicherVerkaufserlös +"' WHERE shop  = '" + shopId +"' AND schlussel = 'zusätzlicher_verkaufserlös'");
+        });
+    }
+
+    public void setReduzierteMaterialienKosten(int reduzierteMaterialienKosten) {
+        this.reduzierteMaterialienKosten = reduzierteMaterialienKosten;
+
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET inhalt = '"+ reduzierteMaterialienKosten +"' WHERE shop  = '" + shopId +"' AND schlussel = 'reduzierte_materialien_kosten'");
+        });
+    }
+
 }
