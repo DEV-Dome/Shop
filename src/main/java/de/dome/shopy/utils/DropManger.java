@@ -102,7 +102,7 @@ public class DropManger {
         String[] standardLoot = {"Holz", "Stein", "Eisen", "Geld" };
         String[] mobLoot = {"Zombiesleim", "Zombiedreck", "Skelett Arm", "Pfeilreste", "Spinnenauge", "Hasenfell", "Sauerstoffkristall", "Stab eines Dreistacks" };
         String[] aufwerterLoot = {"Aufwärtspulver Stufe 1", "Aufwärtspulver Stufe 2", "Dungeon Schüssel der Stufe 1" };
-        String[] specialLoot = {"Mondkristall", "Schriftrollenpapier", "Aufwärtspulver Stufe 3"};
+        String[] specialLoot = {"Einhornkristall", "Schriftrollenpapier", "Aufwärtspulver Stufe 3"};
 
         double wahrscheinlichkeitDrop4 = 0.0090;
         double wahrscheinlichkeitDrop3 = 0.020;

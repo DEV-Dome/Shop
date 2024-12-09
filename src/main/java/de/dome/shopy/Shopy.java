@@ -237,6 +237,13 @@ public class Shopy extends JavaPlugin {
 
             npc.spawn(npcConfig.getLocation("npc.mona.location"));
         }
+        if(npcConfig.contains("npc.lara.location")){
+            NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "§bIngenieurin Lara");
+            npc.getOrAddTrait(SkinTrait.class).setSkinPersistent("IngenieurinLara", "GuBNHMNv+87lWn6L9MFD4ChYzbZByBYxD9Qc5wIOQT/tGpT/6PSTt7xTPTLr+UfnjxfEW0iNB5MM9DIxJTymxKxyN7cGcTJhqxvoq1RNFlKlSxvjorjXLL3BwQMO4SFlLd4vNKYCZMHC0SG1lGg3lrX3EYE7zSMCiNqizn4/NDjntLTO4sORaLf2mvxznODUvIfayJs5gizTzGgtZ5yoibc4iUxX/zuvkxxASsedEAd5ePXkmIE3Ujo73v62c42Z0A7aDwFK+J5aqjBvhLxrmnroGovB7Eah3APoh8sv5z7b9SsOfZOD2GEA2SZSxmwSUYEbqNk1hDQp9AbttxCdbZcHnp8KODXZyDWFuzvs/F0ZDmdRF++8OnmVuU81J5qSUtGj+MBetwfasa/yqatqULJz8hkwf9FrS5/WYhzf0W5ZsiGrlZhfcy6RBV2YieXaSNP6zijY2Pltc0ft4K796gIjUcLWhveJRC4+4AG1SS35UeZScaf75hCD0hwZ8GUJI4Xeua1iA8/wyFn/yFTSLoYJBzFcdawOZ8N6w0dnS6ceD8AykdzYnWfvkAFXagAQ/mn9zmJE82lGR3/9zGSEAIve+c1Y1YJhua0C5NNxFS2NMma9vOpJhVkWAjKCzFOfM0tlgoU9m/oALAzqSBWGTExgzFqbg3gXJ7K0HvVZUjU=", "ewogICJ0aW1lc3RhbXAiIDogMTczMzc3OTA5ODI5MywKICAicHJvZmlsZUlkIiA6ICJkNzliZjAzNDE4YzU0MDUyOGEzZDM4ZTQ4NTAwYzBhOSIsCiAgInByb2ZpbGVOYW1lIiA6ICJMYXJhXzE5MTIiLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2I1OTgxZTMwZWYxMDVlNzc3NDZkZWQ1NDI4MTE0YmNiYTI2NDRmNWE4NDk3MGY5OGIxZDA4OTMwMzhiOTk4IiwKICAgICAgIm1ldGFkYXRhIiA6IHsKICAgICAgICAibW9kZWwiIDogInNsaW0iCiAgICAgIH0KICAgIH0KICB9Cn0=");
+            npc.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.OFF_HAND, new ItemStack(Material.ENCHANTING_TABLE));
+
+            npc.spawn(npcConfig.getLocation("npc.lara.location"));
+        }
     }
 
     public ItemStack createItem(Material m, String Name) {

@@ -1,6 +1,7 @@
 package de.dome.shopy.listener.lobby;
 
 import de.dome.shopy.Shopy;
+import de.dome.shopy.utils.ShopDefaultItems;
 import de.dome.shopy.utils.shop.Shop;
 import de.dome.shopy.utils.shop.ShopItemKategorie;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
@@ -14,8 +15,10 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NPCInteractListener implements Listener {
 
@@ -129,6 +132,8 @@ public class NPCInteractListener implements Listener {
 
                     if(spielerShop.getZones().size() < spielerShop.getShopTemplateMaxGroße()){
                         ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("§7Kosten: §e1 Einhornkristall");
+                        beschreibung.add("");
                         beschreibung.add("§7Erweiter deinen Shop, um mehr Kunden");
                         beschreibung.add("§7anzuziehen und mehr Geräte bauen zu können!");
                         beschreibung.add("");
@@ -152,6 +157,8 @@ public class NPCInteractListener implements Listener {
 
                     if(freigeschlateKategorien != spielerShop.getShopItemKategorie().size()){
                         ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("§7Kosten: §e1 Einhornkristall");
+                        beschreibung.add("");
                         beschreibung.add("§7Schalte eine neue Item Kategorie Frei");
                         beschreibung.add("");
                         beschreibung.add("§7Folgende sind noch nicht freigeschaltet:");
@@ -179,6 +186,8 @@ public class NPCInteractListener implements Listener {
                         contents.updateOrSet(19, Shopy.getInstance().createItemWithLore(Material.CLOCK, "§aGlückwunsch", beschreibung));
                     }else {
                         ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("§7Kosten: §e1 §7Einhornkristall");
+                        beschreibung.add("");
                         beschreibung.add("§7Hier kannst du die Spawnzeit der Kunden Verbessern:");
                         beschreibung.add("");
                         beschreibung.add("§7Spawnzeit (in Sekunden): §e" + (60 - spielerShop.getReduzierteKundenSpawnZeit()) + " §7/ §e45");
@@ -197,6 +206,8 @@ public class NPCInteractListener implements Listener {
                         contents.updateOrSet(20, Shopy.getInstance().createItemWithLore(Material.ARMOR_STAND, "§aGlückwunsch", beschreibung));
                     }else {
                         ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("§7Kosten: §e1 §7Einhornkristall");
+                        beschreibung.add("");
                         beschreibung.add("§7Erhöhe die Maximal anzahl an kunden,");
                         beschreibung.add("");
                         beschreibung.add("§7Kunden pro Grundstück: §e" + (spielerShop.getZusaetzlicheKundenProGrunstueck() + 2) + " §7/ §e4");
@@ -215,6 +226,8 @@ public class NPCInteractListener implements Listener {
                         contents.updateOrSet(21, Shopy.getInstance().createItemWithLore(Material.FIREWORK_ROCKET, "§aGlückwunsch", beschreibung));
                     }else {
                         ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("§7Kosten: §e1 §7Einhornkristall");
+                        beschreibung.add("");
                         beschreibung.add("§7Erhöhe die Wahrscheinlichkeit dass");
                         beschreibung.add("§7kunden kommen:");
                         beschreibung.add("");
@@ -234,6 +247,8 @@ public class NPCInteractListener implements Listener {
                         contents.updateOrSet(22, Shopy.getInstance().createItemWithLore(Material.TOTEM_OF_UNDYING, "§aGlückwunsch", beschreibung));
                     }else {
                         ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("§7Kosten: §e1 §7Einhornkristall");
+                        beschreibung.add("");
                         beschreibung.add("§7Erhöhe die Wahrscheinlichkeit dass");
                         beschreibung.add("§7kunden Mehrere Item kaufen:");
                         beschreibung.add("");
@@ -253,6 +268,8 @@ public class NPCInteractListener implements Listener {
                         contents.updateOrSet(23, Shopy.getInstance().createItemWithLore(Material.BRUSH, "§aGlückwunsch", beschreibung));
                     }else {
                         ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("§7Kosten: §e1 §7Einhornkristall");
+                        beschreibung.add("");
                         beschreibung.add("§7Erhöhe die Wahrscheinlichkeit dass kunden");
                         beschreibung.add("§7an Mehrere Kategorien Intresse haben:");
                         beschreibung.add("");
@@ -272,6 +289,8 @@ public class NPCInteractListener implements Listener {
                         contents.updateOrSet(24, Shopy.getInstance().createItemWithLore(Material.NETHERITE_CHESTPLATE, "§aGlückwunsch", beschreibung));
                     }else {
                         ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("§7Kosten: §e1 §7Einhornkristall");
+                        beschreibung.add("");
                         beschreibung.add("§7Erhöhe den Gewinn beim Verkauf");
                         beschreibung.add("§7von Item an kunden");
                         beschreibung.add("");
@@ -291,6 +310,8 @@ public class NPCInteractListener implements Listener {
                         contents.updateOrSet(25, Shopy.getInstance().createItemWithLore(Material.NETHERITE_INGOT, "§aGlückwunsch", beschreibung));
                     }else {
                         ArrayList<String> beschreibung = new ArrayList<>();
+                        beschreibung.add("§7Kosten: §e1 §7Einhornkristall");
+                        beschreibung.add("");
                         beschreibung.add("§7Reduziere die Kosten");
                         beschreibung.add("§7von Materialien");
                         beschreibung.add("");
@@ -307,7 +328,31 @@ public class NPCInteractListener implements Listener {
                 }
             }).build(Shopy.getInstance()).open(p);
 
+        }else if(npc.getFullName().equals("§bIngenieurin Lara")){
+            RyseInventory.builder().title("§bIngenieurin Lara").rows(4).provider(new InventoryProvider() {
+                @Override
+                public void init(Player player, InventoryContents contents) {
+                    contents.updateOrSet(10, updateLoreMitPreis(ShopDefaultItems.INSTANCE().getRessourcenMark(), 300));
+                    contents.updateOrSet(11, updateLoreMitPreis(ShopDefaultItems.INSTANCE().getWerkbank(), 300));
+                    contents.updateOrSet(12, updateLoreMitPreis(ShopDefaultItems.INSTANCE().getRessourcenLager(), 750));
+                    contents.updateOrSet(13, updateLoreMitPreis(ShopDefaultItems.INSTANCE().getItemLager(), 750));
+                }
+                @Override
+                public void update(Player player, InventoryContents contents) {
+                    init(player, contents);
+                }
+            }).build(Shopy.getInstance()).open(p);
         }
 
+
+    }
+
+    private ItemStack updateLoreMitPreis(ItemStack item, int preis){
+        List<String> lore = item.getLore();
+        lore.add(0, "§7Kosten: §e"+preis+" §7€");
+        lore.add(1, "");
+        item.setLore(lore);
+
+        return item;
     }
 }

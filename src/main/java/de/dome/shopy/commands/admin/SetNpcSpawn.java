@@ -29,8 +29,10 @@ public class SetNpcSpawn implements CommandExecutor {
                         config.set("npc.dungeonhändler.location", p.getLocation());
                     } else if(args[0].equalsIgnoreCase("mona")){
                         config.set("npc.mona.location", p.getLocation());
+                    } else if(args[0].equalsIgnoreCase("lara")){
+                        config.set("npc.lara.location", p.getLocation());
                     }else {
-                        p.sendMessage(Shopy.getInstance().getPrefix() + "§c/setnpcspawn <ersteller/dungeonhändler>");
+                        p.sendMessage(Shopy.getInstance().getPrefix() + "§c/setnpcspawn <ersteller/dungeonhändler/mona/lara>");
                         return true;
                     }
 
@@ -45,7 +47,7 @@ public class SetNpcSpawn implements CommandExecutor {
                     p.sendMessage(Shopy.getInstance().getNoperm());
                 }
             }else {
-                p.sendMessage(Shopy.getInstance().getPrefix() + "§c/setnpcspawn <ersteller/dungeonhändler/mona>");
+                p.sendMessage(Shopy.getInstance().getPrefix() + "§c/setnpcspawn <ersteller/dungeonhändler/mona/lara>");
             }
         }else {
             sender.sendMessage(Shopy.getInstance().getPrefix() + "§cDas können nur Spieler ausführen!");

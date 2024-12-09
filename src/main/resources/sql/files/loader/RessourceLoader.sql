@@ -53,7 +53,7 @@ INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten
 
 
 /* SPECIAL Ressource */
-INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('ECHO_SHARD', 'Mondkristall', 'Ein mächtiger Kristall, welcher Bei Mona gegen starke Geschenke eingetauscht werden kann.', 'SPECIAL', 1, '0', '0');
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('ECHO_SHARD', 'Einhornkristall', 'Ein mächtiger Kristall, welcher Bei Mona gegen starke Geschenke eingetauscht werden kann.', 'SPECIAL', 1, '0', '0');
 INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('TRIPWIRE_HOOK', 'Dungeon Schüssel der Stufe 1', 'Mit diesem Schüssel kannst du einen Dungeon der Stufe 1 Betreten', 'SPECIAL', 2, '0', '0');
 INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('TRIPWIRE_HOOK', 'Dungeon Schüssel der Stufe 2', 'Mit diesem Schüssel kannst du einen Dungeon der Stufe 2 Betreten', 'SPECIAL', 3, '0', '0');
 INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('TRIPWIRE_HOOK', 'Dungeon Schüssel der Stufe 3', 'Mit diesem Schüssel kannst du einen Dungeon der Stufe 3 Betreten', 'SPECIAL', 4, '0', '0');
