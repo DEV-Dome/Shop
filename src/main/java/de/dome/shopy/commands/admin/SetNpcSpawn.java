@@ -18,7 +18,7 @@ public class SetNpcSpawn implements CommandExecutor {
         if(sender instanceof Player){
             Player p = (Player) sender;
 
-            if(args.length != 0){
+            if(args.length == 1){
                 if(p.hasPermission("shopy.cmd.setnpcspawn")){
                     File configFile = new File(Shopy.getInstance().getDataFolder(), "npc.yml");
                     FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
@@ -31,8 +31,10 @@ public class SetNpcSpawn implements CommandExecutor {
                         config.set("npc.mona.location", p.getLocation());
                     } else if(args[0].equalsIgnoreCase("lara")){
                         config.set("npc.lara.location", p.getLocation());
+                    } else if(args[0].equalsIgnoreCase("paul")){
+                        config.set("npc.paul.location", p.getLocation());
                     }else {
-                        p.sendMessage(Shopy.getInstance().getPrefix() + "§c/setnpcspawn <ersteller/dungeonhändler/mona/lara>");
+                        p.sendMessage(Shopy.getInstance().getPrefix() + "§c/setnpcspawn <ersteller/dungeonhändler/mona/lara/paul>");
                         return true;
                     }
 
@@ -47,7 +49,7 @@ public class SetNpcSpawn implements CommandExecutor {
                     p.sendMessage(Shopy.getInstance().getNoperm());
                 }
             }else {
-                p.sendMessage(Shopy.getInstance().getPrefix() + "§c/setnpcspawn <ersteller/dungeonhändler/mona/lara>");
+                p.sendMessage(Shopy.getInstance().getPrefix() + "§c/setnpcspawn <ersteller/dungeonhändler/mona/lara/paul>");
             }
         }else {
             sender.sendMessage(Shopy.getInstance().getPrefix() + "§cDas können nur Spieler ausführen!");

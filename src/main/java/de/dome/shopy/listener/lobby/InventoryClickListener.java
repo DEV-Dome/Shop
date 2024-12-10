@@ -3,7 +3,7 @@ package de.dome.shopy.listener.lobby;
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.Dungeon;
 import de.dome.shopy.utils.Ressource;
-import de.dome.shopy.utils.ShopDefaultItems;
+import de.dome.shopy.utils.manger.ShopDefaultItemsManger;
 import de.dome.shopy.utils.shop.Shop;
 import de.dome.shopy.utils.shop.ShopItemKategorie;
 import org.bukkit.*;
@@ -23,7 +23,6 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -91,10 +90,10 @@ public class InventoryClickListener implements Listener {
                         new Shop(p, true);
                         p.sendMessage(Shopy.getInstance().getPrefix() + "Dein Shop wurde erstellt. Du kannst nun Loslegen.");
 
-                        p.getInventory().addItem(ShopDefaultItems.INSTANCE().getRessourcenMark());
-                        p.getInventory().addItem(ShopDefaultItems.INSTANCE().getWerkbank());
-                        p.getInventory().addItem(ShopDefaultItems.INSTANCE().getItemLager());
-                        p.getInventory().addItem(ShopDefaultItems.INSTANCE().getRessourcenLager());
+                        p.getInventory().addItem(ShopDefaultItemsManger.INSTANCE().getRessourcenMark());
+                        p.getInventory().addItem(ShopDefaultItemsManger.INSTANCE().getWerkbank());
+                        p.getInventory().addItem(ShopDefaultItemsManger.INSTANCE().getItemLager());
+                        p.getInventory().addItem(ShopDefaultItemsManger.INSTANCE().getRessourcenLager());
                     });
 
                     return;

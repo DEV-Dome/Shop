@@ -32,7 +32,6 @@ public class NPCInteractListener implements Listener {
 
         Shop kundenShop = Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
 
-
         if (!npc.getStoredLocation().getWorld().getName().equals("world")) {
             if (Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())) {
                 if (Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getWorld().getName().equalsIgnoreCase(npc.getStoredLocation().getWorld().getName())) {
@@ -54,14 +53,13 @@ public class NPCInteractListener implements Listener {
                             int zeahler = 21;
                             if(shopKunden.getGesuchteItems().size() >= 5) zeahler--;
 
-
                             for(ShopItem shopItem : shopKunden.getGesuchteItems()){
                                 /* Überprüfe ob, dass ausgewählte Item noch im Lager ist */
                                 boolean itemNochAufLager = kundenShop.getShopItems().contains(shopItem);
 
                                 if(shopItem != null && itemNochAufLager){
                                     double itempreis = shopItem.getItemPreis();
-                                    if(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getZusaetzlicherVerkaufserlös() != 0) itempreis += itempreis * (Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getZusaetzlicherVerkaufserlös() / 100);
+                                    if(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getZusaetzlicherVerkaufserlös() > 0) itempreis += itempreis * (Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getZusaetzlicherVerkaufserlös() / 100);
 
                                     ArrayList<String> beschreibung = shopItem.getVolleBeschreibung();
                                     beschreibung.add("");
@@ -97,8 +95,6 @@ public class NPCInteractListener implements Listener {
 
                             contents.set(27, Shopy.getInstance().createItemWithLore(Material.OAK_DOOR, "§9Kunden Weg schicken", new ArrayList<>(), false, false));
                             contents.set(35, Shopy.getInstance().createItemWithLore(Material.BARRIER, "§7Menü schlissen", new ArrayList<>(), false, false));
-
-//                            contents.set(35, Shopy.getInstance().createItemWithLore(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE, "§9Kunden Beraten", new ArrayList<>(), false, false));
                         }
                     }).build(Shopy.getInstance()).open(p);
                 }

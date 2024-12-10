@@ -30,7 +30,13 @@ public class setRessourceCMD implements CommandExecutor {
                         return true;
                     }
 
-                    int newValue = Integer.parseInt(args[2]);
+                    int newValue = 0;
+                    try{
+                        newValue = Integer.parseInt(args[2]);
+                    }catch (Exception e){
+                        p.sendMessage(Shopy.getInstance().getPrefix() + "§e" + args[2] + " §cist keine gültige zahl");
+                        return true;
+                    }
 
                     Shopy.getInstance().getSpielerShops().get(target.getUniqueId()).getRessourenShopManger().setRessourcenValue(ressource, newValue);
                     p.sendMessage(Shopy.getInstance().getPrefix() + "Du hast dem Spieler §e" + target.getName() + " §7Die Ressource §e" + ressource.getName() + " §7auf eine Anzahl von §e" + newValue + " §7gesetzt!");

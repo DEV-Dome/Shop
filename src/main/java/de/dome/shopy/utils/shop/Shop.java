@@ -34,11 +34,11 @@ public class Shop {
 
     int reduzierteKundenSpawnZeit;
     int zusaetzlicheKundenProGrunstueck;
-    int zusaetzlicheKundenWahrscheinlichkeit;
-    int zusaetzlichesItemWahrscheinlichkeit;
-    int zusaetzlicheKategorieWahrscheinlichkeit;
-    int zusaetzlicherVerkaufserlös;
-    int reduzierteMaterialienKosten;
+    double zusaetzlicheKundenWahrscheinlichkeit;
+    double zusaetzlichesItemWahrscheinlichkeit;
+    double zusaetzlicheKategorieWahrscheinlichkeit;
+    double zusaetzlicherVerkaufserlös;
+    double reduzierteMaterialienKosten;
 
     World world;
     Location shopSpawn;
@@ -317,17 +317,17 @@ public class Shop {
                     if(shopRessoure.getValue() >  getRessourcenLager()) colorkey = "§c";
 
                     double kosten = Math.round(ressource.getAktuelleKosten());
-                    if(reduzierteMaterialienKosten != 0) kosten-= kosten * (reduzierteMaterialienKosten / 100);
+                    if(reduzierteMaterialienKosten > 0) kosten -= kosten * (reduzierteMaterialienKosten / 100);
 
                     ArrayList<String> beschreibung = new ArrayList<>();
                     beschreibung.add("§7Deine Menge: " + colorkey +  shopRessoure.getValue() + " §7/§e " + getRessourcenLager() + " §7" + ressource.getName());
-                    beschreibung.add("§7Aktuelle Kosten: §e" + Math.round(kosten) + " §7€");
+                    beschreibung.add("§7Aktuelle Kosten: §e" + kosten + " §7€");
                     beschreibung.add("");
                     beschreibung.add("§6(Du hast " + shopRessourenManger.getRessourceValue(Ressource.getRessoureByName("geld")) + " €)");
                     beschreibung.add("");
                     beschreibung.add("§5" + ressource.getBeschreibung());
 
-                    contents.set(solt, Shopy.getInstance().createItemWithLore(ressource.getIcon(), "§9" + ressource.getName(), beschreibung));
+                    contents.updateOrSet(solt, Shopy.getInstance().createItemWithLore(ressource.getIcon(), "§9" + ressource.getName(), beschreibung));
 
                     /* Items Anordenen */
                     zaheler++;
@@ -347,42 +347,7 @@ public class Shop {
             }
             @Override
             public void update(Player player, InventoryContents contents) {
-                int solt = 10;
-                int zaheler = 0;
-                for (Map.Entry<Ressource, Integer> shopRessoure : Shopy.getInstance().getSpielerShops().get(owner.getUniqueId()).getRessourenShopManger().getShopRessoure().entrySet()) {
-                    Ressource ressource = shopRessoure.getKey();
-                    if(!ressource.getType().equalsIgnoreCase("STANDART")) continue;
-
-                    String colorkey = "§e";
-                    if(shopRessoure.getValue() <  getRessourcenLager()) colorkey = "§e";
-                    if(shopRessoure.getValue() == getRessourcenLager()) colorkey = "§a";
-                    if(shopRessoure.getValue() >  getRessourcenLager()) colorkey = "§c";
-
-                    ArrayList<String> beschreibung = new ArrayList<>();
-                    beschreibung.add("§7Deine Menge: " + colorkey +  shopRessoure.getValue() + " §7/§e " + getRessourcenLager() + " §7" + ressource.getName());
-                    beschreibung.add("§7Aktuelle Kosten: §e" + Math.round(ressource.getAktuelleKosten()) + " §7€");
-                    beschreibung.add("");
-                    beschreibung.add("§6(Du hast " + shopRessourenManger.getRessourceValue(Ressource.getRessoureByName("geld")) + " €)");
-                    beschreibung.add("");
-                    beschreibung.add("§5" + ressource.getBeschreibung());
-
-                    contents.update(solt, Shopy.getInstance().createItemWithLore(ressource.getIcon(), "§9" + ressource.getName(), beschreibung));
-
-                    /* Items Anordenen */
-                    zaheler++;
-                    if (zaheler == 7) {
-                        solt += 3;
-                        zaheler = 0;
-                    }else if(solt == 14 ){
-                        solt += 5;
-                        zaheler = 0;
-                    }else if(solt == 20){
-                        solt += 8;
-                        zaheler = 0;
-                    } else {
-                        solt++;
-                    }
-                }
+                init(player, contents);
             }
         }).build(Shopy.getInstance()).open(owner);
     }
@@ -439,7 +404,7 @@ public class Shop {
                         String itemName = "§9" + item.getName() + " " + item.getItemSeltenheit().getFarbe() + " [" + item.getItemSeltenheit().getName() + "]";
 
 
-                        contents.set(solt, Shopy.getInstance().createItemWithLore(item.getIcon(), itemName, beschreibung, false, true));
+                        contents.updateOrSet(solt, Shopy.getInstance().createItemWithLore(item.getIcon(), itemName, beschreibung, false, true));
                     } else {
                         String FreischlatTyp = "§cNicht bekannt";
                         Item freischaltItem = Item.getItemByFreischaltItem(item);
@@ -467,7 +432,7 @@ public class Shop {
 
 
                         String itemName = "§eItem Freischalten.";
-                        contents.set(solt, Shopy.getInstance().createItemWithLore(Material.GRAY_DYE, itemName, beschreibung));
+                        contents.updateOrSet(solt, Shopy.getInstance().createItemWithLore(Material.GRAY_DYE, itemName, beschreibung));
                     }
 
                     zaheler++;
@@ -486,99 +451,18 @@ public class Shop {
                 }
 
                 /*Menü Regeler */
-                if (seite != 0) contents.set(9, Shopy.getInstance().createItem(Material.ARROW, "§7Letzte Seite"));
-                if (letztesItemGesetzt) contents.set(17, Shopy.getInstance().createItem(Material.ARROW, "§7Nächste Seite"));
+                if (seite != 0) contents.updateOrSet(9, Shopy.getInstance().createItem(Material.ARROW, "§7Letzte Seite"));
+                if (letztesItemGesetzt) contents.updateOrSet(17, Shopy.getInstance().createItem(Material.ARROW, "§7Nächste Seite"));
 
-                contents.set(18, Shopy.getInstance().createItem(Material.CRAFTING_TABLE, "§7Zurück zur Übersicht"));
-                contents.set(26, Shopy.getInstance().createItem(Material.BARRIER, "§7Menü Schlissen"));
+                contents.updateOrSet(18, Shopy.getInstance().createItem(Material.CRAFTING_TABLE, "§7Zurück zur Übersicht"));
+                contents.updateOrSet(26, Shopy.getInstance().createItem(Material.BARRIER, "§7Menü Schlissen"));
 
-                contents.set(4, Shopy.getInstance().createItemWithLore(itemKategorie.getIcon(), "§9" + itemKategorie.getName() + " Statistk", itemKategorie.getAnzeigeBeschreibung(instance)));
+                contents.updateOrSet(4, Shopy.getInstance().createItemWithLore(itemKategorie.getIcon(), "§9" + itemKategorie.getName() + " Statistk", itemKategorie.getAnzeigeBeschreibung(instance)));
             }
 
             @Override
             public void update(Player player, InventoryContents contents) {
-                int solt = 11;
-                int zaheler = 0;
-                int startBei = seite * 5;
-
-                for (ShopItemVorlage shopItemVorlage : getShopItemVorlage()) {
-                    Item item = shopItemVorlage.getItem();
-
-                    if (item.getItemKategorie().getId() != itemKategorie.getId()) continue;
-                    if (startBei > zaheler) {
-                        zaheler++;
-                        continue;
-                    } else if (startBei != -1) {
-                        zaheler = 0;
-                        startBei = -1;
-                    }
-
-                    if (shopItemVorlage.isfreigeschaltet()) {
-                        ArrayList<String> beschreibung = new ArrayList<>();
-                        beschreibung.add("");
-
-                        beschreibung.add("§7Kosten:");
-                        for (ItemRessourecenKosten itr : item.getRessourecsKostenList()) {
-                            beschreibung.add("  §7- §e" + itr.getMenge() + " §7" + itr.getRessoure().getName());
-                        }
-
-                        beschreibung.add("");
-                        beschreibung.add("§7Herstellungen: §e" + shopItemVorlage.getHergestellt());
-                        if(shopItemVorlage.isMeisterung()) beschreibung.add("§7Diese gegenstand wurde §egemeistert!");
-                        else beschreibung.add("§7Meisterung ab §e" + item.getMeisterMenge() + " §7herstellungen.");
-                        beschreibung.add("");
-
-                        beschreibung.add("§7Erfahrungspunkt:");
-                        beschreibung.add("  §7- §e" + item.getShopXp() + " §7Shop Erfahrungspunkte");
-                        beschreibung.add("  §7- §e" + item.getKategorieXp() + " §7Item-linien Erfahrungspunkte");
-                        beschreibung.add("");
-
-                        String[] beschreibungsArray = item.getBeschreibung().split("\n");
-                        for (String itemBeschreibung : beschreibungsArray) {
-                            beschreibung.add(itemBeschreibung.trim());
-                        }
-
-                        String itemName = "§9" + item.getName() + " " + item.getItemSeltenheit().getFarbe() + " [" + item.getItemSeltenheit().getName() + "]";
-                        contents.update(solt, Shopy.getInstance().createItemWithLore(item.getIcon(), itemName, beschreibung, false, true));
-                    } else {
-                        String FreischlatTyp = "§cNicht bekannt";
-                        Item freischaltItem = Item.getItemByFreischaltItem(item);
-
-                        if (item.getFreischlatTyp().equalsIgnoreCase("STANDART")) FreischlatTyp = "Aufleveln von Items";
-                        if (item.getFreischlatTyp().equalsIgnoreCase("ITEM")) FreischlatTyp = "Benutzen eines Bauplans";
-
-                        ArrayList<String> beschreibung = new ArrayList<>();
-                        beschreibung.add("");
-                        if (freischaltItem != null) {
-                            int hergestellt = getShopItemVorlageByItem(freischaltItem.getId()).getHergestellt();
-                            int freischaltMenege = freischaltItem.getFreischaltMenge();
-                            String freischaltItemName = freischaltItem.getName();
-
-                            beschreibung.add("§9" + freischaltItemName + ":");
-                            beschreibung.add("§e" + hergestellt + " §7/ §e" + freischaltMenege);
-                        } else {
-                            beschreibung.add("§7wird Freigeschaltet durch:");
-                            beschreibung.add("§e" + FreischlatTyp);
-                        }
-                        beschreibung.add("");
-                        beschreibung.add("§7Dieses Item wurde noch nicht freigeschaltet.");
-                        beschreibung.add("§7Schalte das Item frei, in dem du mehr Items");
-                        beschreibung.add("§7produzierst oder dir einen Bauplan, kaufst.");
-
-
-                        String itemName = "§eItem noch nicht Freischalten.";
-                        contents.update(solt, Shopy.getInstance().createItemWithLore(Material.GRAY_DYE, itemName, beschreibung));
-                    }
-
-                    zaheler++;
-                    solt += 1;
-
-                    if (zaheler >= 5) {
-                        break;
-                    }
-                }
-
-                contents.update(4, Shopy.getInstance().createItemWithLore(itemKategorie.getIcon(), "§9" + itemKategorie.getName() + " Statistk", itemKategorie.getAnzeigeBeschreibung(instance)));
+                init(player, contents);
             }
         }).build(Shopy.getInstance()).open(this.owner);
     }
@@ -620,6 +504,10 @@ public class Shop {
                     }
                 }
             }
+            @Override
+            public void update(Player player, InventoryContents contents) {
+                init(player, contents);
+            }
         }).build(Shopy.getInstance()).open(owner);
     }
 
@@ -656,7 +544,7 @@ public class Shop {
                                     ItemStack item = shopItem.buildBaseItem();
                                     item.setLore(beschreibung);
 
-                                    contents.set(slot, item);
+                                    contents.updateOrSet(slot, item);
                                 }
                             }else {
                                 if(i > getItemLagerSize() - 1){
@@ -666,69 +554,24 @@ public class Shop {
                                     beschreibung.add("");
                                     beschreibung.add("§7Du kannst diesen Solt freischalten, in dem du mehr Item Lager in deinem Shop aufbaust.");
 
-                                    contents.set(slot, Shopy.getInstance().createItemWithLore(Material.GRAY_DYE, "§7Solt noch nicht freigeschaltet", beschreibung));
+                                    contents.updateOrSet(slot, Shopy.getInstance().createItemWithLore(Material.GRAY_DYE, "§7Solt noch nicht freigeschaltet", beschreibung));
                                 }
                             }
                         }
                         // Option nicht in einem Dungeon anbieten
                         if(!Shopy.getInstance().getSpielerDungeon().containsKey(owner.getUniqueId())) {
-                            contents.set(45, Shopy.getInstance().createItem(Material.TRAPPED_CHEST, "§7zur Shopübersicht"));
-                            contents.set(46, Shopy.getInstance().createItem(Material.BARRIER, "§7Menü Schlissen"));
+                            contents.updateOrSet(45, Shopy.getInstance().createItem(Material.TRAPPED_CHEST, "§7zur Shopübersicht"));
+                            contents.updateOrSet(46, Shopy.getInstance().createItem(Material.BARRIER, "§7Menü Schlissen"));
                         }else contents.set(45, Shopy.getInstance().createItem(Material.BARRIER, "§7Menü Schlissen"));
 
 
-                        if(seite != 0)          contents.set(52, Shopy.getInstance().createItem(Material.ARROW, "§7Letzte Seite"));
-                        if(letztesItemGsetzt)   contents.set(53, Shopy.getInstance().createItem(Material.ARROW, "§7Nächste Seite"));
+                        if(seite != 0)          contents.updateOrSet(52, Shopy.getInstance().createItem(Material.ARROW, "§7Letzte Seite"));
+                        if(letztesItemGsetzt)   contents.updateOrSet(53, Shopy.getInstance().createItem(Material.ARROW, "§7Nächste Seite"));
 
                     }
                     @Override
                     public void update(Player player, InventoryContents contents) {
-                        boolean letztesItemGsetzt = false;
-
-                        for(int i = (seite * 44); i <= 44 * (seite + 1);i++){
-                            /* Item Slot unabhängig der Shop Seite. Darf nicht größer 53 sein */
-                            int slot = i - (seite * 44);
-
-                            ItemStack itemStack = new ItemStack(Material.AIR);
-                            if(contents.get(slot).isPresent()) contents.update(slot, itemStack);
-
-                            if(i <= getItemLagerSize() - 1){
-                                letztesItemGsetzt = true;
-                                if(i <= getShopItems().size() - 1) {
-                                    /* Item laden */
-                                    ShopItem shopItem = getShopItems().get(i);
-                                    if(shopItem.getHaltbarkeit() <= 0) continue;
-
-                                    ArrayList<String> beschreibung = shopItem.getVolleBeschreibung();
-                                    beschreibung.add("");
-
-                                    /* Beschreibung angepassten, je nachdem ob man in einem Dungeon ist */
-                                    if(Shopy.getInstance().getSpielerDungeon().containsKey(owner.getUniqueId())) {
-                                        beschreibung.add("§a- Linksklick zum Item entnehmen");
-                                    }else {
-                                        beschreibung.add("§c- Rechtsklick zum Löschen");
-                                    }
-
-                                    ItemStack item = shopItem.buildBaseItem();
-                                    item.setLore(beschreibung);
-
-                                    contents.update(slot, item);
-                                }
-                            }else {
-                                if(i > getItemLagerSize() - 1){
-                                    letztesItemGsetzt = false;
-
-                                    ArrayList beschreibung = new ArrayList();
-                                    beschreibung.add("");
-                                    beschreibung.add("§7Du kannst diesen Solt freischalten, in dem du mehr Item Lager in deinem Shop aufbaust.");
-
-                                    contents.update(slot, Shopy.getInstance().createItemWithLore(Material.GRAY_DYE, "§7Solt noch nicht freigeschaltet", beschreibung));
-                                }
-                            }
-                        }
-
-                        if(seite != 0)          contents.update(52, Shopy.getInstance().createItem(Material.ARROW, "§7Letzte Seite"));
-                        if(letztesItemGsetzt)   contents.update(53, Shopy.getInstance().createItem(Material.ARROW, "§7Nächste Seite"));
+                        init(player, contents);
                     }
                 }).build(Shopy.getInstance()).open(owner);
     }
@@ -794,6 +637,10 @@ public class Shop {
                         if(type.equals("AUFWERTER")) aktivItem = true;
                         contents.set(50, Shopy.getInstance().createItemWithLore(Material.BLUE_DYE, "§e" + "Aufwerter", beschreibung, aktivItem, false));
                     }
+                    @Override
+                    public void update(Player player, InventoryContents contents) {
+                        init(player, contents);
+                    }
                 }).build(Shopy.getInstance()).open(owner);
     }
     public void kundenManger(){
@@ -805,9 +652,7 @@ public class Shop {
                 int maxKunden = zones.size() * (2 + zusaetzlicheKundenProGrunstueck);
 
                 double wahrscheinlichkeit = 0.55;
-                if(zusaetzlicheKategorieWahrscheinlichkeit == 5) wahrscheinlichkeit = 0.60;
-                if(zusaetzlicheKategorieWahrscheinlichkeit == 10) wahrscheinlichkeit = 0.65;
-                if(zusaetzlicheKategorieWahrscheinlichkeit == 15) wahrscheinlichkeit = 0.70;
+                if(zusaetzlicheKategorieWahrscheinlichkeit > 0) wahrscheinlichkeit += (zusaetzlicheKategorieWahrscheinlichkeit / 100);
 
                 if(shopKunden.size() < maxKunden) {
                     if(Shopy.getInstance().isWahrscheinlichkeit(wahrscheinlichkeit)){
@@ -1009,23 +854,23 @@ public class Shop {
         return zusaetzlicheKundenProGrunstueck;
     }
 
-    public int getZusaetzlicheKundenWahrscheinlichkeit() {
+    public double getZusaetzlicheKundenWahrscheinlichkeit() {
         return zusaetzlicheKundenWahrscheinlichkeit;
     }
 
-    public int getZusaetzlichesItemWahrscheinlichkeit() {
+    public double getZusaetzlichesItemWahrscheinlichkeit() {
         return zusaetzlichesItemWahrscheinlichkeit;
     }
 
-    public int getZusaetzlicheKategorieWahrscheinlichkeit() {
+    public double getZusaetzlicheKategorieWahrscheinlichkeit() {
         return zusaetzlicheKategorieWahrscheinlichkeit;
     }
 
-    public int getZusaetzlicherVerkaufserlös() {
+    public double getZusaetzlicherVerkaufserlös() {
         return zusaetzlicherVerkaufserlös;
     }
 
-    public int getReduzierteMaterialienKosten() {
+    public double getReduzierteMaterialienKosten() {
         return reduzierteMaterialienKosten;
     }
 
@@ -1045,7 +890,7 @@ public class Shop {
         });
     }
 
-    public void setZusaetzlicheKundenWahrscheinlichkeit(int zusaetzlicheKundenWahrscheinlichkeit) {
+    public void setZusaetzlicheKundenWahrscheinlichkeit(double zusaetzlicheKundenWahrscheinlichkeit) {
         this.zusaetzlicheKundenWahrscheinlichkeit = zusaetzlicheKundenWahrscheinlichkeit;
 
         CompletableFuture.runAsync(() -> {
@@ -1053,7 +898,7 @@ public class Shop {
         });
     }
 
-    public void setZusaetzlichesItemWahrscheinlichkeit(int zusaetzlichesItemWahrscheinlichkeit) {
+    public void setZusaetzlichesItemWahrscheinlichkeit(double zusaetzlichesItemWahrscheinlichkeit) {
         this.zusaetzlichesItemWahrscheinlichkeit = zusaetzlichesItemWahrscheinlichkeit;
 
         CompletableFuture.runAsync(() -> {
@@ -1061,7 +906,7 @@ public class Shop {
         });
     }
 
-    public void setZusaetzlicheKategorieWahrscheinlichkeit(int zusaetzlicheKategorieWahrscheinlichkeit) {
+    public void setZusaetzlicheKategorieWahrscheinlichkeit(double zusaetzlicheKategorieWahrscheinlichkeit) {
         this.zusaetzlicheKategorieWahrscheinlichkeit = zusaetzlicheKategorieWahrscheinlichkeit;
 
         CompletableFuture.runAsync(() -> {
@@ -1069,7 +914,7 @@ public class Shop {
         });
     }
 
-    public void setZusaetzlicherVerkaufserlös(int zusaetzlicherVerkaufserlös) {
+    public void setZusaetzlicherVerkaufserlös(double zusaetzlicherVerkaufserlös) {
         this.zusaetzlicherVerkaufserlös = zusaetzlicherVerkaufserlös;
 
         CompletableFuture.runAsync(() -> {
@@ -1077,7 +922,7 @@ public class Shop {
         });
     }
 
-    public void setReduzierteMaterialienKosten(int reduzierteMaterialienKosten) {
+    public void setReduzierteMaterialienKosten(double reduzierteMaterialienKosten) {
         this.reduzierteMaterialienKosten = reduzierteMaterialienKosten;
 
         CompletableFuture.runAsync(() -> {

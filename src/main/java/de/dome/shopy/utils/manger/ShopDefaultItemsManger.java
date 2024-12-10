@@ -1,4 +1,4 @@
-package de.dome.shopy.utils;
+package de.dome.shopy.utils.manger;
 
 import de.dome.shopy.Shopy;
 import org.bukkit.Material;
@@ -6,16 +6,15 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 
-public class ShopDefaultItems {
+public class ShopDefaultItemsManger {
 
-    private static ShopDefaultItems INSTANCE;
+    private static ShopDefaultItemsManger INSTANCE;
     ItemStack ressourcenMark;
     ItemStack werkbank;
     ItemStack itemLager;
     ItemStack ressourcenLager;
 
-    private ShopDefaultItems(){
-
+    private ShopDefaultItemsManger(){
         String buildingHinweis   = "§7Dieser Gegenstand kann nur in der Shop-Welt";
         String buildingHinweis1  = "§7platziert werden. Und entfaltet da einen";
         String buildingHinweis2  = "§7besonderen Effet der über das,";
@@ -68,8 +67,8 @@ public class ShopDefaultItems {
         INSTANCE = this;
     }
 
-    public static ShopDefaultItems INSTANCE() {
-        if(INSTANCE == null) INSTANCE = new ShopDefaultItems();
+    public static ShopDefaultItemsManger INSTANCE() {
+        if(INSTANCE == null) INSTANCE = new ShopDefaultItemsManger();
 
         return INSTANCE;
     }

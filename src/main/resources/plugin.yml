@@ -24,3 +24,4 @@ commands:
   adddungeon:
   setdungeon:
   dungeon:
+  npcreload:

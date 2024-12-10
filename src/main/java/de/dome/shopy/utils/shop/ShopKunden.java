@@ -60,9 +60,7 @@ public class ShopKunden {
         int interessanteKategorieMenge = 2;
 
         double wahrscheinlichkeit = 0.1;
-        if(shop.getZusaetzlichesItemWahrscheinlichkeit() == 5) wahrscheinlichkeit = 0.25;
-        if(shop.getZusaetzlichesItemWahrscheinlichkeit() == 10) wahrscheinlichkeit = 0.30;
-        if(shop.getZusaetzlichesItemWahrscheinlichkeit() == 15) wahrscheinlichkeit = 0.35;
+        if(shop.getZusaetzlicheKategorieWahrscheinlichkeit() > 0) wahrscheinlichkeit += (shop.getZusaetzlicheKategorieWahrscheinlichkeit() / 100);
 
         if(Shopy.getInstance().isWahrscheinlichkeit(wahrscheinlichkeit)) interessanteKategorieMenge = 3;
 
@@ -84,9 +82,7 @@ public class ShopKunden {
             int interessanteItemsMenge = 3;
 
             wahrscheinlichkeit = 0.1;
-            if(shop.getZusaetzlichesItemWahrscheinlichkeit() == 5) wahrscheinlichkeit = 0.15;
-            if(shop.getZusaetzlichesItemWahrscheinlichkeit() == 10) wahrscheinlichkeit = 0.2;
-            if(shop.getZusaetzlichesItemWahrscheinlichkeit() == 15) wahrscheinlichkeit = 0.25;
+            if(shop.getZusaetzlichesItemWahrscheinlichkeit() > 0) wahrscheinlichkeit += (shop.getZusaetzlichesItemWahrscheinlichkeit() / 100);
 
             if(Shopy.getInstance().isWahrscheinlichkeit(wahrscheinlichkeit)) interessanteItemsMenge = 5;
 

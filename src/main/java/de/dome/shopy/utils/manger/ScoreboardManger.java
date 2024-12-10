@@ -1,6 +1,7 @@
-package de.dome.shopy.utils;
+package de.dome.shopy.utils.manger;
 
 import de.dome.shopy.Shopy;
+import de.dome.shopy.utils.Ressource;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;

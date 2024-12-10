@@ -19,13 +19,12 @@ import de.dome.shopy.listener.shop.clicklistener.InventoryClickListenerKundenKau
 import de.dome.shopy.listener.shop.clicklistener.InventoryClickListenerRessourenMarkplatz;
 import de.dome.shopy.listener.shop.clicklistener.InventoryClickListenerWerkbank;
 import de.dome.shopy.utils.*;
+import de.dome.shopy.utils.manger.DropManger;
+import de.dome.shopy.utils.manger.NpcManger;
+import de.dome.shopy.utils.manger.ScoreboardManger;
 import de.dome.shopy.utils.shop.Shop;
 import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.npc.NPCRegistry;
 import net.citizensnpcs.api.trait.trait.Equipment;
-import net.citizensnpcs.trait.SkinTrait;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.*;
@@ -34,7 +33,6 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -104,7 +102,7 @@ public class Shopy extends JavaPlugin {
         mySQLConntion = new MySQL();
         MySQLDefault.getInstance().sqlStartUp();
 
-        registerNPC();
+        NpcManger.INSTANCE().spawnNPC();
         Bukkit.getConsoleSender().sendMessage(prefix + "§aPlugin gestartet");
     }
 
@@ -134,13 +132,8 @@ public class Shopy extends JavaPlugin {
         }
 
         /* Lösche alle NPC die es schon gibt */
-        for (NPCRegistry npcRegistry : CitizensAPI.getNPCRegistries()){
-            for(NPC npc : npcRegistry.sorted()){
-                npc.despawn();
-                npc.destroy();
-            }
-            npcRegistry.saveToStore();
-        }
+        NpcManger.INSTANCE().loescheAlleNpc();
+
         Bukkit.getConsoleSender().sendMessage(prefix + "§cPlugin getsoppt");
     }
 
@@ -196,55 +189,9 @@ public class Shopy extends JavaPlugin {
         getCommand("setdungeon").setExecutor(new setDungeonCMD());
         getCommand("dungeon").setExecutor(new DungeonCMD());
         getCommand("setshopposition").setExecutor(new SetShopPosition());
+        getCommand("npcreload").setExecutor(new NpcReloadCMD());
     }
 
-    private void registerNPC(){
-        /*NPC Config*/
-        File configFile = new File(getInstance().getDataFolder(), "npc.yml");
-        FileConfiguration npcConfig = YamlConfiguration.loadConfiguration(configFile);
-
-        /*NPC Spawnen */
-        if(npcConfig.contains("npc.ersteller.location")){
-            NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "§aShop Verwalter");
-            npc.getOrAddTrait(SkinTrait.class).setSkinPersistent("ShopVerwalter", "kFvWhSu+ruqbkPUdekzeNTjFC6b/I7OwGiwZhvSu9N57cxmavieuMnKvOgMb5/B04f5ZbvsfOw8nM50HFZyYcNLIZBJKfTcr+N7hg1Co0sq106fgUi1cWI/5HfyoRKhHHw4owKhH/RcqgS2U6GElVgAdO/fyJMwq2U59Vqbo9rMN3eVBLulTjAXy/IfcefeOKvoDc/CSN/gLK4inw8cSD5R86uDuXCr1hUwNQUnt9t/tLXwiQ99ktRcR6nSKnu+L6u71hE7dzRFhokc7fXab4xSdZ2YXYQVilPlNZkgQJzn0CNIbgu8ZD1nn9lYHDFcsmhhnPKyCNlP8f70ZqkGUC8BM0WFedpn3cabOUHjRYnx9OrmKpDKHjktVn+VcH6Xat/8QFwbn6X8mCjfKPBMqhx1KxRhv73TgbWRu/EEVsEnO8ZQPZvaiKEjLVSrGgJblRhN76ojvBBv6QZ8u0bo7OAPBsAXsKQzjEBOria7zb03XNY+0CaPQ+nnKgOPzts6KOG83HQxSYazkztJ0JyBmmS+PCUtHZkgd660ni+thfHlFw44A1y0HcqJ3ZE1WaJdx8XVWnEw33ZX8FLj3s9JYFyZuYTk2U0avhR59yog2ZQHtsfRhHw2U7QBXXWZ/Z1GHRQeEp+Lql3+Y1onR2OQ9mY8aHA45IeW4ZaJJS8sWKJM=", "ewogICJ0aW1lc3RhbXAiIDogMTY5ODE1NjMwMzMxMCwKICAicHJvZmlsZUlkIiA6ICJlN2E3MzZhMjFlM2I0YzA2YmVhOGVmMjVmODg0MmJhZiIsCiAgInByb2ZpbGVOYW1lIiA6ICJKZWVwMDIwNiIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS84ZjJmNGMxNmEwNjc3YzQ0NjI4NTBhZDQxODRjZDA5MGQ0NWM0YThmNGE5ZTk4ZWNhODMyZGU4Y2M3MWYyNmM0IgogICAgfQogIH0KfQ==");
-
-            npc.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.HAND, new ItemStack(Material.MAP));
-
-
-            npc.spawn(npcConfig.getLocation("npc.ersteller.location"));
-        }
-
-        if(npcConfig.contains("npc.dungeonhändler.location")){
-            NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "§5Dungeon Händler");
-            npc.getOrAddTrait(SkinTrait.class).setSkinPersistent("DungeonHaendler","YXhhAM+MXF8y/ZhdrLf+TwhTY4Atl+himHLknAh+YB2aUNkP7yoWeYj1hmBEOxTJoKW1JRTwcsGm9MTuySiHTES0gkmC2zwuc2nQKhe/2ScROhbG6Z3uxqeZTI2ckCxJI03dnMjeck3TWOKRiwvQng1Pl2sKfdXPHA4nBIQDF71agD62ko5J5or/uc7xcKK9YaqJA0H+PoxAt344J/egyJQGoya+3U/xvrBooEKIMLuyvlTFWnuUyJ5QL+f2bhx7L+9ko+wrby8ei7XukSqLL9A0fJkRJnreGvwlNPx/mJ9kreh5yOe2FfhmWEFlG1L/q3iE1bLwhpS2GVi+OIdMQq+GvCWE8bZzshK0weIojFxEZ2chEPl5tloaEkqCvcux4k4Ub+hNKZPYeF3XFzGQh1XSYqEbJIKkgrVKxsRiqlTMQz/rQKRYlr/mocarV835sG97PB8Ur5N39ZuS/v7sVOYJuUv2U5YjOn8FMruzdpV8XN/UxCbqrIOaaGhwanfS3FN+qCS1LFJnieM8NUS6G2e+DijNoFUqk+Ml0msFwbiZZnc1dpU65oy/ldKEEJ0S7uSRd+s05DNdoDBe5QXsYP7rsJUXcYRRkvvfbek7ZAKuH3Jh9PZ5oxHpRmGH0Ys5Phbm4A2lMunCQhS5i5qM0iF6E1OvYFBSDnrjOG+a5v4=", "ewogICJ0aW1lc3RhbXAiIDogMTYxOTIwNDU2NzU3OSwKICAicHJvZmlsZUlkIiA6ICJiYzRlZGZiNWYzNmM0OGE3YWM5ZjFhMzlkYzIzZjRmOCIsCiAgInByb2ZpbGVOYW1lIiA6ICI4YWNhNjgwYjIyNDYxMzQwIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2ZiMjBlMDBhMGE5ZGZmMjAwNWU0OWJkMjIxNWVmYWI5N2U5NjcyYTNkMTE1NzYxOGJkODY5MjVhNWJmNDFlMTIiCiAgICB9CiAgfQp9");
-
-            npc.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.HAND, new ItemStack(Material.STONE_SWORD));
-            npc.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.OFF_HAND, new ItemStack(Material.SHIELD));
-            npc.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.CHESTPLATE, new ItemStack(Material.LEATHER_CHESTPLATE));
-            npc.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.LEGGINGS, new ItemStack(Material.LEATHER_LEGGINGS));
-            npc.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.BOOTS, new ItemStack(Material.LEATHER_BOOTS));
-
-
-            npc.spawn(npcConfig.getLocation("npc.dungeonhändler.location"));
-        }
-        if(npcConfig.contains("npc.mona.location")){
-            NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "§dEinhorn Prinessin Mona");
-            npc.getOrAddTrait(SkinTrait.class).setSkinPersistent("EinhornPrinessinMona", "J75uKO2HmSjBtST9m50VmKlMntdltIuP+tC7tim+93moC3YIe20pPm/Seld6Du8UQ+0ThGMXq5HOCW3Tq5HQbA1d2bp5bH81HxWegxmwN8QeOiiNlub+mSf9AV3R6oxmPgX+7xntfQfFnylTwOwYWsPw8ASE1Jy8FpTGxFR9vhJnNSxk7uREtIlo1G1j+8D42Cw5Ho2GuG+tBCDng4Eq03tQQeDA+IQJoRV+McOcwzGHIsh+Ky3xIHumecAOzC8Yt4EBkB34eaFRjOykdqQEXDQEK9A85lHqqFOPDPprhGCW+rk3Zx+7l/duU2s//ROuRYW6f7lenzxSIfYmnaFf5NTDYsIsaQJ61hpPjep9ThUDJ3ntaMGGevaQpcAKo6B/UFLLN/AwCrxQmXO38X+6n5Lttkw/+5LERe0YUznBaJkkJAkbQVyiTuLAwbCLF0qctRYWUj+8cMb7isOdKvTT+vlwjnS2WcWS5a8+mwJvtcCwkSOWTl4E8cFgGWdg0I6QalxMRiHhSayu2rbuKk9d6yfl1UR9lecH7aAnFuOLZVv7UHJEN4lhRugd7DhfKIHx8j0p9weesCc8xe3ABGdNkKzj/aZszqGa0Mk2obnKm7BCmGdAoze7s2ClQM4ouHSljJZKJ0z/TokJ+5VTflpK+e2d8jsOJy+XS0G0ENJDzkE=", "eyJ0aW1lc3RhbXAiOjE1ODgwMTM1OTc3OTcsInByb2ZpbGVJZCI6IjIzZjFhNTlmNDY5YjQzZGRiZGI1MzdiZmVjMTA0NzFmIiwicHJvZmlsZU5hbWUiOiIyODA3Iiwic2lnbmF0dXJlUmVxdWlyZWQiOnRydWUsInRleHR1cmVzIjp7IlNLSU4iOnsidXJsIjoiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS84NzgyNTkwMWJlMjZkOWM4OWIxN2Q1MjZjYTI4NTUwMjZhMDg0NjZiYjRkNGFhMDAzZmJhMjIxMjZiNTk0NDM3IiwibWV0YWRhdGEiOnsibW9kZWwiOiJzbGltIn19fX0=");
-
-            npc.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.HAND, new ItemStack(Material.NETHER_STAR));
-            npc.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.OFF_HAND, new ItemStack(Material.TOTEM_OF_UNDYING));
-            npc.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.CHESTPLATE, new ItemStack(Material.DIAMOND_CHESTPLATE));
-
-            npc.spawn(npcConfig.getLocation("npc.mona.location"));
-        }
-        if(npcConfig.contains("npc.lara.location")){
-            NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "§bIngenieurin Lara");
-            npc.getOrAddTrait(SkinTrait.class).setSkinPersistent("IngenieurinLara", "GuBNHMNv+87lWn6L9MFD4ChYzbZByBYxD9Qc5wIOQT/tGpT/6PSTt7xTPTLr+UfnjxfEW0iNB5MM9DIxJTymxKxyN7cGcTJhqxvoq1RNFlKlSxvjorjXLL3BwQMO4SFlLd4vNKYCZMHC0SG1lGg3lrX3EYE7zSMCiNqizn4/NDjntLTO4sORaLf2mvxznODUvIfayJs5gizTzGgtZ5yoibc4iUxX/zuvkxxASsedEAd5ePXkmIE3Ujo73v62c42Z0A7aDwFK+J5aqjBvhLxrmnroGovB7Eah3APoh8sv5z7b9SsOfZOD2GEA2SZSxmwSUYEbqNk1hDQp9AbttxCdbZcHnp8KODXZyDWFuzvs/F0ZDmdRF++8OnmVuU81J5qSUtGj+MBetwfasa/yqatqULJz8hkwf9FrS5/WYhzf0W5ZsiGrlZhfcy6RBV2YieXaSNP6zijY2Pltc0ft4K796gIjUcLWhveJRC4+4AG1SS35UeZScaf75hCD0hwZ8GUJI4Xeua1iA8/wyFn/yFTSLoYJBzFcdawOZ8N6w0dnS6ceD8AykdzYnWfvkAFXagAQ/mn9zmJE82lGR3/9zGSEAIve+c1Y1YJhua0C5NNxFS2NMma9vOpJhVkWAjKCzFOfM0tlgoU9m/oALAzqSBWGTExgzFqbg3gXJ7K0HvVZUjU=", "ewogICJ0aW1lc3RhbXAiIDogMTczMzc3OTA5ODI5MywKICAicHJvZmlsZUlkIiA6ICJkNzliZjAzNDE4YzU0MDUyOGEzZDM4ZTQ4NTAwYzBhOSIsCiAgInByb2ZpbGVOYW1lIiA6ICJMYXJhXzE5MTIiLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2I1OTgxZTMwZWYxMDVlNzc3NDZkZWQ1NDI4MTE0YmNiYTI2NDRmNWE4NDk3MGY5OGIxZDA4OTMwMzhiOTk4IiwKICAgICAgIm1ldGFkYXRhIiA6IHsKICAgICAgICAibW9kZWwiIDogInNsaW0iCiAgICAgIH0KICAgIH0KICB9Cn0=");
-            npc.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.OFF_HAND, new ItemStack(Material.ENCHANTING_TABLE));
-
-            npc.spawn(npcConfig.getLocation("npc.lara.location"));
-        }
-    }
 
     public ItemStack createItem(Material m, String Name) {
         ItemStack item = new ItemStack(m);
@@ -263,6 +210,7 @@ public class Shopy extends JavaPlugin {
 
         meta.setDisplayName(name);
         meta.setLore(lore);
+
         if(verzaubert) meta.addEnchant(Enchantment.ARROW_FIRE, 10, true);
         if(ohneSchaden){
             meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE);

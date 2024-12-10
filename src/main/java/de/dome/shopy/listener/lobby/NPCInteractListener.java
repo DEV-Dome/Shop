@@ -1,13 +1,13 @@
 package de.dome.shopy.listener.lobby;
 
 import de.dome.shopy.Shopy;
-import de.dome.shopy.utils.ShopDefaultItems;
+import de.dome.shopy.utils.manger.NpcManger;
+import de.dome.shopy.utils.manger.ShopDefaultItemsManger;
 import de.dome.shopy.utils.shop.Shop;
 import de.dome.shopy.utils.shop.ShopItemKategorie;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
-import net.citizensnpcs.api.event.NPCClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Bukkit;
@@ -34,7 +34,8 @@ public class NPCInteractListener implements Listener {
         /* Wenn der NPC keinen namen hat, soll er ignoiert werden */
         if(npc.getName().isEmpty()) return;
 
-        if(npc.getFullName().equals("§aShop Verwalter")){
+
+        if(NpcManger.INSTANCE().getErsteller().getUniqueId() == npc.getUniqueId()){
             if(!Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())) {
                 RyseInventory.builder().title("§aShop Erstellen").rows(3).provider(new InventoryProvider() {
                     @Override
@@ -54,7 +55,15 @@ public class NPCInteractListener implements Listener {
             }else {
                 Bukkit.dispatchCommand(p, "shop");
             }
-        }else if(npc.getFullName().equals("§5Dungeon Händler")){
+            return;
+        }
+        /* Wenn kein Shop vorhanden */
+        if(!Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())) {
+            p.sendMessage(Shopy.getInstance().getPrefix() + "§cUm diesen Händler Benutzen zu können, musst erst einen Shop gründen!");
+            return;
+        }
+
+        if(NpcManger.INSTANCE().getDungeonHaendler().getUniqueId() == npc.getUniqueId()){
             RyseInventory.builder().title("§5Dungeon Händler").rows(3).provider(new InventoryProvider() {
                 @Override
                 public void init(Player player, InventoryContents contents) {
@@ -124,7 +133,7 @@ public class NPCInteractListener implements Listener {
                 }
 
             }).build(Shopy.getInstance()).open(p);
-        }else if(npc.getFullName().equals("§dEinhorn Prinessin Mona")){
+        }else if(NpcManger.INSTANCE().getMona().getUniqueId() == npc.getUniqueId()){
             RyseInventory.builder().title("§dEinhorn Prinessin Mona").rows(4).provider(new InventoryProvider() {
                 @Override
                 public void init(Player player, InventoryContents contents) {
@@ -221,9 +230,9 @@ public class NPCInteractListener implements Listener {
                         beschreibung.add("§7Du hast die Maximale Wahrscheinlichkeit");
                         beschreibung.add("§7das Kunden kommen erreicht!");
                         beschreibung.add("");
-                        beschreibung.add("§7Wahrscheinlichkeit: §e" + (spielerShop.getZusaetzlicheKundenWahrscheinlichkeit() + 55) + "% §7/ §e70 %");
+                        beschreibung.add("§7Wahrscheinlichkeit: §e" + (spielerShop.getZusaetzlicheKundenWahrscheinlichkeit() + 55) + "% §7/ §e70%");
 
-                        contents.updateOrSet(21, Shopy.getInstance().createItemWithLore(Material.FIREWORK_ROCKET, "§aGlückwunsch", beschreibung));
+                        contents.updateOrSet(21, Shopy.getInstance().createItemWithLore(Material.WARPED_FUNGUS_ON_A_STICK, "§aGlückwunsch", beschreibung));
                     }else {
                         ArrayList<String> beschreibung = new ArrayList<>();
                         beschreibung.add("§7Kosten: §e1 §7Einhornkristall");
@@ -231,9 +240,9 @@ public class NPCInteractListener implements Listener {
                         beschreibung.add("§7Erhöhe die Wahrscheinlichkeit dass");
                         beschreibung.add("§7kunden kommen:");
                         beschreibung.add("");
-                        beschreibung.add("§7Wahrscheinlichkeit: §e" + (spielerShop.getZusaetzlicheKundenWahrscheinlichkeit() + 55) + "% §7/ §e70 %");
+                        beschreibung.add("§7Wahrscheinlichkeit: §e" + (spielerShop.getZusaetzlicheKundenWahrscheinlichkeit() + 55) + "% §7/ §e70%");
 
-                        contents.updateOrSet(21, Shopy.getInstance().createItemWithLore(Material.FIREWORK_ROCKET, "§5Wahrscheinlichkeit das Kunden kommen", beschreibung));
+                        contents.updateOrSet(21, Shopy.getInstance().createItemWithLore(Material.CARROT_ON_A_STICK, "§5Wahrscheinlichkeit das Kunden kommen", beschreibung));
                     }
 
                     /* Wahrscheinlichkeit auf zusätzliches Item*/
@@ -242,7 +251,7 @@ public class NPCInteractListener implements Listener {
                         beschreibung.add("§7Du hast die Maximale Wahrscheinlichkeit");
                         beschreibung.add("§7auf zusätzliches Item erreicht!");
                         beschreibung.add("");
-                        beschreibung.add("§7Wahrscheinlichkeit: §e" + (spielerShop.getZusaetzlichesItemWahrscheinlichkeit() + 10) + "% §7/ §e25 %");
+                        beschreibung.add("§7Wahrscheinlichkeit: §e" + (spielerShop.getZusaetzlichesItemWahrscheinlichkeit() + 10) + "% §7/ §e25%");
 
                         contents.updateOrSet(22, Shopy.getInstance().createItemWithLore(Material.TOTEM_OF_UNDYING, "§aGlückwunsch", beschreibung));
                     }else {
@@ -252,7 +261,7 @@ public class NPCInteractListener implements Listener {
                         beschreibung.add("§7Erhöhe die Wahrscheinlichkeit dass");
                         beschreibung.add("§7kunden Mehrere Item kaufen:");
                         beschreibung.add("");
-                        beschreibung.add("§7Wahrscheinlichkeit: §e" + (spielerShop.getZusaetzlichesItemWahrscheinlichkeit() + 10) + "% §7/ §e25 %");
+                        beschreibung.add("§7Wahrscheinlichkeit: §e" + (spielerShop.getZusaetzlichesItemWahrscheinlichkeit() + 10) + "% §7/ §e25%");
 
                         contents.updateOrSet(22, Shopy.getInstance().createItemWithLore(Material.TOTEM_OF_UNDYING, "§5Wahrscheinlichkeit auf zusätzliches Item", beschreibung));
                     }
@@ -263,7 +272,7 @@ public class NPCInteractListener implements Listener {
                         beschreibung.add("§7Du hast die Maximale Wahrscheinlichkeit");
                         beschreibung.add("§7auf zusätzliche Kategorie erreicht!");
                         beschreibung.add("");
-                        beschreibung.add("§7Wahrscheinlichkeit: §e" + (spielerShop.getZusaetzlicheKategorieWahrscheinlichkeit() + 25) + "% §7/ §e40 %");
+                        beschreibung.add("§7Wahrscheinlichkeit: §e" + (spielerShop.getZusaetzlicheKategorieWahrscheinlichkeit() + 25) + "% §7/ §e40%");
 
                         contents.updateOrSet(23, Shopy.getInstance().createItemWithLore(Material.BRUSH, "§aGlückwunsch", beschreibung));
                     }else {
@@ -273,7 +282,7 @@ public class NPCInteractListener implements Listener {
                         beschreibung.add("§7Erhöhe die Wahrscheinlichkeit dass kunden");
                         beschreibung.add("§7an Mehrere Kategorien Intresse haben:");
                         beschreibung.add("");
-                        beschreibung.add("§7Wahrscheinlichkeit: §e" + (spielerShop.getZusaetzlicheKategorieWahrscheinlichkeit() + 25) + "% §7/ §e40 %");
+                        beschreibung.add("§7Wahrscheinlichkeit: §e" + (spielerShop.getZusaetzlicheKategorieWahrscheinlichkeit() + 25) + "% §7/ §e40%");
 
                         contents.updateOrSet(23, Shopy.getInstance().createItemWithLore(Material.BRUSH, "§5Wahrscheinlichkeit auf zusätzliche Kategorie", beschreibung));
                     }
@@ -284,7 +293,7 @@ public class NPCInteractListener implements Listener {
                         beschreibung.add("§7Du hast die Maximale anzahl am");
                         beschreibung.add("§7erhöhten Verkaufs erlöse erreicht!");
                         beschreibung.add("");
-                        beschreibung.add("§7Wahrscheinlichkeit: §e" + spielerShop.getZusaetzlicherVerkaufserlös() + "% §7/ §e15 %");
+                        beschreibung.add("§7Wahrscheinlichkeit: §e" + spielerShop.getZusaetzlicherVerkaufserlös() + "% §7/ §e15%");
 
                         contents.updateOrSet(24, Shopy.getInstance().createItemWithLore(Material.NETHERITE_CHESTPLATE, "§aGlückwunsch", beschreibung));
                     }else {
@@ -294,7 +303,7 @@ public class NPCInteractListener implements Listener {
                         beschreibung.add("§7Erhöhe den Gewinn beim Verkauf");
                         beschreibung.add("§7von Item an kunden");
                         beschreibung.add("");
-                        beschreibung.add("§7Wahrscheinlichkeit: §e" + spielerShop.getZusaetzlicherVerkaufserlös() + "% §7/ §e15 %");
+                        beschreibung.add("§7Wahrscheinlichkeit: §e" + spielerShop.getZusaetzlicherVerkaufserlös() + "% §7/ §e15%");
 
                         contents.updateOrSet(24, Shopy.getInstance().createItemWithLore(Material.STONE_SWORD, "§5Mehr Verkaufs erlöse", beschreibung));
                     }
@@ -305,7 +314,7 @@ public class NPCInteractListener implements Listener {
                         beschreibung.add("§7Du hast die Maximale anzahl an");
                         beschreibung.add("§7Materialien Kosten reduzieren erreicht!");
                         beschreibung.add("");
-                        beschreibung.add("§7Wahrscheinlichkeit: §e" + spielerShop.getReduzierteMaterialienKosten() + "% §7/ §e15 %");
+                        beschreibung.add("§7Wahrscheinlichkeit: §e" + spielerShop.getReduzierteMaterialienKosten() + "% §7/ §e15%");
 
                         contents.updateOrSet(25, Shopy.getInstance().createItemWithLore(Material.NETHERITE_INGOT, "§aGlückwunsch", beschreibung));
                     }else {
@@ -315,7 +324,7 @@ public class NPCInteractListener implements Listener {
                         beschreibung.add("§7Reduziere die Kosten");
                         beschreibung.add("§7von Materialien");
                         beschreibung.add("");
-                        beschreibung.add("§7Wahrscheinlichkeit: §e" + spielerShop.getReduzierteMaterialienKosten() + "% §7/ §e15 %");
+                        beschreibung.add("§7Wahrscheinlichkeit: §e" + spielerShop.getReduzierteMaterialienKosten() + "% §7/ §e15%");
 
                         contents.updateOrSet(25, Shopy.getInstance().createItemWithLore(Material.COPPER_INGOT, "§5Materialien Kosten reduzieren", beschreibung));
                     }
@@ -328,14 +337,14 @@ public class NPCInteractListener implements Listener {
                 }
             }).build(Shopy.getInstance()).open(p);
 
-        }else if(npc.getFullName().equals("§bIngenieurin Lara")){
+        }else if(NpcManger.INSTANCE().getLara().getUniqueId() == npc.getUniqueId()){
             RyseInventory.builder().title("§bIngenieurin Lara").rows(4).provider(new InventoryProvider() {
                 @Override
                 public void init(Player player, InventoryContents contents) {
-                    contents.updateOrSet(10, updateLoreMitPreis(ShopDefaultItems.INSTANCE().getRessourcenMark(), 300));
-                    contents.updateOrSet(11, updateLoreMitPreis(ShopDefaultItems.INSTANCE().getWerkbank(), 300));
-                    contents.updateOrSet(12, updateLoreMitPreis(ShopDefaultItems.INSTANCE().getRessourcenLager(), 750));
-                    contents.updateOrSet(13, updateLoreMitPreis(ShopDefaultItems.INSTANCE().getItemLager(), 750));
+                    contents.updateOrSet(10, updateLoreMitPreis(ShopDefaultItemsManger.INSTANCE().getRessourcenMark(), 300));
+                    contents.updateOrSet(11, updateLoreMitPreis(ShopDefaultItemsManger.INSTANCE().getWerkbank(), 300));
+                    contents.updateOrSet(12, updateLoreMitPreis(ShopDefaultItemsManger.INSTANCE().getRessourcenLager(), 750));
+                    contents.updateOrSet(13, updateLoreMitPreis(ShopDefaultItemsManger.INSTANCE().getItemLager(), 750));
                 }
                 @Override
                 public void update(Player player, InventoryContents contents) {

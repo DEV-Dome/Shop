@@ -1,6 +1,8 @@
-package de.dome.shopy.utils;
+package de.dome.shopy.utils.manger;
 
 import de.dome.shopy.Shopy;
+import de.dome.shopy.utils.Dungeon;
+import de.dome.shopy.utils.Ressource;
 import de.dome.shopy.utils.shop.ShopRessourenManger;
 import org.bukkit.entity.Player;
 
