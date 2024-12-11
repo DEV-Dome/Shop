@@ -83,9 +83,27 @@ public class MySQL {
         try {
             Statement statement = connection.createStatement();
             statement.executeUpdate(sql);
+
         } catch (SQLException e) {
             e.printStackTrace();
             return;
+        }
+    }
+    public int queryReturnKey(String sql) {
+        if (this.connection == null) return -1;
+
+
+        try {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                return generatedKeys.getInt(1);
+            }else return -2;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
         }
     }
 

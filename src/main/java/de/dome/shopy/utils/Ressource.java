@@ -118,4 +118,8 @@ public class Ressource {
 
         this.aktuelleKosten = neueKosten;
     }
+
+    public static ArrayList<Ressource> getRessourceList() {
+        return ressourceList;
+    }
 }

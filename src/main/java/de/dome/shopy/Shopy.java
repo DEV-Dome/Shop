@@ -303,8 +303,8 @@ public class Shopy extends JavaPlugin {
         double x =      Double.parseDouble(dataArray[1].split("=")[1]);
         double y =      Double.parseDouble(dataArray[2].split("=")[1]);
         double z =      Double.parseDouble(dataArray[3].split("=")[1]);
-        float pitch =   Float.parseFloat(dataArray[3].split("=")[1]);
-        float yaw =     Float.parseFloat(dataArray[3].split("=")[1]);
+        float pitch =   Float.parseFloat(dataArray[4].split("=")[1]);
+        float yaw =     Float.parseFloat(dataArray[5].split("=")[1].split("}")[0]);
 
         ret = new Location(world, x,y,z,yaw,pitch);
 

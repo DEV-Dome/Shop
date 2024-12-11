@@ -78,6 +78,8 @@ public class InventoryClickListener implements Listener {
                                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_werte (shop, schlussel, inhalt) VALUES ('" + shop_id + "', 'zusätzlicher_verkaufserlös', '0')");
                                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_werte (shop, schlussel, inhalt) VALUES ('" + shop_id + "', 'reduzierte_materialien_kosten', '0')");
 
+                                Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_werte (shop, schlussel, inhalt) VALUES ('" + shop_id + "', 'erledigte_handwerks_aufgaben', '0')");
+
                                 /*Start geld*/
                                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_ressource (shop, ressource, menge) VALUES ('" + shop_id + "', '" + Ressource.getRessoureByName("Geld").getId() +"', '100')");
                             }else {

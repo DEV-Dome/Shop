@@ -48,14 +48,7 @@ public class ShopItem {
     }
 
     public double getItemPreis(){
-        double preis = 0;
-
-        for(ItemRessourecenKosten irk : baseItem.getRessourecsKostenList()){
-            double durschnittlicheKosten = (irk.getRessoure().getMinimaleKosten() + irk.getRessoure().getMaximaleKosten()) / 2;
-            if(irk.getRessoure().getType().equalsIgnoreCase("DUNGEON-LOOT")) durschnittlicheKosten = 25.0;
-
-            preis += (durschnittlicheKosten * irk.getMenge());
-        }
+        double preis = baseItem.getItemPreis();
 
         if(haltbarkeit < 3) preis/=4;
 

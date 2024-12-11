@@ -49,6 +49,20 @@ public class Item {
             Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_vorlage SET freigeschaltet='JA' WHERE item ='" + getId() +"' AND shop = '" + shop.getShopId() +"'");
         });
     }
+
+    public double getItemPreis(){
+        double preis = 0;
+
+        for(ItemRessourecenKosten irk : getRessourecsKostenList()){
+            double durschnittlicheKosten = (irk.getRessoure().getMinimaleKosten() + irk.getRessoure().getMaximaleKosten()) / 2;
+            if(irk.getRessoure().getType().equalsIgnoreCase("DUNGEON-LOOT")) durschnittlicheKosten = 25.0;
+
+            preis += (durschnittlicheKosten * irk.getMenge());
+        }
+
+        return preis;
+    }
+
     public int getId() {
         return id;
     }

@@ -18,12 +18,12 @@ public class BlockBreakListener implements Listener {
     public void blockBreak(BlockBreakEvent e) {
         Player p = e.getPlayer();
 
-        if(e.getBlock().getWorld().getName().equalsIgnoreCase("world")){
+//        if(e.getBlock().getWorld().getName().equalsIgnoreCase("world")){
             if(p.getGameMode() != GameMode.CREATIVE){
                 e.setCancelled(true);
                 p.sendMessage(Shopy.getInstance().getNoperm());
             }
-        }
+//        }
     }
 
     @EventHandler

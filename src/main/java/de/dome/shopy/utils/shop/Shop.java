@@ -7,6 +7,8 @@ import de.dome.shopy.utils.items.Item;
 import de.dome.shopy.utils.items.ItemKategorie;
 import de.dome.shopy.utils.items.ItemRessourecenKosten;
 import de.dome.shopy.utils.items.ItemSeltenheit;
+import de.dome.shopy.utils.shop.shophandwerksaufgabe.ShopHandwerksAufgabe;
+import de.dome.shopy.utils.shop.shophandwerksaufgabe.ShopHandwerksAufgabeItem;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
@@ -17,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
@@ -29,6 +32,7 @@ public class Shop {
     int ressourcenLagerSize;
     int itemLagerSize;
     int taskIdSpawnManger = -1;
+    int taskIdHandwerksManger = -1;
     int shopTemplate;
     int shopTemplateMaxGroße;
 
@@ -40,6 +44,8 @@ public class Shop {
     double zusaetzlicherVerkaufserlös;
     double reduzierteMaterialienKosten;
 
+    int erledigteHandwerksAufgaben;
+
     World world;
     Location shopSpawn;
     ArrayList<Cuboid> zones;
@@ -49,6 +55,7 @@ public class Shop {
     ArrayList<ShopItem> shopItems;
     ArrayList<ShopItemVorlage> shopItemVorlagen;
     ArrayList<ShopKunden> shopKunden;
+    ArrayList<ShopHandwerksAufgabe> shopHandwerksAufgabe;
 
 
 
@@ -62,6 +69,7 @@ public class Shop {
         shopItemVorlagen = new ArrayList<>();
         shopItemKategorie = new LinkedHashMap<>();
         shopKunden = new ArrayList<>();
+        shopHandwerksAufgabe = new ArrayList<>();
         instance = this;
         
         CompletableFuture<Void> basisDaten = CompletableFuture.runAsync(() -> {
@@ -95,7 +103,7 @@ public class Shop {
                             this.world.setSpawnLimit(SpawnCategory.MONSTER, 0);
 
                             this.world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
-                            if(playerTeleport) this.owner.teleport(this.world.getSpawnLocation());
+
                         }else {
                             this.world = Bukkit.getWorld(world);
                         }
@@ -253,6 +261,7 @@ public class Shop {
             } catch (SQLException e) { }
         });
         basisDaten.thenRun(() -> {
+            if(playerTeleport) this.owner.teleport(this.shopSpawn);
             if(loadShop){
                 this.shopRessourenManger = new ShopRessourenManger(this);
             }
@@ -272,6 +281,7 @@ public class Shop {
                         if(result.getString("schlussel").equals("zusätzliche_kategorie_wahrscheinlichkeit")) zusaetzlicheKategorieWahrscheinlichkeit = Integer.parseInt(result.getString("inhalt"));
                         if(result.getString("schlussel").equals("zusätzlicher_verkaufserlös")) zusaetzlicherVerkaufserlös = Integer.parseInt(result.getString("inhalt"));
                         if(result.getString("schlussel").equals("reduzierte_materialien_kosten")) reduzierteMaterialienKosten = Integer.parseInt(result.getString("inhalt"));
+                        if(result.getString("schlussel").equals("erledigte_handwerks_aufgaben")) erledigteHandwerksAufgaben = Integer.parseInt(result.getString("inhalt"));
                     }
                 } catch (SQLException e) {
                     Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
@@ -282,6 +292,7 @@ public class Shop {
             Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
                 Shopy.getInstance().getScoreboardManger().setScoreBoard(owner);
                 kundenManger();
+                HandwerksAufgabenManger();
             });
 
         });
@@ -290,6 +301,7 @@ public class Shop {
     public void unLoadWorld(){
         Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
             if(taskIdSpawnManger != -1) Bukkit.getScheduler().cancelTask(taskIdSpawnManger);
+            if(taskIdHandwerksManger != -1) Bukkit.getScheduler().cancelTask(taskIdHandwerksManger);
 
             for(ShopKunden shopKunden : shopKunden){
                 shopKunden.npc.getNavigator().cancelNavigation();
@@ -431,7 +443,7 @@ public class Shop {
                         beschreibung.add("§7produzierst oder dir einen Bauplan, kaufst.");
 
 
-                        String itemName = "§eItem Freischalten.";
+                        String itemName = "§eItem noch nicht freigeschaltet";
                         contents.updateOrSet(solt, Shopy.getInstance().createItemWithLore(Material.GRAY_DYE, itemName, beschreibung));
                     }
 
@@ -663,10 +675,51 @@ public class Shop {
                         });
                     }
                 }
-
             }
-        }, 1200L, (1200 - (20 * reduzierteKundenSpawnZeit))).getTaskId();
+        }, (1000 - (20 * reduzierteKundenSpawnZeit)), (1200 - (20 * reduzierteKundenSpawnZeit))).getTaskId();
 
+    }
+    public void HandwerksAufgabenManger(){
+        Shop shop = this;
+            taskIdHandwerksManger = Bukkit.getScheduler().runTaskTimer(Shopy.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+                    for(ShopHandwerksAufgabe shopHandwerkAufgabe : shopHandwerksAufgabe){
+                        if(shopHandwerkAufgabe.getGueltigBis().isAfter(LocalDateTime.now())){
+                            shopHandwerksAufgabe.remove(shopHandwerkAufgabe);
+                        }
+                    }
+
+                    CompletableFuture.runAsync(() -> {
+                        try {
+                            String queryAufgaben = "SELECT * FROM shop_handwerks_aufgaben WHERE gueltig_bis <= NOW() AND shop = " + shop.getShopId();
+                            ResultSet resultAufgaben = Shopy.getInstance().getMySQLConntion().resultSet(queryAufgaben);
+
+                            while(resultAufgaben.next()){
+                                ShopHandwerksAufgabe aufgabe = new ShopHandwerksAufgabe(shop);
+                                aufgabe.setGueltigBis(LocalDateTime.of(resultAufgaben.getDate("gueltig_bis").toLocalDate(), resultAufgaben.getTime("gueltig_bis").toLocalTime()));
+
+                                String queryAufgabenItems = "SELECT * FROM shop_handwerks_aufgaben_zuordnung " +
+                                        "LEFT JOIN shop_handwerks_aufgaben_item ON shop_handwerks_aufgaben_zuordnung.aufgaben_item = shop_handwerks_aufgaben_item.id  " +
+                                        "WHERE aufgabe = " + resultAufgaben.getInt("id");
+
+                                ResultSet resultAufgabenItems = Shopy.getInstance().getMySQLConntion().resultSet(queryAufgabenItems);
+                                while(resultAufgabenItems.next()){
+                                    ShopHandwerksAufgabeItem aufgabenItem = new ShopHandwerksAufgabeItem(Item.getItemById(resultAufgabenItems.getInt("item")), resultAufgabenItems.getInt("menge"), resultAufgabenItems.getString("belohnung"), resultAufgabenItems.getInt("belohnung_menge"));
+                                    aufgabe.getShopHandwerksAufgabeItems().add(aufgabenItem);
+                                }
+                                shopHandwerksAufgabe.add(aufgabe);
+                            }
+                        } catch (SQLException e) {
+                            Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
+                        }
+                    }).thenRun(() ->{
+                        if(shopHandwerksAufgabe.size() == 0){
+                            shopHandwerksAufgabe.add(ShopHandwerksAufgabe.erstelleAufgabe(shop));
+                        }
+                    });
+                }
+            }, 20, 36000L).getTaskId();
     }
 
     public void addShopZone(){
@@ -842,6 +895,10 @@ public class Shop {
         return shopTemplate;
     }
 
+    public ArrayList<ShopHandwerksAufgabe> getShopHandwerksAufgabe() {
+        return shopHandwerksAufgabe;
+    }
+
     public int getShopTemplateMaxGroße() {
         return shopTemplateMaxGroße;
     }
@@ -872,6 +929,10 @@ public class Shop {
 
     public double getReduzierteMaterialienKosten() {
         return reduzierteMaterialienKosten;
+    }
+
+    public int getErledigteHandwerksAufgaben() {
+        return erledigteHandwerksAufgaben;
     }
 
     public void setReduzierteKundenSpawnZeit(int reduzierteKundenSpawnZeit) {
@@ -930,4 +991,11 @@ public class Shop {
         });
     }
 
+    public void setErledigteHandwerksAufgaben(int erledigteHandwerksAufgaben) {
+        this.erledigteHandwerksAufgaben = erledigteHandwerksAufgaben;
+
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET inhalt = '"+ erledigteHandwerksAufgaben +"' WHERE shop  = '" + shopId +"' AND schlussel = 'erledigte_handwerks_aufgaben'");
+        });
+    }
 }

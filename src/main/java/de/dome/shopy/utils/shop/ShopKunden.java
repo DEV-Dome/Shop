@@ -37,7 +37,7 @@ public class ShopKunden {
 
         Random random = new Random();
         int skinIndex = random.nextInt(kundenSkins.size());
-        npcName = kundenName[ random.nextInt(94)];
+        npcName = kundenName[random.nextInt(94)];
 
         /* Kunden Spawnen */
         npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "§9" + npcName);

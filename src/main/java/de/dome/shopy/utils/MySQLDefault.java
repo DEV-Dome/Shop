@@ -60,6 +60,10 @@ public class MySQLDefault {
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/DungeonPositionen.sql"));
 
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/kunden_skins.sql"));
+
+                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ShopHandwerksAufgaben.sql"));
+                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ShopHandwerksAufgabenItem.sql"));
+                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ShopHandwerksAufgabenZuordnung.sql"));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
