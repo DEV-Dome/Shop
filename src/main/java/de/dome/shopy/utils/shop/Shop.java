@@ -276,12 +276,13 @@ public class Shop {
                         if(result.getString("schlussel").equals("item_lager")) itemLagerSize = Integer.parseInt(result.getString("inhalt"));
                         if(result.getString("schlussel").equals("zusätzliche_kunden_spawn_zeit")) reduzierteKundenSpawnZeit = Integer.parseInt(result.getString("inhalt"));
                         if(result.getString("schlussel").equals("zusätzliche_kunden_pro_grundstück")) zusaetzlicheKundenProGrunstueck = Integer.parseInt(result.getString("inhalt"));
-                        if(result.getString("schlussel").equals("zusätzliche_kunden_wahrscheinlichkeit")) zusaetzlicheKundenWahrscheinlichkeit = Integer.parseInt(result.getString("inhalt"));
-                        if(result.getString("schlussel").equals("zusätzliches_item_wahrscheinlichkeit")) zusaetzlichesItemWahrscheinlichkeit = Integer.parseInt(result.getString("inhalt"));
-                        if(result.getString("schlussel").equals("zusätzliche_kategorie_wahrscheinlichkeit")) zusaetzlicheKategorieWahrscheinlichkeit = Integer.parseInt(result.getString("inhalt"));
-                        if(result.getString("schlussel").equals("zusätzlicher_verkaufserlös")) zusaetzlicherVerkaufserlös = Integer.parseInt(result.getString("inhalt"));
-                        if(result.getString("schlussel").equals("reduzierte_materialien_kosten")) reduzierteMaterialienKosten = Integer.parseInt(result.getString("inhalt"));
+                        if(result.getString("schlussel").equals("zusätzliche_kunden_wahrscheinlichkeit")) zusaetzlicheKundenWahrscheinlichkeit = Double.parseDouble(result.getString("inhalt"));
+                        if(result.getString("schlussel").equals("zusätzliches_item_wahrscheinlichkeit")) zusaetzlichesItemWahrscheinlichkeit = Double.parseDouble(result.getString("inhalt"));
+                        if(result.getString("schlussel").equals("zusätzliche_kategorie_wahrscheinlichkeit")) zusaetzlicheKategorieWahrscheinlichkeit = Double.parseDouble(result.getString("inhalt"));
+                        if(result.getString("schlussel").equals("zusätzlicher_verkaufserlös")) zusaetzlicherVerkaufserlös = Double.parseDouble(result.getString("inhalt"));
+                        if(result.getString("schlussel").equals("reduzierte_materialien_kosten")) reduzierteMaterialienKosten = Double.parseDouble(result.getString("inhalt"));
                         if(result.getString("schlussel").equals("erledigte_handwerks_aufgaben")) erledigteHandwerksAufgaben = Integer.parseInt(result.getString("inhalt"));
+
                     }
                 } catch (SQLException e) {
                     Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
@@ -655,6 +656,54 @@ public class Shop {
                     }
                 }).build(Shopy.getInstance()).open(owner);
     }
+    public void openHandwerksmeisterPaulUbersicht(){
+        RyseInventory.builder().title("§2Handwerksmeister Paul").rows(3).provider(new InventoryProvider() {
+            @Override
+            public void init(Player player, InventoryContents contents) {
+                if(getShopHandwerksAufgabe().get(0).isErledigt()){
+                    contents.updateOrSet(10, Shopy.getInstance().createItemWithLore(Material.SKULL_BANNER_PATTERN, "§9Aufgabe 1 [Erledigt]", getShopHandwerksAufgabe().get(0).getBeschreibung()));
+                }else {
+                    contents.updateOrSet(10, Shopy.getInstance().createItemWithLore(Material.FLOWER_BANNER_PATTERN, "§9Aufgabe 1", getShopHandwerksAufgabe().get(0).getBeschreibung()));
+                }
+
+                if(erledigteHandwerksAufgaben >= 100){
+                    if(getShopHandwerksAufgabe().get(1).isErledigt()){
+                        contents.updateOrSet(13, Shopy.getInstance().createItemWithLore(Material.SKULL_BANNER_PATTERN, "§9Aufgabe 2 [Erledigt]", getShopHandwerksAufgabe().get(1).getBeschreibung()));
+                    }else {
+                        contents.updateOrSet(13, Shopy.getInstance().createItemWithLore(Material.FLOWER_BANNER_PATTERN, "§9Aufgabe 2", getShopHandwerksAufgabe().get(1).getBeschreibung()));
+                    }
+                }else {
+                    ArrayList<String> beschreibungAufgabe2 = new ArrayList<>();
+                    beschreibungAufgabe2.add("");
+                    beschreibungAufgabe2.add("§7Erledige Handwerksaufgaben");
+                    beschreibungAufgabe2.add("§e" + getErledigteHandwerksAufgaben() + " §7/§e 100");
+
+                    contents.updateOrSet(13, Shopy.getInstance().createItemWithLore(Material.GRAY_DYE, "§eAufgabe noch nicht freigeschaltet", beschreibungAufgabe2));
+                }
+
+                if(erledigteHandwerksAufgaben >= 250){
+                    if(getShopHandwerksAufgabe().get(2).isErledigt()){
+                        contents.updateOrSet(16, Shopy.getInstance().createItemWithLore(Material.SKULL_BANNER_PATTERN, "§9Aufgabe 3 [Erledigt]", getShopHandwerksAufgabe().get(2).getBeschreibung()));
+                    }else {
+                        contents.updateOrSet(16, Shopy.getInstance().createItemWithLore(Material.FLOWER_BANNER_PATTERN, "§9Aufgabe 3", getShopHandwerksAufgabe().get(2).getBeschreibung()));
+                    }
+                }else {
+                    ArrayList<String> beschreibungAufgabe3 = new ArrayList<>();
+                    beschreibungAufgabe3.add("");
+                    beschreibungAufgabe3.add("§7Erledige Handwerksaufgaben");
+                    beschreibungAufgabe3.add("§e" + getErledigteHandwerksAufgaben() + " §7/§e 250");
+
+                    contents.updateOrSet(16, Shopy.getInstance().createItemWithLore(Material.GRAY_DYE, "§eAufgabe noch nicht freigeschaltet", beschreibungAufgabe3));
+                }
+
+            }
+            @Override
+            public void update(Player player, InventoryContents contents) {
+                init(player, contents);
+            }
+        }).build(Shopy.getInstance()).open(owner);
+    }
+
     public void kundenManger(){
         Shop shop = this;
 
@@ -692,11 +741,11 @@ public class Shop {
 
                     CompletableFuture.runAsync(() -> {
                         try {
-                            String queryAufgaben = "SELECT * FROM shop_handwerks_aufgaben WHERE gueltig_bis <= NOW() AND shop = " + shop.getShopId();
+                            String queryAufgaben = "SELECT * FROM shop_handwerks_aufgaben WHERE gueltig_bis >= NOW() AND shop = " + shop.getShopId();
                             ResultSet resultAufgaben = Shopy.getInstance().getMySQLConntion().resultSet(queryAufgaben);
 
                             while(resultAufgaben.next()){
-                                ShopHandwerksAufgabe aufgabe = new ShopHandwerksAufgabe(shop);
+                                ShopHandwerksAufgabe aufgabe = new ShopHandwerksAufgabe(shop, resultAufgaben.getInt("id"), resultAufgaben.getBoolean("erledigt"));
                                 aufgabe.setGueltigBis(LocalDateTime.of(resultAufgaben.getDate("gueltig_bis").toLocalDate(), resultAufgaben.getTime("gueltig_bis").toLocalTime()));
 
                                 String queryAufgabenItems = "SELECT * FROM shop_handwerks_aufgaben_zuordnung " +
@@ -705,7 +754,7 @@ public class Shop {
 
                                 ResultSet resultAufgabenItems = Shopy.getInstance().getMySQLConntion().resultSet(queryAufgabenItems);
                                 while(resultAufgabenItems.next()){
-                                    ShopHandwerksAufgabeItem aufgabenItem = new ShopHandwerksAufgabeItem(Item.getItemById(resultAufgabenItems.getInt("item")), resultAufgabenItems.getInt("menge"), resultAufgabenItems.getString("belohnung"), resultAufgabenItems.getInt("belohnung_menge"));
+                                    ShopHandwerksAufgabeItem aufgabenItem = new ShopHandwerksAufgabeItem(Item.getItemById(resultAufgabenItems.getInt("item")), resultAufgabenItems.getInt("id"), resultAufgabenItems.getInt("menge"), resultAufgabenItems.getString("belohnung"), resultAufgabenItems.getInt("belohnung_menge"), resultAufgabenItems.getInt("fortschritt"));
                                     aufgabe.getShopHandwerksAufgabeItems().add(aufgabenItem);
                                 }
                                 shopHandwerksAufgabe.add(aufgabe);
@@ -714,12 +763,12 @@ public class Shop {
                             Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
                         }
                     }).thenRun(() ->{
-                        if(shopHandwerksAufgabe.size() == 0){
+                        while(shopHandwerksAufgabe.size() <= 2){
                             shopHandwerksAufgabe.add(ShopHandwerksAufgabe.erstelleAufgabe(shop));
                         }
                     });
                 }
-            }, 20, 36000L).getTaskId();
+            }, 20, 12000L).getTaskId();
     }
 
     public void addShopZone(){

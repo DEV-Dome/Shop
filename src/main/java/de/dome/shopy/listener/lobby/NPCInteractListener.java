@@ -352,32 +352,7 @@ public class NPCInteractListener implements Listener {
                 }
             }).build(Shopy.getInstance()).open(p);
         }else if(NpcManger.INSTANCE().getPaul().getUniqueId() == npc.getUniqueId()){
-            RyseInventory.builder().title("§2Handwerksmeister Paul").rows(3).provider(new InventoryProvider() {
-                @Override
-                public void init(Player player, InventoryContents contents) {
-                    Shop spielerShop =  Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
-
-                    contents.updateOrSet(10, Shopy.getInstance().createItemWithLore(Material.FLOWER_BANNER_PATTERN, "§9Aufgabe 1", spielerShop.getShopHandwerksAufgabe().get(0).getBschreibung()));
-
-                    ArrayList<String> beschreibungAufgabe2 = new ArrayList<>();
-                    beschreibungAufgabe2.add("");
-                    beschreibungAufgabe2.add("§7Erledige Handwerksaufgaben");
-                    beschreibungAufgabe2.add("§e" + spielerShop.getErledigteHandwerksAufgaben() + " §7/§e 100");
-
-                    contents.updateOrSet(13, Shopy.getInstance().createItemWithLore(Material.GRAY_DYE, "§eAufgabe noch nicht freigeschaltet", beschreibungAufgabe2));
-
-                    ArrayList<String> beschreibungAufgabe3 = new ArrayList<>();
-                    beschreibungAufgabe3.add("");
-                    beschreibungAufgabe3.add("§7Erledige Handwerksaufgaben");
-                    beschreibungAufgabe3.add("§e" + spielerShop.getErledigteHandwerksAufgaben() + " §7/§e 250");
-
-                    contents.updateOrSet(15, Shopy.getInstance().createItemWithLore(Material.GRAY_DYE, "§eAufgabe noch nicht freigeschaltet", beschreibungAufgabe3));
-                }
-                @Override
-                public void update(Player player, InventoryContents contents) {
-                    init(player, contents);
-                }
-            }).build(Shopy.getInstance()).open(p);
+            Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openHandwerksmeisterPaulUbersicht();
         }
     }
 

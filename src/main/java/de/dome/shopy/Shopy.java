@@ -13,6 +13,7 @@ import de.dome.shopy.listener.lobby.NPCInteractListener;
 import de.dome.shopy.listener.lobby.PlayerDeathListener;
 import de.dome.shopy.listener.lobby.*;
 import de.dome.shopy.listener.lobby.BlockBreakListener;
+import de.dome.shopy.listener.lobby.clicklistener.*;
 import de.dome.shopy.listener.shop.*;
 import de.dome.shopy.listener.shop.clicklistener.InventoryClickListenerItemLager;
 import de.dome.shopy.listener.shop.clicklistener.InventoryClickListenerKundenKauf;
@@ -145,9 +146,14 @@ public class Shopy extends JavaPlugin {
         new PlayerQuitListener();
         new WorldListener();
         new NPCInteractListener();
-        new InventoryClickListener();
         new PlayerDeathListener();
         new de.dome.shopy.listener.lobby.PlayerRespawnListener();
+
+        new InventoryClickListenerMona();
+        new InventoryClickListenerShop();
+        new InventoryClickListenerLara();
+        new InventoryClickListenerDungeonHaendler();
+        new InventoryClickListenerPaul();
 
         /* Shop Welt */
         new de.dome.shopy.listener.shop.BlockBreakListener();

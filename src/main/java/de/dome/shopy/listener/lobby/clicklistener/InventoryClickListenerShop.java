@@ -1,12 +1,13 @@
-package de.dome.shopy.listener.lobby;
+package de.dome.shopy.listener.lobby.clicklistener;
 
 import de.dome.shopy.Shopy;
-import de.dome.shopy.utils.Dungeon;
 import de.dome.shopy.utils.Ressource;
 import de.dome.shopy.utils.manger.ShopDefaultItemsManger;
 import de.dome.shopy.utils.shop.Shop;
-import de.dome.shopy.utils.shop.ShopItemKategorie;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,23 +19,19 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class InventoryClickListener implements Listener {
+public class InventoryClickListenerShop implements Listener {
 
-    public InventoryClickListener() {
+    public InventoryClickListenerShop() {
         Shopy.getInstance().getServer().getPluginManager().registerEvents(this, Shopy.getInstance());
     }
 
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent e){
-        if(!(e.getWhoClicked() instanceof Player)) return;
+    public void onInventoryClick(InventoryClickEvent e) {
+        if (!(e.getWhoClicked() instanceof Player)) return;
 
         Player p = (Player) e.getWhoClicked();
         ItemStack item = e.getCurrentItem();
@@ -62,7 +59,7 @@ public class InventoryClickListener implements Listener {
                                 File von = new File(Shopy.getInstance().getDataFolder().getPath() + "/image/vorlage1");
                                 File zu = new File(Shopy.getInstance().getDataFolder().getPath() + "/shop_welten/" + weltName);
 
-                                kopiereOrdner(von, zu);
+                                Shopy.getInstance().kopiereOrdner(von, zu);
 
                                 Shopy.getInstance().getMySQLConntion().query("UPDATE shop SET shop_ordner = '" + weltName +"' WHERE id = " + shop_id);
 
@@ -179,150 +176,5 @@ public class InventoryClickListener implements Listener {
                 if (item.getType() == Material.BLUE_DYE) Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openRessourenUbersicht("AUFWERTER");
             }
         }
-
-        if (e.getView().getTitle().equals("§5Dungeon Händler")) {
-            if(item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
-                switch (item.getType()){
-                    case ZOMBIE_SPAWN_EGG:
-                        Shopy.getInstance().getSpielerDungeon().put(p.getUniqueId(), new Dungeon(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()), 1));
-                        break;
-                    case VINDICATOR_SPAWN_EGG:
-                        Shopy.getInstance().getSpielerDungeon().put(p.getUniqueId(), new Dungeon(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()), 2));
-                        break;
-                    case BLAZE_SPAWN_EGG:
-                        Shopy.getInstance().getSpielerDungeon().put(p.getUniqueId(), new Dungeon(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()), 3));
-                        break;
-                    case EVOKER_SPAWN_EGG:
-                        Shopy.getInstance().getSpielerDungeon().put(p.getUniqueId(), new Dungeon(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()), 4));
-                        break;
-                }
-            }
-        }
-        if (e.getView().getTitle().equals("§dEinhorn Prinessin Mona")) {
-            if(item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
-                Shop spielerShop =  Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
-                int spielerEinhornkristall = spielerShop.getRessourenShopManger().getRessourceValue(Ressource.getRessoureByName("Einhornkristall"));
-
-
-                if(item.getItemMeta().getDisplayName().equals("§5Shop Erweitern") && kaufMitMoundKristall(p, spielerEinhornkristall)){
-                    spielerShop.addShopZone();
-
-                    p.sendMessage(Shopy.getInstance().getPrefix() + "Dein Shop Grundstück wurde erweitert!");
-                    p.updateInventory();
-                }
-
-                if(item.getItemMeta().getDisplayName().equals("§5Crafting Kategorie Freischalten") && kaufMitMoundKristall(p, spielerEinhornkristall)){
-                    ShopItemKategorie shopItemKategorie = spielerShop.schalteZufaelligeItemKategorieFrei();
-
-                    p.sendMessage(Shopy.getInstance().getPrefix() + "Du hast die Kategorie §e" + shopItemKategorie.getItemKategorie().getName() + " §7freigeschaltet!");
-                    p.updateInventory();
-                }
-
-                /* Kunden Perks */
-                if(item.getItemMeta().getDisplayName().equals("§5Spawnzeit Reduzieren") && kaufMitMoundKristall(p, spielerEinhornkristall)){
-                    spielerShop.setReduzierteKundenSpawnZeit(spielerShop.getReduzierteKundenSpawnZeit() + 5);
-
-                    p.sendMessage(Shopy.getInstance().getPrefix() + "Du hast die spawnzeit um §e5 Sekunden §7Reduziert!");
-                    p.updateInventory();
-                }
-                if(item.getItemMeta().getDisplayName().equals("§5Maximale Kunden Menge pro Grundstück") && kaufMitMoundKristall(p, spielerEinhornkristall)){
-                    spielerShop.setZusaetzlicheKundenProGrunstueck(spielerShop.getZusaetzlicheKundenProGrunstueck() + 1);
-
-                    p.sendMessage(Shopy.getInstance().getPrefix() + "§7Du hast die maximale Anzahl an Kunden pro um Grundstück auf§e "+ spielerShop.getZusaetzlicheKundenProGrunstueck() +" §7erhört!");
-                    p.updateInventory();
-                }
-                if(item.getItemMeta().getDisplayName().equals("§5Wahrscheinlichkeit das Kunden kommen") && kaufMitMoundKristall(p, spielerEinhornkristall)){
-                    spielerShop.setZusaetzlicheKundenWahrscheinlichkeit(spielerShop.getZusaetzlicheKundenWahrscheinlichkeit() + 5);
-
-                    p.sendMessage(Shopy.getInstance().getPrefix() + "§7Du hast die Wahrscheinlichkeit das Kunden kommen erhöht!");
-                    p.updateInventory();
-                }
-                if(item.getItemMeta().getDisplayName().equals("§5Wahrscheinlichkeit auf zusätzliches Item") && kaufMitMoundKristall(p, spielerEinhornkristall)){
-                    spielerShop.setZusaetzlichesItemWahrscheinlichkeit(spielerShop.getZusaetzlichesItemWahrscheinlichkeit() + 5);
-
-                    p.sendMessage(Shopy.getInstance().getPrefix() + "§7Du hast die Wahrscheinlichkeit auf zusätzliches Item erhöht!");
-                    p.updateInventory();
-                }
-                if(item.getItemMeta().getDisplayName().equals("§5Wahrscheinlichkeit auf zusätzliche Kategorie") && kaufMitMoundKristall(p, spielerEinhornkristall)){
-                    spielerShop.setZusaetzlicheKategorieWahrscheinlichkeit(spielerShop.getZusaetzlicheKategorieWahrscheinlichkeit() + 5);
-
-                    p.sendMessage(Shopy.getInstance().getPrefix() + "§7Du hast die Wahrscheinlichkeit auf zusätzliche Kategorie erhöht!");
-                    p.updateInventory();
-                }
-                if(item.getItemMeta().getDisplayName().equals("§5Mehr Verkaufs erlöse") && kaufMitMoundKristall(p, spielerEinhornkristall)){
-                    spielerShop.setZusaetzlicherVerkaufserlös(spielerShop.getZusaetzlicherVerkaufserlös() + 5);
-
-                    p.sendMessage(Shopy.getInstance().getPrefix() + "§7Du hast denn Verkaufs erlöse erhöht!");
-                    p.updateInventory();
-                }
-                if(item.getItemMeta().getDisplayName().equals("§5Materialien Kosten reduzieren") && kaufMitMoundKristall(p, spielerEinhornkristall)){
-                    spielerShop.setReduzierteMaterialienKosten(spielerShop.getReduzierteMaterialienKosten() + 5);
-
-                    p.sendMessage(Shopy.getInstance().getPrefix() + "§7Du hast die Materialien Kosten reduzieren!");
-                    p.updateInventory();
-                }
-            }
-        }
-        if (e.getView().getTitle().equals("§bIngenieurin Lara")) {
-            Shop spielerShop =  Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
-            int spielerGeld = spielerShop.getRessourenShopManger().getRessourceValue(Ressource.getRessoureByName("Geld"));
-
-            String regex = "§e(\\d+)";
-            java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(regex);
-            java.util.regex.Matcher matcher = pattern.matcher(item.getItemMeta().getLore().get(0));
-
-            int kosten = 0;
-            if (matcher.find()) {
-                kosten = Integer.parseInt(matcher.group(1));
-            }
-            if(spielerGeld <= kosten){
-                p.sendMessage(Shopy.getInstance().getPrefix() + "Leider reicht dein Geld dafür nicht aus! Dir fehlt noch §e" + (kosten - spielerGeld) + " §7€.");
-                return;
-            }
-            Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger().setRessourcenValue(Ressource.getRessoureByName("Geld"), (spielerGeld - kosten));
-
-            ItemStack giveItem = item.clone();
-            List<String> lore = giveItem.getLore();
-            lore.remove(1);
-            lore.remove(0);
-            giveItem.setLore(lore);
-
-            p.getInventory().addItem(giveItem);
-        }
     }
-
-    private boolean kaufMitMoundKristall(Player p, int spielerEinhornkristall){
-        if(spielerEinhornkristall <= 1){
-            int zuWenig = 1 - spielerEinhornkristall;
-            p.sendMessage(Shopy.getInstance().getPrefix() + "Leider reichen deine Einhornkristall dafür nicht aus! Dir fehlt noch §e" + zuWenig + " Einhornkristall.");
-            return false;
-        }
-        Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourenShopManger().setRessourcenValue(Ressource.getRessoureByName("Einhornkristall"), (spielerEinhornkristall - 1));
-        return true;
-    }
-    public void kopiereOrdner(File quelle, File ziel) throws IOException {
-        // Prüfen, ob die Quelle ein Verzeichnis ist
-        if (quelle.isDirectory()) {
-            // Wenn das Zielverzeichnis nicht existiert, erstellen wir es
-            if (!ziel.exists()) {
-                ziel.mkdir();
-            }
-
-            // Liste der Dateien und Unterverzeichnisse im Quellverzeichnis abrufen
-            String[] dateien = quelle.list();
-
-            if (dateien != null) {
-                for (String datei : dateien) {
-                    // Rekursiv jeden Eintrag kopieren
-                    kopiereOrdner(new File(quelle, datei), new File(ziel, datei));
-                }
-            }
-        } else {
-            // Wenn die Quelle eine Datei ist, diese kopieren
-            Path quellePfad = quelle.toPath();
-            Path zielPfad = ziel.toPath();
-            Files.copy(quellePfad, zielPfad, StandardCopyOption.REPLACE_EXISTING);
-        }
-    }
-
 }

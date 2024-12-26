@@ -56,7 +56,7 @@ public class InventoryClickListenerKundenKauf implements Listener {
                 ShopItem shopItem = spielerShop.getShopItemById(itemID);
 
                 double itempreis = shopItem.getItemPreis();
-                if(spielerShop.getZusaetzlicherVerkaufserlös() > 0) itempreis += itempreis * (spielerShop.getZusaetzlicherVerkaufserlös() / 100);
+                if(spielerShop.getZusaetzlicherVerkaufserlös() > 0) itempreis += itempreis * ((double) spielerShop.getZusaetzlicherVerkaufserlös() / 100);
 
                 /* Check wurde das Item gefunden */
                 if(shopItem != null && itemID != -1){
