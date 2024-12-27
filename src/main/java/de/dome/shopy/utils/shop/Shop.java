@@ -733,11 +733,14 @@ public class Shop {
             taskIdHandwerksManger = Bukkit.getScheduler().runTaskTimer(Shopy.getInstance(), new Runnable() {
                 @Override
                 public void run() {
-                    for(ShopHandwerksAufgabe shopHandwerkAufgabe : shopHandwerksAufgabe){
-                        if(shopHandwerkAufgabe.getGueltigBis().isAfter(LocalDateTime.now())){
-                            shopHandwerksAufgabe.remove(shopHandwerkAufgabe);
+                    if(shopHandwerksAufgabe == null) shopHandwerksAufgabe = new ArrayList<>();
+
+                        for(ShopHandwerksAufgabe shopHandwerkAufgabe : shopHandwerksAufgabe){
+                            if(shopHandwerkAufgabe.getGueltigBis().isAfter(LocalDateTime.now())){
+                                shopHandwerksAufgabe.remove(shopHandwerkAufgabe);
+                            }
                         }
-                    }
+
 
                     CompletableFuture.runAsync(() -> {
                         try {
@@ -821,6 +824,37 @@ public class Shop {
 
         return freischlaten;
     }
+
+    public ArrayList<ShopItemVorlage> getNichtFreigeschaltetItems(){
+        ArrayList<ShopItemVorlage> nichtFreigeschaltetItems = new ArrayList<>();
+
+        for(ShopItemVorlage shopItemVorlage : getShopItemVorlage()){
+            if(!shopItemVorlage.isfreigeschaltet()) {
+                if(getShopItemKategorie().get(shopItemVorlage.getItem().getItemKategorie().getName()).isFreigeschaltet()){
+                    nichtFreigeschaltetItems.add(shopItemVorlage);
+                }
+            }
+        }
+
+        return nichtFreigeschaltetItems;
+    }
+    public ShopItemVorlage schalteNeuesSchriftrollenItemFrei(){
+        ShopItemVorlage nichtFreigeschaltetItems = null;
+
+        for(ShopItemVorlage shopItemVorlage : getShopItemVorlage()){
+            if(!shopItemVorlage.isfreigeschaltet()) {
+                if(getShopItemKategorie().get(shopItemVorlage.getItem().getItemKategorie().getName()).isFreigeschaltet()){
+                    shopItemVorlage.setFreigeschaltet(true);
+
+                    nichtFreigeschaltetItems = shopItemVorlage;
+                    break;
+                }
+            }
+        }
+
+        return nichtFreigeschaltetItems;
+    }
+
 
     public void changeRessourcenLager(int newAmount){
         CompletableFuture.runAsync(() -> {

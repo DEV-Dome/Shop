@@ -29,16 +29,13 @@ public class InventoryClickListenerPaul implements Listener {
         if (!(e.getWhoClicked() instanceof Player)) return;
         if(e.getCurrentItem() == null) return;
         if(!e.getCurrentItem().hasItemMeta()) return;
+        if(!Shopy.getInstance().getSpielerShops().containsKey(e.getWhoClicked().getUniqueId())) return;
 
         Player p = (Player) e.getWhoClicked();
         ItemStack item = e.getCurrentItem();
-        final Shop spielerShop;
+        final Shop spielerShop = Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
 
-        if(Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())){
-             spielerShop =  Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
-        }else spielerShop = null;
-
-        if (e.getView().getTitle().equals("§2Handwerksmeister Paul") && spielerShop != null) {
+        if (e.getView().getTitle().equals("§2Handwerksmeister Paul")) {
             if(item.getItemMeta().getDisplayName().startsWith("§9Aufgabe")){
                 int aufgabenNummer = Integer.parseInt(item.getItemMeta().getDisplayName().split(" ")[1]);
                 RyseInventory.builder().title("§2Item Abgabe Aufgabe " + aufgabenNummer).rows(6).provider(new InventoryProvider() {
@@ -87,7 +84,7 @@ public class InventoryClickListenerPaul implements Listener {
             }
         }
 
-        if (e.getView().getTitle().startsWith("§2Item Abgabe Aufgabe") && p.getWorld().getName().equals("world") && spielerShop != null) {
+        if (e.getView().getTitle().startsWith("§2Item Abgabe Aufgabe") && p.getWorld().getName().equals("world")) {
             if(item.getItemMeta().getDisplayName().equals("§7Zurück zur Aufgabenübersicht")){
                 spielerShop.openHandwerksmeisterPaulUbersicht();
                 return;

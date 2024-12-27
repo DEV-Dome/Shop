@@ -91,7 +91,7 @@ public class InventoryClickListenerMona implements Listener {
     }
 
     private boolean kaufMitMoundKristall(Player p, int spielerEinhornkristall){
-        if(spielerEinhornkristall <= 1){
+        if(spielerEinhornkristall <= 0){
             int zuWenig = 1 - spielerEinhornkristall;
             p.sendMessage(Shopy.getInstance().getPrefix() + "Leider reichen deine Einhornkristall dafür nicht aus! Dir fehlt noch §e" + zuWenig + " Einhornkristall.");
             return false;

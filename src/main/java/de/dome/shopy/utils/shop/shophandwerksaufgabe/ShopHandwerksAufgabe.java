@@ -50,10 +50,10 @@ public class ShopHandwerksAufgabe {
 
         ArrayList<Item> inFrageKommeItems = new ArrayList<>();
 
-        if(Shopy.getInstance().isWahrscheinlichkeit(0.03)) anzahlItem = 5;
-        else if(Shopy.getInstance().isWahrscheinlichkeit(0.07)) anzahlItem = 4;
-        else if(Shopy.getInstance().isWahrscheinlichkeit(0.095)) anzahlItem = 3;
-        else if(Shopy.getInstance().isWahrscheinlichkeit(0.16)) anzahlItem = 2;
+        if(Shopy.getInstance().isWahrscheinlichkeit(0.1)) anzahlItem = 2;
+        else if(Shopy.getInstance().isWahrscheinlichkeit(0.06)) anzahlItem = 3;
+        else if(Shopy.getInstance().isWahrscheinlichkeit(0.04)) anzahlItem = 4;
+        else if(Shopy.getInstance().isWahrscheinlichkeit(0.025)) anzahlItem = 5;
         else anzahlItem = 1;
 
 
@@ -76,21 +76,27 @@ public class ShopHandwerksAufgabe {
 
                 String belohnung = "";
                 if(Shopy.getInstance().isWahrscheinlichkeit(0.63)) {
-                    while (belohnung.equals("")){
-                        Ressource ressource = Ressource.getRessourceList().get(random.nextInt(Ressource.getRessourceList().size()));
-                        if(ressource.getType().equals("STANDART") || ressource.getType().equals("DUNGEON-LOOT")){
-                            belohnung = ressource.getName();
+                    if(Shopy.getInstance().isWahrscheinlichkeit(0.045)){
+                        belohnung = "Schriftrollenpapier";
+                    }else {
+                        while (belohnung.equals("")){
+                            Ressource ressource = Ressource.getRessourceList().get(random.nextInt(Ressource.getRessourceList().size()));
+                            if(ressource.getType().equals("STANDART") || ressource.getType().equals("DUNGEON-LOOT")){
+                                belohnung = ressource.getName();
+                            }
                         }
                     }
                 }
 
                 int menge = 1;
-                if(Shopy.getInstance().isWahrscheinlichkeit(0.45)) menge = 2;
-                if(Shopy.getInstance().isWahrscheinlichkeit(0.32)) menge = 3;
+                if(Shopy.getInstance().isWahrscheinlichkeit(0.15)) menge = 2;
+                else if(Shopy.getInstance().isWahrscheinlichkeit(0.6)) menge = 3;
 
-                int belohnungsMenge = 3;
-                if(Shopy.getInstance().isWahrscheinlichkeit(0.3)) belohnungsMenge = 5;
-                if(Shopy.getInstance().isWahrscheinlichkeit(0.17)) belohnungsMenge = 7;
+                int belohnungsMenge = 2;
+                if(Shopy.getInstance().isWahrscheinlichkeit(0.24)) belohnungsMenge = 3;
+                else if(Shopy.getInstance().isWahrscheinlichkeit(0.12)) belohnungsMenge = 4;
+                else if(Shopy.getInstance().isWahrscheinlichkeit(0.07)) belohnungsMenge = 5;
+                if(belohnung.equals("Schriftrollenpapier")) belohnungsMenge = 1;
 
 
                 int finalMenge = menge;

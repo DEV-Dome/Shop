@@ -44,10 +44,6 @@ public class ShopItemVorlage {
         return meisterung;
     }
 
-    public boolean isFreigeschaltet() {
-        return freigeschaltet;
-    }
-
     public boolean addHerstellung(){
         hergestellt++;
         boolean ret = false;
@@ -91,5 +87,12 @@ public class ShopItemVorlage {
 
     public void setFreigeschaltet(boolean freigeschaltet) {
         this.freigeschaltet = freigeschaltet;
+
+        CompletableFuture.runAsync(() -> {
+            String freigeschaltetString = "NEIN";
+            if(freigeschaltet) freigeschaltetString = "JA";
+
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_vorlage SET freigeschaltet='"+ freigeschaltetString +"' WHERE item ='" + item.getId() +"' AND shop = '" + shop.getShopId() +"'");
+        });
     }
 }

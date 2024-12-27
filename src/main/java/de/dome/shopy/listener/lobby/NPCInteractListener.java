@@ -141,7 +141,7 @@ public class NPCInteractListener implements Listener {
 
                     if(spielerShop.getZones().size() < spielerShop.getShopTemplateMaxGroße()){
                         ArrayList<String> beschreibung = new ArrayList<>();
-                        beschreibung.add("§7Kosten: §e1 Einhornkristall");
+                        beschreibung.add("§7Kosten: §e1 §7Einhornkristall");
                         beschreibung.add("");
                         beschreibung.add("§7Erweiter deinen Shop, um mehr Kunden");
                         beschreibung.add("§7anzuziehen und mehr Geräte bauen zu können!");
@@ -166,7 +166,7 @@ public class NPCInteractListener implements Listener {
 
                     if(freigeschlateKategorien != spielerShop.getShopItemKategorie().size()){
                         ArrayList<String> beschreibung = new ArrayList<>();
-                        beschreibung.add("§7Kosten: §e1 Einhornkristall");
+                        beschreibung.add("§7Kosten: §e1 §7Einhornkristall");
                         beschreibung.add("");
                         beschreibung.add("§7Schalte eine neue Item Kategorie Frei");
                         beschreibung.add("");
@@ -353,7 +353,33 @@ public class NPCInteractListener implements Listener {
             }).build(Shopy.getInstance()).open(p);
         }else if(NpcManger.INSTANCE().getPaul().getUniqueId() == npc.getUniqueId()){
             Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openHandwerksmeisterPaulUbersicht();
+        } else if(NpcManger.INSTANCE().getSiegfried().getUniqueId() == npc.getUniqueId()){
+            RyseInventory.builder().title(npc.getFullName()).rows(4).provider(new InventoryProvider() {
+                @Override
+                public void init(Player player, InventoryContents contents) {
+                    Shop spielerShop = Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
+
+                    ArrayList<String> beschreibung = new ArrayList<>();
+                    beschreibung.add("§7Kosten: §e" + 1 + " §7Schriftrollenpapier");
+                    beschreibung.add("");
+                    beschreibung.add("§7Schalte ein neues unbekanntest herstellungsrezept frei.");
+                    beschreibung.add("§7noch freizuschaltende Herstellungsrezept: §e" + spielerShop.getNichtFreigeschaltetItems().size());
+
+                    contents.updateOrSet(10, Shopy.getInstance().createItemWithLore(Material.PAPER,"§9Unbekanntes Herstellungsrezept freischalten", beschreibung));
+
+                    contents.updateOrSet(11, Shopy.getInstance().createItem(Material.LIME_DYE,"§9Dungeon Schlüssel Stufe 1"));
+                    contents.updateOrSet(12, Shopy.getInstance().createItem(Material.BLUE_DYE,"§9Dungeon Schlüssel Stufe 2"));
+                    contents.updateOrSet(13, Shopy.getInstance().createItem(Material.MAGENTA_DYE,"§9Dungeon Schlüssel Stufe 3"));
+                    contents.updateOrSet(14, Shopy.getInstance().createItem(Material.ORANGE_DYE,"§9Dungeon Schlüssel Stufe 4"));
+                }
+
+                @Override
+                public void update(Player player, InventoryContents contents) {
+                    init(player, contents);
+                }
+            }).build(Shopy.getInstance()).open(p);
         }
+
     }
 
     private ItemStack updateLoreMitPreis(ItemStack item, int preis){

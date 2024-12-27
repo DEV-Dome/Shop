@@ -24,6 +24,8 @@ import de.dome.shopy.utils.manger.DropManger;
 import de.dome.shopy.utils.manger.NpcManger;
 import de.dome.shopy.utils.manger.ScoreboardManger;
 import de.dome.shopy.utils.shop.Shop;
+import de.dome.shopy.utils.shop.ShopItem;
+import de.dome.shopy.utils.shop.ShopItemVorlage;
 import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
 import net.citizensnpcs.api.trait.trait.Equipment;
 import net.kyori.adventure.text.Component;
@@ -154,6 +156,7 @@ public class Shopy extends JavaPlugin {
         new InventoryClickListenerLara();
         new InventoryClickListenerDungeonHaendler();
         new InventoryClickListenerPaul();
+        new InventoryClickListenerSiegfried();
 
         /* Shop Welt */
         new de.dome.shopy.listener.shop.BlockBreakListener();
@@ -295,7 +298,6 @@ public class Shopy extends JavaPlugin {
     public DropManger getDropManger() {
         return dropManger;
     }
-
 
     public Location getLocationFromString(String locationString) {
         Location ret = null;

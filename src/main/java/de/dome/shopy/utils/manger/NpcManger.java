@@ -21,6 +21,7 @@ public class NpcManger {
     NPC mona;
     NPC lara;
     NPC paul;
+    NPC siegfried;
 
     private NpcManger(){}
 
@@ -72,10 +73,17 @@ public class NpcManger {
             paul = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "§2Handwerksmeister Paul");
             paul.getOrAddTrait(SkinTrait.class).setSkinPersistent("HandwerksmeisterPaul", "LosKgGYp4uLP27HXOnLtqTGvGsgypLmjR0PAjwr7kgWw3jYLRORqU0nuLizYAPy3XHg1AnsHu608ATzNSqBoP9nneMVYjeX+ivrutqfaFJB4Wqr+bvFJ0WwERSorMJ52swqS29zFLilJcpB8zM1Qvrc0Jg1gW/D6RSSKUcA/dAQXgRqtTvX04iGcXKM0Bkp/vM/CshjCPAQOwt68pbZvT29bEdSiYgvV+xe8scV534oGMslwexGlPIiKcaXV0vEVO2BwsHP/pQcGBqh4btHNUBJRsOuj0SPTC3Bt9jBleeFCxYERLApDyObRAJUuUDAp+hSSjvwEdG1ZDvW84ozGDAw1Ic7aI+9wVbL5OPvthrteZqVGPBpI0HU1eIvG5o4YgTe1oCkq1hQaC3icLWh3VfK/ylAY6k5lszZJ1v0r0IwyT6YKYytusgibWb91kguKgX8YeVXX2HtK4CRtDiQb5qMZ7jFG+3BzhR51A3W9iNR4HBCS+GwndtSFKKcSitdWFp3hfvP3v/CzLZ20uXveGLGJDBX0hQ2Z4CrzV+qXDpYrpNagJqdC7BjpMs7/PhoQm1tkL96N8RHa1Z1UzG/n1NndWvd/JZ9PQ2xwZTq2Q7kZx93+Y2L+cpLWq4TEg6FmACUcNtb9ukgYYBvMGK9msqXo0PzQBduiVwyrzBOasMg=", "ewogICJ0aW1lc3RhbXAiIDogMTYyOTEwNDkzODk4NCwKICAicHJvZmlsZUlkIiA6ICIxYTc1ZTNiYmI1NTk0MTc2OTVjMmY4NTY1YzNlMDAzZCIsCiAgInByb2ZpbGVOYW1lIiA6ICJUZXJvZmFyIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzk4ZWI5NGUwZWExMTM1NWVlZmViOTg0YTdkNmY2NDYzMTE1N2E1N2U0ZTE2YWRmM2Y1OTg5ZWZjNjkzN2ZiMWUiCiAgICB9CiAgfQp9");
 
-            paul.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.HAND, new ItemStack(Material.DIAMOND));
-            paul.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.OFF_HAND, new ItemStack(Material.OAK_WOOD));
+            paul.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.OFF_HAND, new ItemStack(Material.DIAMOND_AXE));
 
             paul.spawn(npcConfig.getLocation("npc.paul.location"));
+        }
+        if(npcConfig.contains("npc.siegfried.location")){
+            siegfried = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "§dMystiker Siegfried");
+            siegfried.getOrAddTrait(SkinTrait.class).setSkinPersistent("MystikerSiegfried", "KnmHND985Zklm1mmDFanBYnUmKc8Ggm0W3Ts4lZN8O1Z544yiFG/O705Wqb+RIWx1nP1ieiDvJZGIzK0DyNSvZCzSPyazleVRisxN3/08aBo2vwMok8uyIfmiNToZ5Asu2vhxZhfLR4dnQObmcn8QPqauTqaklRg/qhUeDgSsb+ONAUA5QWhRnI1EoZkB/8TwDx4xRDWaPZkcHtS++DPboVbrUNaUBPn0hNSdzZ5NSoHGjXkYrytGVKt1xP2495mrg4OKysN3K7Rw1mk8qdpVI+LgFHeD3LJdMCgpbfRq68/8hax5zUsd/2naPJUCRz0GrxqD1huflVHgHFMUIp3K3QaRCGXPQZnbwJpkF+PN2YHu4el3TkVLmAb4X5nvx3CMgLoCYdCmKziiZeYBAggSrYW9vKhapXqBRUXEi50mjEcXRJIqC6aEBLh/QlZSUyVcyRQ7INP1fdi/88dgQR62gQz3G+CZYZvO4xo7pEUDC6cHWCA5hfi7JE64nFY8oFvZcrapL+2/ctTTkpHHAjph4bJfgUlEunFQfhqJAZBRF8mM4m1yuqFctu1QWz8jU7f5OyBLbHd/RGZS4sxljtCfkEUDin2xHf0bYrSmppDDzWY9b+nzMGyZQubwJBBbtCHzSLZKDRagKDwVJcXItm/VCRjNIgY/sFRTESNG6xIhno=", "ewogICJ0aW1lc3RhbXAiIDogMTczNTI4MTA4NzkyNywKICAicHJvZmlsZUlkIiA6ICIxNzM1MGE5OWQ3MzQ0NDBjYTY0YzJjMDU3YTNjMWM4ZSIsCiAgInByb2ZpbGVOYW1lIiA6ICJHaWxkZWRoZXJvNTY5MSIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS9jOWEyYjQ2ZjIwMTMxMzE4ZDA2NTM5NmMzM2ZhNTIxYjZlNWMwOTA4YjA0MGVhNjdjMWI0NzM5YjI3NDk3OWYzIgogICAgfQogIH0KfQ==");
+
+            siegfried.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.OFF_HAND, new ItemStack(Material.GLASS_BOTTLE));
+
+            siegfried.spawn(npcConfig.getLocation("npc.siegfried.location"));
         }
     }
 
@@ -113,5 +121,8 @@ public class NpcManger {
 
     public NPC getPaul() {
         return paul;
+    }
+    public NPC getSiegfried() {
+        return siegfried;
     }
 }
