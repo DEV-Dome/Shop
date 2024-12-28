@@ -59,7 +59,10 @@ public class NPCInteractListener implements Listener {
 
                                 if(shopItem != null && itemNochAufLager){
                                     double itempreis = shopItem.getItemPreis();
-                                    if(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getZusaetzlicherVerkaufserlös() > 0) itempreis += itempreis * (Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getZusaetzlicherVerkaufserlös() / 100);
+
+                                    /* Aufschläge */
+                                    if(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getZusaetzlicherVerkaufserlös() > 0) itempreis += itempreis * ((double) Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getZusaetzlicherVerkaufserlös() / 100);
+                                    if(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getTresenPostion() != null) itempreis += itempreis * ((double) 10 / 100);
 
                                     ArrayList<String> beschreibung = shopItem.getVolleBeschreibung();
                                     beschreibung.add("");

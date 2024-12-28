@@ -346,6 +346,10 @@ public class NPCInteractListener implements Listener {
                     contents.updateOrSet(12, updateLoreMitPreis(ShopDefaultItemsManger.INSTANCE().getRessourcenLager(), 750));
                     contents.updateOrSet(13, updateLoreMitPreis(ShopDefaultItemsManger.INSTANCE().getItemLager(), 750));
                     contents.updateOrSet(14, updateLoreMitPreis(ShopDefaultItemsManger.INSTANCE().getAufgabenTisch(), 500));
+
+                    contents.updateOrSet(15, updateLoreMitPreis(ShopDefaultItemsManger.INSTANCE().getRustungStander(), 250));
+                    contents.updateOrSet(16, updateLoreMitPreis(ShopDefaultItemsManger.INSTANCE().getTresen(), 2000));
+                    contents.updateOrSet(19, updateLoreMitPreis(ShopDefaultItemsManger.INSTANCE().getUpgrader(), 5000));
                 }
                 @Override
                 public void update(Player player, InventoryContents contents) {

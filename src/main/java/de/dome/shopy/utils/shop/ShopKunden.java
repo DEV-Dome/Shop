@@ -10,9 +10,14 @@ import net.citizensnpcs.trait.SkinTrait;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.type.Lectern;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Directional;
+import org.bukkit.util.Vector;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,6 +36,7 @@ public class ShopKunden {
     ArrayList<ShopItem> interessanteItems = new ArrayList<>();
     ArrayList<ShopItem> gesuchteItems = new ArrayList<>();
     Shop shop;
+    Location ziel;
 
     public ShopKunden (Shop shop){
         this.shop = shop;
@@ -45,16 +51,34 @@ public class ShopKunden {
         npc.spawn(shop.getShopSpawn());
 
         /* NPC Bewegung */
+        ziel = null;
         int versuche = 0;
-        Location ziel = null;
-        while (versuche <= 3){
+
+        if(shop.getTresenPostion() != null){
+            Block tresen = shop.getTresenPostion().getBlock();
+
+            if (tresen.getType() == Material.LECTERN) {
+                if (tresen.getBlockData() instanceof Lectern) {
+                    Lectern lectern = (Lectern) tresen.getBlockData();
+
+                    Vector facing = lectern.getFacing().getDirection().multiply(shop.getShopKunden().size() + 1);
+
+                    ziel = shop.getTresenPostion().clone().subtract(facing);
+                    if(npc.getNavigator().canNavigateTo(ziel)) versuche = 100;
+                }
+            }
+        }
+
+        while (versuche <= 10){
             ziel = shop.getZones().get(random.nextInt(shop.getZones().size())).getRandomLocation();
             if(npc.getNavigator().canNavigateTo(ziel)) break;
             versuche++;
         }
 
-        if(ziel != null) npc.getNavigator().setTarget(ziel);
-        else npc.teleport(ziel, PlayerTeleportEvent.TeleportCause.UNKNOWN);
+        if(ziel != null && npc.getNavigator().canNavigateTo(ziel)){
+                npc.getNavigator().setTarget(ziel);
+        } else loescheKunden();
+
 
         /* Kauf Wunsch deffiniern */
         int interessanteKategorieMenge = 2;
@@ -147,7 +171,23 @@ public class ShopKunden {
     }
 
     public void loescheKunden(){
-        if(npc.getNavigator().canNavigateTo(shop.getShopSpawn())) npc.getNavigator().setTarget(shop.shopSpawn);
+
+        if(shop.getTresenPostion() != null){
+            Location vorher = null;
+
+            for (ShopKunden kunden : shop.getShopKunden()){
+                if(kunden.npc.getUniqueId() == npc.getUniqueId() || vorher != null){
+                    if(vorher != null)kunden.npc.getNavigator().setTarget(vorher);
+
+                    vorher = kunden.getZiel();
+                    kunden.setZiel(vorher);
+                }
+            }
+        }
+
+        if(npc.getNavigator().canNavigateTo(shop.getShopSpawn())) {
+            npc.getNavigator().setTarget(shop.shopSpawn);
+        }
 
         Bukkit.getScheduler().runTaskLater(Shopy.getInstance(), () -> {
             npc.despawn();
@@ -180,5 +220,13 @@ public class ShopKunden {
 
     public ArrayList<ShopItem> getGesuchteItems() {
         return gesuchteItems;
+    }
+
+    public Location getZiel() {
+        return ziel;
+    }
+
+    public void setZiel(Location ziel) {
+        this.ziel = ziel;
     }
 }

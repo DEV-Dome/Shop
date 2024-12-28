@@ -60,45 +60,33 @@ public class BlockBreakListener implements Listener {
                     for(Cuboid cb : ps.getZones()){
                         if(cb.contains(e.getBlock())){
                            /* Besöndere Blöcke Spawnbar machen*/
-                            String buildingHinweis  = "§7Dieser Gegenstand kann nur in der Shop-Welt platziert werden. Und entfaltet da einen besonderen Effet der über das, gewöhnlich Maß in Minecraft hinaus geht.";
-                            if(e.getBlock().getType() == Material.LECTERN){
-                                e.setDropItems(false);
-
-                                p.getInventory().addItem(ShopDefaultItemsManger.INSTANCE().getRessourcenMark());
-                            }
-                            if(e.getBlock().getType() == Material.CRAFTING_TABLE){
-                                e.setDropItems(false);
-
-                                p.getInventory().addItem(ShopDefaultItemsManger.INSTANCE().getWerkbank());
-                            }
-                            if(e.getBlock().getType() == Material.TRAPPED_CHEST){
+                            if(e.getBlock().getType() == ShopDefaultItemsManger.INSTANCE().getItemLager().getType()){
                                 e.setDropItems(false);
 
                                 p.getInventory().addItem(ShopDefaultItemsManger.INSTANCE().getItemLager());
 
-
                                 /* Item Effeckt beim Abbauen (negativ) */
                                 int newAmount = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getItemLagerSize() - 10;
-                                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).changeItemLager(newAmount);
+                                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).andereItemLager(newAmount);
 
                                 p.sendMessage(Shopy.getInstance().getPrefix() + "Durch das Platzieren des Item, wurde dein Itemlager um 10 Plätze reduziert.");
 
-                            }
-                            if(e.getBlock().getType() == Material.BARREL){
+                            }else if(e.getBlock().getType() == ShopDefaultItemsManger.INSTANCE().getRessourcenLager().getType()){
                                 e.setDropItems(false);
 
                                 p.getInventory().addItem(ShopDefaultItemsManger.INSTANCE().getRessourcenLager());
 
                                 /* Item Effeckt beim Abbauen (negativ) */
                                 int newAmount = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourcenLager() - 10;
-                                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).changeRessourcenLager(newAmount);
+                                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).andereRessourcenLager(newAmount);
 
                                 p.sendMessage(Shopy.getInstance().getPrefix() + "Durch das Platzieren des Item, wurde dein Ressourcenlager um 10 Plätze reduziert.");
-                            }
-                            if(e.getBlock().getType() == Material.TARGET){
+                            }else if(ShopDefaultItemsManger.INSTANCE().getStandertItemMatrialList().containsKey(e.getBlock().getType())){
                                 e.setDropItems(false);
-
-                                p.getInventory().addItem(ShopDefaultItemsManger.INSTANCE().getAufgabenTisch());
+                                p.getInventory().addItem(ShopDefaultItemsManger.INSTANCE().getStandertItemMatrialList().get(e.getBlock().getType()));
+                            }
+                            if(e.getBlock().getType() == ShopDefaultItemsManger.INSTANCE().getTresen().getType()){
+                                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).loscheTresen();
                             }
                             return;
                         }

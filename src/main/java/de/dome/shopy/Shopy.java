@@ -167,6 +167,8 @@ public class Shopy extends JavaPlugin {
         new InventoryClickListenerRessourenMarkplatz();
         new InventoryClickListenerItemLager();
         new InventoryClickListenerKundenKauf();
+        new EntityDamageByEntityListener();
+        new PlayerInteractAtEntityListener();
 
         new de.dome.shopy.listener.shop.NPCInteractListener();
 

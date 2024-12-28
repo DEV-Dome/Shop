@@ -22,7 +22,7 @@ public class PlayerInteractListener implements Listener {
         if(!Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())) return;
 
         if(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getWorld().getName().equalsIgnoreCase(e.getClickedBlock().getWorld().getName()) || p.hasPermission("shopy.bypass.interactOnOtherWorlds")) {
-            if (e.getClickedBlock().getType() == Material.LECTERN) {
+            if (e.getClickedBlock().getType() == Material.CARTOGRAPHY_TABLE) {
                 Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openMarkplatzInventar();
             }
             if (e.getClickedBlock().getType() == Material.CRAFTING_TABLE) {
@@ -38,6 +38,11 @@ public class PlayerInteractListener implements Listener {
             }
             if (e.getClickedBlock().getType() == Material.BARREL) {
                 e.setCancelled(true);
+            }
+            if(e.getClickedBlock().getType() == Material.LECTERN)  e.setCancelled(true);
+            if(e.getClickedBlock().getType() == Material.ARMOR_STAND || e.getClickedBlock().getType() == Material.SMITHING_TABLE){
+                e.setCancelled(true);
+                p.sendMessage(Shopy.getInstance().getPrefix() + "§7Funktion kommt später ....");
             }
         }
     }

@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ShopDefaultItemsManger {
 
@@ -14,8 +15,16 @@ public class ShopDefaultItemsManger {
     ItemStack itemLager;
     ItemStack ressourcenLager;
     ItemStack aufgabenTisch;
+    ItemStack rustungStander;
+    ItemStack tresen;
+    ItemStack upgrader;
+
+    HashMap<Material, ItemStack> standertItemMatrialList;
 
     private ShopDefaultItemsManger(){
+        INSTANCE = this;
+        standertItemMatrialList = new HashMap<>();
+
         String buildingHinweis   = "§7Dieser Gegenstand kann nur in der Shop-Welt";
         String buildingHinweis1  = "§7platziert werden. Und entfaltet da einen";
         String buildingHinweis2  = "§7besonderen Effet der über das,";
@@ -30,7 +39,8 @@ public class ShopDefaultItemsManger {
         beschreibung.add(buildingHinweis2);
         beschreibung.add(buildingHinweis3);
 
-        ressourcenMark = Shopy.getInstance().createItemWithLore(Material.LECTERN, "§9Ressourcen Mark", beschreibung);
+        ressourcenMark = Shopy.getInstance().createItemWithLore(Material.CARTOGRAPHY_TABLE, "§9Ressourcen Mark", beschreibung);
+        standertItemMatrialList.put(ressourcenMark.getType(), ressourcenMark);
 
         beschreibung = new ArrayList<>();
         beschreibung.add("§5Auf diesem Gegenstand können mächtige");
@@ -42,6 +52,7 @@ public class ShopDefaultItemsManger {
         beschreibung.add(buildingHinweis3);
 
         werkbank = Shopy.getInstance().createItemWithLore(Material.CRAFTING_TABLE, "§9Werkbank", beschreibung);
+        standertItemMatrialList.put(werkbank.getType(), werkbank);
 
         beschreibung = new ArrayList<>();
         beschreibung.add("§5Pro Item lager können 10");
@@ -53,6 +64,7 @@ public class ShopDefaultItemsManger {
         beschreibung.add(buildingHinweis3);
 
         itemLager = Shopy.getInstance().createItemWithLore(Material.TRAPPED_CHEST, "§9Item Lager", beschreibung);
+        standertItemMatrialList.put(itemLager.getType(), itemLager);
 
         beschreibung = new ArrayList<>();
         beschreibung.add("§5Pro Ressourcen lager können 10");
@@ -64,6 +76,7 @@ public class ShopDefaultItemsManger {
         beschreibung.add(buildingHinweis3);
 
         ressourcenLager = Shopy.getInstance().createItemWithLore(Material.BARREL, "§9Ressourcen Lager", beschreibung);
+        standertItemMatrialList.put(ressourcenLager.getType(), ressourcenLager);
 
         beschreibung = new ArrayList<>();
         beschreibung.add("§5Erhalte in deinem Shop,");
@@ -75,14 +88,53 @@ public class ShopDefaultItemsManger {
         beschreibung.add(buildingHinweis3);
 
         aufgabenTisch = Shopy.getInstance().createItemWithLore(Material.TARGET, "§9AufgabenTisch", beschreibung);
+        standertItemMatrialList.put(aufgabenTisch.getType(),aufgabenTisch);
 
-        INSTANCE = this;
+        beschreibung = new ArrayList<>();
+        beschreibung.add("§5Stelle Rüstungen aus, um die warschnlichkeit");
+        beschreibung.add("§zu erhöhen diese zu verkaufen");
+        beschreibung.add("");
+        beschreibung.add(buildingHinweis);
+        beschreibung.add(buildingHinweis1);
+        beschreibung.add(buildingHinweis2);
+        beschreibung.add(buildingHinweis3);
+
+        rustungStander = Shopy.getInstance().createItemWithLore(Material.ARMOR_STAND, "§9Rüstungsständer", beschreibung);
+        standertItemMatrialList.put(rustungStander.getType(), rustungStander);
+
+        beschreibung = new ArrayList<>();
+        beschreibung.add("§5Verkaufte Items welche über einem Tresen");
+        beschreibung.add("§5verkauft wurden, bringen 10% mehr Erlös.");
+        beschreibung.add("");
+        beschreibung.add(buildingHinweis);
+        beschreibung.add(buildingHinweis1);
+        beschreibung.add(buildingHinweis2);
+        beschreibung.add(buildingHinweis3);
+
+        tresen = Shopy.getInstance().createItemWithLore(Material.LECTERN, "§9Tresen", beschreibung);
+        standertItemMatrialList.put(tresen.getType(), tresen);
+
+        beschreibung = new ArrayList<>();
+        beschreibung.add("§5Mit diesem gerät kannst du,");
+        beschreibung.add("§5deine Ausrüstung aufwerten!");
+        beschreibung.add("");
+        beschreibung.add(buildingHinweis);
+        beschreibung.add(buildingHinweis1);
+        beschreibung.add(buildingHinweis2);
+        beschreibung.add(buildingHinweis3);
+
+        upgrader = Shopy.getInstance().createItemWithLore(Material.SMITHING_TABLE, "§9Aufwerter", beschreibung);
+        standertItemMatrialList.put(upgrader.getType(), upgrader);
     }
 
     public static ShopDefaultItemsManger INSTANCE() {
         if(INSTANCE == null) INSTANCE = new ShopDefaultItemsManger();
 
         return INSTANCE;
+    }
+
+    public HashMap<Material, ItemStack> getStandertItemMatrialList() {
+        return standertItemMatrialList;
     }
 
     public ItemStack getRessourcenMark() {
@@ -103,5 +155,17 @@ public class ShopDefaultItemsManger {
 
     public ItemStack getAufgabenTisch() {
         return aufgabenTisch.clone();
+    }
+
+    public ItemStack getRustungStander() {
+        return rustungStander.clone();
+    }
+
+    public ItemStack getTresen() {
+        return tresen.clone();
+    }
+
+    public ItemStack getUpgrader() {
+        return upgrader.clone();
     }
 }

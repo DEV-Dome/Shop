@@ -48,6 +48,7 @@ public class Shop {
 
     World world;
     Location shopSpawn;
+    Location tresenPostion;
     ArrayList<Cuboid> zones;
     ShopRessourenManger shopRessourenManger;
     /* itemKategorieLevel auf den Shop bezogen */
@@ -71,6 +72,7 @@ public class Shop {
         shopKunden = new ArrayList<>();
         shopHandwerksAufgabe = new ArrayList<>();
         instance = this;
+        tresenPostion = null;
         
         CompletableFuture<Void> basisDaten = CompletableFuture.runAsync(() -> {
             try {
@@ -156,7 +158,7 @@ public class Shop {
                         int aktuelleXP = -1;
 
                         /* Vorhandes Level */
-                        String itemKategorieQuery = "SELECT * FROM shop_werte WHERE schlussel = 'itemKategorie_" + itemKategorie.getName() + "_level' LIMIT 1";
+                        String itemKategorieQuery = "SELECT * FROM shop_werte WHERE schlussel = 'itemKategorie_" + itemKategorie.getName() + "_level' AND shop = " + shopId + " LIMIT 1";
                         ResultSet resultItemKategorie= Shopy.getInstance().getMySQLConntion().resultSet(itemKategorieQuery);
 
                         if(resultItemKategorie.next()){
@@ -186,7 +188,7 @@ public class Shop {
                         }
 
                         /* Vorhande XP */
-                        itemKategorieQuery = "SELECT * FROM shop_werte WHERE schlussel = 'itemKategorie_" + itemKategorie.getName() + "_xp' LIMIT 1";
+                        itemKategorieQuery = "SELECT * FROM shop_werte WHERE schlussel = 'itemKategorie_" + itemKategorie.getName() + "_xp'  AND shop = " + shopId + " LIMIT 1";
                         resultItemKategorie= Shopy.getInstance().getMySQLConntion().resultSet(itemKategorieQuery);
 
                         if(resultItemKategorie.next()){
@@ -282,7 +284,7 @@ public class Shop {
                         if(result.getString("schlussel").equals("zusätzlicher_verkaufserlös")) zusaetzlicherVerkaufserlös = Double.parseDouble(result.getString("inhalt"));
                         if(result.getString("schlussel").equals("reduzierte_materialien_kosten")) reduzierteMaterialienKosten = Double.parseDouble(result.getString("inhalt"));
                         if(result.getString("schlussel").equals("erledigte_handwerks_aufgaben")) erledigteHandwerksAufgaben = Integer.parseInt(result.getString("inhalt"));
-
+                        if(result.getString("schlussel").equals("tresen_postion")) tresenPostion = Shopy.getInstance().getLocationFromString(result.getString("inhalt"));
                     }
                 } catch (SQLException e) {
                     Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
@@ -733,12 +735,6 @@ public class Shop {
             taskIdHandwerksManger = Bukkit.getScheduler().runTaskTimer(Shopy.getInstance(), new Runnable() {
                 @Override
                 public void run() {
-//                        for(ShopHandwerksAufgabe shopHandwerkAufgabe : shopHandwerksAufgabe){
-//                            if(shopHandwerkAufgabe.getGueltigBis().isAfter(LocalDateTime.now())){
-//                                shopHandwerksAufgabe.remove(shopHandwerkAufgabe);
-//                            }
-//                        }
-                    Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§9Debug lauf ...");
                     ArrayList<ShopHandwerksAufgabe> newShopHandwerksAufgabe = new ArrayList<>();
 
                     CompletableFuture.runAsync(() -> {
@@ -820,7 +816,7 @@ public class Shop {
 
         ShopItemKategorie finalFreischlaten = freischlaten;
         CompletableFuture.runAsync(() -> {
-            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET inhalt = '1' WHERE schlussel = 'itemKategorie_"+ finalFreischlaten.itemKategorie.getName() +"_freigeschaltet'");
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET inhalt = '1' WHERE schlussel = 'itemKategorie_"+ finalFreischlaten.itemKategorie.getName() +"_freigeschaltet' AND shop = " + shopId );
         });
 
         return freischlaten;
@@ -857,17 +853,35 @@ public class Shop {
     }
 
 
-    public void changeRessourcenLager(int newAmount){
+    public void andereRessourcenLager(int newAmount){
         CompletableFuture.runAsync(() -> {
-            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET inhalt = '"+ newAmount +"' WHERE schlussel = 'ressourcen_lager'");
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET inhalt = '"+ newAmount +"' WHERE schlussel = 'ressourcen_lager' AND shop = " + shopId);
         });
         ressourcenLagerSize = newAmount;
     }
-    public void changeItemLager(int newAmount){
+    public void andereItemLager(int newAmount){
         CompletableFuture.runAsync(() -> {
-            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET inhalt = '"+ newAmount +"' WHERE schlussel = 'item_lager'");
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_werte SET inhalt = '"+ newAmount +"' WHERE schlussel = 'item_lager' AND shop = " + shopId);
         });
         itemLagerSize = newAmount;
+    }
+    public void platziereTresen(Location postion) {
+        tresenPostion = postion;
+
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_werte (shop, schlussel, inhalt) VALUES ('"+ shopId +"', 'tresen_postion', '"+ postion +"')");
+        });
+    }
+    public void loscheTresen(){
+        tresenPostion = null;
+
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("DELETE FROM shop_werte WHERE schlussel = 'tresen_postion' AND shop = " + shopId);
+        });
+    }
+
+    public Location getTresenPostion() {
+        return tresenPostion;
     }
 
     public Player getOwner() {
