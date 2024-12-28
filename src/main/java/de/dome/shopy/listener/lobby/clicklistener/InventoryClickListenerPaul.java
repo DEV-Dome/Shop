@@ -37,7 +37,11 @@ public class InventoryClickListenerPaul implements Listener {
 
         if (e.getView().getTitle().equals("§2Handwerksmeister Paul")) {
             if(item.getItemMeta().getDisplayName().startsWith("§9Aufgabe")){
-                int aufgabenNummer = Integer.parseInt(item.getItemMeta().getDisplayName().split(" ")[1]);
+                String[] itemNameAlsArray = item.getItemMeta().getDisplayName().split(" ");
+                if(itemNameAlsArray.length == 3 && itemNameAlsArray[2].equals("[Erledigt]")) return;
+
+                int aufgabenNummer = Integer.parseInt(itemNameAlsArray[1]);
+
                 RyseInventory.builder().title("§2Item Abgabe Aufgabe " + aufgabenNummer).rows(6).provider(new InventoryProvider() {
                     @Override
                     public void init(Player player, InventoryContents contents) {
@@ -84,7 +88,7 @@ public class InventoryClickListenerPaul implements Listener {
             }
         }
 
-        if (e.getView().getTitle().startsWith("§2Item Abgabe Aufgabe") && p.getWorld().getName().equals("world")) {
+        if (e.getView().getTitle().startsWith("§2Item Abgabe Aufgabe")) {
             if(item.getItemMeta().getDisplayName().equals("§7Zurück zur Aufgabenübersicht")){
                 spielerShop.openHandwerksmeisterPaulUbersicht();
                 return;

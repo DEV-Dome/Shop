@@ -33,7 +33,9 @@ public class PlayerInteractListener implements Listener {
                 e.setCancelled(true);
                 Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openItemLagerInventar(0);
             }
-
+            if (e.getClickedBlock().getType() == Material.TARGET) {
+                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openHandwerksmeisterPaulUbersicht();
+            }
             if (e.getClickedBlock().getType() == Material.BARREL) {
                 e.setCancelled(true);
             }

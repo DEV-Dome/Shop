@@ -733,14 +733,13 @@ public class Shop {
             taskIdHandwerksManger = Bukkit.getScheduler().runTaskTimer(Shopy.getInstance(), new Runnable() {
                 @Override
                 public void run() {
-                    if(shopHandwerksAufgabe == null) shopHandwerksAufgabe = new ArrayList<>();
-
-                        for(ShopHandwerksAufgabe shopHandwerkAufgabe : shopHandwerksAufgabe){
-                            if(shopHandwerkAufgabe.getGueltigBis().isAfter(LocalDateTime.now())){
-                                shopHandwerksAufgabe.remove(shopHandwerkAufgabe);
-                            }
-                        }
-
+//                        for(ShopHandwerksAufgabe shopHandwerkAufgabe : shopHandwerksAufgabe){
+//                            if(shopHandwerkAufgabe.getGueltigBis().isAfter(LocalDateTime.now())){
+//                                shopHandwerksAufgabe.remove(shopHandwerkAufgabe);
+//                            }
+//                        }
+                    Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§9Debug lauf ...");
+                    ArrayList<ShopHandwerksAufgabe> newShopHandwerksAufgabe = new ArrayList<>();
 
                     CompletableFuture.runAsync(() -> {
                         try {
@@ -760,18 +759,20 @@ public class Shop {
                                     ShopHandwerksAufgabeItem aufgabenItem = new ShopHandwerksAufgabeItem(Item.getItemById(resultAufgabenItems.getInt("item")), resultAufgabenItems.getInt("id"), resultAufgabenItems.getInt("menge"), resultAufgabenItems.getString("belohnung"), resultAufgabenItems.getInt("belohnung_menge"), resultAufgabenItems.getInt("fortschritt"));
                                     aufgabe.getShopHandwerksAufgabeItems().add(aufgabenItem);
                                 }
-                                shopHandwerksAufgabe.add(aufgabe);
+                                newShopHandwerksAufgabe.add(aufgabe);
                             }
                         } catch (SQLException e) {
                             Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§4" + e.getMessage());
                         }
                     }).thenRun(() ->{
-                        while(shopHandwerksAufgabe.size() <= 2){
-                            shopHandwerksAufgabe.add(ShopHandwerksAufgabe.erstelleAufgabe(shop));
+                        while(newShopHandwerksAufgabe.size() <= 2){
+                            newShopHandwerksAufgabe.add(ShopHandwerksAufgabe.erstelleAufgabe(shop));
                         }
+
+                        shopHandwerksAufgabe = newShopHandwerksAufgabe;
                     });
                 }
-            }, 20, 12000L).getTaskId();
+            }, 20, 1200L).getTaskId();
     }
 
     public void addShopZone(){

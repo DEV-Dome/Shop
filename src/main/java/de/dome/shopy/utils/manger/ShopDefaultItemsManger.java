@@ -13,6 +13,7 @@ public class ShopDefaultItemsManger {
     ItemStack werkbank;
     ItemStack itemLager;
     ItemStack ressourcenLager;
+    ItemStack aufgabenTisch;
 
     private ShopDefaultItemsManger(){
         String buildingHinweis   = "§7Dieser Gegenstand kann nur in der Shop-Welt";
@@ -64,6 +65,17 @@ public class ShopDefaultItemsManger {
 
         ressourcenLager = Shopy.getInstance().createItemWithLore(Material.BARREL, "§9Ressourcen Lager", beschreibung);
 
+        beschreibung = new ArrayList<>();
+        beschreibung.add("§5Erhalte in deinem Shop,");
+        beschreibung.add("§5zugriff auf die Handwerkaufgaben");
+        beschreibung.add("");
+        beschreibung.add(buildingHinweis);
+        beschreibung.add(buildingHinweis1);
+        beschreibung.add(buildingHinweis2);
+        beschreibung.add(buildingHinweis3);
+
+        aufgabenTisch = Shopy.getInstance().createItemWithLore(Material.TARGET, "§9AufgabenTisch", beschreibung);
+
         INSTANCE = this;
     }
 
@@ -87,5 +99,9 @@ public class ShopDefaultItemsManger {
 
     public ItemStack getRessourcenLager() {
         return ressourcenLager.clone();
+    }
+
+    public ItemStack getAufgabenTisch() {
+        return aufgabenTisch.clone();
     }
 }

@@ -2,6 +2,7 @@
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.Cuboid;
+import de.dome.shopy.utils.manger.ShopDefaultItemsManger;
 import de.dome.shopy.utils.shop.Shop;
 import de.dome.shopy.utils.shop.ShopsZonesCreator;
 import org.bukkit.GameMode;
@@ -63,32 +64,18 @@ public class BlockBreakListener implements Listener {
                             if(e.getBlock().getType() == Material.LECTERN){
                                 e.setDropItems(false);
 
-                                ArrayList<String> beschreibung = new ArrayList<>();
-                                beschreibung.add("§5Mithilfe dieses Gegenstandes können Ressourcen gekauft werden.");
-                                beschreibung.add("");
-                                beschreibung.add(buildingHinweis);
-
-                                p.getInventory().addItem(Shopy.getInstance().createItemWithLore(Material.LECTERN, "§9Ressourcen Mark", beschreibung));
+                                p.getInventory().addItem(ShopDefaultItemsManger.INSTANCE().getRessourcenMark());
                             }
                             if(e.getBlock().getType() == Material.CRAFTING_TABLE){
                                 e.setDropItems(false);
 
-                                ArrayList<String> beschreibung = new ArrayList<>();
-                                beschreibung.add("§5Auf diesem Gegenstand können mächtige Waffen und Werkzeuge hergestellt werden..");
-                                beschreibung.add("");
-                                beschreibung.add(buildingHinweis);
-
-                                p.getInventory().addItem(Shopy.getInstance().createItemWithLore(Material.CRAFTING_TABLE, "§9Werkbank", beschreibung));
+                                p.getInventory().addItem(ShopDefaultItemsManger.INSTANCE().getWerkbank());
                             }
                             if(e.getBlock().getType() == Material.TRAPPED_CHEST){
                                 e.setDropItems(false);
 
-                                ArrayList<String> beschreibung = new ArrayList<>();
-                                beschreibung.add("§5Pro Item lager können 10 hergestellte Items gelagert werden.");
-                                beschreibung.add("");
-                                beschreibung.add(buildingHinweis);
+                                p.getInventory().addItem(ShopDefaultItemsManger.INSTANCE().getItemLager());
 
-                                p.getInventory().addItem(Shopy.getInstance().createItemWithLore(Material.TRAPPED_CHEST, "§9Item Lager", beschreibung));
 
                                 /* Item Effeckt beim Abbauen (negativ) */
                                 int newAmount = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getItemLagerSize() - 10;
@@ -100,12 +87,7 @@ public class BlockBreakListener implements Listener {
                             if(e.getBlock().getType() == Material.BARREL){
                                 e.setDropItems(false);
 
-                                ArrayList<String> beschreibung = new ArrayList<>();
-                                beschreibung.add("§5Pro Ressourcen lager können 10 Ressourcen gelagert werden");
-                                beschreibung.add("");
-                                beschreibung.add(buildingHinweis);
-
-                                p.getInventory().addItem(Shopy.getInstance().createItemWithLore(Material.BARREL, "§9Ressourcen Lager", beschreibung));
+                                p.getInventory().addItem(ShopDefaultItemsManger.INSTANCE().getRessourcenLager());
 
                                 /* Item Effeckt beim Abbauen (negativ) */
                                 int newAmount = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getRessourcenLager() - 10;
@@ -113,7 +95,11 @@ public class BlockBreakListener implements Listener {
 
                                 p.sendMessage(Shopy.getInstance().getPrefix() + "Durch das Platzieren des Item, wurde dein Ressourcenlager um 10 Plätze reduziert.");
                             }
+                            if(e.getBlock().getType() == Material.TARGET){
+                                e.setDropItems(false);
 
+                                p.getInventory().addItem(ShopDefaultItemsManger.INSTANCE().getAufgabenTisch());
+                            }
                             return;
                         }
                     }
