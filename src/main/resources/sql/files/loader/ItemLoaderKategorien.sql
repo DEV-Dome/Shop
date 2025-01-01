@@ -10,4 +10,4 @@ INSERT INTO item_kategorie (icon, name, beschreibung, reinfolge) VALUES ('NETHER
 
 INSERT INTO item_kategorie (icon, name, beschreibung, reinfolge) VALUES ('NETHERITE_LEGGINGS', 'Hosen', 'Baue und erforsche die mächtigsten Hosen', 6);
 
-INSERT INTO item_kategorie (icon, name, beschreibung, reinfolge) VALUES ('NETHERITE_BOOTS', 'Schuhe', 'Baue und erforsche die mächtigsten Schuhe', 6);
+INSERT INTO item_kategorie (icon, name, beschreibung, reinfolge) VALUES ('NETHERITE_BOOTS', 'Schuhe', 'Baue und erforsche die mächtigsten Schuhe', 7);

@@ -170,10 +170,10 @@ public class InventoryClickListenerShop implements Listener {
         }
         if (e.getView().getTitle().equals("§9Shop - Ressourcen Übersicht")) {
             if(item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName() &&  Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())) {
-                if (item.getType() == Material.OAK_WOOD) Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openRessourenUbersicht("STANDART");
-                if (item.getType() == Material.AMETHYST_SHARD) Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openRessourenUbersicht("DUNGEON-LOOT");
-                if (item.getType() == Material.ECHO_SHARD) Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openRessourenUbersicht("SPECIAL");
-                if (item.getType() == Material.BLUE_DYE) Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openRessourenUbersicht("AUFWERTER");
+                if (item.getType() == Material.OAK_WOOD) Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopInventarManger().openRessourenUbersicht("STANDART");
+                if (item.getType() == Material.AMETHYST_SHARD) Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopInventarManger().openRessourenUbersicht("DUNGEON-LOOT");
+                if (item.getType() == Material.ECHO_SHARD) Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopInventarManger().openRessourenUbersicht("SPECIAL");
+                if (item.getType() == Material.BLUE_DYE) Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopInventarManger().openRessourenUbersicht("AUFWERTER");
             }
         }
     }

@@ -22,7 +22,7 @@ public class ItemLagerCMD implements CommandExecutor {
             Shop shop = Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
 
             if(Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())){
-                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openItemLagerInventar(0);
+                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopInventarManger().openItemLagerInventar(0);
             }else {
                 p.sendMessage(Shopy.getInstance().getPrefix() + "Du hast dir noch keinen Shop erstellt. Dieses kannst du beim §eWelten Ersteller§7 tun.");
             }

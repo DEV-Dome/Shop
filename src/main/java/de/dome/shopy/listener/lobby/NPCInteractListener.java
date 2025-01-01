@@ -357,7 +357,7 @@ public class NPCInteractListener implements Listener {
                 }
             }).build(Shopy.getInstance()).open(p);
         }else if(NpcManger.INSTANCE().getPaul().getUniqueId() == npc.getUniqueId()){
-            Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openHandwerksmeisterPaulUbersicht();
+            Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopInventarManger().openHandwerksmeisterPaulUbersicht();
         } else if(NpcManger.INSTANCE().getSiegfried().getUniqueId() == npc.getUniqueId()){
             RyseInventory.builder().title(npc.getFullName()).rows(4).provider(new InventoryProvider() {
                 @Override

@@ -51,11 +51,11 @@ public class InventoryClickListenerItemLager implements Listener {
                     return;
                 }
                 if (item.getItemMeta().getDisplayName().equals("§7Letzte Seite")) {
-                    spielerShop.openItemLagerInventar(AkkuelleSeite - 1);
+                    spielerShop.getShopInventarManger().openItemLagerInventar(AkkuelleSeite - 1);
                     return;
                 }
                 if (item.getItemMeta().getDisplayName().equals("§7Nächste Seite")) {
-                    spielerShop.openItemLagerInventar(AkkuelleSeite + 1);
+                    spielerShop.getShopInventarManger().openItemLagerInventar(AkkuelleSeite + 1);
                     return;
                 }
                 //Rechtklick zum Item löschen ausführen

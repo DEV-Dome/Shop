@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class EntityDamageByEntityListener implements Listener {
@@ -17,13 +18,15 @@ public class EntityDamageByEntityListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerInteract(EntityDamageByEntityEvent e) {
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
         if(!(e.getDamager() instanceof Player)) return;
         Player p = (Player) e.getDamager();
 
         if(!Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())) return;
         if (e.getEntity() instanceof ArmorStand) {
+
             p.getInventory().addItem(ShopDefaultItemsManger.INSTANCE().getRustungStander());
+            Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).loscheItemHalter(e.getEntity().getLocation());
         }
 
     }

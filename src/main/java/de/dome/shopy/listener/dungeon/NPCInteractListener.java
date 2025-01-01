@@ -23,7 +23,7 @@ public class NPCInteractListener implements Listener {
 
         if(Shopy.getInstance().getSpielerDungeon().containsKey(p.getUniqueId())){
             if(npc.getFullName().equals("§9Waffenlager")){
-                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openItemLagerInventar(0);
+                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopInventarManger().openItemLagerInventar(0);
             }
         }
     }

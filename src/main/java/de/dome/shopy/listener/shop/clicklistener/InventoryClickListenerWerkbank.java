@@ -38,7 +38,7 @@ public class InventoryClickListenerWerkbank implements Listener {
                 String kategorieName = item.getItemMeta().getDisplayName().substring(2);
                 ItemKategorie itemKategorie = ItemKategorie.getItemKategorieByName(kategorieName);
 
-                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openWaffenCraftInventar(0, itemKategorie);
+                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopInventarManger().openWaffenCraftInventar(0, itemKategorie);
             }
         }
         /* Werkbank einzelne Ansicht */
@@ -51,7 +51,7 @@ public class InventoryClickListenerWerkbank implements Listener {
 
                 /*Statische Items*/
                 if(item.getItemMeta().getDisplayName().equals("§7Zurück zur Übersicht")){
-                    spielerShop.openWerkbankInventar();
+                    spielerShop.getShopInventarManger().openWerkbankInventar();
                     return;
                 }
                 if(item.getItemMeta().getDisplayName().equals("§7Menü Schlissen")){
@@ -62,14 +62,14 @@ public class InventoryClickListenerWerkbank implements Listener {
                 if(item.getItemMeta().getDisplayName().equals("§7Letzte Seite")) {
                     ItemKategorie itemKategorie = ItemKategorie.getItemKategorieByName(titleWorte[1]);
 
-                    Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openWaffenCraftInventar(AkkuelleSeite - 1, itemKategorie);
+                    Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopInventarManger().openWaffenCraftInventar(AkkuelleSeite - 1, itemKategorie);
                     return;
                 }
 
                 if(item.getItemMeta().getDisplayName().equals("§7Nächste Seite")) {
                     ItemKategorie itemKategorie = ItemKategorie.getItemKategorieByName(titleWorte[1]);
 
-                    Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openWaffenCraftInventar(AkkuelleSeite + 1, itemKategorie);
+                    Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopInventarManger().openWaffenCraftInventar(AkkuelleSeite + 1, itemKategorie);
                     return;
                 }
 
@@ -133,7 +133,7 @@ public class InventoryClickListenerWerkbank implements Listener {
                     double ruestung = realItem.getMinRuestung() + (realItem.getMaxRuestung() - realItem.getMinRuestung()) * random.nextDouble();
 
 
-                    spielerShop.getShopItems().add(new ShopItem(platzhalterID, realItem.getId(), realItem.getItemKategorie(), realItem.getName(), realItem.getBeschreibung(), realItem.getIcon(), realItem.getItemSeltenheit(), waffenSchaden, waffenAngriffsgeschwindigkeit, ruestung, 3));
+                    spielerShop.getShopItems().add(new ShopItem(platzhalterID, realItem.getId(), realItem.getItemKategorie(), realItem.getName(), realItem.getBeschreibung(), realItem.getIcon(), realItem.getItemSeltenheit(), waffenSchaden, waffenAngriffsgeschwindigkeit, ruestung, 3, false));
                     CompletableFuture.runAsync(() -> {
                         Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item (shop, item) VALUES ('" + spielerShop.getShopId() + "', '" + realItem.getId() + "')");
 

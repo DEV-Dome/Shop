@@ -32,8 +32,9 @@ public class ShopItem {
 
     int haltbarkeit = 0;
     Item baseItem;
+    boolean ausgestellt;
 
-    public ShopItem(int id, int baseItemID, ItemKategorie itemKategorie, String name, String beschreibung, Material icon, ItemSeltenheit itemSeltenheit, double schaden, double angriffsgeschwindigkeit, double rustung, int haltbarkeit) {
+    public ShopItem(int id, int baseItemID, ItemKategorie itemKategorie, String name, String beschreibung, Material icon, ItemSeltenheit itemSeltenheit, double schaden, double angriffsgeschwindigkeit, double rustung, int haltbarkeit, boolean ausgestellt) {
         this.id = id;
         this.itemKategorie = itemKategorie;
         this.name = name;
@@ -44,6 +45,7 @@ public class ShopItem {
         this.angriffsgeschwindigkeit = roundToTwoDecimalPlaces(angriffsgeschwindigkeit);
         this.rustung = roundToTwoDecimalPlaces(rustung);
         this.haltbarkeit = haltbarkeit;
+        this.ausgestellt = ausgestellt;
         baseItem = Item.getItemById(baseItemID);
     }
 
@@ -147,6 +149,24 @@ public class ShopItem {
         return angriffsgeschwindigkeit;
     }
 
+    public boolean isAusgestellt() {
+        return ausgestellt;
+    }
+
+    public void setAusgestellt(boolean ausgestellt,int austellID) {
+        this.ausgestellt = ausgestellt;
+
+        if(ausgestellt){
+            CompletableFuture.runAsync(() -> {
+                Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item SET ausgestellt  = '"+ austellID +"' WHERE id  = " + id );
+            });
+        }else {
+            CompletableFuture.runAsync(() -> {
+                Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item SET ausgestellt = NULL WHERE id  = " + id);
+            });
+        }
+    }
+
     public int getHaltbarkeit() {
         return haltbarkeit;
     }
@@ -161,14 +181,14 @@ public class ShopItem {
             });
         }else {
             /* Item Löschen, da es aufgebraucht wurde */
-            delteItem();
+            deleteItem();
             zerstört = true;
         }
 
         return zerstört;
     }
 
-    public void delteItem(){
+    public void deleteItem(){
         CompletableFuture.runAsync(() -> {
             Shopy.getInstance().getMySQLConntion().query("DELETE FROM shop_item_werte WHERE item  = '" + id +"'");
             Shopy.getInstance().getMySQLConntion().query("DELETE FROM shop_item WHERE id = '" + id +"'");

@@ -15,10 +15,7 @@ import de.dome.shopy.listener.lobby.*;
 import de.dome.shopy.listener.lobby.BlockBreakListener;
 import de.dome.shopy.listener.lobby.clicklistener.*;
 import de.dome.shopy.listener.shop.*;
-import de.dome.shopy.listener.shop.clicklistener.InventoryClickListenerItemLager;
-import de.dome.shopy.listener.shop.clicklistener.InventoryClickListenerKundenKauf;
-import de.dome.shopy.listener.shop.clicklistener.InventoryClickListenerRessourenMarkplatz;
-import de.dome.shopy.listener.shop.clicklistener.InventoryClickListenerWerkbank;
+import de.dome.shopy.listener.shop.clicklistener.*;
 import de.dome.shopy.utils.*;
 import de.dome.shopy.utils.manger.DropManger;
 import de.dome.shopy.utils.manger.NpcManger;
@@ -57,6 +54,7 @@ public class Shopy extends JavaPlugin {
 
     private String prefix = "§9Shopy | §7";
     private String noperm = prefix + "§cDafür hast du keine Berechtigung.";
+    private String konatktSupport = prefix + "§cHier ist etwas schiefgelaufen. Versuche es bitte später erneut, oder kontaktieren den Support.";
     private static Shopy instance;
     private Location serverSpawn;
     MySQL mySQLConntion;
@@ -151,6 +149,7 @@ public class Shopy extends JavaPlugin {
         new PlayerDeathListener();
         new de.dome.shopy.listener.lobby.PlayerRespawnListener();
 
+
         new InventoryClickListenerMona();
         new InventoryClickListenerShop();
         new InventoryClickListenerLara();
@@ -167,8 +166,10 @@ public class Shopy extends JavaPlugin {
         new InventoryClickListenerRessourenMarkplatz();
         new InventoryClickListenerItemLager();
         new InventoryClickListenerKundenKauf();
+        new InventoryClickListenerArmorStand();
         new EntityDamageByEntityListener();
         new PlayerInteractAtEntityListener();
+        new EntityPlaceListener();
 
         new de.dome.shopy.listener.shop.NPCInteractListener();
 
@@ -299,6 +300,10 @@ public class Shopy extends JavaPlugin {
     }
     public DropManger getDropManger() {
         return dropManger;
+    }
+
+    public String getKonatktSupport() {
+        return konatktSupport;
     }
 
     public Location getLocationFromString(String locationString) {

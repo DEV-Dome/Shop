@@ -23,18 +23,18 @@ public class PlayerInteractListener implements Listener {
 
         if(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getWorld().getName().equalsIgnoreCase(e.getClickedBlock().getWorld().getName()) || p.hasPermission("shopy.bypass.interactOnOtherWorlds")) {
             if (e.getClickedBlock().getType() == Material.CARTOGRAPHY_TABLE) {
-                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openMarkplatzInventar();
+                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopInventarManger().openMarkplatzInventar();
             }
             if (e.getClickedBlock().getType() == Material.CRAFTING_TABLE) {
                 e.setCancelled(true);
-                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openWerkbankInventar();
+                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopInventarManger().openWerkbankInventar();
             }
             if(e.getClickedBlock().getType() == Material.TRAPPED_CHEST){
                 e.setCancelled(true);
-                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openItemLagerInventar(0);
+                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopInventarManger().openItemLagerInventar(0);
             }
             if (e.getClickedBlock().getType() == Material.TARGET) {
-                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).openHandwerksmeisterPaulUbersicht();
+                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopInventarManger().openHandwerksmeisterPaulUbersicht();
             }
             if (e.getClickedBlock().getType() == Material.BARREL) {
                 e.setCancelled(true);

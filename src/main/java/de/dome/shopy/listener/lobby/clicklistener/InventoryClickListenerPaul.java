@@ -90,7 +90,7 @@ public class InventoryClickListenerPaul implements Listener {
 
         if (e.getView().getTitle().startsWith("§2Item Abgabe Aufgabe")) {
             if(item.getItemMeta().getDisplayName().equals("§7Zurück zur Aufgabenübersicht")){
-                spielerShop.openHandwerksmeisterPaulUbersicht();
+                spielerShop.getShopInventarManger().openHandwerksmeisterPaulUbersicht();
                 return;
             }
             if(item.getItemMeta().getDisplayName().equals("§7Menü Schlissen")){
@@ -117,7 +117,7 @@ public class InventoryClickListenerPaul implements Listener {
                                 spielerShop.getShopHandwerksAufgabe().get(aufgabenIndex).setErledigt(true);
                                 spielerShop.setErledigteHandwerksAufgaben(spielerShop.getErledigteHandwerksAufgaben() + 1);
 
-                                spielerShop.openHandwerksmeisterPaulUbersicht();
+                                spielerShop.getShopInventarManger().openHandwerksmeisterPaulUbersicht();
                                 spielerShop.delteShopItemById(itemID);
 
                                 String belohnung = spielerShop.getShopHandwerksAufgabe().get(aufgabenIndex).gebeBelohnung();
