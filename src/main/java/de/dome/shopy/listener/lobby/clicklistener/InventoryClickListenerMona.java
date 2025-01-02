@@ -29,6 +29,8 @@ public class InventoryClickListenerMona implements Listener {
                 int spielerEinhornkristall = spielerShop.getRessourenShopManger().getRessourceValue(Ressource.getRessoureByName("Einhornkristall"));
 
 
+                if(item.getItemMeta().getDisplayName().equals("§7Schlissen")) p.closeInventory();
+
                 if(item.getItemMeta().getDisplayName().equals("§5Shop Erweitern") && kaufMitMoundKristall(p, spielerEinhornkristall)){
                     spielerShop.addShopZone();
 

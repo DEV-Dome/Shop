@@ -103,6 +103,7 @@ public class InventoryClickListenerShop implements Listener {
 
         if (e.getView().getTitle().equals("§9Shop")) {
             if(item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()){
+                if(item.getType() == Material.BARRIER) p.closeInventory();
                 if(item.getType() == Material.NETHER_STAR){
 
                     if (!Shopy.getInstance().getPlayersNotTeleport().contains(p)) {

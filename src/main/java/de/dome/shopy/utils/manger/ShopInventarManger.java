@@ -409,6 +409,7 @@ public class ShopInventarManger {
                     contents.updateOrSet(16, Shopy.getInstance().createItemWithLore(Material.GRAY_DYE, "§eAufgabe noch nicht freigeschaltet", beschreibungAufgabe3));
                 }
 
+                contents.updateOrSet(18, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
             }
             @Override
             public void update(Player player, InventoryContents contents) {

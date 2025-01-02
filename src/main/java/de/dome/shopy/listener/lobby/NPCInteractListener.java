@@ -130,6 +130,7 @@ public class NPCInteractListener implements Listener {
 
                     contents.set(16, Shopy.getInstance().createItemWithLore(Material.EVOKER_SPAWN_EGG, "§5Dungeon Stufe 4", beschreibung));
 
+                    contents.updateOrSet(18, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
                 }
 
             }).build(Shopy.getInstance()).open(p);
@@ -329,6 +330,7 @@ public class NPCInteractListener implements Listener {
                         contents.updateOrSet(25, Shopy.getInstance().createItemWithLore(Material.COPPER_INGOT, "§5Materialien Kosten reduzieren", beschreibung));
                     }
 
+                    contents.updateOrSet(27, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
                 }
 
                 @Override
@@ -350,6 +352,9 @@ public class NPCInteractListener implements Listener {
                     contents.updateOrSet(15, updateLoreMitPreis(ShopDefaultItemsManger.INSTANCE().getRustungStander(), 250));
                     contents.updateOrSet(16, updateLoreMitPreis(ShopDefaultItemsManger.INSTANCE().getTresen(), 2000));
                     contents.updateOrSet(19, updateLoreMitPreis(ShopDefaultItemsManger.INSTANCE().getUpgrader(), 5000));
+
+
+                    contents.updateOrSet(27, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
                 }
                 @Override
                 public void update(Player player, InventoryContents contents) {
@@ -376,6 +381,8 @@ public class NPCInteractListener implements Listener {
                     contents.updateOrSet(12, Shopy.getInstance().createItem(Material.BLUE_DYE,"§9Dungeon Schlüssel Stufe 2"));
                     contents.updateOrSet(13, Shopy.getInstance().createItem(Material.MAGENTA_DYE,"§9Dungeon Schlüssel Stufe 3"));
                     contents.updateOrSet(14, Shopy.getInstance().createItem(Material.ORANGE_DYE,"§9Dungeon Schlüssel Stufe 4"));
+
+                    contents.updateOrSet(27, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
                 }
 
                 @Override

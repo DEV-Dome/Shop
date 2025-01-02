@@ -37,7 +37,11 @@ public class InventoryClickListenerPaul implements Listener {
         final Shop spielerShop = Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
 
         if (e.getView().getTitle().equals("§2Handwerksmeister Paul")) {
+            if(item.getItemMeta().getDisplayName().equals("§7Schlissen")) p.closeInventory();
+
             if(item.getItemMeta().getDisplayName().startsWith("§9Aufgabe")){
+
+
                 String[] itemNameAlsArray = item.getItemMeta().getDisplayName().split(" ");
                 if(itemNameAlsArray.length == 3 && itemNameAlsArray[2].equals("[Erledigt]")) return;
 

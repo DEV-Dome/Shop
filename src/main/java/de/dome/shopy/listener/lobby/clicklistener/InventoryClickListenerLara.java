@@ -25,6 +25,12 @@ public class InventoryClickListenerLara implements Listener {
         ItemStack item = e.getCurrentItem();
 
         if (e.getView().getTitle().equals("§bIngenieurin Lara")) {
+            if(item.getItemMeta().getDisplayName().equals("§7Schlissen")){
+                p.closeInventory();
+                return;
+            }
+
+
             Shop spielerShop =  Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
             int spielerGeld = spielerShop.getRessourenShopManger().getRessourceValue(Ressource.getRessoureByName("Geld"));
 

@@ -30,6 +30,8 @@ public class InventoryClickListenerSiegfried implements Listener {
         Shop spielerShop = Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
 
         if (e.getView().getTitle().equals(NpcManger.INSTANCE().getSiegfried().getFullName())) {
+            if(item.getItemMeta().getDisplayName().equals("§7Schlissen")) p.closeInventory();
+
             if(item.getItemMeta().getDisplayName().startsWith("§9Dungeon Schlüssel Stufe")){
                 p.sendMessage(Shopy.getInstance().getPrefix() + "Diese Funktion wird später hinzugefügt!");
                 return;

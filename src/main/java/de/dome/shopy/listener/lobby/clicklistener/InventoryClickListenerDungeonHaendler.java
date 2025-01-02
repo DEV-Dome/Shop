@@ -36,6 +36,9 @@ public class InventoryClickListenerDungeonHaendler implements Listener {
                     case EVOKER_SPAWN_EGG:
                         Shopy.getInstance().getSpielerDungeon().put(p.getUniqueId(), new Dungeon(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()), 4));
                         break;
+                    case BARRIER:
+                        p.closeInventory();
+                        break;
                 }
             }
         }
