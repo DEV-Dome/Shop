@@ -18,11 +18,13 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Directional;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 
@@ -35,6 +37,8 @@ public class ShopKunden {
     ArrayList<ItemKategorie>  interessanteKategorien = new ArrayList<>();
     ArrayList<ShopItem> interessanteItems = new ArrayList<>();
     ArrayList<ShopItem> gesuchteItems = new ArrayList<>();
+    ArrayList<Vector> npcLaufWeg = new ArrayList<>();
+    ArrayList<ShopItemHalter> angeschuateItemHalter = new ArrayList<>();
     Shop shop;
     Location ziel;
 
@@ -75,8 +79,19 @@ public class ShopKunden {
             versuche++;
         }
 
+
         if(ziel != null && npc.getNavigator().canNavigateTo(ziel)){
-                npc.getNavigator().setTarget(ziel);
+            int maxStops = 3;
+            for(ShopItemHalter shopItemHalter : shop.getShopItemHalter().values()){
+                if(npcLaufWeg.size() > maxStops) break;
+                if(Shopy.getInstance().isWahrscheinlichkeit(0.35)){
+                    npcLaufWeg.add(shopItemHalter.getLocation().toVector());
+                    angeschuateItemHalter.add(shopItemHalter);
+                }
+            }
+
+            npcLaufWeg.add(ziel.toVector());
+            npc.getNavigator().setTarget(npcLaufWeg);
         } else loescheKunden();
 
 
@@ -114,9 +129,33 @@ public class ShopKunden {
                 if(Shopy.getInstance().isWahrscheinlichkeit(0.37)){
                     gesuchteItems.add(null);
                 }else {
-                    ShopItem randomShopItem = interessanteItems.get(random.nextInt(interessanteItems.size()));
-                    if(!gesuchteItems.contains(randomShopItem)) gesuchteItems.add(randomShopItem);
-                    else gesuchteItems.add(null);
+                    ShopItemHalter shopItemHalter = null;
+                    if(angeschuateItemHalter.size() != 0) shopItemHalter = angeschuateItemHalter.get(random.nextInt(angeschuateItemHalter.size()));
+
+                    if(Shopy.getInstance().isWahrscheinlichkeit(0.125) && shopItemHalter != null){
+                        if(shopItemHalter.getItem1() != null || shopItemHalter.getItem2() != null || shopItemHalter.getItem3() != null || shopItemHalter.getItem4() != null ){
+                            int solt = random.nextInt(4);
+                            ShopItem randomShopItem = null;
+
+                            if(solt == 1 && shopItemHalter.getItem1() != null) randomShopItem = shopItemHalter.getItem1();
+                            else if(solt == 2 && shopItemHalter.getItem2() != null) randomShopItem = shopItemHalter.getItem2();
+                            else if(solt == 3 && shopItemHalter.getItem3() != null) randomShopItem = shopItemHalter.getItem3();
+                            else if(solt == 4 && shopItemHalter.getItem4() != null) randomShopItem = shopItemHalter.getItem4();
+                            else {
+                                randomShopItem = interessanteItems.get(random.nextInt(interessanteItems.size()));
+                            }
+
+                            gesuchteItems.add(randomShopItem);
+                        }else {
+                            ShopItem randomShopItem = interessanteItems.get(random.nextInt(interessanteItems.size()));
+                            if(!gesuchteItems.contains(randomShopItem)) gesuchteItems.add(randomShopItem);
+                            else gesuchteItems.add(null);
+                        }
+                    }else {
+                        ShopItem randomShopItem = interessanteItems.get(random.nextInt(interessanteItems.size()));
+                        if(!gesuchteItems.contains(randomShopItem)) gesuchteItems.add(randomShopItem);
+                        else gesuchteItems.add(null);
+                    }
                 }
             }
         }else {
@@ -177,7 +216,10 @@ public class ShopKunden {
 
             for (ShopKunden kunden : shop.getShopKunden()){
                 if(kunden.npc.getUniqueId() == npc.getUniqueId() || vorher != null){
-                    if(vorher != null)kunden.npc.getNavigator().setTarget(vorher);
+                    if(vorher != null) {
+                        kunden.npc.getNavigator().cancelNavigation();
+                        kunden.npc.getNavigator().setTarget(vorher);
+                    }
 
                     vorher = kunden.getZiel();
                     kunden.setZiel(vorher);
@@ -186,6 +228,7 @@ public class ShopKunden {
         }
 
         if(npc.getNavigator().canNavigateTo(shop.getShopSpawn())) {
+            npc.getNavigator().cancelNavigation();
             npc.getNavigator().setTarget(shop.shopSpawn);
         }
 
@@ -217,6 +260,7 @@ public class ShopKunden {
     public ArrayList<ShopItem> getInteressanteItems() {
         return interessanteItems;
     }
+
 
     public ArrayList<ShopItem> getGesuchteItems() {
         return gesuchteItems;

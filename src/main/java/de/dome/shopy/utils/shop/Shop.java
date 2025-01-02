@@ -14,8 +14,11 @@ import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import org.bukkit.*;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SpawnCategory;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import java.sql.ResultSet;
@@ -631,8 +634,42 @@ public class Shop {
             if(shopItem.getId() == id){
                 CompletableFuture.runAsync(() -> {
                     Shopy.getInstance().getMySQLConntion().query("DELETE FROM shop_item_werte WHERE item  = '" + id +"'");
+
+                    Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_1 = NULL WHERE item_1 = " + id);
+                    Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_2 = NULL WHERE item_2 = " + id);
+                    Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_3 = NULL WHERE item_3 = " + id);
+                    Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_4 = NULL WHERE item_4 = " + id);
+
                     Shopy.getInstance().getMySQLConntion().query("DELETE FROM shop_item WHERE id = '" + id +"'");
                 });
+
+                for(ShopItemHalter shopItemHalter : shopItemHalter.values()){
+                    /* Wenn kein Armor Stand suchen */
+                    ArmorStand armorStand = null;
+                    for (Entity entity : shopItemHalter.getLocation().getWorld().getNearbyEntities(shopItemHalter.getLocation(), 0.5, 0.5, 0.5)) {
+                        if (entity instanceof ArmorStand) {
+                            armorStand = (ArmorStand) entity;
+                        }
+                    }
+
+                    if(shopItemHalter.getItem1() != null && shopItemHalter.getItem1().getId() == id){
+                        shopItemHalter.setItem1(null);
+                        if(armorStand != null ) armorStand.setItem(EquipmentSlot.HEAD, null);
+                    }
+                    if(shopItemHalter.getItem2() != null && shopItemHalter.getItem2().getId() == id){
+                        shopItemHalter.setItem2(null);
+                        if(armorStand != null ) armorStand.setItem(EquipmentSlot.CHEST, null);
+                    }
+                    if(shopItemHalter.getItem3() != null && shopItemHalter.getItem3().getId() == id){
+                        shopItemHalter.setItem3(null);
+                        if(armorStand != null ) armorStand.setItem(EquipmentSlot.LEGS, null);
+
+                    }
+                    if(shopItemHalter.getItem4() != null && shopItemHalter.getItem4().getId() == id){
+                        shopItemHalter.setItem4(null);
+                        if(armorStand != null ) armorStand.setItem(EquipmentSlot.FEET, null);
+                    }
+                }
 
                 shopItems.remove(i);
                 break;

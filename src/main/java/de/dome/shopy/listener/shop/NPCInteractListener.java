@@ -54,10 +54,12 @@ public class NPCInteractListener implements Listener {
                             if(shopKunden.getGesuchteItems().size() >= 5) zeahler--;
 
                             for(ShopItem shopItem : shopKunden.getGesuchteItems()){
+                                if(shopItem == null) continue;
                                 /* Überprüfe ob, dass ausgewählte Item noch im Lager ist */
-                                boolean itemNochAufLager = kundenShop.getShopItems().contains(shopItem);
+                                ShopItem itemNochAufLager = null;
+                                if(shopItem != null) itemNochAufLager = kundenShop.getShopItemById(shopItem.getId());
 
-                                if(shopItem != null && itemNochAufLager){
+                                if(shopItem != null && itemNochAufLager != null){
                                     double itempreis = shopItem.getItemPreis();
 
                                     /* Aufschläge */
@@ -67,13 +69,14 @@ public class NPCInteractListener implements Listener {
                                     ArrayList<String> beschreibung = shopItem.getVolleBeschreibung();
                                     beschreibung.add("");
                                     beschreibung.add("§7Dieser Kunde bietet: §e" + itempreis + "€ §7für das Item!");
+                                    if(shopItem.isAusgestellt()) beschreibung.add("§7Dieses Item ist teil deiner Austellungen");
 
                                     ItemStack item = shopItem.buildBaseItem();
                                     item.setLore(beschreibung);
 
                                     contents.set(zeahler, item);
                                     zeahler++;
-                                }else if(!itemNochAufLager) {
+                                }else if(itemNochAufLager == null) {
                                     ArrayList<String> beschreibung = new ArrayList<>();
                                     beschreibung.add("");
                                     beschreibung.add("§7Leider ist das Item");
@@ -94,6 +97,18 @@ public class NPCInteractListener implements Listener {
                                     contents.set(zeahler, item);
                                     zeahler++;
                                 }
+                            }
+                            if(zeahler == 21){
+                                ArrayList<String> beschreibung = new ArrayList<>();
+                                beschreibung.add("");
+                                beschreibung.add("§7Leider hat der Kunde");
+                                beschreibung.add("§7nichts passendes gefunden!");
+
+                                ItemStack item = Shopy.getInstance().createItemWithLore(Material.MAP, "§cKein Passendes Item!", beschreibung);
+
+                                contents.set(21, item);
+                                contents.set(22, item);
+                                contents.set(23, item);
                             }
 
                             contents.set(27, Shopy.getInstance().createItemWithLore(Material.OAK_DOOR, "§9Kunden Weg schicken", new ArrayList<>(), false, false));
