@@ -3,6 +3,7 @@ package de.dome.shopy.listener.lobby.clicklistener;
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.shop.Shop;
 import de.dome.shopy.utils.shop.ShopItem;
+import de.dome.shopy.utils.shop.shophandwerksaufgabe.ShopHandwerksAufgabe;
 import de.dome.shopy.utils.shop.shophandwerksaufgabe.ShopHandwerksAufgabeItem;
 import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
 import io.github.rysefoxx.inventory.plugin.content.IntelligentItemData;
@@ -41,50 +42,9 @@ public class InventoryClickListenerPaul implements Listener {
                 if(itemNameAlsArray.length == 3 && itemNameAlsArray[2].equals("[Erledigt]")) return;
 
                 int aufgabenNummer = Integer.parseInt(itemNameAlsArray[1]);
+                int aufgabenID = Integer.parseInt(item.getItemMeta().getLore().get(0).split(" ")[1]);
 
-                RyseInventory.builder().title("§2Item Abgabe Aufgabe " + aufgabenNummer).rows(6).provider(new InventoryProvider() {
-                    @Override
-                    public void init(Player player, InventoryContents contents) {
-                        int i = 0;
-                        int aufgabenIndex = aufgabenNummer - 1;
-                        for(ShopItem shopItem : spielerShop.getShopItems()){
-                            if(i >= 5 * 9) break;
-                            /* prüfe ist Item Relavant für Aufgabe  */
-                            boolean gefunden = false;
-
-                            for(ShopHandwerksAufgabeItem handwerksAufgabeItem : spielerShop.getShopHandwerksAufgabe().get(aufgabenIndex).getShopHandwerksAufgabeItems()){
-                                if(handwerksAufgabeItem.getItem().getName().equals(shopItem.getName())){
-                                    if(handwerksAufgabeItem.getMenge() > handwerksAufgabeItem.getFortschritt()){
-                                        gefunden = true;
-                                    }
-                                }
-                            }
-                            if(!gefunden) continue;
-
-                            /* Item bauen */
-                            ArrayList<String> beschreibung = shopItem.getVolleBeschreibung();
-                            beschreibung.add("");
-
-                            beschreibung.add("§a- Linksklick zum Item abgeben");
-
-                            ItemStack item = shopItem.buildBaseItem();
-                            item.setLore(beschreibung);
-
-                            contents.updateOrSet(i, item);
-                            i++;
-                        }
-
-                        contents.updateOrSet(45, Shopy.getInstance().createItem(Material.DIAMOND, "§7Zurück zur Aufgabenübersicht"));
-                        contents.updateOrSet(53, Shopy.getInstance().createItem(Material.BARRIER, "§7Menü Schlissen"));
-                        contents.updateOrSet(46, Shopy.getInstance().createItemWithLore(Material.FLOWER_BANNER_PATTERN, "§9Aufgabe " + aufgabenNummer, spielerShop.getShopHandwerksAufgabe().get(aufgabenIndex).getBeschreibung()));
-                    }
-                    @Override
-                    public void update(Player player, InventoryContents contents) {
-                        for(IntelligentItemData ii : contents.getAllData()) contents.removeFirst();
-
-                        init(player, contents);
-                    }
-                }).build(Shopy.getInstance()).open(p);
+                spielerShop.getShopInventarManger().openHandwerksmeisterPaulAufgabenAnsicht(aufgabenNummer, aufgabenID);
             }
         }
 
@@ -102,33 +62,37 @@ public class InventoryClickListenerPaul implements Listener {
             }
 
             int itemID = Integer.parseInt(item.getItemMeta().getLore().get(0).split(":")[1].substring(1));
-            int aufgabenIndex = Integer.parseInt(e.getView().getTitle().split(" ")[3]) - 1;
+            int aufgabenID = Integer.parseInt(e.getView().getTitle().split(" ")[3]);
             ShopItem shopItem = spielerShop.getShopItemById(itemID);
 
-
             if(shopItem != null){
-                for(ShopHandwerksAufgabeItem handwerksAufgabeItem : spielerShop.getShopHandwerksAufgabe().get(aufgabenIndex).getShopHandwerksAufgabeItems()){
-                    if(handwerksAufgabeItem.getItem().getName().equals(shopItem.getName())){
-                        if(handwerksAufgabeItem.getMenge() > handwerksAufgabeItem.getFortschritt()){
-                            handwerksAufgabeItem.setFortschritt(handwerksAufgabeItem.getFortschritt() + 1);
+                for(ShopHandwerksAufgabe handwerksAufgabe : spielerShop.getShopHandwerksAufgabe()){
+                    if(handwerksAufgabe.getId() == aufgabenID) {
+                        for(ShopHandwerksAufgabeItem handwerksAufgabeItem : handwerksAufgabe.getShopHandwerksAufgabeItems()){
+                            if(handwerksAufgabeItem.getItem().getName().equals(shopItem.getName())){
+                                if(handwerksAufgabeItem.getMenge() > handwerksAufgabeItem.getFortschritt()){
+                                    handwerksAufgabeItem.setFortschritt(handwerksAufgabeItem.getFortschritt() + 1);
 
-                            // Überprüfe ob, die Aufgabe abgeschlossen ist.
-                            if(spielerShop.getShopHandwerksAufgabe().get(aufgabenIndex).isAufgabeAbgeschlossen()){
-                                spielerShop.getShopHandwerksAufgabe().get(aufgabenIndex).setErledigt(true);
-                                spielerShop.setErledigteHandwerksAufgaben(spielerShop.getErledigteHandwerksAufgaben() + 1);
+                                    // Überprüfe ob, die Aufgabe abgeschlossen ist.
+                                    if(handwerksAufgabe.isAufgabeAbgeschlossen()){
+                                        handwerksAufgabe.setErledigt(true);
+                                        spielerShop.setErledigteHandwerksAufgaben(spielerShop.getErledigteHandwerksAufgaben() + 1);
 
-                                spielerShop.getShopInventarManger().openHandwerksmeisterPaulUbersicht();
-                                spielerShop.delteShopItemById(itemID);
+                                        spielerShop.getShopInventarManger().openHandwerksmeisterPaulUbersicht();
+                                        spielerShop.delteShopItemById(itemID);
 
-                                String belohnung = spielerShop.getShopHandwerksAufgabe().get(aufgabenIndex).gebeBelohnung();
-                                p.sendMessage(Shopy.getInstance().getPrefix() + "§7Du hast die Aufgabe abgeschlossen, zur Belohnung bekommt du folgende Items: §e" + belohnung );
-                            }else {
-                                p.sendMessage(Shopy.getInstance().getPrefix() + "Du hast das Item: §e" + shopItem.getName() + " §7für die Aufgabe gespendet!");
-                                spielerShop.delteShopItemById(itemID);
-                                p.updateInventory();
+                                        String belohnung = handwerksAufgabe.gebeBelohnung();
+                                        p.sendMessage(Shopy.getInstance().getPrefix() + "§7Du hast die Aufgabe abgeschlossen, zur Belohnung bekommt du folgende Items: §e" + belohnung );
+                                    }else {
+                                        p.sendMessage(Shopy.getInstance().getPrefix() + "Du hast das Item: §e" + shopItem.getName() + " §7für die Aufgabe gespendet!");
+                                        spielerShop.delteShopItemById(itemID);
+                                        p.updateInventory();
+                                    }
+                                    break;
+                                }
                             }
-                            break;
                         }
+                        break;
                     }
                 }
             }else {

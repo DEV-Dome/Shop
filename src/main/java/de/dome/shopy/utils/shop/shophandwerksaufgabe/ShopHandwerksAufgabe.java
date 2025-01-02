@@ -147,6 +147,8 @@ public class ShopHandwerksAufgabe {
 
         if(!erledigt){
             int belohungsGeld = 0;
+            beschreibung.add("§7Aufgaben-ID: " + id);
+            beschreibung.add("");
             beschreibung.add("§7Folgende Items musst du für die Aufgabe Liefern:");
 
             for(ShopHandwerksAufgabeItem aufgabenItem : shopHandwerksAufgabeItems){

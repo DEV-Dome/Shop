@@ -6,6 +6,8 @@ import de.dome.shopy.utils.items.Item;
 import de.dome.shopy.utils.items.ItemKategorie;
 import de.dome.shopy.utils.items.ItemRessourecenKosten;
 import de.dome.shopy.utils.shop.*;
+import de.dome.shopy.utils.shop.shophandwerksaufgabe.ShopHandwerksAufgabeItem;
+import io.github.rysefoxx.inventory.plugin.content.IntelligentItemData;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
@@ -414,6 +416,52 @@ public class ShopInventarManger {
             }
         }).build(Shopy.getInstance()).open(shop.getOwner());
 
+    }
+    public void openHandwerksmeisterPaulAufgabenAnsicht(int aufgabenNummer, int aufgabenID){
+        RyseInventory.builder().title("§2Item Abgabe Aufgabe " + aufgabenID).rows(6).provider(new InventoryProvider() {
+            @Override
+            public void init(Player player, InventoryContents contents) {
+                int i = 0;
+                int aufgabenIndex = aufgabenNummer - 1;
+                for(ShopItem shopItem : shop.getShopItems()){
+                    if(i >= 5 * 9) break;
+                    /* prüfe ist Item Relavant für Aufgabe  */
+                    boolean gefunden = false;
+
+                    for(ShopHandwerksAufgabeItem handwerksAufgabeItem : shop.getShopHandwerksAufgabe().get(aufgabenIndex).getShopHandwerksAufgabeItems()){
+                        if(handwerksAufgabeItem.getItem().getName().equals(shopItem.getName())){
+                            if(handwerksAufgabeItem.getMenge() > handwerksAufgabeItem.getFortschritt()){
+                                gefunden = true;
+                            }
+                        }
+                    }
+                    if(!gefunden) continue;
+                    if(shopItem.isAusgestellt()) continue;
+
+                    /* Item bauen */
+                    ArrayList<String> beschreibung = shopItem.getVolleBeschreibung();
+                    beschreibung.add("");
+
+                    beschreibung.add("§a- Linksklick zum Item abgeben");
+
+                    ItemStack item = shopItem.buildBaseItem();
+                    item.setLore(beschreibung);
+
+                    contents.updateOrSet(i, item);
+                    i++;
+                }
+
+                contents.updateOrSet(45, Shopy.getInstance().createItem(Material.DIAMOND, "§7Zurück zur Aufgabenübersicht"));
+                contents.updateOrSet(53, Shopy.getInstance().createItem(Material.BARRIER, "§7Menü Schlissen"));
+                contents.updateOrSet(46, Shopy.getInstance().createItemWithLore(Material.FLOWER_BANNER_PATTERN, "§9Aufgabe " + aufgabenNummer, shop.getShopHandwerksAufgabe().get(aufgabenIndex).getBeschreibung()));
+            }
+            @Override
+            public void update(Player player, InventoryContents contents) {
+                for(IntelligentItemData ii : contents.getAllData()) contents.removeFirst();
+
+                init(player, contents);
+            }
+        }).build(Shopy.getInstance()).open(shop.getOwner());
     }
     public void openRustungsausteller(int itemAusstellerID){
         RyseInventory.builder().title("§9Itemaussteller " + itemAusstellerID).rows(4).provider(new InventoryProvider() {

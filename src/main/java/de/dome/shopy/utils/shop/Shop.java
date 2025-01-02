@@ -251,7 +251,7 @@ public class Shop {
                         double rustung = 0;
                         int haltbarkeit = 0;
                         boolean ausgestellt = false;
-                        if(shopItemHalterById(resultItemLager.getInt("sid")) != null) ausgestellt = true;
+                        if(shopItemHalterById(resultItemLager.getInt("ausgestellt")) != null) ausgestellt = true;
 
                         String queryItemLagerItemWerte = "SELECT * FROM shop_item_werte WHERE item = " + resultItemLager.getInt("sid");
                         ResultSet resultItemLagerItemWerte = Shopy.getInstance().getMySQLConntion().resultSet(queryItemLagerItemWerte);
