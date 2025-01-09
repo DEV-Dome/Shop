@@ -5,6 +5,5 @@ CREATE TABLE IF NOT EXISTS shop_item (
     ausgestellt INT DEFAULT NULL,
 
     FOREIGN KEY (shop) REFERENCES shop(id),
-    FOREIGN KEY (item) REFERENCES item(id),
-    FOREIGN KEY (ausgestellt) REFERENCES shop_item_halter(id)
+    FOREIGN KEY (item) REFERENCES item(id)
 );

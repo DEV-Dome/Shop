@@ -56,7 +56,7 @@ public class InventoryClickListenerShop implements Listener {
                                 int shop_id = result.getInt("id");
                                 weltName += shop_id;
 
-                                File von = new File(Shopy.getInstance().getDataFolder().getPath() + "/image/vorlage1");
+                                File von = new File(Shopy.getInstance().getDataFolder().getPath() + "/image/vorlage");
                                 File zu = new File(Shopy.getInstance().getDataFolder().getPath() + "/shop_welten/" + weltName);
 
                                 Shopy.getInstance().kopiereOrdner(von, zu);
