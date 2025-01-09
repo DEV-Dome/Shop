@@ -84,7 +84,7 @@ public class ShopKunden {
             int maxStops = 3;
             for(ShopItemHalter shopItemHalter : shop.getShopItemHalter().values()){
                 if(npcLaufWeg.size() > maxStops) break;
-                if(Shopy.getInstance().isWahrscheinlichkeit(0.35)){
+                if(Shopy.getInstance().isWahrscheinlichkeit(0.55)){
                     npcLaufWeg.add(shopItemHalter.getLocation().toVector());
                     angeschuateItemHalter.add(shopItemHalter);
                 }

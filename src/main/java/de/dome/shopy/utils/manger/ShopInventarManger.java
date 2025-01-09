@@ -258,7 +258,11 @@ public class ShopInventarManger {
                                     if(shopItem.getHaltbarkeit() <= 0) continue;
 
                                     ArrayList<String> beschreibung = shopItem.getVolleBeschreibung();
-                                    beschreibung.add("");
+                                    if(shopItem.isAusgestellt()){
+                                        beschreibung.add("");
+                                        beschreibung.add("§aDieses Item ist zurzeit ausgestellt.");
+                                    }else beschreibung.add("");
+
 
                                     /* Beschreibung angepassten, je nachdem ob man in einem Dungeon ist */
                                     if(Shopy.getInstance().getSpielerDungeon().containsKey(shop.getOwner().getUniqueId())) {
@@ -483,6 +487,13 @@ public class ShopInventarManger {
                 if(shopItemHalter.getItem4() != null) contents.updateOrSet(31, Shopy.getInstance().createItemWithLore(shopItemHalter.getItem4().getIcon(), shopItemHalter.getItem4().getVollenName(), shopItemHalter.getItem4().getVolleBeschreibung()));
                 else contents.updateOrSet(31, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§9Schuhe wählen"));
 
+                /*Hand und Offhand*/
+                if(shopItemHalter.getItem5() != null) contents.updateOrSet(12, Shopy.getInstance().createItemWithLore(shopItemHalter.getItem5().getIcon(), shopItemHalter.getItem5().getVollenName(), shopItemHalter.getItem5().getVolleBeschreibung()));
+                else contents.updateOrSet(12, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§9Haupthand wählen"));
+
+//                if(shopItemHalter.getItem6() != null) contents.updateOrSet(14, Shopy.getInstance().createItemWithLore(shopItemHalter.getItem6().getIcon(), shopItemHalter.getItem6().getVollenName(), shopItemHalter.getItem6().getVolleBeschreibung()));
+//                else contents.updateOrSet(14, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§9Offhand wählen"));
+
                 /* Actions */
                 contents.updateOrSet(27, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
             }
@@ -495,9 +506,13 @@ public class ShopInventarManger {
         }).build(Shopy.getInstance()).open(shop.getOwner());
     }
 
-    public void openRustungsAustellerAuswahl(ItemKategorie itemKategorie, int itemAusstellerID, int seite){
+    public void openRustungsAustellerAuswahl(ArrayList<ItemKategorie> itemKategorie, int itemAusstellerID, int seite){
         if(itemKategorie != null){
-            RyseInventory.builder().title("§9Itemausstelluswahl " + itemKategorie.getName() + " Seite " + seite + " " + itemAusstellerID).rows(4).provider(new InventoryProvider() {
+            String bereichName = "";
+            if(itemKategorie.size() == 1) bereichName = itemKategorie.get(0).getName();
+            else bereichName = "Handitem";
+
+            RyseInventory.builder().title("§9Itemausstelluswahl " + bereichName + " Seite " + seite + " " + itemAusstellerID).rows(4).provider(new InventoryProvider() {
                 @Override
                 public void init(Player player, InventoryContents contents) {
                     int i = 0;
@@ -510,7 +525,7 @@ public class ShopInventarManger {
                         }
                         if(i >= max_item) break;
 
-                        if(shopItem.getItemKategorie().getId() == itemKategorie.getId() && !shopItem.isAusgestellt()){
+                        if(itemKategorie.contains(shopItem.getItemKategorie()) && !shopItem.isAusgestellt()){
                             contents.updateOrSet(i - start_item, shopItem.buildBaseItem());
                             i++;
                         }

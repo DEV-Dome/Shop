@@ -254,7 +254,7 @@ public class Shop {
                         double rustung = 0;
                         int haltbarkeit = 0;
                         boolean ausgestellt = false;
-                        if(shopItemHalterById(resultItemLager.getInt("ausgestellt")) != null) ausgestellt = true;
+                        if(resultItemLager.getInt("ausgestellt") != 0) ausgestellt = true;
 
                         String queryItemLagerItemWerte = "SELECT * FROM shop_item_werte WHERE item = " + resultItemLager.getInt("sid");
                         ResultSet resultItemLagerItemWerte = Shopy.getInstance().getMySQLConntion().resultSet(queryItemLagerItemWerte);
@@ -279,15 +279,19 @@ public class Shop {
                     ShopItem shopItem2 = null;
                     ShopItem shopItem3 = null;
                     ShopItem shopItem4 = null;
+                    ShopItem shopItem5 = null;
+                    ShopItem shopItem6 = null;
 
                     for(ShopItem shopItem : shopItems){
                         if(shopItem.getId() == resultItemHalter.getInt("item_1")) shopItem1 = shopItem;
                         if(shopItem.getId() == resultItemHalter.getInt("item_2")) shopItem2 = shopItem;
                         if(shopItem.getId() == resultItemHalter.getInt("item_3")) shopItem3 = shopItem;
                         if(shopItem.getId() == resultItemHalter.getInt("item_4")) shopItem4 = shopItem;
+                        if(shopItem.getId() == resultItemHalter.getInt("item_5")) shopItem5 = shopItem;
+                        if(shopItem.getId() == resultItemHalter.getInt("item_6")) shopItem6 = shopItem;
                     }
 
-                    ShopItemHalter newShopItemHalter = new ShopItemHalter(resultItemHalter.getInt("id"), this, resultItemHalter.getString("typ"), itemHalterLoaction, shopItem1, shopItem2, shopItem3, shopItem4);
+                    ShopItemHalter newShopItemHalter = new ShopItemHalter(resultItemHalter.getInt("id"), this, resultItemHalter.getString("typ"), itemHalterLoaction, shopItem1, shopItem2, shopItem3, shopItem4, shopItem5, shopItem6);
                     shopItemHalter.put(itemHalterLoaction, newShopItemHalter);
                 }
 
@@ -525,22 +529,25 @@ public class Shop {
         CompletableFuture.runAsync(() -> {
             int insertId = Shopy.getInstance().getMySQLConntion().queryReturnKey("INSERT INTO shop_item_halter (shop, typ, location) VALUES ('"+ shopId +"', '"+ typ +"','"+ postion +"' )");
 
-            ShopItemHalter newShopItemHalter = new ShopItemHalter(insertId, this, typ, postion, null, null, null, null);
+            ShopItemHalter newShopItemHalter = new ShopItemHalter(insertId, this, typ, postion, null, null, null, null, null, null);
             shopItemHalter.put(postion, newShopItemHalter);
         });
     }
     public void loscheItemHalter(Location postion){
         if(shopItemHalter.containsKey(postion)){
+            ShopItemHalter nowShopItemHalter =  shopItemHalter.get(postion);
+
             /* Alle Item unseten*/
-            shopItemHalter.get(postion).item1.setAusgestellt(false, 0);
-            shopItemHalter.get(postion).item2.setAusgestellt(false, 0);
-            shopItemHalter.get(postion).item3.setAusgestellt(false, 0);
-            shopItemHalter.get(postion).item4.setAusgestellt(false, 0);
+           if(nowShopItemHalter.getItem1() != null) nowShopItemHalter.getItem1().setAusgestellt(false, 0);
+           if(nowShopItemHalter.getItem2() != null) nowShopItemHalter.getItem2().setAusgestellt(false, 0);
+           if(nowShopItemHalter.getItem3() != null) nowShopItemHalter.getItem3().setAusgestellt(false, 0);
+           if(nowShopItemHalter.getItem4() != null) nowShopItemHalter.getItem4().setAusgestellt(false, 0);
+           if(nowShopItemHalter.getItem5() != null) nowShopItemHalter.getItem5().setAusgestellt(false, 0);
+           if(nowShopItemHalter.getItem6() != null) nowShopItemHalter.getItem6().setAusgestellt(false, 0);
 
             /* Löschen aus Liste*/
             shopItemHalter.remove(postion);
         }
-
 
         CompletableFuture.runAsync(() -> {
             Shopy.getInstance().getMySQLConntion().query("DELETE FROM shop_item_halter WHERE location = '"+ postion +"' AND shop = " + shopId);

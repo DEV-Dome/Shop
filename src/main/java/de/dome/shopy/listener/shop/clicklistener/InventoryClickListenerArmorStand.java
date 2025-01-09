@@ -18,6 +18,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+
 public class InventoryClickListenerArmorStand implements Listener {
 
     public InventoryClickListenerArmorStand() {
@@ -39,17 +41,21 @@ public class InventoryClickListenerArmorStand implements Listener {
         if(e.getView().getTitle().startsWith("§9Itemaussteller")){
             int itemAusstellerID = Integer.parseInt(e.getView().getTitle().split(" ")[1]);
 
-            final ItemKategorie itemKategorie;
             if(e.getSlot() == 27){
                 p.closeInventory();
                 return;
             }
+            final ArrayList<ItemKategorie> itemKategorie = new ArrayList<>();
 
-            if(e.getSlot() == 4) itemKategorie = ItemKategorie.getItemKategorieById(4);
-            else if(e.getSlot() == 13) itemKategorie = ItemKategorie.getItemKategorieById(5);
-            else if(e.getSlot() == 22) itemKategorie = ItemKategorie.getItemKategorieById(6);
-            else if(e.getSlot() == 31) itemKategorie = ItemKategorie.getItemKategorieById(7);
-            else itemKategorie = null;
+            if(e.getSlot() == 4) itemKategorie.add(ItemKategorie.getItemKategorieById(4));
+            else if(e.getSlot() == 13) itemKategorie.add(ItemKategorie.getItemKategorieById(5));
+            else if(e.getSlot() == 22) itemKategorie.add(ItemKategorie.getItemKategorieById(6));
+            else if(e.getSlot() == 31) itemKategorie.add(ItemKategorie.getItemKategorieById(7));
+            else if(e.getSlot() == 12 || e.getSlot() == 14){
+                itemKategorie.add(ItemKategorie.getItemKategorieById(1));
+                itemKategorie.add(ItemKategorie.getItemKategorieById(2));
+                itemKategorie.add(ItemKategorie.getItemKategorieById(3));
+            }
 
             spielerShop.getShopInventarManger().openRustungsAustellerAuswahl(itemKategorie, itemAusstellerID, 1);
 
@@ -59,7 +65,14 @@ public class InventoryClickListenerArmorStand implements Listener {
             ShopItemHalter shopItemHalter = spielerShop.shopItemHalterById(itemAusstellerID);
 
             int seite = Integer.parseInt(e.getView().getTitle().split(" ")[3]);
-            ItemKategorie itemKategorie = ItemKategorie.getItemKategorieByName(e.getView().getTitle().split(" ")[1]);
+
+            ArrayList<ItemKategorie> itemKategorie = new ArrayList<>();
+            if(!e.getView().getTitle().split(" ")[1].equals("Handitem")) itemKategorie.add(ItemKategorie.getItemKategorieByName(e.getView().getTitle().split(" ")[1]));
+            else {
+                itemKategorie.add(ItemKategorie.getItemKategorieById(1));
+                itemKategorie.add(ItemKategorie.getItemKategorieById(2));
+                itemKategorie.add(ItemKategorie.getItemKategorieById(3));
+            }
 
             if(item.getItemMeta().getDisplayName().equals("§7Zurück")) spielerShop.getShopInventarManger().openRustungsausteller(itemAusstellerID);
             else if(item.getItemMeta().getDisplayName().equals("§7Schlissen")) p.closeInventory();
@@ -79,27 +92,34 @@ public class InventoryClickListenerArmorStand implements Listener {
                     return;
                 }
 
-                if(itemKategorie.getId() == 4){
-                    shopItemHalter.setItem1(null);
+                if(itemKategorie.size() == 1){
+                    if(itemKategorie.get(0).getId() == 4){
+                        shopItemHalter.setItem1(null);
+                        armorStand.setItem(EquipmentSlot.HAND, null);
+
+                        spielerShop.getShopInventarManger().openRustungsausteller(itemAusstellerID);
+                    }else if(itemKategorie.get(0).getId() == 5){
+                        shopItemHalter.setItem2(null);
+                        armorStand.setItem(EquipmentSlot.CHEST, null);
+
+                        spielerShop.getShopInventarManger().openRustungsausteller(itemAusstellerID);
+                    }else if(itemKategorie.get(0).getId() == 6) {
+                        shopItemHalter.setItem3(null);
+                        armorStand.setItem(EquipmentSlot.LEGS, null);
+
+                        spielerShop.getShopInventarManger().openRustungsausteller(itemAusstellerID);
+                    }else if(itemKategorie.get(0).getId() == 7) {
+                        shopItemHalter.setItem4(null);
+                        armorStand.setItem(EquipmentSlot.FEET, null);
+
+                        spielerShop.getShopInventarManger().openRustungsausteller(itemAusstellerID);
+                    }else p.sendMessage(Shopy.getInstance().getKonatktSupport());
+                }else {
+                    shopItemHalter.setItem5(null);
                     armorStand.setItem(EquipmentSlot.HAND, null);
 
                     spielerShop.getShopInventarManger().openRustungsausteller(itemAusstellerID);
-                }else if(itemKategorie.getId() == 5){
-                    shopItemHalter.setItem2(null);
-                    armorStand.setItem(EquipmentSlot.CHEST, null);
-
-                    spielerShop.getShopInventarManger().openRustungsausteller(itemAusstellerID);
-                }else if(itemKategorie.getId() == 6) {
-                    shopItemHalter.setItem3(null);
-                    armorStand.setItem(EquipmentSlot.LEGS, null);
-
-                    spielerShop.getShopInventarManger().openRustungsausteller(itemAusstellerID);
-                }else if(itemKategorie.getId() == 7) {
-                    shopItemHalter.setItem4(null);
-                    armorStand.setItem(EquipmentSlot.FEET, null);
-
-                    spielerShop.getShopInventarManger().openRustungsausteller(itemAusstellerID);
-                }else p.sendMessage(Shopy.getInstance().getKonatktSupport());
+                }
 
             } else {
                 int itemID = Integer.parseInt(item.getItemMeta().getLore().get(0).split(":")[1].substring(1));
@@ -117,30 +137,38 @@ public class InventoryClickListenerArmorStand implements Listener {
                     p.sendMessage(Shopy.getInstance().getKonatktSupport());
                     return;
                 }
+                if(itemKategorie.size() == 1){
+                    if(itemKategorie.get(0).getId() == 4){
+                        shopItemHalter.setItem1(shopItem);
 
-                if(itemKategorie.getId() == 4){
-                    shopItemHalter.setItem1(shopItem);
+                        armorStand.setItem(EquipmentSlot.HAND, shopItem.buildBaseItem());
+                        spielerShop.getShopInventarManger().openRustungsausteller(itemAusstellerID);
+                    }else if(itemKategorie.get(0).getId() == 5){
+                        shopItemHalter.setItem2(shopItem);
+
+                        armorStand.setItem(EquipmentSlot.CHEST, shopItem.buildBaseItem());
+
+                        spielerShop.getShopInventarManger().openRustungsausteller(itemAusstellerID);
+                    }else if(itemKategorie.get(0).getId() == 6) {
+                        shopItemHalter.setItem3(shopItem);
+
+                        armorStand.setItem(EquipmentSlot.LEGS, shopItem.buildBaseItem());
+                        spielerShop.getShopInventarManger().openRustungsausteller(itemAusstellerID);
+                    }else if(itemKategorie.get(0).getId() == 7) {
+                        shopItemHalter.setItem4(shopItem);
+
+                        armorStand.setItem(EquipmentSlot.FEET, shopItem.buildBaseItem());
+                        spielerShop.getShopInventarManger().openRustungsausteller(itemAusstellerID);
+                    }else {
+                        p.sendMessage(Shopy.getInstance().getKonatktSupport());
+                    }
+                }else {
+                    shopItemHalter.setItem5(shopItem);
 
                     armorStand.setItem(EquipmentSlot.HAND, shopItem.buildBaseItem());
                     spielerShop.getShopInventarManger().openRustungsausteller(itemAusstellerID);
-                }else if(itemKategorie.getId() == 5){
-                    shopItemHalter.setItem2(shopItem);
-
-                    armorStand.setItem(EquipmentSlot.CHEST, shopItem.buildBaseItem());
-                    spielerShop.getShopInventarManger().openRustungsausteller(itemAusstellerID);
-                }else if(itemKategorie.getId() == 6) {
-                    shopItemHalter.setItem3(shopItem);
-
-                    armorStand.setItem(EquipmentSlot.LEGS, shopItem.buildBaseItem());
-                    spielerShop.getShopInventarManger().openRustungsausteller(itemAusstellerID);
-                }else if(itemKategorie.getId() == 7) {
-                    shopItemHalter.setItem4(shopItem);
-
-                    armorStand.setItem(EquipmentSlot.FEET, shopItem.buildBaseItem());
-                    spielerShop.getShopInventarManger().openRustungsausteller(itemAusstellerID);
-                }else {
-                    p.sendMessage(Shopy.getInstance().getKonatktSupport());
                 }
+
 
             }
         }

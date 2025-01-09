@@ -17,8 +17,10 @@ public class ShopItemHalter {
     ShopItem item2;
     ShopItem item3;
     ShopItem item4;
+    ShopItem item5;
+    ShopItem item6;
 
-    public ShopItemHalter(int id, Shop shop, String typ, Location location, ShopItem item1, ShopItem item2, ShopItem item3, ShopItem item4) {
+    public ShopItemHalter(int id, Shop shop, String typ, Location location, ShopItem item1, ShopItem item2, ShopItem item3, ShopItem item4, ShopItem item5, ShopItem item6) {
         this.id = id;
         this.shop = shop;
         this.typ = typ;
@@ -27,6 +29,8 @@ public class ShopItemHalter {
         this.item2 = item2;
         this.item3 = item3;
         this.item4 = item4;
+        this.item5 = item5;
+        this.item6 = item6;
     }
 
     public Shop getShop() {
@@ -55,6 +59,14 @@ public class ShopItemHalter {
 
     public ShopItem getItem4() {
         return item4;
+    }
+
+    public ShopItem getItem5() {
+        return item5;
+    }
+
+    public ShopItem getItem6() {
+        return item6;
     }
 
     public void setItem1(ShopItem item) {
@@ -139,6 +151,49 @@ public class ShopItemHalter {
         item.setAusgestellt(true, id);
         CompletableFuture.runAsync(() -> {
             Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_4 = '"+ item.getId() +"' WHERE id = " + getId());
+        });
+    }
+
+    public void setItem5(ShopItem item) {
+        if(item5 != null) this.item5.setAusgestellt(false, 0);
+
+        /*Nur ein Item Löschen*/
+        if(item == null){
+            this.item5 = null;
+
+            CompletableFuture.runAsync(() -> {
+                Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_5 = NULL WHERE id = " + getId());
+            });
+
+            return;
+        }
+
+        this.item5 = item;
+
+        item.setAusgestellt(true, id);
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_5 = '"+ item.getId() +"' WHERE id = " + getId());
+        });
+    }
+    public void setItem6(ShopItem item) {
+        if(item6 != null) this.item6.setAusgestellt(false, 0);
+
+        /*Nur ein Item Löschen*/
+        if(item == null){
+            this.item6 = null;
+
+            CompletableFuture.runAsync(() -> {
+                Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_6 = NULL WHERE id = " + getId());
+            });
+
+            return;
+        }
+
+        this.item6 = item;
+
+        item.setAusgestellt(true, id);
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_6 = '"+ item.getId() +"' WHERE id = " + getId());
         });
     }
 
