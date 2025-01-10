@@ -68,14 +68,6 @@ public class MySQLDefault {
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ShopHandwerksAufgaben.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ShopHandwerksAufgabenItem.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ShopHandwerksAufgabenZuordnung.sql"));
-
-                    String[] querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ZusatzFremdschluessel.sql").split(";");
-                    for(String query : querys){
-                        query = query.trim();
-                        if(query.equals("") || query.equals(";")) continue;
-
-                        Shopy.getInstance().getMySQLConntion().query(query);
-                    }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -86,13 +78,19 @@ public class MySQLDefault {
 
     private void loadSQLData(){
         try {
-            Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§9Phase 2 gestartet!");
-
             ResultSet ressource = Shopy.getInstance().getMySQLConntion().resultSet("SELECT * FROM ressource");
 
             if(ressource != null){
                 if(!ressource.next()){
-                    String[] querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/loader/RessourceLoader.sql").split(";");
+                    String[] querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ZusatzFremdschluessel.sql").split(";");
+                    for(String query : querys){
+                        query = query.trim();
+                        if(query.equals("") || query.equals(";")) continue;
+
+                        Shopy.getInstance().getMySQLConntion().query(query);
+                    }
+
+                    querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/loader/RessourceLoader.sql").split(";");
                     for(String query : querys){
                         query = query.trim();
                         if(query.equals("") || query.equals(";")) continue;

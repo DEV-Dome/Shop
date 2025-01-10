@@ -67,7 +67,7 @@ public class Shop {
     ShopInventarManger shopInventarManger;
 
     /* Halte fest, ob überhaupt ein Spielershop gefunden wurde  */
-    private boolean loadShop = false;
+    private boolean shopGefunden = false;
 
     public Shop(Player owner, Boolean playerTeleport){
         this.owner = owner;
@@ -89,7 +89,7 @@ public class Shop {
 
                 /* Shop daten aus datenbank laden*/
                 if (result.next()){
-                    loadShop = true;
+                    shopGefunden = true;
 
                     this.shopId = result.getInt("id");
                     this.owner = Bukkit.getPlayer(UUID.fromString(result.getString("owner")));
@@ -300,7 +300,7 @@ public class Shop {
         });
         basisDaten.thenRun(() -> {
             if(playerTeleport) this.owner.teleport(this.shopSpawn);
-            if(loadShop){
+            if(shopGefunden){
                 this.shopRessourenManger = new ShopRessourenManger(this);
             }
             CompletableFuture.runAsync(() -> {
@@ -328,9 +328,11 @@ public class Shop {
 
             }).thenRun(() -> {
                 Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
-                    Shopy.getInstance().getScoreboardManger().setScoreBoard(owner);
-                    kundenManger();
-                    HandwerksAufgabenManger();
+                    if(shopGefunden){
+                        Shopy.getInstance().getScoreboardManger().setScoreBoard(owner);
+                        kundenManger();
+                        HandwerksAufgabenManger();
+                    }
                 });
             });
         });
