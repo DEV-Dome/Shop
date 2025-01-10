@@ -73,7 +73,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
 
 INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('5', '1', 'WOODEN_AXE', 'Axt des Holzfällers Lehrlings', 'Dieser klassischen Axttype wird häufig \n von Holzfällern Lehrlingen genutzt.', 1, 5);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (5, 6, 6);
-    INSERT INTO item_kosten (item, ressource, menge) VALUES (105, 13, 2);
+    INSERT INTO item_kosten (item, ressource, menge) VALUES (5, 13, 2);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (5, "shop_xp", 1);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (5, "kategorie_xp", 5);
@@ -162,7 +162,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (9, "immer_freigeschlatet", "nein");
 
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (9, "freigeschlatet_typ", "ITEM");
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (9, "freigeschlatet_item", ,0);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (9, "freigeschlatet_item", 0);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (9, "freigeschlatet_menge", 0);
 
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (9, "min_schaden", 1.5);
@@ -306,7 +306,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
 INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('16', '1', 'GOLDEN_AXE', 'Ladirende Axt', 'Wann sich diese Axt wohl aufgelöst hat?', 1, 16);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (16, 6, 2);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (16, 1, 2);
-    INSERT INTO item_kosten (item, ressource, menge) VALUES (20, 2, 1);
+    INSERT INTO item_kosten (item, ressource, menge) VALUES (16, 2, 1);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (16, 3, 4);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (16, 13, 2);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (16, 23, 1);
@@ -329,7 +329,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
 INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('17', '1', 'GOLDEN_AXE', 'Axt des Schweins', 'Schweine in der Hölle tragen diese Äxte', 2, 17);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (17, 6, 3);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (17, 1, 3);
-    INSERT INTO item_kosten (item, ressource, menge) VALUES (20, 2, 2);
+    INSERT INTO item_kosten (item, ressource, menge) VALUES (17, 2, 2);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (17, 3, 8);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (17, 15, 2);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (17, 22, 1);
@@ -376,7 +376,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
 INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('19', '1', 'GOLDEN_AXE', 'Sparschwein schlachter', 'Kann jedes Sparschwein töten.', 1, 19);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (19, 6, 3);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (19, 1, 3);
-    INSERT INTO item_kosten (item, ressource, menge) VALUES (20, 2, 2);
+    INSERT INTO item_kosten (item, ressource, menge) VALUES (19, 2, 2);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (19, 3, 6);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (19, 11, 3);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (19, 20, 2);

@@ -312,15 +312,15 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (716, "max_ruestung", 4.4);
 
 INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('717', '6', 'DIAMOND_LEGGINGS', 'Hose aus der 1.8', 'Man sieht ihr das alte PVP System noch an.', 2, 18);
-    INSERT INTO item_kosten (item, ressource, menge) VALUES (719, 8, 4);
-    INSERT INTO item_kosten (item, ressource, menge) VALUES (719, 9, 2);
-    INSERT INTO item_kosten (item, ressource, menge) VALUES (719, 1, 2);
-    INSERT INTO item_kosten (item, ressource, menge) VALUES (719, 3, 3);
-    INSERT INTO item_kosten (item, ressource, menge) VALUES (719, 4, 8);
+    INSERT INTO item_kosten (item, ressource, menge) VALUES (717, 8, 4);
+    INSERT INTO item_kosten (item, ressource, menge) VALUES (717, 9, 2);
+    INSERT INTO item_kosten (item, ressource, menge) VALUES (717, 1, 2);
+    INSERT INTO item_kosten (item, ressource, menge) VALUES (717, 3, 3);
+    INSERT INTO item_kosten (item, ressource, menge) VALUES (717, 4, 8);
 
-    INSERT INTO item_kosten (item, ressource, menge) VALUES (719, 22, 2);
-    INSERT INTO item_kosten (item, ressource, menge) VALUES (719, 24, 2);
-    INSERT INTO item_kosten (item, ressource, menge) VALUES (719, 26, 2);
+    INSERT INTO item_kosten (item, ressource, menge) VALUES (717, 22, 2);
+    INSERT INTO item_kosten (item, ressource, menge) VALUES (717, 24, 2);
+    INSERT INTO item_kosten (item, ressource, menge) VALUES (717, 26, 2);
 
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (717, "shop_xp", 1);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (717, "kategorie_xp", 2);

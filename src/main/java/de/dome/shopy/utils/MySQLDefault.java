@@ -3,6 +3,7 @@ package de.dome.shopy.utils;
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.items.ItemKategorie;
 import de.dome.shopy.utils.shop.ShopKunden;
+import org.bukkit.Bukkit;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -45,14 +46,16 @@ public class MySQLDefault {
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/Ressource.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ShopRessource.sql"));
 
-                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ItemSeltenheit.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ItemKategorie.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ItemKategorieLevel.sql"));
+
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/Item.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ItemKosten.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ItemWerte.sql"));
 
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ShopItem.sql"));
+                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ItemSeltenheit.sql"));
+
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ShopItemHalter.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ShopItemVorlage.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ShopItemWerte.sql"));
@@ -65,6 +68,14 @@ public class MySQLDefault {
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ShopHandwerksAufgaben.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ShopHandwerksAufgabenItem.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ShopHandwerksAufgabenZuordnung.sql"));
+
+                    String[] querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ZusatzFremdschluessel.sql").split(";");
+                    for(String query : querys){
+                        query = query.trim();
+                        if(query.equals("") || query.equals(";")) continue;
+
+                        Shopy.getInstance().getMySQLConntion().query(query);
+                    }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -75,6 +86,8 @@ public class MySQLDefault {
 
     private void loadSQLData(){
         try {
+            Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§9Phase 2 gestartet!");
+
             ResultSet ressource = Shopy.getInstance().getMySQLConntion().resultSet("SELECT * FROM ressource");
 
             if(ressource != null){
@@ -204,6 +217,8 @@ public class MySQLDefault {
 
                         Shopy.getInstance().getMySQLConntion().query(query);
                     }
+
+                    Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§aDatenbank Einrichtung abgeschlossen!");
                 }
             }
 
@@ -224,7 +239,6 @@ public class MySQLDefault {
             @Override
             public void run() {
                 int kategorie_axte = -1;
-
 
                 try {
                     ResultSet kategorie = Shopy.getInstance().getMySQLConntion().resultSet("SELECT * FROM item_kategorie");

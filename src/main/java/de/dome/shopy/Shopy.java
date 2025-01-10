@@ -65,6 +65,7 @@ public class Shopy extends JavaPlugin {
     private HashMap<UUID, Dungeon> spielerDungeon;
     private ScoreboardManger scoreboardManger;
     private DropManger dropManger;
+
     @Override
     public void onEnable() {
         super.onEnable();

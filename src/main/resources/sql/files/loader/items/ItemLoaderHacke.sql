@@ -162,7 +162,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (209, "immer_freigeschlatet", "nein");
 
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (209, "freigeschlatet_typ", "ITEM");
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (209, "freigeschlatet_item", ,0);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (209, "freigeschlatet_item", 0);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (209, "freigeschlatet_menge", 0);
 
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (209, "min_schaden", 1.3);
@@ -205,7 +205,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (211, "immer_freigeschlatet", "nein");
 
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (211, "freigeschlatet_typ", "ITEM");
-        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (211, "freigeschlatet_item", ,0);
+        INSERT INTO item_werte (item, schlussel, inhalt) VALUES (211, "freigeschlatet_item", 0);
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (211, "freigeschlatet_menge", 0);
 
         INSERT INTO item_werte (item, schlussel, inhalt) VALUES (211, "min_schaden", 1.9);
