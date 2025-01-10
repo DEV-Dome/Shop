@@ -38,7 +38,16 @@ public class InventoryClickListenerShop implements Listener {
 
         if (e.getView().getTitle().equals("§aShop Erstellen")) {
             if(item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()){
-                if(item.getType() == Material.GRASS_BLOCK){
+                if(item.getType() == Material.GRASS_BLOCK || item.getType() == Material.ICE || item.getType() == Material.SAND){
+                    /* Welche Karte soll erstellt werden */
+                    int templateID;
+
+                    if(item.getType() == Material.GRASS_BLOCK) templateID = 1;
+                    else if(item.getType() == Material.ICE) templateID = 2;
+                    else if(item.getType() == Material.SAND) templateID = 3;
+                    else return;
+
+
                     p.sendMessage(Shopy.getInstance().getPrefix() + "Dein Shop wird erstellt. Das kann einen §eAugenblick§7 dauern, du wirst anschließend dort hin §eteleportiert§7.");
                     p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_YES, 1, 1);
                     p.closeInventory();
@@ -47,7 +56,8 @@ public class InventoryClickListenerShop implements Listener {
                     CompletableFuture<Void> shopErstellen = CompletableFuture.runAsync(() -> {
                         try {
                             String weltName = "sps_" + p.getUniqueId() + "_";
-                            Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop (owner, template, shop_level, shop_ordner, shop_zones) VALUES ('" + p.getUniqueId() + "', 1, 1, NULL, 1)");
+                            String vorlagenName = "";
+                            Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop (owner, template, shop_level, shop_ordner, shop_zones) VALUES ('" + p.getUniqueId() + "', '" + templateID + "', 1, NULL, 1)");
 
                             String query = "SELECT * FROM shop WHERE owner = '" + p.getUniqueId() + "' ORDER BY id DESC";
                             ResultSet result =  Shopy.getInstance().getMySQLConntion().resultSet(query);
@@ -56,7 +66,17 @@ public class InventoryClickListenerShop implements Listener {
                                 int shop_id = result.getInt("id");
                                 weltName += shop_id;
 
-                                File von = new File(Shopy.getInstance().getDataFolder().getPath() + "/image/vorlage");
+                                String queryTemplate = "SELECT * FROM shop_template WHERE id = " + templateID;
+                                ResultSet resultTemplate =  Shopy.getInstance().getMySQLConntion().resultSet(queryTemplate);
+
+                                if (resultTemplate.next()){
+                                    vorlagenName = resultTemplate.getString("template_ordner");
+                                }else {
+                                    p.sendMessage(Shopy.getInstance().getKonatktSupport());
+                                    return;
+                                }
+
+                                File von = new File(Shopy.getInstance().getDataFolder().getPath() + "/image/" + vorlagenName);
                                 File zu = new File(Shopy.getInstance().getDataFolder().getPath() + "/shop_welten/" + weltName);
 
                                 Shopy.getInstance().kopiereOrdner(von, zu);
@@ -87,7 +107,7 @@ public class InventoryClickListenerShop implements Listener {
                     /* Wenn neue Shop Kopiert und gerneriert wurde, kann weiters passiern */
                     shopErstellen.thenRun(() -> {
                         new Shop(p, true);
-                        p.sendMessage(Shopy.getInstance().getPrefix() + "Dein Shop wurde erstellt. Du kannst nun Loslegen.");
+                        p.sendMessage(Shopy.getInstance().getPrefix() + "Dein Shop wurde erstellt. Du kannst nun Loslegen => §9/shop §7.");
 
                         p.getInventory().addItem(ShopDefaultItemsManger.INSTANCE().getRessourcenMark());
                         p.getInventory().addItem(ShopDefaultItemsManger.INSTANCE().getWerkbank());

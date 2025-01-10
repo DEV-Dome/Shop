@@ -40,15 +40,26 @@ public class NPCInteractListener implements Listener {
                 RyseInventory.builder().title("§aShop Erstellen").rows(3).provider(new InventoryProvider() {
                     @Override
                     public void init(Player player, InventoryContents contents) {
-                        ArrayList beschreibungNormalerShop = new ArrayList<>();
-                        beschreibungNormalerShop.add("§7Hier findest du einen Shop, welcher in einer ganz normalen Umgebung ist.");
+                        /* Ruinen Shop */
+                        ArrayList<String> beschreibungRuninenShop = new ArrayList<>();
+                        beschreibungRuninenShop.add("§7Gründe einen Shop in einer,");
+                        beschreibungRuninenShop.add("§7verlassenen Ruine. (Waldkarte)");
 
-                        ArrayList beschreibungNochNichtVerfuegbar = new ArrayList<>();
-                        beschreibungNochNichtVerfuegbar.add("§7Dieses Template, kann nicht genutzt werden. Es wird zu Späteren nachgereicht.");
+                        contents.set(10, Shopy.getInstance().createItemWithLore(Material.GRASS_BLOCK, "§9Ruine", beschreibungRuninenShop));
 
-                        contents.set(10, Shopy.getInstance().createItemWithLore(Material.BARRIER, "§cNoch nicht verfügbar", beschreibungNochNichtVerfuegbar));
-                        contents.set(13, Shopy.getInstance().createItemWithLore(Material.GRASS_BLOCK, "§aNormaler Shop", beschreibungNormalerShop));
-                        contents.set(16, Shopy.getInstance().createItemWithLore(Material.BARRIER, "§cNoch nicht verfügbar", beschreibungNochNichtVerfuegbar));
+                        /*Nordpol Shop*/
+                        ArrayList<String> beschreibungNordpolShop = new ArrayList<>();
+                        beschreibungNordpolShop.add("§7Gründe einen Shop am");
+                        beschreibungNordpolShop.add("§7Eisigen Nordpol. (Eiskarte)");
+
+                        contents.set(13, Shopy.getInstance().createItemWithLore(Material.ICE, "§9Nordpol", beschreibungNordpolShop));
+
+                        /*Nordpol Shop*/
+                        ArrayList<String> beschreibungSavannenShop = new ArrayList<>();
+                        beschreibungSavannenShop.add("§7Gründe einen Shop");
+                        beschreibungSavannenShop.add("§7in der Savanne. (Wüstenkarte)");
+
+                        contents.set(16, Shopy.getInstance().createItemWithLore(Material.SAND, "§9Savanne", beschreibungSavannenShop));
                     }
 
                 }).build(Shopy.getInstance()).open(p);
