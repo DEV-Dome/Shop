@@ -107,7 +107,7 @@ public class InventoryClickListenerShop implements Listener {
                     /* Wenn neue Shop Kopiert und gerneriert wurde, kann weiters passiern */
                     shopErstellen.thenRun(() -> {
                         new Shop(p, true);
-                        p.sendMessage(Shopy.getInstance().getPrefix() + "Dein Shop wurde erstellt. Du kannst nun Loslegen => §9/shop §7.");
+                        p.sendMessage(Shopy.getInstance().getPrefix() + "Dein Shop wurde erstellt. Du kannst nun Loslegen.");
 
                         p.getInventory().addItem(ShopDefaultItemsManger.INSTANCE().getRessourcenMark());
                         p.getInventory().addItem(ShopDefaultItemsManger.INSTANCE().getWerkbank());

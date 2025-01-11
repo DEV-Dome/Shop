@@ -113,7 +113,6 @@ public class Shop {
                             this.world.setSpawnLimit(SpawnCategory.MONSTER, 0);
 
                             this.world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
-
                         }else {
                             this.world = Bukkit.getWorld(world);
                         }
@@ -299,10 +298,6 @@ public class Shop {
             } catch (SQLException e) { }
         });
         basisDaten.thenRun(() -> {
-            if(playerTeleport) this.owner.teleport(this.shopSpawn);
-            if(shopGefunden){
-                this.shopRessourenManger = new ShopRessourenManger(this);
-            }
             CompletableFuture.runAsync(() -> {
                 String query = "SELECT * FROM shop_werte WHERE shop = '" + shopId + "'";
                 ResultSet result = Shopy.getInstance().getMySQLConntion().resultSet(query);
@@ -329,9 +324,20 @@ public class Shop {
             }).thenRun(() -> {
                 Bukkit.getScheduler().runTask(Shopy.getInstance(), () -> {
                     if(shopGefunden){
+                        this.shopRessourenManger = new ShopRessourenManger(this);
                         Shopy.getInstance().getScoreboardManger().setScoreBoard(owner);
+
+                        /* Scheduler starten*/
                         kundenManger();
                         HandwerksAufgabenManger();
+
+                        /* Player Teleport*/
+                        if(playerTeleport){
+                            this.shopSpawn.setWorld(this.world);
+                            this.owner.teleport(this.shopSpawn);
+                        }
+                    }else {
+                        this.owner.sendMessage(Shopy.getInstance().getKonatktSupport());
                     }
                 });
             });

@@ -82,6 +82,8 @@ public class MySQLDefault {
 
             if(ressource != null){
                 if(!ressource.next()){
+                    Bukkit.getConsoleSender().sendMessage(Shopy.getInstance().getPrefix() + "§aDatenbank Einrichtung wird gestartet!");
+
                     String[] querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ZusatzFremdschluessel.sql").split(";");
                     for(String query : querys){
                         query = query.trim();

@@ -91,7 +91,7 @@ public class ShopKunden {
             }
 
             npcLaufWeg.add(ziel.toVector());
-            npc.getNavigator().setTarget(npcLaufWeg);
+            if(npcLaufWeg.size() != 0) npc.getNavigator().setTarget(npcLaufWeg);
         } else loescheKunden();
 
 
