@@ -245,7 +245,7 @@ public class Shop {
                         shopItemVorlagen.add(shopItemVorlage);
                     }
 
-                    String queryItemLager = "SELECT *,shop_item.id AS 'sid',item.id AS 'iid' From shop_item JOIN item ON item.id = shop_item.item";
+                    String queryItemLager = "SELECT *,shop_item.id AS 'sid',item.id AS 'iid',shop_item.item_seltenheit AS 'shop_item.item_seltenheit' From shop_item JOIN item ON item.id = shop_item.item";
                     ResultSet resultItemLager = Shopy.getInstance().getMySQLConntion().resultSet(queryItemLager);
                     while(resultItemLager.next()){
                         double schaden = 0;
@@ -264,7 +264,7 @@ public class Shop {
                             if(resultItemLagerItemWerte.getString("schlussel").equals("ruestung")) rustung = Double.parseDouble(resultItemLagerItemWerte.getString("inhalt"));
                         }
 
-                        ShopItem newItem = new ShopItem(resultItemLager.getInt("sid"), resultItemLager.getInt("iid"),ItemKategorie.getItemKategorieById(resultItemLager.getInt("item_kategorie")), resultItemLager.getString("name"), resultItemLager.getString("beschreibung"), Material.getMaterial(resultItemLager.getString("icon")), ItemSeltenheit.getItemStufeById(resultItemLager.getInt("item_seltenheit")), schaden, angriffsgeschwindigkeit, rustung, haltbarkeit, ausgestellt);
+                        ShopItem newItem = new ShopItem(resultItemLager.getInt("sid"), resultItemLager.getInt("iid"),ItemKategorie.getItemKategorieById(resultItemLager.getInt("item_kategorie")), resultItemLager.getString("name"), resultItemLager.getString("beschreibung"), Material.getMaterial(resultItemLager.getString("icon")), ItemSeltenheit.getItemStufeById(resultItemLager.getInt("shop_item.item_seltenheit")), schaden, angriffsgeschwindigkeit, rustung, haltbarkeit, ausgestellt);
                         shopItems.add(newItem);
                     }
                 }
@@ -654,6 +654,8 @@ public class Shop {
                     Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_2 = NULL WHERE item_2 = " + id);
                     Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_3 = NULL WHERE item_3 = " + id);
                     Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_4 = NULL WHERE item_4 = " + id);
+                    Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_5 = NULL WHERE item_5 = " + id);
+                    Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_6 = NULL WHERE item_6 = " + id);
 
                     Shopy.getInstance().getMySQLConntion().query("DELETE FROM shop_item WHERE id = '" + id +"'");
                 });
@@ -683,6 +685,14 @@ public class Shop {
                     if(shopItemHalter.getItem4() != null && shopItemHalter.getItem4().getId() == id){
                         shopItemHalter.setItem4(null);
                         if(armorStand != null ) armorStand.setItem(EquipmentSlot.FEET, null);
+                    }
+                    if(shopItemHalter.getItem5() != null && shopItemHalter.getItem5().getId() == id){
+                        shopItemHalter.setItem5(null);
+                        if(armorStand != null ) armorStand.setItem(EquipmentSlot.HAND, null);
+                    }
+                    if(shopItemHalter.getItem6() != null && shopItemHalter.getItem6().getId() == id){
+                        shopItemHalter.setItem6(null);
+                        if(armorStand != null ) armorStand.setItem(EquipmentSlot.OFF_HAND, null);
                     }
                 }
 

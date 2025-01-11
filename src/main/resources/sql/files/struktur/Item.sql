@@ -6,6 +6,6 @@ CREATE TABLE IF NOT EXISTS item (
     name VARCHAR(512) NOT NULL,
     beschreibung TEXT NOT NULL,
     reinfolge INT NOT NULL,
-    FOREIGN KEY (item_kategorie) REFERENCES item_kategorie(id),
+
     FOREIGN KEY (item_kategorie) REFERENCES item_kategorie(id)
 );

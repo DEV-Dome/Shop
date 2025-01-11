@@ -54,6 +54,12 @@ public class ShopItem {
 
         if(haltbarkeit < 3) preis/=4;
 
+        if(itemSeltenheit.getId() == 2) preis += preis * ((double) 7 / 100);
+        else if(itemSeltenheit.getId() == 3) preis += preis * ((double) 14 / 100);
+        else if(itemSeltenheit.getId() == 4) preis += preis * ((double) 22 / 100);
+        else if(itemSeltenheit.getId() == 5) preis += preis * ((double) 31 / 100);
+        else if(itemSeltenheit.getId() == 6) preis += preis * ((double) 40 / 100);
+
         return preis;
     }
 
