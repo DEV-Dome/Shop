@@ -61,10 +61,10 @@ INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten
 
 
 /* AUFWERTER Ressource */
-INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('LIME_DYE', 'Aufwärtspulver Stufe 1', 'Mit diesem Pulver können Gegenstände aufgewertet werden', 'AUFWERTER', 1, '0', '0');
-INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('BLUE_DYE', 'Aufwärtspulver Stufe 2', 'Mit diesem Pulver können Gegenstände aufgewertet werden', 'AUFWERTER', 2, '0', '0');
-INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('MAGENTA_DYE', 'Aufwärtspulver Stufe 3', 'Mit diesem Pulver können Gegenstände aufgewertet werden', 'AUFWERTER', 3, '0', '0');
-INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('ORANGE_DYE', 'Aufwärtspulver Stufe 4', 'Mit diesem Pulver können Gegenstände aufgewertet werden', 'AUFWERTER', 4, '0', '0');
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('LIME_DYE', 'Aufwärtspulver Stufe 1', 'Mit diesem Pulver können Gegenstände\n aufgewertet werden', 'AUFWERTER', 1, '0', '0');
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('BLUE_DYE', 'Aufwärtspulver Stufe 2', 'Mit diesem Pulver können Gegenstände\n aufgewertet werden', 'AUFWERTER', 2, '0', '0');
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('MAGENTA_DYE', 'Aufwärtspulver Stufe 3', 'Mit diesem Pulver können Gegenstände\n aufgewertet werden', 'AUFWERTER', 3, '0', '0');
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('ORANGE_DYE', 'Aufwärtspulver Stufe 4', 'Mit diesem Pulver können Gegenstände\n aufgewertet werden', 'AUFWERTER', 4, '0', '0');
 INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('PAPER', 'Schriftrollenpapier', 'Auf dieses Papier können neue Entwürfe gezeichnet werden', 'AUFWERTER', 5, '0', '0');
 
 

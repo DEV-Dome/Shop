@@ -65,11 +65,12 @@ public class NPCInteractListener implements Listener {
                                     /* Aufschläge */
                                     if(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getZusaetzlicherVerkaufserlös() > 0) itempreis += itempreis * ((double) Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getZusaetzlicherVerkaufserlös() / 100);
                                     if(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getTresenPostion() != null) itempreis += itempreis * ((double) 10 / 100);
+                                    itempreis = Math.round(itempreis * 100.0) / 100.0;
 
                                     ArrayList<String> beschreibung = shopItem.getVolleBeschreibung();
                                     beschreibung.add("");
                                     beschreibung.add("§7Dieser Kunde bietet: §e" + itempreis + "€ §7für das Item!");
-                                    if(shopItem.isAusgestellt()) beschreibung.add("§7Dieses Item ist teil deiner Austellungen");
+                                    if(shopItem.isAusgestellt()) beschreibung.add("§aDieses Item ist teil deiner Ausstellung");
 
                                     ItemStack item = shopItem.buildBaseItem();
                                     item.setLore(beschreibung);

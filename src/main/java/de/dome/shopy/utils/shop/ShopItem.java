@@ -5,6 +5,7 @@ import de.dome.shopy.utils.items.Item;
 import de.dome.shopy.utils.items.ItemKategorie;
 import de.dome.shopy.utils.items.ItemRessourecenKosten;
 import de.dome.shopy.utils.items.ItemSeltenheit;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -118,8 +119,9 @@ public class ShopItem {
         ArrayList<String> volleBeschreibung = new ArrayList<>();
 
         /* ID anzeigen*/
-        volleBeschreibung.add("§7Item-ID: " + getId() + "");
-        volleBeschreibung.add("§7Haltbarkeit: §e" + getHaltbarkeit() + "");
+        volleBeschreibung.add("§7Item-ID: " + getId());
+        volleBeschreibung.add("§7Haltbarkeit: §e" + getHaltbarkeit());
+        volleBeschreibung.add("§7Durchschnittspreis: §e" + getItemPreis());
 
         volleBeschreibung.add("");
 
@@ -173,6 +175,36 @@ public class ShopItem {
         }
     }
 
+    public void setRustung(double rustung) {
+        this.rustung = rustung;
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_werte SET inhalt = '"+ this.rustung +"' WHERE item  = '" + id +"' AND schlussel = 'ruestung'");
+        });
+    }
+
+    public void setAngriffsgeschwindigkeit(double angriffsgeschwindigkeit) {
+        this.angriffsgeschwindigkeit = angriffsgeschwindigkeit;
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_werte SET inhalt = '"+ this.angriffsgeschwindigkeit +"' WHERE item  = '" + id +"' AND schlussel = 'angriffsgeschwindigkeit'");
+        });
+    }
+
+    public void setSchaden(double schaden) {
+        this.schaden = schaden;
+
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_werte SET inhalt = '"+ this.schaden +"' WHERE item  = '" + id +"' AND schlussel = 'schaden'");
+        });
+    }
+
+    public void setItemSeltenheit(ItemSeltenheit itemSeltenheit) {
+        this.itemSeltenheit = itemSeltenheit;
+
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item SET item_seltenheit = " + itemSeltenheit.getId() + " WHERE id  = " + id);
+        });
+    }
+
     public int getHaltbarkeit() {
         return haltbarkeit;
     }
@@ -201,9 +233,21 @@ public class ShopItem {
         });
     }
 
+    public void aufwerten(){
+        ItemSeltenheit newItemSeltenheit = ItemSeltenheit.getItemStufeById(getItemSeltenheit().getId() + 1);
+        setItemSeltenheit(newItemSeltenheit);
+
+        this.angriffsgeschwindigkeit += (this.angriffsgeschwindigkeit * ((double) 10 / 100));
+        this.schaden += (this.schaden * ((double) 10 / 100));
+        this.rustung += (this.rustung * ((double) 10 / 100));
+    }
+
     private double roundToTwoDecimalPlaces(double value) {
         BigDecimal bd = new BigDecimal(Double.toString(value));
         bd = bd.setScale(2, RoundingMode.HALF_UP);
         return bd.doubleValue();
     }
+
+
+
 }

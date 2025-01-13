@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS item_kosten (
     item INT NOT NULL,
     ressource INT NOT NULL,
     menge INT NOT NULL,
+
     FOREIGN KEY (item) REFERENCES item(id),
     FOREIGN KEY (ressource) REFERENCES ressource(id)
 );

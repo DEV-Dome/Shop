@@ -5,6 +5,7 @@ import de.dome.shopy.utils.Ressource;
 import de.dome.shopy.utils.items.Item;
 import de.dome.shopy.utils.items.ItemKategorie;
 import de.dome.shopy.utils.items.ItemRessourecenKosten;
+import de.dome.shopy.utils.items.ItemSeltenheit;
 import de.dome.shopy.utils.shop.*;
 import de.dome.shopy.utils.shop.shophandwerksaufgabe.ShopHandwerksAufgabeItem;
 import io.github.rysefoxx.inventory.plugin.content.IntelligentItemData;
@@ -475,24 +476,21 @@ public class ShopInventarManger {
                 ShopItemHalter shopItemHalter = shop.shopItemHalterById(itemAusstellerID);
 
                 /*Rüstung */
-                if(shopItemHalter.getItem1() != null) contents.updateOrSet(4, Shopy.getInstance().createItemWithLore(shopItemHalter.getItem1().getIcon(), shopItemHalter.getItem1().getVollenName(), shopItemHalter.getItem1().getVolleBeschreibung()));
-                else contents.updateOrSet(4, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§9Helm wählen"));
+                if(shopItemHalter.getItem1() != null) contents.updateOrSet(4, shopItemHalter.getItem1().buildBaseItem());
+                else contents.updateOrSet(4, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§7Helm wählen"));
 
-                if(shopItemHalter.getItem2() != null) contents.updateOrSet(13, Shopy.getInstance().createItemWithLore(shopItemHalter.getItem2().getIcon(), shopItemHalter.getItem2().getVollenName(), shopItemHalter.getItem2().getVolleBeschreibung()));
-                else contents.updateOrSet(13, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§9Brustplatte wählen"));
+                if(shopItemHalter.getItem2() != null) contents.updateOrSet(13, shopItemHalter.getItem2().buildBaseItem());
+                else contents.updateOrSet(13, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§7Brustplatte wählen"));
 
-                if(shopItemHalter.getItem3() != null) contents.updateOrSet(22, Shopy.getInstance().createItemWithLore(shopItemHalter.getItem3().getIcon(), shopItemHalter.getItem3().getVollenName(), shopItemHalter.getItem3().getVolleBeschreibung()));
-                else contents.updateOrSet(22, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§9Hose wählen"));
+                if(shopItemHalter.getItem3() != null) contents.updateOrSet(22, shopItemHalter.getItem3().buildBaseItem());
+                else contents.updateOrSet(22, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§7Hose wählen"));
 
-                if(shopItemHalter.getItem4() != null) contents.updateOrSet(31, Shopy.getInstance().createItemWithLore(shopItemHalter.getItem4().getIcon(), shopItemHalter.getItem4().getVollenName(), shopItemHalter.getItem4().getVolleBeschreibung()));
-                else contents.updateOrSet(31, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§9Schuhe wählen"));
+                if(shopItemHalter.getItem4() != null) contents.updateOrSet(31, shopItemHalter.getItem4().buildBaseItem());
+                else contents.updateOrSet(31, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§7Schuhe wählen"));
 
                 /*Hand und Offhand*/
-                if(shopItemHalter.getItem5() != null) contents.updateOrSet(12, Shopy.getInstance().createItemWithLore(shopItemHalter.getItem5().getIcon(), shopItemHalter.getItem5().getVollenName(), shopItemHalter.getItem5().getVolleBeschreibung()));
-                else contents.updateOrSet(12, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§9Haupthand wählen"));
-
-//                if(shopItemHalter.getItem6() != null) contents.updateOrSet(14, Shopy.getInstance().createItemWithLore(shopItemHalter.getItem6().getIcon(), shopItemHalter.getItem6().getVollenName(), shopItemHalter.getItem6().getVolleBeschreibung()));
-//                else contents.updateOrSet(14, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§9Offhand wählen"));
+                if(shopItemHalter.getItem5() != null) contents.updateOrSet(12, shopItemHalter.getItem5().buildBaseItem());
+                else contents.updateOrSet(12, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§7Haupthand wählen"));
 
                 /* Actions */
                 contents.updateOrSet(27, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
@@ -547,6 +545,81 @@ public class ShopInventarManger {
         }else {
             shop.getOwner().sendMessage(Shopy.getInstance().getKonatktSupport());
         }
+    }
+
+    public void openAufwerter(ShopItem item){
+        RyseInventory.builder().title("§9Aufwerter").rows(4).provider(new InventoryProvider() {
+            @Override
+            public void init(Player player, InventoryContents contents) {
+
+                if(item == null){
+                    contents.updateOrSet(12, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§7Item auswählen"));
+                    contents.updateOrSet(14, Shopy.getInstance().createItem(Material.GLASS_BOTTLE, "§7Aufwertungsmaterialien"));
+
+                    contents.updateOrSet(27, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
+                }else {
+                    contents.updateOrSet(12, item.buildBaseItem());
+
+                    if(item.getItemSeltenheit().getAufwerter() != null){
+                        Ressource aufwerter = item.getItemSeltenheit().getAufwerter();
+                        Material icon = item.getItemSeltenheit().getAufwerter().getIcon();
+                        int aufwerterMenge = Shopy.getInstance().getSpielerShops().get(player.getUniqueId()).getShopRessourenManger().getRessourceValue(aufwerter);
+
+                        ArrayList<String> beschreibungAufwertungsMatrial = new ArrayList<>();
+                        beschreibungAufwertungsMatrial.add("§7Du brauchst folgende Matrialen zum aufwerten:");
+                        beschreibungAufwertungsMatrial.add("§e"+ item.getItemSeltenheit().getAufwerterMenge() +" §7/ §e" + aufwerterMenge + " §7" + aufwerter.getName());
+
+                        contents.updateOrSet(14, Shopy.getInstance().createItemWithLore(icon, "§9Aufwertungsmaterialien", beschreibungAufwertungsMatrial));
+                    }else {
+                        player.closeInventory();
+                        player.sendMessage(Shopy.getInstance().getKonatktSupport());
+                    }
+
+                    contents.updateOrSet(22, Shopy.getInstance().createItem(Material.SMITHING_TABLE, "§9Aufwerten"));
+                    contents.updateOrSet(27, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
+                }
+
+            }
+
+            @Override
+            public void update(Player player, InventoryContents contents) {
+                init(player, contents);
+            }
+        }).build(Shopy.getInstance()).open(shop.getOwner());
+    }
+
+    public void openAuswerterItemAuswahl(int seite){
+            RyseInventory.builder().title("§9Aufwerterauswahl Seite " + seite).rows(4).provider(new InventoryProvider() {
+                @Override
+                public void init(Player player, InventoryContents contents) {
+                    int i = 0;
+                    int start_item = (seite - 1) * 27; // 0
+                    int max_item = seite * 27; // 27
+                    for (ShopItem shopItem : shop.getShopItems()){
+                        if(i < start_item) {
+                            i++;
+                            continue;
+                        }
+                        if(shopItem.isAusgestellt()) continue;
+                        if(shopItem.getItemSeltenheit().getId() >= 4) continue;
+                        if(i >= max_item) break;
+
+                        contents.updateOrSet(i - start_item, shopItem.buildBaseItem());
+                        i++;
+                    }
+
+                    contents.updateOrSet(27, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§7Zurück"));
+                    contents.updateOrSet(28, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
+
+                    if(seite != 1) contents.updateOrSet(34, Shopy.getInstance().createItem(Material.ARROW, "§7Letzte Seite"));
+                    if(!contents.get(26).isEmpty()) contents.updateOrSet(35, Shopy.getInstance().createItem(Material.ARROW, "§7Nächste Seite"));
+                }
+
+                @Override
+                public void update(Player player, InventoryContents contents) {
+                    init(player, contents);
+                }
+            }).build(Shopy.getInstance()).open(shop.getOwner());
     }
 
 }

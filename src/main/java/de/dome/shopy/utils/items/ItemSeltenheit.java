@@ -1,6 +1,7 @@
 package de.dome.shopy.utils.items;
 
 import de.dome.shopy.Shopy;
+import de.dome.shopy.utils.Ressource;
 import org.bukkit.Bukkit;
 
 import java.sql.ResultSet;
@@ -14,11 +15,16 @@ public class ItemSeltenheit {
     String name;
     String farbe;
 
+    int aufwerterMenge;
+    Ressource aufwerter;
+
     public static ArrayList<ItemSeltenheit> itemSeltenheitList;
-    public ItemSeltenheit(int id, String name, String farbe) {
+    public ItemSeltenheit(int id, String name, String farbe, int aufwerterMenge, Ressource aufwerter) {
         this.id = id;
         this.name = name;
         this.farbe = farbe;
+        this.aufwerterMenge = aufwerterMenge;
+        this.aufwerter = aufwerter;
     }
 
     public int getId() {
@@ -33,6 +39,14 @@ public class ItemSeltenheit {
         return farbe;
     }
 
+    public int getAufwerterMenge() {
+        return aufwerterMenge;
+    }
+
+    public Ressource getAufwerter() {
+        return aufwerter;
+    }
+
     public static void registerItemStufen(){
         CompletableFuture.runAsync(() -> {
             itemSeltenheitList = new ArrayList<>();
@@ -42,7 +56,10 @@ public class ItemSeltenheit {
 
                 ResultSet resultItemStufe = Shopy.getInstance().getMySQLConntion().resultSet(queryRessourecs);
                 while (resultItemStufe.next()) {
-                    ItemSeltenheit newItemSeltenheit = new ItemSeltenheit(resultItemStufe.getInt("id"), resultItemStufe.getString("name"), resultItemStufe.getString("farbe"));
+                    Ressource aufwerter = null;
+                    if(resultItemStufe.getInt("aufwertung_ressource") != 1) aufwerter = Ressource.getRessoureByID(resultItemStufe.getInt("aufwertung_ressource"));
+
+                    ItemSeltenheit newItemSeltenheit = new ItemSeltenheit(resultItemStufe.getInt("id"), resultItemStufe.getString("name"), resultItemStufe.getString("farbe"), resultItemStufe.getInt("aufwertung_menge"), aufwerter);
 
                     itemSeltenheitList.add(newItemSeltenheit);
                 }
