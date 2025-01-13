@@ -24,6 +24,8 @@ public class InventoryClickListenerSiegfried implements Listener {
         if (e.getCurrentItem() == null) return;
         if (!e.getCurrentItem().hasItemMeta()) return;
         if(!Shopy.getInstance().getSpielerShops().containsKey(e.getWhoClicked().getUniqueId())) return;
+        if(e.getClickedInventory() == null) return;
+        if(!e.getClickedInventory().equals(e.getView().getTopInventory())) return;
 
         Player p = (Player) e.getWhoClicked();
         ItemStack item = e.getCurrentItem();

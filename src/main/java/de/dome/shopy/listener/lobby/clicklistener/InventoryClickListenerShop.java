@@ -39,6 +39,10 @@ public class InventoryClickListenerShop implements Listener {
         if (e.getView().getTitle().equals("§aShop Erstellen")) {
             if(item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()){
                 if(item.getType() == Material.GRASS_BLOCK || item.getType() == Material.ICE || item.getType() == Material.SAND){
+                    /* Check, ob es ein zu verkaufens Item ist*/
+                    if(e.getClickedInventory() == null) return;
+                    if(!e.getClickedInventory().equals(e.getView().getTopInventory())) return;
+
                     /* Welche Karte soll erstellt werden */
                     int templateID;
 
@@ -123,6 +127,11 @@ public class InventoryClickListenerShop implements Listener {
 
         if (e.getView().getTitle().equals("§9Shop")) {
             if(item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()){
+                /* Check, ob es ein zu verkaufens Item ist*/
+                if(e.getClickedInventory() == null) return;
+                if(!e.getClickedInventory().equals(e.getView().getTopInventory())) return;
+
+
                 if(item.getType() == Material.BARRIER) p.closeInventory();
                 if(item.getType() == Material.NETHER_STAR){
 
@@ -191,6 +200,10 @@ public class InventoryClickListenerShop implements Listener {
         }
         if (e.getView().getTitle().equals("§9Shop - Ressourcen Übersicht")) {
             if(item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName() &&  Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())) {
+                /* Check, ob es ein zu verkaufens Item ist*/
+                if(e.getClickedInventory() == null) return;
+                if(!e.getClickedInventory().equals(e.getView().getTopInventory())) return;
+
                 if (item.getType() == Material.OAK_WOOD) Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopInventarManger().openRessourenUbersicht("STANDART");
                 if (item.getType() == Material.AMETHYST_SHARD) Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopInventarManger().openRessourenUbersicht("DUNGEON-LOOT");
                 if (item.getType() == Material.ECHO_SHARD) Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopInventarManger().openRessourenUbersicht("SPECIAL");

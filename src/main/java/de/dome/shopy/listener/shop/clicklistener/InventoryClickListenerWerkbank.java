@@ -31,10 +31,14 @@ public class InventoryClickListenerWerkbank implements Listener {
         Player p = (Player) e.getWhoClicked();
         ItemStack item = e.getCurrentItem();
 
+        /* Check, ob es ein zu verkaufens Item ist*/
+        if(e.getClickedInventory() == null) return;
+        if(!e.getClickedInventory().equals(e.getView().getTopInventory())) return;
 
         /* Werkbank Übersicht*/
         if (e.getView().getTitle().equals("§9Werkbank-Kategorie")) {
             if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName() && !item.getItemMeta().getDisplayName().equals("§eKategorie noch nicht Freischalten.")) {
+
                 String kategorieName = item.getItemMeta().getDisplayName().substring(2);
                 ItemKategorie itemKategorie = ItemKategorie.getItemKategorieByName(kategorieName);
 

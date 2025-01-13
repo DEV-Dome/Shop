@@ -23,6 +23,10 @@ public class InventoryClickListenerDungeonHaendler implements Listener {
 
         if (e.getView().getTitle().equals("§5Dungeon Händler")) {
             if(item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
+                /* Check, ob es ein zu verkaufens Item ist*/
+                if(e.getClickedInventory() == null) return;
+                if(!e.getClickedInventory().equals(e.getView().getTopInventory())) return;
+
                 switch (item.getType()){
                     case ZOMBIE_SPAWN_EGG:
                         Shopy.getInstance().getSpielerDungeon().put(p.getUniqueId(), new Dungeon(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()), 1));

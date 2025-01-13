@@ -26,6 +26,10 @@ public class InventoryClickListenerRessourenMarkplatz  implements Listener {
         /* Item Markt*/
         if (e.getView().getTitle().equals("§9Ressouren Markplatz")) {
             if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
+                /* Check, ob es ein zu verkaufens Item ist*/
+                if(e.getClickedInventory() == null) return;
+                if(!e.getClickedInventory().equals(e.getView().getTopInventory())) return;
+
                 String name = item.getItemMeta().getDisplayName().substring(2);
                 Shop spielerShop = Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
 

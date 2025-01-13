@@ -25,10 +25,18 @@ public class InventoryClickListenerLara implements Listener {
         ItemStack item = e.getCurrentItem();
 
         if (e.getView().getTitle().equals("§bIngenieurin Lara")) {
+            /* Check, ob es ein zu verkaufens Item ist*/
+            if(e.getClickedInventory() == null) return;
+            if(!e.getClickedInventory().equals(e.getView().getTopInventory())) return;
+
             if(item.getItemMeta().getDisplayName().equals("§7Schlissen")){
                 p.closeInventory();
                 return;
             }
+
+            /* Check, ob es ein zu verkaufens Item ist*/
+            if(e.getClickedInventory() == null) return;
+            if(!e.getClickedInventory().equals(e.getView().getTopInventory())) return;
 
 
             Shop spielerShop =  Shopy.getInstance().getSpielerShops().get(p.getUniqueId());

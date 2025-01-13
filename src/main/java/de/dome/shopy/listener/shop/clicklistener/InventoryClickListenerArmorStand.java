@@ -33,6 +33,8 @@ public class InventoryClickListenerArmorStand implements Listener {
         if(!e.getCurrentItem().hasItemMeta()) return;
         if(!Shopy.getInstance().getSpielerShops().containsKey(e.getWhoClicked().getUniqueId())) return;
         if(!Shopy.getInstance().getSpielerShops().get(e.getWhoClicked().getUniqueId()).getWorld().getName().equals(e.getWhoClicked().getWorld().getName())) return;
+        if(e.getClickedInventory() == null) return;
+        if(!e.getClickedInventory().equals(e.getView().getTopInventory())) return;
 
         Player p = (Player) e.getWhoClicked();
         ItemStack item = e.getCurrentItem();

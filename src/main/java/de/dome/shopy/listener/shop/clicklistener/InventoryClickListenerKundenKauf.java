@@ -28,6 +28,10 @@ public class InventoryClickListenerKundenKauf implements Listener {
 
         if (e.getView().getTitle().startsWith("§9Kundenansicht von ")) {
             if (item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
+                /* Check, ob es ein zu verkaufens Item ist*/
+                if(e.getClickedInventory() == null) return;
+                if(!e.getClickedInventory().equals(e.getView().getTopInventory())) return;
+
                 Shop spielerShop = Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
                 ShopKunden shopKunde = null;
 

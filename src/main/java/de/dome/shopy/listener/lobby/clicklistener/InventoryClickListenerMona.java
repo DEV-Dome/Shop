@@ -25,6 +25,10 @@ public class InventoryClickListenerMona implements Listener {
 
         if (e.getView().getTitle().equals("§dEinhorn Prinessin Mona")) {
             if(item != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
+                /* Check, ob es ein zu verkaufens Item ist*/
+                if(e.getClickedInventory() == null) return;
+                if(!e.getClickedInventory().equals(e.getView().getTopInventory())) return;
+
                 Shop spielerShop =  Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
                 int spielerEinhornkristall = spielerShop.getRessourenShopManger().getRessourceValue(Ressource.getRessoureByName("Einhornkristall"));
 
