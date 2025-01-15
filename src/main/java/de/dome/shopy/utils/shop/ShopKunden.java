@@ -92,8 +92,14 @@ public class ShopKunden {
                 }
             }
 
-            npcLaufWeg.add(ziel.toVector());
-            if(npcLaufWeg.size() != 0) npc.getNavigator().setTarget(npcLaufWeg);
+            try {
+                npcLaufWeg.add(ziel.toVector());
+                npc.getNavigator().setTarget(npcLaufWeg);
+            } catch (IllegalStateException e){
+                /* Wenn der Kunden nicht zum Ziel geschickt werden kann, diesen Löschen und neuen erstellen */
+                loescheKunden();
+                shop.getShopKunden().add(new ShopKunden(shop));
+            }
         } else loescheKunden();
 
 
@@ -230,8 +236,10 @@ public class ShopKunden {
         }
 
         if(npc.getNavigator().canNavigateTo(shop.getShopSpawn())) {
-            npc.getNavigator().cancelNavigation();
-            npc.getNavigator().setTarget(shop.shopSpawn);
+            try {
+                npc.getNavigator().cancelNavigation();
+                npc.getNavigator().setTarget(shop.shopSpawn);
+            } catch (IllegalStateException e){}
         }
 
         Bukkit.getScheduler().runTaskLater(Shopy.getInstance(), () -> {

@@ -194,7 +194,7 @@ public class NPCInteractListener implements Listener {
                     }
 
 
-                    contents.updateOrSet(12, Shopy.getInstance().createItem(Material.NETHERITE_SWORD, "§5Neue Item Stufe Freischalten"));
+//                    contents.updateOrSet(12, Shopy.getInstance().createItem(Material.NETHERITE_SWORD, "§5Neue Item Stufe Freischalten"));
 
                     /* Kunden Perks */
                     /* Spawnzeit Reduzieren */

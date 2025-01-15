@@ -336,8 +336,6 @@ public class Shop {
                             this.shopSpawn.setWorld(this.world);
                             this.owner.teleport(this.shopSpawn);
                         }
-                    }else {
-                        this.owner.sendMessage(Shopy.getInstance().getKonatktSupport());
                     }
                 });
             });

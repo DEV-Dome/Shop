@@ -548,7 +548,11 @@ public class ShopInventarManger {
     }
 
     public void openAufwerter(ShopItem item){
-        RyseInventory.builder().title("§9Aufwerter").rows(4).provider(new InventoryProvider() {
+        /* Größe je nach ansicht festlegen */
+        int inventarGroeße = 3;
+        if(item != null) inventarGroeße = 4;
+
+        RyseInventory.builder().title("§9Aufwerter").rows(inventarGroeße).provider(new InventoryProvider() {
             @Override
             public void init(Player player, InventoryContents contents) {
 
@@ -556,7 +560,7 @@ public class ShopInventarManger {
                     contents.updateOrSet(12, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§7Item auswählen"));
                     contents.updateOrSet(14, Shopy.getInstance().createItem(Material.GLASS_BOTTLE, "§7Aufwertungsmaterialien"));
 
-                    contents.updateOrSet(27, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
+                    contents.updateOrSet(18, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
                 }else {
                     contents.updateOrSet(12, item.buildBaseItem());
 
@@ -567,9 +571,11 @@ public class ShopInventarManger {
 
                         ArrayList<String> beschreibungAufwertungsMatrial = new ArrayList<>();
                         beschreibungAufwertungsMatrial.add("§7Du brauchst folgende Matrialen zum aufwerten:");
-                        beschreibungAufwertungsMatrial.add("§e"+ item.getItemSeltenheit().getAufwerterMenge() +" §7/ §e" + aufwerterMenge + " §7" + aufwerter.getName());
+                        beschreibungAufwertungsMatrial.add("§e"+ aufwerterMenge +" §7/ §e" + item.getItemSeltenheit().getAufwerterMenge() + " §7" + aufwerter.getName());
 
                         contents.updateOrSet(14, Shopy.getInstance().createItemWithLore(icon, "§9Aufwertungsmaterialien", beschreibungAufwertungsMatrial));
+
+
                     }else {
                         player.closeInventory();
                         player.sendMessage(Shopy.getInstance().getKonatktSupport());
@@ -578,7 +584,6 @@ public class ShopInventarManger {
                     contents.updateOrSet(22, Shopy.getInstance().createItem(Material.SMITHING_TABLE, "§9Aufwerten"));
                     contents.updateOrSet(27, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
                 }
-
             }
 
             @Override

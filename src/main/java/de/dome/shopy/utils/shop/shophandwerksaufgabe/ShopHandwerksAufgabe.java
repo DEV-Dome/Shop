@@ -50,10 +50,10 @@ public class ShopHandwerksAufgabe {
 
         ArrayList<Item> inFrageKommeItems = new ArrayList<>();
 
-        if(Shopy.getInstance().isWahrscheinlichkeit(0.1)) anzahlItem = 2;
-        else if(Shopy.getInstance().isWahrscheinlichkeit(0.06)) anzahlItem = 3;
-        else if(Shopy.getInstance().isWahrscheinlichkeit(0.04)) anzahlItem = 4;
-        else if(Shopy.getInstance().isWahrscheinlichkeit(0.025)) anzahlItem = 5;
+        if(Shopy.getInstance().isWahrscheinlichkeit(0.025)) anzahlItem = 5;
+        else if(Shopy.getInstance().isWahrscheinlichkeit(0.075)) anzahlItem = 4;
+        else if(Shopy.getInstance().isWahrscheinlichkeit(0.21)) anzahlItem = 3;
+        else if(Shopy.getInstance().isWahrscheinlichkeit(0.44)) anzahlItem = 2;
         else anzahlItem = 1;
 
 
@@ -70,33 +70,60 @@ public class ShopHandwerksAufgabe {
 
             /* Items in der Aufgabe erstellen */
             ArrayList<Item> hinzugefuegteItems = new ArrayList<>();
-            for(int i = 0; i <= anzahlItem; i++){
+            boolean aufwerterHinzugefuegt = false;
+            for(int i = 0; i <= anzahlItem - 1; i++){
                 Item item = inFrageKommeItems.get(random.nextInt(inFrageKommeItems.size()));
 
+                /* Wie viel wird benötigt */
+                int menge = 1;
+                if(Shopy.getInstance().isWahrscheinlichkeit(0.15)) menge = 2;
+                else if(Shopy.getInstance().isWahrscheinlichkeit(0.6)) menge = 3;
 
+                /* wie oft wird die Belohung ausgeben */
+                int belohnungsMenge = 2;
+                if(Shopy.getInstance().isWahrscheinlichkeit(0.24)) belohnungsMenge = 3;
+                else if(Shopy.getInstance().isWahrscheinlichkeit(0.12)) belohnungsMenge = 4;
+                else if(Shopy.getInstance().isWahrscheinlichkeit(0.07)) belohnungsMenge = 5;
+
+
+                /* Belohung generien */
                 String belohnung = "";
-                if(Shopy.getInstance().isWahrscheinlichkeit(0.63)) {
-                    if(Shopy.getInstance().isWahrscheinlichkeit(0.045)){
-                        belohnung = "Schriftrollenpapier";
+                if(Shopy.getInstance().isWahrscheinlichkeit(0.75) || anzahlItem == 1) {
+                    if( !aufwerterHinzugefuegt && Shopy.getInstance().isWahrscheinlichkeit(0.81)){
+                        aufwerterHinzugefuegt = true;
+                        if(Shopy.getInstance().isWahrscheinlichkeit(0.985)){
+                            if(Shopy.getInstance().isWahrscheinlichkeit(0.055)){
+                                belohnung = "Aufwärtspulver Stufe 4";
+                                if(belohnungsMenge > 2) belohnungsMenge = 1;
+                            } else if(Shopy.getInstance().isWahrscheinlichkeit(0.17)){
+                                belohnung = "Aufwärtspulver Stufe 3";
+                                if(belohnungsMenge > 2) belohnungsMenge = 2;
+                            } else if(Shopy.getInstance().isWahrscheinlichkeit(0.33)){
+                                belohnung = "Aufwärtspulver Stufe 2";
+                                if(belohnungsMenge > 3) belohnungsMenge = 3;
+                            } else{
+                                belohnung = "Aufwärtspulver Stufe 1";
+                                if(belohnungsMenge > 3) belohnungsMenge = 4;
+                            }
+                        }else {
+                            belohnung = "Schriftrollenpapier";
+                            belohnungsMenge = 1;
+                        }
                     }else {
                         while (belohnung.equals("")){
-                            Ressource ressource = Ressource.getRessourceList().get(random.nextInt(Ressource.getRessourceList().size()));
-                            if(ressource.getType().equals("STANDART") || ressource.getType().equals("DUNGEON-LOOT")){
-                                belohnung = ressource.getName();
+                            if(Shopy.getInstance().isWahrscheinlichkeit(0.008)){
+                                belohnung = "Einhornkristall";
+                                belohnungsMenge = 1;
+                            } else {
+                                Ressource ressource = Ressource.getRessourceList().get(random.nextInt(Ressource.getRessourceList().size()));
+                                if(ressource.getType().equals("STANDART") || ressource.getType().equals("DUNGEON-LOOT")){
+                                    belohnung = ressource.getName();
+                                }
                             }
                         }
                     }
                 }
 
-                int menge = 1;
-                if(Shopy.getInstance().isWahrscheinlichkeit(0.15)) menge = 2;
-                else if(Shopy.getInstance().isWahrscheinlichkeit(0.6)) menge = 3;
-
-                int belohnungsMenge = 2;
-                if(Shopy.getInstance().isWahrscheinlichkeit(0.24)) belohnungsMenge = 3;
-                else if(Shopy.getInstance().isWahrscheinlichkeit(0.12)) belohnungsMenge = 4;
-                else if(Shopy.getInstance().isWahrscheinlichkeit(0.07)) belohnungsMenge = 5;
-                if(belohnung.equals("Schriftrollenpapier")) belohnungsMenge = 1;
 
 
                 int finalMenge = menge;
