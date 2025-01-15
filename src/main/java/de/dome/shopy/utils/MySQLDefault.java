@@ -54,6 +54,7 @@ public class MySQLDefault {
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/Item.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ItemKosten.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ItemWerte.sql"));
+                    Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ItemVerzauberungen.sql"));
 
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ShopItem.sql"));
                     Shopy.getInstance().getMySQLConntion().query(Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/struktur/ShopItemHalter.sql"));
@@ -148,6 +149,15 @@ public class MySQLDefault {
                 if(!itemKategorie.next()){
                     /* Kategorien */
                     String[] querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/loader/ItemLoaderKategorien.sql").split(";");
+                    for(String query : querys){
+                        query = query.trim();
+                        if(query.equals("") || query.equals(" ")) continue;
+
+                        Shopy.getInstance().getMySQLConntion().query(query);
+                    }
+
+                    /* Verzauberungen */
+                    querys = Shopy.getInstance().getMySQLConntion().readSQLFile("sql/files/loader/ItemVerzauberungenLoader.sql").split(";");
                     for(String query : querys){
                         query = query.trim();
                         if(query.equals("") || query.equals(" ")) continue;

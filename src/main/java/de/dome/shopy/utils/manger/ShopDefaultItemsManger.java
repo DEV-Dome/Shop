@@ -18,6 +18,7 @@ public class ShopDefaultItemsManger {
     ItemStack rustungStander;
     ItemStack tresen;
     ItemStack upgrader;
+    ItemStack verzauber;
 
     HashMap<Material, ItemStack> standertItemMatrialList;
 
@@ -125,6 +126,18 @@ public class ShopDefaultItemsManger {
 
         upgrader = Shopy.getInstance().createItemWithLore(Material.SMITHING_TABLE, "§9Aufwerter", beschreibung);
         standertItemMatrialList.put(upgrader.getType(), upgrader);
+
+        beschreibung = new ArrayList<>();
+        beschreibung.add("§5Mit diesem gerät kannst du,");
+        beschreibung.add("§5Magisch Items verzaubern!");
+        beschreibung.add("");
+        beschreibung.add(buildingHinweis);
+        beschreibung.add(buildingHinweis1);
+        beschreibung.add(buildingHinweis2);
+        beschreibung.add(buildingHinweis3);
+
+        verzauber = Shopy.getInstance().createItemWithLore(Material.AMETHYST_BLOCK, "§9Verzauberer", beschreibung);
+        standertItemMatrialList.put(verzauber.getType(), verzauber);
     }
 
     public static ShopDefaultItemsManger INSTANCE() {
@@ -167,5 +180,9 @@ public class ShopDefaultItemsManger {
 
     public ItemStack getUpgrader() {
         return upgrader.clone();
+    }
+
+    public ItemStack getVerzauber() {
+        return verzauber.clone();
     }
 }

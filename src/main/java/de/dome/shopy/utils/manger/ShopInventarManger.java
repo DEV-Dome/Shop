@@ -627,4 +627,39 @@ public class ShopInventarManger {
             }).build(Shopy.getInstance()).open(shop.getOwner());
     }
 
+    public void openVerzaubere(ShopItem item){
+        /* Größe je nach ansicht festlegen */
+        int inventarGroeße = 3;
+        if(item != null) inventarGroeße = 4;
+
+        RyseInventory.builder().title("§9Verzaubere").rows(inventarGroeße).provider(new InventoryProvider() {
+            @Override
+            public void init(Player player, InventoryContents contents) {
+
+                ArrayList<String> beschreibung = new ArrayList<>();
+                beschreibung.add("§7Eine verzauberung kostetet");
+                beschreibung.add("§7immer §e1000 €§7. Es ist zufällig,");
+                beschreibung.add("§7welche verzauberung du bekommst.");
+
+                if(item == null){
+                    contents.updateOrSet(12, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§7Item auswählen"));
+                    contents.updateOrSet(14, Shopy.getInstance().createItemWithLore(Material.GOLD_INGOT, "§9Aufwertungsmaterialien", beschreibung));
+
+                    contents.updateOrSet(18, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
+                }else {
+                    contents.updateOrSet(12, item.buildBaseItem());
+                    contents.updateOrSet(14, Shopy.getInstance().createItemWithLore(Material.GOLD_INGOT, "§9Aufwertungsmaterialien", beschreibung));
+
+                    contents.updateOrSet(22, Shopy.getInstance().createItem(Material.AMETHYST_BLOCK, "§9Aufwerten"));
+                    contents.updateOrSet(27, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
+                }
+            }
+
+            @Override
+            public void update(Player player, InventoryContents contents) {
+                init(player, contents);
+            }
+        }).build(Shopy.getInstance()).open(shop.getOwner());
+    }
+
 }

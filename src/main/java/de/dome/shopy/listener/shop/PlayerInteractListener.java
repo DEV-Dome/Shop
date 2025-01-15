@@ -49,6 +49,10 @@ public class PlayerInteractListener implements Listener {
                 e.setCancelled(true);
                 shopInventarManger.openAufwerter(null);
             }
+            if(e.getClickedBlock().getType() == Material.AMETHYST_BLOCK){
+                e.setCancelled(true);
+                shopInventarManger.openVerzaubere(null);
+            }
         }
     }
 }
