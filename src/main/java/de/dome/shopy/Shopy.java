@@ -183,6 +183,7 @@ public class Shopy extends JavaPlugin {
         new PlayerRespawnListener();
         new InventoryCloseListener();
         new PlayerDropItemListener();
+        new PlayerArmorChangeListener();
         new de.dome.shopy.listener.dungeon.EntityDamageListener();
         new de.dome.shopy.listener.dungeon.NPCInteractListener();
     }

@@ -38,7 +38,7 @@ public class InventoryClickListenerVerzaubere implements Listener {
         if(e.getView().getTitle().equals("§9Verzaubere")){
             e.setCancelled(true);
             if(e.getSlot() == 12) spielerShop.getShopInventarManger().openVerzaubereItemAuswahl(1);
-            else if(e.getSlot() == 27) p.closeInventory();
+            else if(e.getSlot() == 27 || e.getSlot() == 18) p.closeInventory();
             else if(e.getSlot() == 22) {
                 int itemID = Integer.parseInt(e.getClickedInventory().getItem(12).getItemMeta().getLore().get(0).split(":")[1].substring(1));
                 ShopItem shopItem = spielerShop.getShopItemById(itemID);

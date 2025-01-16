@@ -1,5 +1,6 @@
 package de.dome.shopy.listener.dungeon;
 
+import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import de.dome.shopy.Shopy;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,6 +12,8 @@ public class PlayerDropItemListener implements Listener {
     public PlayerDropItemListener() {
         Shopy.getInstance().getServer().getPluginManager().registerEvents(this, Shopy.getInstance());
     }
+
+
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent e) {
         Player p = e.getPlayer();

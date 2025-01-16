@@ -645,18 +645,7 @@ public class Shop {
             ShopItem shopItem = shopItems.get(i);
 
             if(shopItem.getId() == id){
-                CompletableFuture.runAsync(() -> {
-                    Shopy.getInstance().getMySQLConntion().query("DELETE FROM shop_item_werte WHERE item  = '" + id +"'");
-
-                    Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_1 = NULL WHERE item_1 = " + id);
-                    Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_2 = NULL WHERE item_2 = " + id);
-                    Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_3 = NULL WHERE item_3 = " + id);
-                    Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_4 = NULL WHERE item_4 = " + id);
-                    Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_5 = NULL WHERE item_5 = " + id);
-                    Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_6 = NULL WHERE item_6 = " + id);
-
-                    Shopy.getInstance().getMySQLConntion().query("DELETE FROM shop_item WHERE id = '" + id +"'");
-                });
+                shopItem.deleteItem();
 
                 for(ShopItemHalter shopItemHalter : shopItemHalter.values()){
                     /* Wenn kein Armor Stand suchen */

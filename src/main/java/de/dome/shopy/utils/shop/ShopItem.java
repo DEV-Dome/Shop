@@ -6,6 +6,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -241,7 +243,7 @@ public class ShopItem {
             });
         }else {
             /* Item Löschen, da es aufgebraucht wurde */
-            deleteItem();
+
             zerstört = true;
         }
 
@@ -249,10 +251,18 @@ public class ShopItem {
     }
 
     public void deleteItem(){
-        CompletableFuture.runAsync(() -> {
-            Shopy.getInstance().getMySQLConntion().query("DELETE FROM shop_item_werte WHERE item  = '" + id +"'");
-            Shopy.getInstance().getMySQLConntion().query("DELETE FROM shop_item WHERE id = '" + id +"'");
-        });
+            CompletableFuture.runAsync(() -> {
+                Shopy.getInstance().getMySQLConntion().query("DELETE FROM shop_item_werte WHERE item  = '" + id +"'");
+
+                Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_1 = NULL WHERE item_1 = " + id);
+                Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_2 = NULL WHERE item_2 = " + id);
+                Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_3 = NULL WHERE item_3 = " + id);
+                Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_4 = NULL WHERE item_4 = " + id);
+                Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_5 = NULL WHERE item_5 = " + id);
+                Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_halter SET item_6 = NULL WHERE item_6 = " + id);
+
+                Shopy.getInstance().getMySQLConntion().query("DELETE FROM shop_item WHERE id = '" + id +"'");
+            });
     }
 
     public void aufwerten(){

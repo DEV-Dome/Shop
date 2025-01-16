@@ -125,7 +125,7 @@ public class ShopInventarManger {
 
                         String[] beschreibungsArray = item.getBeschreibung().split("\n");
                         for (String itemBeschreibung : beschreibungsArray) {
-                            beschreibung.add(itemBeschreibung.trim());
+                            beschreibung.add("§3" + itemBeschreibung.trim());
                         }
 
                         String itemName = "§9" + item.getName() + " " + item.getItemSeltenheit().getFarbe() + " [" + item.getItemSeltenheit().getName() + "]";
@@ -207,7 +207,7 @@ public class ShopInventarManger {
                         beschreibung.add("");
                         String[] beschreibungsArray = shopItemKategorie.getItemKategorie().getBeschreibung().split("\n");
                         for (String itemBeschreibung : beschreibungsArray) {
-                            beschreibung.add(itemBeschreibung.trim());
+                            beschreibung.add("§3" +itemBeschreibung.trim());
                         }
 
                         contents.updateOrSet(solt, Shopy.getInstance().createItemWithLore(shopItemKategorie.getItemKategorie().getIcon(), "§9" + shopItemKategorie.getItemKategorie().getName(), beschreibung));
@@ -267,6 +267,7 @@ public class ShopInventarManger {
 
                                     /* Beschreibung angepassten, je nachdem ob man in einem Dungeon ist */
                                     if(Shopy.getInstance().getSpielerDungeon().containsKey(shop.getOwner().getUniqueId())) {
+                                        if(shopItem.isAusgestellt()) continue;
                                         beschreibung.add("§a- Linksklick zum Item entnehmen");
                                     }else {
                                         beschreibung.add("§c- Rechtsklick zum Löschen");

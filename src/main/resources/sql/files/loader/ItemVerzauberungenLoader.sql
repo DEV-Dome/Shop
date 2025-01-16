@@ -33,13 +33,13 @@ INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Pa
 INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Panzer', 'Die Rüstung ist um 15% erhört.', 7);
 
 -- HELM
-INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Teufel', 'Du bekommst weniger Feuerschaden.', 4);
-INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Geist', 'Werde unsichtbar.', 4);
+INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Teufel', 'Du bekommst weniger Feuerschaden.', 4); --
+INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Geist', 'Werde unsichtbar.', 4); --
 INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Panzer+', 'Die Rüstung ist um 22% erhört.', 4);
 
 -- Brustplatte
-INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Waschbrettbauch', 'Du erleidest weniger schaden.', 5);
-INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Barbar', 'Du teilst mehr schaden aus.', 5);
+INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Waschbrettbauch', 'Du erleidest weniger schaden.', 5); --
+INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Barbar', 'Du teilst mehr schaden aus.', 5); --
 INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Bär', 'Du bekommst mehr Loot', 5);
 
 -- Hose
