@@ -3,10 +3,7 @@ package de.dome.shopy.utils.shop;
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.Cuboid;
 import de.dome.shopy.utils.Ressource;
-import de.dome.shopy.utils.items.Item;
-import de.dome.shopy.utils.items.ItemKategorie;
-import de.dome.shopy.utils.items.ItemRessourecenKosten;
-import de.dome.shopy.utils.items.ItemSeltenheit;
+import de.dome.shopy.utils.items.*;
 import de.dome.shopy.utils.manger.ShopInventarManger;
 import de.dome.shopy.utils.shop.shophandwerksaufgabe.ShopHandwerksAufgabe;
 import de.dome.shopy.utils.shop.shophandwerksaufgabe.ShopHandwerksAufgabeItem;
@@ -252,6 +249,8 @@ public class Shop {
                         double angriffsgeschwindigkeit = 0;
                         double rustung = 0;
                         int haltbarkeit = 0;
+                        ItemVerzauberung itemVerzauberung = null;
+
                         boolean ausgestellt = false;
                         if(resultItemLager.getInt("ausgestellt") != 0) ausgestellt = true;
 
@@ -262,9 +261,10 @@ public class Shop {
                             if(resultItemLagerItemWerte.getString("schlussel").equals("angriffsgeschwindigkeit")) angriffsgeschwindigkeit = Double.parseDouble(resultItemLagerItemWerte.getString("inhalt"));
                             if(resultItemLagerItemWerte.getString("schlussel").equals("haltbarkeit")) haltbarkeit = Integer.parseInt(resultItemLagerItemWerte.getString("inhalt"));
                             if(resultItemLagerItemWerte.getString("schlussel").equals("ruestung")) rustung = Double.parseDouble(resultItemLagerItemWerte.getString("inhalt"));
+                            if(resultItemLagerItemWerte.getString("schlussel").equals("verzauberung")) itemVerzauberung = ItemVerzauberung.getItemVerzauberungById(Integer.parseInt(resultItemLagerItemWerte.getString("inhalt")));
                         }
 
-                        ShopItem newItem = new ShopItem(resultItemLager.getInt("sid"), resultItemLager.getInt("iid"),ItemKategorie.getItemKategorieById(resultItemLager.getInt("item_kategorie")), resultItemLager.getString("name"), resultItemLager.getString("beschreibung"), Material.getMaterial(resultItemLager.getString("icon")), ItemSeltenheit.getItemStufeById(resultItemLager.getInt("shop_item.item_seltenheit")), schaden, angriffsgeschwindigkeit, rustung, haltbarkeit, ausgestellt);
+                        ShopItem newItem = new ShopItem(resultItemLager.getInt("sid"), resultItemLager.getInt("iid"),ItemKategorie.getItemKategorieById(resultItemLager.getInt("item_kategorie")), resultItemLager.getString("name"), resultItemLager.getString("beschreibung"), Material.getMaterial(resultItemLager.getString("icon")), ItemSeltenheit.getItemStufeById(resultItemLager.getInt("shop_item.item_seltenheit")),itemVerzauberung, schaden, angriffsgeschwindigkeit, rustung, haltbarkeit, ausgestellt);
                         shopItems.add(newItem);
                     }
                 }

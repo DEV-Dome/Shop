@@ -1,10 +1,7 @@
 package de.dome.shopy.utils.shop;
 
 import de.dome.shopy.Shopy;
-import de.dome.shopy.utils.items.Item;
-import de.dome.shopy.utils.items.ItemKategorie;
-import de.dome.shopy.utils.items.ItemRessourecenKosten;
-import de.dome.shopy.utils.items.ItemSeltenheit;
+import de.dome.shopy.utils.items.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -27,6 +24,7 @@ public class ShopItem {
     String beschreibung;
     Material icon;
     ItemSeltenheit itemSeltenheit;
+    ItemVerzauberung itemVerzauberung;
     double schaden = 0;
     double angriffsgeschwindigkeit = 0;
     double rustung = 0;
@@ -35,13 +33,14 @@ public class ShopItem {
     Item baseItem;
     boolean ausgestellt;
 
-    public ShopItem(int id, int baseItemID, ItemKategorie itemKategorie, String name, String beschreibung, Material icon, ItemSeltenheit itemSeltenheit, double schaden, double angriffsgeschwindigkeit, double rustung, int haltbarkeit, boolean ausgestellt) {
+    public ShopItem(int id, int baseItemID, ItemKategorie itemKategorie, String name, String beschreibung, Material icon, ItemSeltenheit itemSeltenheit, ItemVerzauberung itemVerzauberung, double schaden, double angriffsgeschwindigkeit, double rustung, int haltbarkeit, boolean ausgestellt) {
         this.id = id;
         this.itemKategorie = itemKategorie;
         this.name = name;
         this.beschreibung = beschreibung;
         this.icon = icon;
         this.itemSeltenheit = itemSeltenheit;
+        this.itemVerzauberung = itemVerzauberung;
         this.schaden = roundToTwoDecimalPlaces(schaden);
         this.angriffsgeschwindigkeit = roundToTwoDecimalPlaces(angriffsgeschwindigkeit);
         this.rustung = roundToTwoDecimalPlaces(rustung);
@@ -60,6 +59,8 @@ public class ShopItem {
         else if(itemSeltenheit.getId() == 4) preis += preis * ((double) 22 / 100);
         else if(itemSeltenheit.getId() == 5) preis += preis * ((double) 31 / 100);
         else if(itemSeltenheit.getId() == 6) preis += preis * ((double) 40 / 100);
+
+        if(itemVerzauberung != null) preis += preis * ((double) 25 / 100);
 
         return preis;
     }
@@ -115,6 +116,7 @@ public class ShopItem {
     public String getBeschreibung() {
         return beschreibung;
     }
+
     public ArrayList<String> getVolleBeschreibung() {
         ArrayList<String> volleBeschreibung = new ArrayList<>();
 
@@ -122,13 +124,20 @@ public class ShopItem {
         volleBeschreibung.add("§7Item-ID: " + getId());
         volleBeschreibung.add("§7Haltbarkeit: §e" + getHaltbarkeit());
         volleBeschreibung.add("§7Durchschnittspreis: §e" + getItemPreis());
-
         volleBeschreibung.add("");
 
+        /*Verzauberung */
+        if(itemVerzauberung != null){
+            volleBeschreibung.add("§5" + itemVerzauberung.getName());
+            volleBeschreibung.add("§5" + itemVerzauberung.getBeschreibung());
+            volleBeschreibung.add("");
+        }
+
+        /*Beschreibung*/
         String[] beschreibungsArray = getBeschreibung().split("\n");
 
         for (String itemBeschreibung : beschreibungsArray) {
-            volleBeschreibung.add(itemBeschreibung.trim());
+            volleBeschreibung.add("§3" + itemBeschreibung.trim());
         }
 
         return volleBeschreibung;
@@ -139,6 +148,10 @@ public class ShopItem {
     }
     public ItemSeltenheit getItemSeltenheit() {
         return itemSeltenheit;
+    }
+
+    public ItemVerzauberung getItemVerzauberung() {
+        return itemVerzauberung;
     }
 
     public double getSchaden() {
@@ -173,6 +186,15 @@ public class ShopItem {
                 Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item SET ausgestellt = NULL WHERE id  = " + id);
             });
         }
+    }
+
+    public void setItemVerzauberung(ItemVerzauberung itemVerzauberung) {
+        this.itemVerzauberung = itemVerzauberung;
+
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("DELETE FROM shop_item_werte WHERE item  = '" + id +"' AND schlussel = 'verzauberung'");
+            Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_werte (item, schlussel, inhalt) VALUES ('" + getId() + "', 'verzauberung','" + itemVerzauberung.getId() + "')");
+        });
     }
 
     public void setRustung(double rustung) {

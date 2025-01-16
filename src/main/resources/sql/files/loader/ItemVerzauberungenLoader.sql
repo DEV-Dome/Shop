@@ -20,7 +20,7 @@ INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Ka
 INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Kabum', 'Löse eine Explosion, beim Töten eines Gegners aus', 3);
 
 -- Axt
-INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Meisterschurke', 'Die Angriffsgeschwindigkeit ist um 11% erhört.', 3);
+INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Meisterschurke', 'Die Angriffsgeschwindigkeit ist um 11% erhört.', 1);
 
 -- Schwert
 INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('AuschAusch', 'Der Schaden ist um 15% erhört.', 2);
