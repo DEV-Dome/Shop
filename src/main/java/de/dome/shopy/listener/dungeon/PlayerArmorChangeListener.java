@@ -35,16 +35,23 @@ public class PlayerArmorChangeListener implements Listener {
                 int itemID = Integer.parseInt(lorearray[1].substring(1));
                 ShopItem shopItem = spielerShop.getShopItemById(itemID);
 
+                /* Verzauberungs Level festelegen */
+
+                int amplifier = 0;
+                if(shopItem.getItemSeltenheit().getId() == 3) amplifier = 1;
+                if(shopItem.getItemSeltenheit().getId() == 4) amplifier = 2;
+                if(shopItem.getItemSeltenheit().getId() == 5) amplifier = 3;
+
                 if(shopItem.getItemVerzauberung() != null){
-                    if(shopItem.getItemVerzauberung().getName().equals("Teufel")) p.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, 0, true, false));
-                    if(shopItem.getItemVerzauberung().getName().equals("Geist")) p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, true, false));
+                    if(shopItem.getItemVerzauberung().getName().equals("Teufel")) p.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, amplifier, true, false));
+                    if(shopItem.getItemVerzauberung().getName().equals("Geist")) p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, amplifier, true, false));
 
-                    if(shopItem.getItemVerzauberung().getName().equals("Waschbrettbauch")) p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 0, true, false));
-                    if(shopItem.getItemVerzauberung().getName().equals("Barbar")) p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 0, true, false));
+                    if(shopItem.getItemVerzauberung().getName().equals("Waschbrettbauch")) p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, amplifier, true, false));
+                    if(shopItem.getItemVerzauberung().getName().equals("Barbar")) p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, amplifier, true, false));
 
-                    if(shopItem.getItemVerzauberung().getName().equals("Panter")) p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, true, false));
-                    if(shopItem.getItemVerzauberung().getName().equals("Hase")) p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 0, true, false));
-                    if(shopItem.getItemVerzauberung().getName().equals("Fee")) p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, Integer.MAX_VALUE, 0, true, false));
+                    if(shopItem.getItemVerzauberung().getName().equals("Panter")) p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, amplifier, true, false));
+                    if(shopItem.getItemVerzauberung().getName().equals("Hase")) p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, amplifier, true, false));
+                    if(shopItem.getItemVerzauberung().getName().equals("Fee")) p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, Integer.MAX_VALUE, amplifier, true, false));
                 }
             }
         }

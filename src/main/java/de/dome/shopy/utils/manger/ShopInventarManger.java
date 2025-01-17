@@ -607,7 +607,7 @@ public class ShopInventarManger {
                             continue;
                         }
                         if(shopItem.isAusgestellt()) continue;
-                        if(shopItem.getItemSeltenheit().getId() >= 4) continue;
+                        if(shopItem.getItemSeltenheit().getId() >= 5) continue;
                         if(i >= max_item) break;
 
                         contents.updateOrSet(i - start_item, shopItem.buildBaseItem());

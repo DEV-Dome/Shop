@@ -43,7 +43,6 @@ public class InventoryClickListenerVerzaubere implements Listener {
                 int itemID = Integer.parseInt(e.getClickedInventory().getItem(12).getItemMeta().getLore().get(0).split(":")[1].substring(1));
                 ShopItem shopItem = spielerShop.getShopItemById(itemID);
 
-
                 Ressource aufwerter = Ressource.getRessoureByName("Geld");
                 int benoetigteAufwerterMenge = 1000;
                 int aufwerterMenge = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopRessourenManger().getRessourceValue(aufwerter);
@@ -51,7 +50,7 @@ public class InventoryClickListenerVerzaubere implements Listener {
                 if(aufwerterMenge >= benoetigteAufwerterMenge){
                     Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopRessourenManger().setRessourcenValue(aufwerter, (aufwerterMenge - benoetigteAufwerterMenge));
 
-                    ItemVerzauberung hinzugefuegteVerzauberung = ItemVerzauberung.getItemVerzauberungById(1);
+                    ItemVerzauberung hinzugefuegteVerzauberung;
                     do{
                         Random random = new Random();
                         hinzugefuegteVerzauberung = ItemVerzauberung.getItemItemVerzauberungList().get(random.nextInt(ItemVerzauberung.getItemItemVerzauberungList().size()));
@@ -59,11 +58,67 @@ public class InventoryClickListenerVerzaubere implements Listener {
                         if(hinzugefuegteVerzauberung.getItemKategorie() == null) break;
                     } while (hinzugefuegteVerzauberung.getItemKategorie().getId() != shopItem.getItemKategorie().getId());
 
+                    /* Sollte die alte verzauberung noch einen Statuseffekt haben, wird dieser hier enfernt */
+                    if(shopItem.getItemVerzauberung() != null){
+                        ItemVerzauberung alteItemVerzauberung = shopItem.getItemVerzauberung();
+
+                        if(alteItemVerzauberung.getId() == 3 || alteItemVerzauberung.getId() == 4 || alteItemVerzauberung.getId() == 5){
+                            double neuerSchaden = shopItem.getSchaden() / 1.1;
+                            shopItem.setSchaden(neuerSchaden);
+                        }
+                        if(alteItemVerzauberung.getId() == 6 || alteItemVerzauberung.getId() == 7 || alteItemVerzauberung.getId() == 8){
+                            double neueAngriffsgeschwindigkeit = shopItem.getAngriffsgeschwindigkeit() / 1.08;
+                            shopItem.setAngriffsgeschwindigkeit(neueAngriffsgeschwindigkeit);
+                        }
+                        if(alteItemVerzauberung.getId() == 15){
+                            double neueAngriffsgeschwindigkeit = shopItem.getAngriffsgeschwindigkeit() / 1.11;
+                            shopItem.setAngriffsgeschwindigkeit(neueAngriffsgeschwindigkeit);
+                        }
+                        if(alteItemVerzauberung.getId() == 16){
+                            double neuerSchaden = shopItem.getSchaden() / 1.15;
+                            shopItem.setSchaden(neuerSchaden);
+                        }
+                        if(alteItemVerzauberung.getId() == 18 || alteItemVerzauberung.getId() == 19 || alteItemVerzauberung.getId() == 20 || alteItemVerzauberung.getId() == 21){
+                            double neueRuestung = shopItem.getRustung() / 1.15;
+                            shopItem.setRustung(neueRuestung);
+                        }
+                        if(alteItemVerzauberung.getId() == 24){
+                            double neueRuestung = shopItem.getRustung() / 1.22;
+                            shopItem.setRustung(neueRuestung);
+                        }
+                    }
+
+                    /* Item verzaubern */
                     shopItem.setItemVerzauberung(hinzugefuegteVerzauberung);
 
                     spielerShop.getShopInventarManger().openVerzaubere(shopItem);
                     p.sendMessage(Shopy.getInstance().getPrefix() + "§aDu hast das Item verzaubert!");
 
+                    /*Verzauberungen die Dirket angewendet werden */
+                    if(hinzugefuegteVerzauberung.getId() == 3 || hinzugefuegteVerzauberung.getId() == 4 || hinzugefuegteVerzauberung.getId() == 5){
+                        double neuerSchaden = shopItem.getSchaden() + shopItem.getSchaden() * ((double) 10 / 100);
+                        shopItem.setSchaden(neuerSchaden);
+                    }
+                    if(hinzugefuegteVerzauberung.getId() == 6 || hinzugefuegteVerzauberung.getId() ==  7 || hinzugefuegteVerzauberung.getId() == 8){
+                        double neueAngriffsgeschwindigkeit = shopItem.getAngriffsgeschwindigkeit() + shopItem.getAngriffsgeschwindigkeit() * ((double) 8 / 100);
+                        shopItem.setAngriffsgeschwindigkeit(neueAngriffsgeschwindigkeit);
+                    }
+                    if(hinzugefuegteVerzauberung.getId() == 15){
+                        double neueAngriffsgeschwindigkeit = shopItem.getAngriffsgeschwindigkeit() + shopItem.getAngriffsgeschwindigkeit() * ((double) 11 / 100);
+                        shopItem.setAngriffsgeschwindigkeit(neueAngriffsgeschwindigkeit);
+                    }
+                    if(hinzugefuegteVerzauberung.getId() == 16){
+                        double neuerSchaden = shopItem.getSchaden() + shopItem.getSchaden() * ((double) 15 / 100);
+                        shopItem.setSchaden(neuerSchaden);
+                    }
+                    if(hinzugefuegteVerzauberung.getId() == 18 || hinzugefuegteVerzauberung.getId() == 19 || hinzugefuegteVerzauberung.getId() == 20 || hinzugefuegteVerzauberung.getId() == 21){
+                        double neueRuestung = shopItem.getRustung() + shopItem.getRustung() * ((double) 15 / 100);
+                        shopItem.setRustung(neueRuestung);
+                    }
+                    if(hinzugefuegteVerzauberung.getId() == 24){
+                        double neueRuestung = shopItem.getRustung() + shopItem.getRustung() * ((double) 22 / 100);
+                        shopItem.setRustung(neueRuestung);
+                    }
                 }else {
                     p.sendMessage(Shopy.getInstance().getPrefix() + "§cDir fehlen noch §e" + (benoetigteAufwerterMenge - aufwerterMenge) + " € §cUm das Item verzaubern zu können!");
                 }

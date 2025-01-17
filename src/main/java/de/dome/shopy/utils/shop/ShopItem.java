@@ -62,7 +62,17 @@ public class ShopItem {
         else if(itemSeltenheit.getId() == 5) preis += preis * ((double) 31 / 100);
         else if(itemSeltenheit.getId() == 6) preis += preis * ((double) 40 / 100);
 
-        if(itemVerzauberung != null) preis += preis * ((double) 25 / 100);
+        if(itemVerzauberung != null){
+            if(itemVerzauberung.getId() == 1){
+                int prozentErhoert = 10;
+                if(itemSeltenheit.getId() == 3) prozentErhoert = 15;
+                if(itemSeltenheit.getId() == 4) prozentErhoert = 20;
+                if(itemSeltenheit.getId() == 5) prozentErhoert = 25;
+
+                preis += preis * ((double) (25 + prozentErhoert) / 100);
+            }
+            else preis += preis * ((double) 25 / 100);
+        }
 
         return preis;
     }
@@ -125,7 +135,7 @@ public class ShopItem {
         /* ID anzeigen*/
         volleBeschreibung.add("§7Item-ID: " + getId());
         volleBeschreibung.add("§7Haltbarkeit: §e" + getHaltbarkeit());
-        volleBeschreibung.add("§7Durchschnittspreis: §e" + getItemPreis());
+        volleBeschreibung.add("§7Durchschnittspreis: §e" + Math.round(getItemPreis() * 100.0) / 100.0);
         volleBeschreibung.add("");
 
         /*Verzauberung */
