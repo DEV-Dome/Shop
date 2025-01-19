@@ -11,13 +11,13 @@ INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Sc
 INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Schurke', 'Die Angriffsgeschwindigkeit ist erhört.', 2); --
 INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Schurke', 'Die Angriffsgeschwindigkeit ist erhört.', 3); --
 
-INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Dieb', 'Heile dich nach jedem Kill', 1);
-INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Dieb', 'Heile dich nach jedem Kill', 2);
-INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Dieb', 'Heile dich nach jedem Kill', 3);
+INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Dieb', 'Heile dich nach jedem Kill', 1); --
+INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Dieb', 'Heile dich nach jedem Kill', 2); --
+INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Dieb', 'Heile dich nach jedem Kill', 3); --
 
-INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Kabum', 'Löse eine Explosion, beim Töten eines Gegners aus', 1);
-INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Kabum', 'Löse eine Explosion, beim Töten eines Gegners aus', 2);
-INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Kabum', 'Löse eine Explosion, beim Töten eines Gegners aus', 3);
+INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Kabum', 'Löse eine Explosion, beim Töten eines Gegners aus', 1); --
+INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Kabum', 'Löse eine Explosion, beim Töten eines Gegners aus', 2); --
+INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Kabum', 'Löse eine Explosion, beim Töten eines Gegners aus', 3); --
 
 -- Axt
 INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Meisterschurke', 'Die Angriffsgeschwindigkeit ist erhört.', 1); --
@@ -44,7 +44,7 @@ INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('B�
 
 -- Hose
 INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Spinne', 'Ziehe Gegner an dich ran, welche dich aus der Ferne angreifen.', 6);
-INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Igel', 'Gegner nehmen Schaden, wenn Sie sich angreifen.', 6);
+INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Igel', 'Gegner nehmen Schaden, wenn Sie sich angreifen.', 6);--
 INSERT INTO item_verzauberungen (name, beschreibung, item_kategorie) VALUES ('Glückstreffer', 'Du bekommst bessern Loot', 6);
 
 -- Schuhe

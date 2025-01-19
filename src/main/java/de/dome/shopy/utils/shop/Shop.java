@@ -336,6 +336,7 @@ public class Shop {
                             this.shopSpawn.setWorld(this.world);
                             this.owner.teleport(this.shopSpawn);
                         }
+                        if(tresenPostion != null) tresenPostion.setWorld(this.world);
                     }
                 });
             });
