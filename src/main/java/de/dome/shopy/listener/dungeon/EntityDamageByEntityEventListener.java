@@ -3,6 +3,7 @@ package de.dome.shopy.listener.dungeon;
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.shop.Shop;
 import de.dome.shopy.utils.shop.ShopItem;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -50,10 +51,10 @@ public class EntityDamageByEntityEventListener implements Listener {
                             World exploadWorld = e.getEntity().getLocation().getWorld();
                             Location exploadLocation = e.getEntity().getLocation();
 
-                            float radius = 1;
-                            if(shopItem.getItemSeltenheit().getId() == 3) radius = 1.25f;
-                            if(shopItem.getItemSeltenheit().getId() == 4) radius = 1.65f;
-                            if(shopItem.getItemSeltenheit().getId() == 5) radius = 2;
+                            float radius = 0.5F;
+                            if(shopItem.getItemSeltenheit().getId() == 3) radius = 0.75f;
+                            if(shopItem.getItemSeltenheit().getId() == 4) radius = 1;
+                            if(shopItem.getItemSeltenheit().getId() == 5) radius = 1.25F;
 
                             exploadWorld.createExplosion(exploadLocation.getX(), exploadLocation.getY(), exploadLocation.getZ(), radius, false, false);
                         }
@@ -67,28 +68,39 @@ public class EntityDamageByEntityEventListener implements Listener {
 
                             livingEntity.damage(damage);
                         }
-                        /* Spinne */
-                        if (e.getDamager() instanceof Projectile) {
-                            ItemStack leggins = p.getInventory().getLeggings();
-                            Projectile projectile = (Projectile) e.getDamager();
+                        if(shopItem.getItemVerzauberung().getName().equals("Volltreffer")){
+                            double multiply = 1;
+                            if(shopItem.getItemSeltenheit().getId() == 3) multiply = 1.5;
+                            if(shopItem.getItemSeltenheit().getId() == 4) multiply = 2;
+                            if(shopItem.getItemSeltenheit().getId() == 5) multiply = 2.5;
 
-                            if(leggins.hasItemMeta() && leggins.getItemMeta().hasLore()) {
-                                String[] legginsLoreArray = leggins.getItemMeta().getLore().get(0).split(":");
-                                if (legginsLoreArray[0].equals("§7Item-ID")) {
-                                    int legginsItemID = Integer.parseInt(lorearray[1].substring(1));
-                                    ShopItem legginsShopItem = spielerShop.getShopItemById(legginsItemID);
+                            e.getEntity().setVelocity(p.getEyeLocation().getDirection().multiply(multiply));
+                        }
+                    }
+                }
+            }
+        } else if (e.getDamager() instanceof Projectile) {
+            if(e.getEntity() instanceof Player ) {
+                Player p = (Player) e.getEntity();
 
-                                    if(legginsShopItem.getItemVerzauberung().getName().equals("Spinne")){
-                                        if(projectile.getShooter() instanceof Entity){
-                                            Entity schooter = (Entity)  projectile.getShooter();
-                                            Location targetLocation = p.getEyeLocation().add( p.getEyeLocation().getDirection().multiply(2));
+                ItemStack leggins = p.getInventory().getLeggings();
+                Projectile projectile = (Projectile) e.getDamager();
 
-                                            schooter.teleport(targetLocation);
-                                        }
-                                    }
-                                }
+                if (leggins != null && leggins.hasItemMeta() && leggins.getItemMeta().hasLore()) {
+
+                    String[] legginsLoreArray = leggins.getItemMeta().getLore().get(0).split(":");
+                    if (legginsLoreArray[0].equals("§7Item-ID")) {
+                        int legginsItemID = Integer.parseInt(legginsLoreArray[1].substring(1));
+                        ShopItem legginsShopItem = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopItemById(legginsItemID);
+
+                        if (legginsShopItem.getItemVerzauberung().getName().equals("Spinne")) {
+                            if (projectile.getShooter() instanceof Entity) {
+
+                                Entity schooter = (Entity) projectile.getShooter();
+                                Location targetLocation = p.getEyeLocation().add(p.getEyeLocation().getDirection().multiply(2));
+
+                                schooter.teleport(targetLocation);
                             }
-
                         }
                     }
                 }

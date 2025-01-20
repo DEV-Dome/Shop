@@ -3,8 +3,12 @@ package de.dome.shopy.utils.manger;
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.Dungeon;
 import de.dome.shopy.utils.Ressource;
+import de.dome.shopy.utils.shop.ShopItem;
 import de.dome.shopy.utils.shop.ShopRessourenManger;
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -54,6 +58,43 @@ public class DropManger {
 
                 wahrscheinlichkeitStandartItem = 0.5;
                 break;
+        }
+        /* Verzauberung */
+        ItemStack chestplate = p.getInventory().getChestplate();
+        if (chestplate != null && chestplate.hasItemMeta() && chestplate.getItemMeta().hasLore()) {
+            String[] chestplateLoreArray = chestplate.getItemMeta().getLore().get(0).split(":");
+            if (chestplateLoreArray[0].equals("§7Item-ID")) {
+                int chestplateLoreArrayItemID = Integer.parseInt(chestplateLoreArray[1].substring(1));
+                ShopItem chestplateShopItem = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopItemById(chestplateLoreArrayItemID);
+
+                if (chestplateShopItem.getItemVerzauberung().getName().equals("Bär")) {
+                    double multiply = 0.07;
+                    if(chestplateShopItem.getItemSeltenheit().getId() == 3) multiply = 0.13;
+                    if(chestplateShopItem.getItemSeltenheit().getId() == 4) multiply = 0.17;
+                    if(chestplateShopItem.getItemSeltenheit().getId() == 5) multiply = 0.22;
+
+                    wahrscheinlichkeitDrop3 += (double) wahrscheinlichkeitDrop3 * multiply;
+                    wahrscheinlichkeitDrop2 += (double) wahrscheinlichkeitDrop2 * multiply;
+                    wahrscheinlichkeitDrop1 += (double) wahrscheinlichkeitDrop1 * multiply;
+                }
+            }
+        }
+        ItemStack leggins = p.getInventory().getLeggings();
+        if (leggins != null && leggins.hasItemMeta() && leggins.getItemMeta().hasLore()) {
+            String[] legginsLoreArray = leggins.getItemMeta().getLore().get(0).split(":");
+            if (legginsLoreArray[0].equals("§7Item-ID")) {
+                int legginsLoreArrayItemID = Integer.parseInt(legginsLoreArray[1].substring(1));
+                ShopItem legginsShopItem = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopItemById(legginsLoreArrayItemID);
+
+                if (legginsShopItem.getItemVerzauberung().getName().equals("Glückstreffer")) {
+                    double multiply = 0.07;
+                    if(legginsShopItem.getItemSeltenheit().getId() == 3) multiply = 0.13;
+                    if(legginsShopItem.getItemSeltenheit().getId() == 4) multiply = 0.17;
+                    if(legginsShopItem.getItemSeltenheit().getId() == 5) multiply = 0.22;
+
+                    wahrscheinlichkeitStandartItem += (double) wahrscheinlichkeitStandartItem * multiply;
+                }
+            }
         }
 
 
