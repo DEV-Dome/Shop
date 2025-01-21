@@ -39,12 +39,18 @@ public class InventoryClickListenerReparaturTisch implements Listener {
                 int itemID = Integer.parseInt(e.getClickedInventory().getItem(12).getItemMeta().getLore().get(0).split(":")[1].substring(1));
                 ShopItem shopItem = spielerShop.getShopItemById(itemID);
 
+                /* Maximale Haltbarkeit beachten*/
+                if(shopItem.getHaltbarkeit() >= shopItem.getMaxHaltbarkeit()){
+                    p.sendMessage(Shopy.getInstance().getPrefix() + "§cDieses Item hat bereits volle Haltbarkeit!");
+                    return;
+                }
+
                 /* CheckUP ob die Benötigen Materialen vorhanden sind*/
                 Ressource geld = Ressource.getRessoureByName("Geld");
                 int benoetigteGeldMenge = 50;
                 int geldMenge = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopRessourenManger().getRessourceValue(geld);
 
-                if(geldMenge <= benoetigteGeldMenge){
+                if(geldMenge < benoetigteGeldMenge){
                     p.sendMessage(Shopy.getInstance().getPrefix() + "§cDir fehlen noch §e" + (benoetigteGeldMenge - geldMenge) + " € §cUm das Item reperriern zu können!");
                     return;
                 }
@@ -53,7 +59,7 @@ public class InventoryClickListenerReparaturTisch implements Listener {
                 int benoetigteHauptMatrialMenge = 1;
                 int hauptMatrialMenge = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopRessourenManger().getRessourceValue(hauptMatrial);
 
-                if(hauptMatrialMenge <= benoetigteHauptMatrialMenge){
+                if(hauptMatrialMenge < benoetigteHauptMatrialMenge){
                     p.sendMessage(Shopy.getInstance().getPrefix() + "§cDir fehlen noch §e" + (benoetigteHauptMatrialMenge - hauptMatrialMenge) + " " + hauptMatrial.getName() +"  §cUm das Item reperriern zu können!");
                     return;
                 }

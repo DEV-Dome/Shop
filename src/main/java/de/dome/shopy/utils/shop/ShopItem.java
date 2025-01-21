@@ -33,10 +33,11 @@ public class ShopItem {
     double rustung = 0;
 
     int haltbarkeit = 0;
+    int maxHaltbarkeit = 0;
     Item baseItem;
     boolean ausgestellt;
 
-    public ShopItem(int id, int baseItemID, ItemKategorie itemKategorie, String name, String beschreibung, Material icon, ItemSeltenheit itemSeltenheit, ItemVerzauberung itemVerzauberung, double schaden, double angriffsgeschwindigkeit, double rustung, int haltbarkeit, boolean ausgestellt) {
+    public ShopItem(int id, int baseItemID, ItemKategorie itemKategorie, String name, String beschreibung, Material icon, ItemSeltenheit itemSeltenheit, ItemVerzauberung itemVerzauberung, double schaden, double angriffsgeschwindigkeit, double rustung, int haltbarkeit, int maxHaltbarkeit, boolean ausgestellt) {
         this.id = id;
         this.itemKategorie = itemKategorie;
         this.name = name;
@@ -48,6 +49,7 @@ public class ShopItem {
         this.angriffsgeschwindigkeit = roundToTwoDecimalPlaces(angriffsgeschwindigkeit);
         this.rustung = roundToTwoDecimalPlaces(rustung);
         this.haltbarkeit = haltbarkeit;
+        this.maxHaltbarkeit = maxHaltbarkeit;
         this.ausgestellt = ausgestellt;
         baseItem = Item.getItemById(baseItemID);
     }
@@ -56,6 +58,9 @@ public class ShopItem {
         double preis = baseItem.getItemPreis();
 
         if(haltbarkeit < 3) preis/=4;
+        if(haltbarkeit > 3){
+            preis += preis * ((double) (haltbarkeit - 3) / 100);
+        }
 
         if(itemSeltenheit.getId() == 2) preis += preis * ((double) 7 / 100);
         else if(itemSeltenheit.getId() == 3) preis += preis * ((double) 14 / 100);
@@ -138,9 +143,14 @@ public class ShopItem {
     public ArrayList<String> getVolleBeschreibung() {
         ArrayList<String> volleBeschreibung = new ArrayList<>();
 
+        /* Haltbarkeit Farbe definiern */
+        String haltbarkeit = "§e" + getHaltbarkeit();
+        if(getHaltbarkeit() == getMaxHaltbarkeit()) haltbarkeit = "§a" + getHaltbarkeit();
+        if(getHaltbarkeit() > getMaxHaltbarkeit()) haltbarkeit = "§c" + getHaltbarkeit();
+
         /* ID anzeigen*/
         volleBeschreibung.add("§7Item-ID: " + getId());
-        volleBeschreibung.add("§7Haltbarkeit: §e" + getHaltbarkeit());
+        volleBeschreibung.add("§7Haltbarkeit: " + haltbarkeit + " §7/§e " + getMaxHaltbarkeit());
         volleBeschreibung.add("§7Durchschnittspreis: §e" + Math.round(getItemPreis() * 100.0) / 100.0);
         volleBeschreibung.add("");
 
@@ -243,6 +253,12 @@ public class ShopItem {
         CompletableFuture.runAsync(() -> {
             Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_werte SET inhalt = '"+ this.haltbarkeit +"' WHERE item  = '" + id +"' AND schlussel = 'haltbarkeit'");
         });
+    }    public void setMaxHaltbarkeit(int maxHaltbarkeit) {
+        this.maxHaltbarkeit = maxHaltbarkeit;
+
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_werte SET inhalt = '"+ this.maxHaltbarkeit +"' WHERE item  = '" + id +"' AND schlussel = 'max_haltbarkeit'");
+        });
     }
 
     public void setItemSeltenheit(ItemSeltenheit itemSeltenheit) {
@@ -256,6 +272,11 @@ public class ShopItem {
     public int getHaltbarkeit() {
         return haltbarkeit;
     }
+
+    public int getMaxHaltbarkeit() {
+        return maxHaltbarkeit;
+    }
+
     public boolean HaltbarkeitVerringern(){
         boolean zerstört = false;
 
@@ -295,6 +316,8 @@ public class ShopItem {
         this.angriffsgeschwindigkeit += (this.angriffsgeschwindigkeit * ((double) 10 / 100));
         this.schaden += (this.schaden * ((double) 10 / 100));
         this.rustung += (this.rustung * ((double) 10 / 100));
+
+        setMaxHaltbarkeit(getMaxHaltbarkeit() + 1);
     }
 
     private double roundToTwoDecimalPlaces(double value) {
