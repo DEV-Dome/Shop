@@ -125,8 +125,7 @@ public class InventoryClickListenerVerzaubere implements Listener {
 
             }
 
-        }
-        if(e.getView().getTitle().startsWith("§9Verzaubereauswahl Seite")){
+        }else if(e.getView().getTitle().startsWith("§9Verzaubereauswahl Seite")){
             e.setCancelled(true);
             int seite = Integer.parseInt(e.getView().getTitle().split(" ")[2]);
 

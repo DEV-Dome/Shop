@@ -1,6 +1,7 @@
 package de.dome.shopy.utils.shop;
 
 import de.dome.shopy.Shopy;
+import de.dome.shopy.utils.Ressource;
 import de.dome.shopy.utils.items.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -77,6 +78,10 @@ public class ShopItem {
         return preis;
     }
 
+    public Ressource getHauptMaterial(){
+        return baseItem.getHauptMaterial();
+    }
+
     public ItemStack buildBaseItem(){
         ItemStack item = Shopy.getInstance().createItemWithLore(getIcon(), getVollenName(), getVolleBeschreibung());
         ItemMeta meta = item.getItemMeta();
@@ -122,6 +127,7 @@ public class ShopItem {
     public String getVollenName() {
         return "§9" + getName() +  " " + getItemSeltenheit().getFarbe() + " [" + getItemSeltenheit().getName() + "]";
     }
+
 
 
 
@@ -228,6 +234,14 @@ public class ShopItem {
 
         CompletableFuture.runAsync(() -> {
             Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_werte SET inhalt = '"+ this.schaden +"' WHERE item  = '" + id +"' AND schlussel = 'schaden'");
+        });
+    }
+
+    public void setHaltbarkeit(int haltbarkeit) {
+        this.haltbarkeit = haltbarkeit;
+
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("UPDATE shop_item_werte SET inhalt = '"+ this.haltbarkeit +"' WHERE item  = '" + id +"' AND schlussel = 'haltbarkeit'");
         });
     }
 

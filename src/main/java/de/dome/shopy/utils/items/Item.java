@@ -31,6 +31,7 @@ public class Item {
     double maxAngriffsgeschwindigkeit = 0;
     double minRuestung = 0;
     double maxRuestung = 0;
+    Ressource hauptMaterial = null;
     public static ArrayList<Item> itemList;
     public ArrayList<ItemRessourecenKosten> ressourecsKostenList;
 
@@ -61,6 +62,20 @@ public class Item {
         }
 
         return preis;
+    }
+
+    private Ressource ermitteleHauptMaterial(){
+        Ressource ressource = null;
+        int ressourceMenge = 0;
+
+        for(ItemRessourecenKosten itemRessourecenKosten : getRessourecsKostenList()){
+            if(ressourceMenge < itemRessourecenKosten.getMenge()){
+                ressource = itemRessourecenKosten.getRessoure();
+                ressourceMenge = itemRessourecenKosten.getMenge();
+            }
+        }
+
+        return ressource;
     }
 
     public int getId() {
@@ -143,6 +158,10 @@ public class Item {
         return maxRuestung;
     }
 
+    public Ressource getHauptMaterial() {
+        return hauptMaterial;
+    }
+
     public static void registerItem(){
         CompletableFuture.runAsync(() -> {
             itemList = new ArrayList<>();
@@ -189,6 +208,8 @@ public class Item {
 
                     /* Item Stufe */
                     newItem.itemSeltenheit = ItemSeltenheit.getItemStufeById(resultItem.getInt("item_seltenheit"));
+                    newItem.hauptMaterial = newItem.ermitteleHauptMaterial();
+
                     itemList.add(newItem);
                 }
             }catch (SQLException e) {

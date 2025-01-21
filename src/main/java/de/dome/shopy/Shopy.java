@@ -170,6 +170,7 @@ public class Shopy extends JavaPlugin {
         new InventoryClickListenerArmorStand();
         new InventoryClickListenerAufwerter();
         new InventoryClickListenerVerzaubere();
+        new InventoryClickListenerReparaturTisch();
 
         new EntityDamageByEntityListener();
         new PlayerInteractAtEntityListener();

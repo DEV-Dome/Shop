@@ -19,6 +19,7 @@ public class ShopDefaultItemsManger {
     ItemStack tresen;
     ItemStack upgrader;
     ItemStack verzauber;
+    ItemStack reparaturTisch;
 
     HashMap<Material, ItemStack> standertItemMatrialList;
 
@@ -138,6 +139,19 @@ public class ShopDefaultItemsManger {
 
         verzauber = Shopy.getInstance().createItemWithLore(Material.AMETHYST_BLOCK, "§9Verzauberer", beschreibung);
         standertItemMatrialList.put(verzauber.getType(), verzauber);
+
+        beschreibung = new ArrayList<>();
+        beschreibung.add("§5Mit diesem gerät kannst du,");
+        beschreibung.add("§5Die Haltbarkeit deiner, ");
+        beschreibung.add("§5Items wiederherstellen.");
+        beschreibung.add("");
+        beschreibung.add(buildingHinweis);
+        beschreibung.add(buildingHinweis1);
+        beschreibung.add(buildingHinweis2);
+        beschreibung.add(buildingHinweis3);
+
+        reparaturTisch = Shopy.getInstance().createItemWithLore(Material.ANVIL, "§9Reparatur Tisch", beschreibung);
+        standertItemMatrialList.put(reparaturTisch.getType(), reparaturTisch);
     }
 
     public static ShopDefaultItemsManger INSTANCE() {
@@ -184,5 +198,9 @@ public class ShopDefaultItemsManger {
 
     public ItemStack getVerzauber() {
         return verzauber.clone();
+    }
+
+    public ItemStack getReparaturTisch() {
+        return reparaturTisch.clone();
     }
 }

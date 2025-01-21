@@ -53,6 +53,10 @@ public class PlayerInteractListener implements Listener {
                 e.setCancelled(true);
                 shopInventarManger.openVerzaubere(null);
             }
+            if(e.getClickedBlock().getType() == Material.ANVIL){
+                e.setCancelled(true);
+                shopInventarManger.openReparaturTisch(null);
+            }
         }
     }
 }

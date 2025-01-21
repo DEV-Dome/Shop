@@ -701,4 +701,75 @@ public class ShopInventarManger {
         }).build(Shopy.getInstance()).open(shop.getOwner());
     }
 
+    public void openReparaturTisch(ShopItem item){
+        /* Größe je nach ansicht festlegen */
+        int inventarGroeße = 3;
+        if(item != null) inventarGroeße = 4;
+
+        RyseInventory.builder().title("§9Reparatur Tisch").rows(inventarGroeße).provider(new InventoryProvider() {
+            @Override
+            public void init(Player player, InventoryContents contents) {
+                if(item == null){
+                    ArrayList<String> beschreibung = new ArrayList<>();
+                    beschreibung.add("§7Eine reparatur kostetet");
+                    beschreibung.add("§7§e50 €§7 und §e1 Repatur Material§7.");
+
+                    contents.updateOrSet(12, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§7Item auswählen"));
+                    contents.updateOrSet(14, Shopy.getInstance().createItemWithLore(Material.GOLD_INGOT, "§9Repaturmateriali", beschreibung));
+
+                    contents.updateOrSet(18, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
+                }else {
+                    Ressource repaturMaterial = item.getHauptMaterial();
+
+                    ArrayList<String> beschreibung = new ArrayList<>();
+                    beschreibung.add("§7Eine reparatur kostetet");
+                    beschreibung.add("§7§e50 €§7 und §e1 "+ repaturMaterial.getName() +"§7.");
+
+                    contents.updateOrSet(12, item.buildBaseItem());
+                    contents.updateOrSet(14, Shopy.getInstance().createItemWithLore(Material.GOLD_INGOT, "§9Repaturmateriali", beschreibung));
+
+                    contents.updateOrSet(22, Shopy.getInstance().createItem(Material.ANVIL, "§9Reparieren"));
+                    contents.updateOrSet(27, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
+                }
+            }
+
+            @Override
+            public void update(Player player, InventoryContents contents) {
+                init(player, contents);
+            }
+        }).build(Shopy.getInstance()).open(shop.getOwner());
+    }
+
+    public void openReparaturTischAuswahl(int seite){
+        RyseInventory.builder().title("§9Reparatur Tisch Seite " + seite).rows(4).provider(new InventoryProvider() {
+            @Override
+            public void init(Player player, InventoryContents contents) {
+                int i = 0;
+                int start_item = (seite - 1) * 27;
+                int max_item = seite * 27;
+                for (ShopItem shopItem : shop.getShopItems()){
+                    if(i < start_item) {
+                        i++;
+                        continue;
+                    }
+                    if(i >= max_item) break;
+
+                    contents.updateOrSet(i - start_item, shopItem.buildBaseItem());
+                    i++;
+                }
+
+                contents.updateOrSet(27, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§7Zurück"));
+                contents.updateOrSet(28, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
+
+                if(seite != 1) contents.updateOrSet(34, Shopy.getInstance().createItem(Material.ARROW, "§7Letzte Seite"));
+                if(!contents.get(26).isEmpty()) contents.updateOrSet(35, Shopy.getInstance().createItem(Material.ARROW, "§7Nächste Seite"));
+            }
+
+            @Override
+            public void update(Player player, InventoryContents contents) {
+                init(player, contents);
+            }
+        }).build(Shopy.getInstance()).open(shop.getOwner());
+    }
+
 }
