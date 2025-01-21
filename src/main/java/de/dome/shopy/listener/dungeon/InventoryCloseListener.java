@@ -15,18 +15,19 @@ public class InventoryCloseListener implements Listener {
     }
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
-        if (!(e.getPlayer() instanceof Player)) return;
-
-        Player p = (Player) e.getPlayer();
-
-        if (e.getView().getTitle().startsWith("§9Item ")) {
-            if (Shopy.getInstance().getSpielerDungeon().containsKey(p.getUniqueId())){
-                Shopy.getInstance().getSpielerDungeon().get(p.getUniqueId()).getWaffenkammerNPC().destroy(p);
-
-                p.sendMessage(Shopy.getInstance().getPrefix() + "Der Waffenkammergeist ist verblasst. Ihr müsst wohl mit den Items auskommen! Viel Glück.");
-                p.playSound(p, Sound.ENTITY_ITEM_BREAK,  1,1);
-            }
-        }
+//        if (!(e.getPlayer() instanceof Player)) return;
+//
+//        Player p = (Player) e.getPlayer();
+//
+//
+//        if (e.getView().getTitle().startsWith("§9Item Lager Seite ")) {
+//            if (Shopy.getInstance().getSpielerDungeon().containsKey(p.getUniqueId())){
+//                Shopy.getInstance().getSpielerDungeon().get(p.getUniqueId()).getWaffenkammerNPC().destroy(p);
+//
+//                p.sendMessage(Shopy.getInstance().getPrefix() + "Der Waffenkammergeist ist verblasst. Ihr müsst wohl mit den Items auskommen! Viel Glück.");
+//                p.playSound(p, Sound.ENTITY_ITEM_BREAK,  1,1);
+//            }
+//        }
     }
 
 }

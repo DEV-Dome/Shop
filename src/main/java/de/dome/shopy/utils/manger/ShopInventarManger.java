@@ -239,16 +239,15 @@ public class ShopInventarManger {
     }
 
     public void openItemLagerInventar(int seite){
-        RyseInventory.builder().title("§9Item Lager Seite " + seite)
-                .rows(6)
-                .provider(new InventoryProvider() {
+        RyseInventory.builder().title("§9Item Lager Seite " + seite).rows(6).provider(new InventoryProvider() {
                     @Override
                     public void init(Player player, InventoryContents contents) {
                         boolean letztesItemGsetzt = false;
+                        int soltZahlerMinus = 0;
 
-                        for(int i = (0 + (seite * 44)); i <= 44 * (seite + 1);i++){
+                        for(int i = (0 + (seite * 44)); i <= 44 * (seite + 1); i++){
                             /* Item Slot unabhängig der Shop Seite. Darf nicht größer 53 sein */
-                            int slot = i - (seite * 44);
+                            int slot = i - (seite * 44) - soltZahlerMinus;
 
                             if(i <= shop.getItemLagerSize() - 1){
                                 if(i <= shop.getShopItems().size() - 1) {
@@ -256,7 +255,10 @@ public class ShopInventarManger {
 
                                     /* Item laden */
                                     ShopItem shopItem = shop.getShopItems().get(i);
-                                    if(shopItem.getHaltbarkeit() <= 0) continue;
+                                    if(shopItem.getHaltbarkeit() <= 0){
+                                        soltZahlerMinus++;
+                                        continue;
+                                    }
 
                                     ArrayList<String> beschreibung = shopItem.getVolleBeschreibung();
                                     if(shopItem.isAusgestellt()){
@@ -267,7 +269,10 @@ public class ShopInventarManger {
 
                                     /* Beschreibung angepassten, je nachdem ob man in einem Dungeon ist */
                                     if(Shopy.getInstance().getSpielerDungeon().containsKey(shop.getOwner().getUniqueId())) {
-                                        if(shopItem.isAusgestellt()) continue;
+                                        if(shopItem.isAusgestellt()){
+                                            soltZahlerMinus++;
+                                            continue;
+                                        }
                                         beschreibung.add("§a- Linksklick zum Item entnehmen");
                                     }else {
                                         beschreibung.add("§c- Rechtsklick zum Löschen");
@@ -290,6 +295,7 @@ public class ShopInventarManger {
                                 }
                             }
                         }
+
                         // Option nicht in einem Dungeon anbieten
                         if(!Shopy.getInstance().getSpielerDungeon().containsKey(shop.getOwner().getUniqueId())) {
                             contents.updateOrSet(45, Shopy.getInstance().createItem(Material.TRAPPED_CHEST, "§7zur Shopübersicht"));
@@ -636,7 +642,6 @@ public class ShopInventarManger {
         RyseInventory.builder().title("§9Verzaubere").rows(inventarGroeße).provider(new InventoryProvider() {
             @Override
             public void init(Player player, InventoryContents contents) {
-
                 ArrayList<String> beschreibung = new ArrayList<>();
                 beschreibung.add("§7Eine verzauberung kostetet");
                 beschreibung.add("§7immer §e1000 €§7. Es ist zufällig,");

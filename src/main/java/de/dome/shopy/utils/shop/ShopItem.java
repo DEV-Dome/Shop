@@ -253,7 +253,6 @@ public class ShopItem {
             });
         }else {
             /* Item Löschen, da es aufgebraucht wurde */
-
             zerstört = true;
         }
 

@@ -99,11 +99,15 @@ public class InventoryClickListenerItemLager implements Listener {
 
                             if(shopItem.HaltbarkeitVerringern()){
                                 /* Item wurde zerstört */
+                                spielerShop.delteShopItemById(shopItem.getId());
                                 p.sendMessage(Shopy.getInstance().getPrefix() + "Die Haltbarkeit dieses Items ist auf 0 gekommen. Deswegen wurde es zerstört!");
+
                                 p.playSound(p, Sound.ENTITY_ITEM_BREAK,  1,1);
                             }else {
                                 p.playSound(p, Sound.ENTITY_ITEM_PICKUP,  1,1);
                             }
+
+                            p.updateInventory();
                         }else {
                             p.sendMessage(Shopy.getInstance().getPrefix() + "Du hast dir dieses Item bereits genommen!");
                         }
