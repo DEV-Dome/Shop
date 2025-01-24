@@ -15,6 +15,7 @@ import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -131,7 +132,13 @@ public class ShopInventarManger {
                         String itemName = "§9" + item.getName() + " " + item.getItemSeltenheit().getFarbe() + " [" + item.getItemSeltenheit().getName() + "]";
 
 
-                        contents.updateOrSet(solt, Shopy.getInstance().createItemWithLore(item.getIcon(), itemName, beschreibung, false, true));
+                        ItemStack craftItem = item.getIcon();
+                        ItemMeta im = craftItem.getItemMeta();
+                        im.setDisplayName(itemName);
+                        im.setLore(beschreibung);
+                        craftItem.setItemMeta(im);
+
+                        contents.updateOrSet(solt, craftItem);
                     } else {
                         String FreischlatTyp = "§cNicht bekannt";
                         Item freischaltItem = Item.getItemByFreischaltItem(item);

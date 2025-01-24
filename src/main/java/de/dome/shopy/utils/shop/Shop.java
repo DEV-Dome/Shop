@@ -251,6 +251,7 @@ public class Shop {
                         int haltbarkeit = 0;
                         int maxHaltbarkeit = 0;
                         ItemVerzauberung itemVerzauberung = null;
+                        String icon = "";
 
                         boolean ausgestellt = false;
                         if(resultItemLager.getInt("ausgestellt") != 0) ausgestellt = true;
@@ -264,9 +265,10 @@ public class Shop {
                             if(resultItemLagerItemWerte.getString("schlussel").equals("max_haltbarkeit")) maxHaltbarkeit = Integer.parseInt(resultItemLagerItemWerte.getString("inhalt"));
                             if(resultItemLagerItemWerte.getString("schlussel").equals("ruestung")) rustung = Double.parseDouble(resultItemLagerItemWerte.getString("inhalt"));
                             if(resultItemLagerItemWerte.getString("schlussel").equals("verzauberung")) itemVerzauberung = ItemVerzauberung.getItemVerzauberungById(Integer.parseInt(resultItemLagerItemWerte.getString("inhalt")));
+                            if(resultItemLagerItemWerte.getString("schlussel").equals("custom_model_data")) icon = resultItemLagerItemWerte.getString("inhalt");
                         }
 
-                        ShopItem newItem = new ShopItem(resultItemLager.getInt("sid"), resultItemLager.getInt("iid"),ItemKategorie.getItemKategorieById(resultItemLager.getInt("item_kategorie")), resultItemLager.getString("name"), resultItemLager.getString("beschreibung"), Material.getMaterial(resultItemLager.getString("icon")), ItemSeltenheit.getItemStufeById(resultItemLager.getInt("shop_item.item_seltenheit")),itemVerzauberung, schaden, angriffsgeschwindigkeit, rustung, haltbarkeit, maxHaltbarkeit, ausgestellt);
+                        ShopItem newItem = new ShopItem(resultItemLager.getInt("sid"), resultItemLager.getInt("iid"),ItemKategorie.getItemKategorieById(resultItemLager.getInt("item_kategorie")), resultItemLager.getString("name"), resultItemLager.getString("beschreibung"), Material.getMaterial(resultItemLager.getString("icon")), ItemSeltenheit.getItemStufeById(resultItemLager.getInt("shop_item.item_seltenheit")),itemVerzauberung, schaden, angriffsgeschwindigkeit, rustung, haltbarkeit, maxHaltbarkeit, ausgestellt, icon);
                         shopItems.add(newItem);
                     }
                 }

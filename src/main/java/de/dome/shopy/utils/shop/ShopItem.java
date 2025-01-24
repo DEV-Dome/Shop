@@ -3,6 +3,7 @@ package de.dome.shopy.utils.shop;
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.Ressource;
 import de.dome.shopy.utils.items.*;
+import dev.lone.itemsadder.api.CustomStack;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -12,6 +13,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -25,7 +27,8 @@ public class ShopItem {
     ItemKategorie itemKategorie;
     String name;
     String beschreibung;
-    Material icon;
+    String customModelData = "";
+    ItemStack icon;
     ItemSeltenheit itemSeltenheit;
     ItemVerzauberung itemVerzauberung;
     double schaden = 0;
@@ -37,12 +40,11 @@ public class ShopItem {
     Item baseItem;
     boolean ausgestellt;
 
-    public ShopItem(int id, int baseItemID, ItemKategorie itemKategorie, String name, String beschreibung, Material icon, ItemSeltenheit itemSeltenheit, ItemVerzauberung itemVerzauberung, double schaden, double angriffsgeschwindigkeit, double rustung, int haltbarkeit, int maxHaltbarkeit, boolean ausgestellt) {
+    public ShopItem(int id, int baseItemID, ItemKategorie itemKategorie, String name, String beschreibung, Material icon, ItemSeltenheit itemSeltenheit, ItemVerzauberung itemVerzauberung, double schaden, double angriffsgeschwindigkeit, double rustung, int haltbarkeit, int maxHaltbarkeit, boolean ausgestellt, String customModelData) {
         this.id = id;
         this.itemKategorie = itemKategorie;
         this.name = name;
         this.beschreibung = beschreibung;
-        this.icon = icon;
         this.itemSeltenheit = itemSeltenheit;
         this.itemVerzauberung = itemVerzauberung;
         this.schaden = roundToTwoDecimalPlaces(schaden);
@@ -52,6 +54,14 @@ public class ShopItem {
         this.maxHaltbarkeit = maxHaltbarkeit;
         this.ausgestellt = ausgestellt;
         baseItem = Item.getItemById(baseItemID);
+
+        /* richtiges Icon setzten */
+        this.icon = baseItem.getIcon();
+        if(!customModelData.equals("")){
+            ItemStack newIcon = CustomStack.getInstance(customModelData).getItemStack();
+            this.icon = newIcon;
+            this.customModelData = customModelData;
+        }
     }
 
     public double getItemPreis(){
@@ -88,8 +98,14 @@ public class ShopItem {
     }
 
     public ItemStack buildBaseItem(){
-        ItemStack item = Shopy.getInstance().createItemWithLore(getIcon(), getVollenName(), getVolleBeschreibung());
+        ItemStack item = baseItem.getIcon();
+        if(!customModelData.equals("")) item = getIcon();
+
         ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(getVollenName());
+        meta.setLore(getVolleBeschreibung());
+        item.setItemMeta(meta);
+
 
         // Entferne alle existierenden Attribute
         meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE);
@@ -171,7 +187,7 @@ public class ShopItem {
         return volleBeschreibung;
     }
 
-    public Material getIcon() {
+    public ItemStack getIcon() {
         return icon;
     }
     public ItemSeltenheit getItemSeltenheit() {
@@ -221,7 +237,7 @@ public class ShopItem {
 
         CompletableFuture.runAsync(() -> {
             Shopy.getInstance().getMySQLConntion().query("DELETE FROM shop_item_werte WHERE item  = '" + id +"' AND schlussel = 'verzauberung'");
-            Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_werte (item, schlussel, inhalt) VALUES ('" + getId() + "', 'verzauberung','" + itemVerzauberung.getId() + "')");
+            Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_werte (item, schlussel, inhalt) VALUES ('" + id + "', 'verzauberung','" + itemVerzauberung.getId() + "')");
         });
     }
 

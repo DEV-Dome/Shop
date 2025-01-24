@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -84,33 +85,33 @@ public class InventoryClickListenerItemLager implements Listener {
                 }else {
                     if (Shopy.getInstance().getSpielerDungeon().containsKey(p.getUniqueId())){
                         /* Wenn Itemlager im Dungeon geöffnet wurde */
+                        int itemID = Integer.parseInt(item.getItemMeta().getLore().get(0).split(":")[1].substring(1));
+                        ShopItem shopItem = spielerShop.getShopItemById(itemID);
 
-                        /* Check ob, dass Item schon genommen wurde */
-                        if(!p.getInventory().contains(item)){
-                            ItemMeta im = item.getItemMeta();
-                            im.setUnbreakable(true);
-                            item.setItemMeta(im);
+                        ItemStack gebeSpielerItem = shopItem.buildBaseItem();
 
-                            p.getInventory().addItem(item);
+                        ItemMeta im = gebeSpielerItem.getItemMeta();
+                        im.setUnbreakable(true);
+                        im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+                        gebeSpielerItem.setItemMeta(im);
 
-                            /* ShopItem holen und haltbarkeit um 1 runtersetzten */
-                            int itemID = Integer.parseInt(item.getItemMeta().getLore().get(0).split(":")[1].substring(1));
-                            ShopItem shopItem = spielerShop.getShopItemById(itemID);
+                        p.getInventory().addItem(gebeSpielerItem);
 
-                            if(shopItem.HaltbarkeitVerringern()){
-                                /* Item wurde zerstört */
-                                spielerShop.delteShopItemById(shopItem.getId());
-                                p.sendMessage(Shopy.getInstance().getPrefix() + "Die Haltbarkeit dieses Items ist auf 0 gekommen. Deswegen wurde es zerstört!");
+                        /* ShopItem holen und haltbarkeit um 1 runtersetzten */
 
-                                p.playSound(p, Sound.ENTITY_ITEM_BREAK,  1,1);
-                            }else {
-                                p.playSound(p, Sound.ENTITY_ITEM_PICKUP,  1,1);
-                            }
 
-                            p.updateInventory();
+                        if(shopItem.HaltbarkeitVerringern()){
+                            /* Item wurde zerstört */
+                            spielerShop.delteShopItemById(shopItem.getId());
+                            p.sendMessage(Shopy.getInstance().getPrefix() + "Die Haltbarkeit dieses Items ist auf 0 gekommen. Deswegen wurde es zerstört!");
+
+                            p.playSound(p, Sound.ENTITY_ITEM_BREAK,  1,1);
                         }else {
-                            p.sendMessage(Shopy.getInstance().getPrefix() + "Du hast dir dieses Item bereits genommen!");
+                            p.playSound(p, Sound.ENTITY_ITEM_PICKUP,  1,1);
                         }
+
+                        p.updateInventory();
+
                     }
                 }
             }

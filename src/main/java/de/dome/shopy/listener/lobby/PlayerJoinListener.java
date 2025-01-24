@@ -4,13 +4,18 @@ import de.dome.shopy.Shopy;
 import de.dome.shopy.commands.welt.LadeWeltCMD;
 import de.dome.shopy.listener.shop.BlockBreakListener;
 import de.dome.shopy.utils.shop.Shop;
+import dev.lone.itemsadder.api.CustomStack;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 

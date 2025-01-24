@@ -42,6 +42,8 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (502, "freigeschlatet_item", 504);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (502, "freigeschlatet_menge", 13);
 
+    INSERT INTO item_werte (item, schlussel, inhalt) VALUES (502, "custom_model_data", "lunardragonset:lunar_dragonchestplate");
+
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (502, "min_ruestung", 0.6);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (502, "max_ruestung", 0.8);
 

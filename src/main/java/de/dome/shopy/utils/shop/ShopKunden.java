@@ -176,7 +176,7 @@ public class ShopKunden {
         for(ItemKategorie optionAusgruestet : interessanteKategorien){
             for(ShopItemVorlage shopItemVorlage : shop.getShopItemVorlage()){
                 if(!shopItemVorlage.isfreigeschaltet() && shopItemVorlage.getItem().getItemKategorie() == optionAusgruestet){
-                    Equipment.EquipmentSlot equipmentSlot = Shopy.getInstance().getEquipmentSlot(shopItemVorlage.getItem().getIcon());
+                    Equipment.EquipmentSlot equipmentSlot = Shopy.getInstance().getEquipmentSlot(shopItemVorlage.getItem().getIcon().getType());
                     if(equipmentSlot != null){
                         npc.getOrAddTrait(Equipment.class).set(equipmentSlot, new ItemStack(shopItemVorlage.getItem().getIcon()));
                         break;

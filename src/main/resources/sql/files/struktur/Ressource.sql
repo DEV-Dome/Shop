@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS ressource (
     icon VARCHAR(250) NOT NULL,
     name VARCHAR(50) NOT NULL,
     beschreibung TEXT NOT NULL,
-    typ ENUM('STANDART', 'DUNGEON-LOOT', 'SPECIAL', 'AUFWERTER', 'WAHRUNG') NOT NULL,
+    typ ENUM('STANDART', 'DUNGEON-LOOT', 'SPECIAL', 'AUFWERTER', 'SET', 'WAHRUNG') NOT NULL,
     minimale_kosten DECIMAL(8,2) NOT NULL,
     maximale_kosten DECIMAL(8,2) NOT NULL,
     reinfolge INT NOT NULL

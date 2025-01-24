@@ -137,7 +137,7 @@ public class InventoryClickListenerWerkbank implements Listener {
                     double ruestung = realItem.getMinRuestung() + (realItem.getMaxRuestung() - realItem.getMinRuestung()) * random.nextDouble();
 
 
-                    spielerShop.getShopItems().add(new ShopItem(platzhalterID, realItem.getId(), realItem.getItemKategorie(), realItem.getName(), realItem.getBeschreibung(), realItem.getIcon(), realItem.getItemSeltenheit(), null, waffenSchaden, waffenAngriffsgeschwindigkeit, ruestung, 3, 3, false));
+                    spielerShop.getShopItems().add(new ShopItem(platzhalterID, realItem.getId(), realItem.getItemKategorie(), realItem.getName(), realItem.getBeschreibung(), realItem.getIcon().getType(), realItem.getItemSeltenheit(), null, waffenSchaden, waffenAngriffsgeschwindigkeit, ruestung, 3, 3, false, realItem.getCustomModelData()));
                     CompletableFuture.runAsync(() -> {
                         Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item (shop, item, item_seltenheit) VALUES ('" + spielerShop.getShopId() + "', '" + realItem.getId() + "', '" + realItem.getItemSeltenheit().getId() + "')");
 
@@ -154,6 +154,10 @@ public class InventoryClickListenerWerkbank implements Listener {
                                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_werte (item, schlussel, inhalt) VALUES ('" + queryGetItemIdResult.getInt("id") + "', 'ruestung','" + ruestung + "')");
                                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_werte (item, schlussel, inhalt) VALUES ('" + queryGetItemIdResult.getInt("id") + "', 'haltbarkeit','3')");
                                 Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_werte (item, schlussel, inhalt) VALUES ('" + queryGetItemIdResult.getInt("id") + "', 'max_haltbarkeit','3')");
+                                if(!realItem.getCustomModelData().equals("")){
+                                    Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_werte (item, schlussel, inhalt) VALUES ('" + queryGetItemIdResult.getInt("id") + "', 'custom_model_data','" + realItem.getCustomModelData() + "')");
+
+                                }
                             }
                         } catch (SQLException ex) {
                             throw new RuntimeException(ex);

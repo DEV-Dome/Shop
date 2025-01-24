@@ -3,8 +3,11 @@ package de.dome.shopy.utils.items;
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.Ressource;
 import de.dome.shopy.utils.shop.Shop;
+import dev.lone.itemsadder.api.CustomStack;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,9 +19,10 @@ public class Item {
     ItemKategorie itemKategorie;
     String name = "Nicht geladen ....";
     String beschreibung;
-    Material icon;
+    ItemStack icon;
     ItemSeltenheit itemSeltenheit;
     String freischlatTyp;
+    String customModelData = "";
     int freischaltItemID;
     int freischaltMenge;
     boolean immerFreigeschaltet;
@@ -35,7 +39,7 @@ public class Item {
     public static ArrayList<Item> itemList;
     public ArrayList<ItemRessourecenKosten> ressourecsKostenList;
 
-    public Item(int id, ItemKategorie itemKategorie, String name, String beschreibung, Material icon) {
+    public Item(int id, ItemKategorie itemKategorie, String name, String beschreibung, ItemStack icon) {
         this.id = id;
         this.itemKategorie = itemKategorie;
         this.name = name;
@@ -94,7 +98,7 @@ public class Item {
         return beschreibung;
     }
 
-    public Material getIcon() {
+    public ItemStack getIcon() {
         return icon;
     }
 
@@ -158,6 +162,10 @@ public class Item {
         return maxRuestung;
     }
 
+    public String getCustomModelData() {
+        return customModelData;
+    }
+
     public Ressource getHauptMaterial() {
         return hauptMaterial;
     }
@@ -171,17 +179,22 @@ public class Item {
 
                 ResultSet resultItem = Shopy.getInstance().getMySQLConntion().resultSet(queryRessourecs);
                 while (resultItem.next()) {
-                    Item newItem = new Item(resultItem.getInt("id"), ItemKategorie.getItemKategorieById(resultItem.getInt("item_kategorie")), resultItem.getString("name"), resultItem.getString("beschreibung"), Material.getMaterial(resultItem.getString("icon")));
+                    ItemStack hinzugefuegendesIcons = Shopy.getInstance().createItem(Material.getMaterial(resultItem.getString("icon")), "");
+                    Item newItem = new Item(resultItem.getInt("id"), ItemKategorie.getItemKategorieById(resultItem.getInt("item_kategorie")), resultItem.getString("name"), resultItem.getString("beschreibung"), hinzugefuegendesIcons);
+
 
                     /*Kosten Laden*/
                     String queryRessourecsKosten = "SELECT * FROM item_kosten WHERE item = " + newItem.getId();
                     ResultSet resultItemKosten = Shopy.getInstance().getMySQLConntion().resultSet(queryRessourecsKosten);
+
                     while (resultItemKosten.next()) {
                         newItem.getRessourecsKostenList().add(new ItemRessourecenKosten(resultItemKosten.getInt("id"), newItem, Ressource.getRessoureByID(resultItemKosten.getInt("ressource")), resultItemKosten.getInt("menge")));
                     }
+
                     /*Werte Laden*/
                     String queryRessourecsWerte = "SELECT * FROM item_werte WHERE item = " + newItem.getId();
                     ResultSet resultItemWerte = Shopy.getInstance().getMySQLConntion().resultSet(queryRessourecsWerte);
+
                     while (resultItemWerte.next()) {
                         if(resultItemWerte.getString("schlussel").equals("shop_xp")) newItem.shopXp = Integer.parseInt(resultItemWerte.getString("inhalt"));
                         if(resultItemWerte.getString("schlussel").equals("kategorie_xp")) newItem.kategorieXp = Integer.parseInt(resultItemWerte.getString("inhalt"));
@@ -199,6 +212,13 @@ public class Item {
 
                         if(resultItemWerte.getString("schlussel").equals("min_ruestung")) newItem.minRuestung = Double.parseDouble(resultItemWerte.getString("inhalt"));
                         if(resultItemWerte.getString("schlussel").equals("max_ruestung")) newItem.maxRuestung = Double.parseDouble(resultItemWerte.getString("inhalt"));
+
+                        /* Wenn eine Cotom Textur gefunden wird, anwenden! */
+                        if(resultItemWerte.getString("schlussel").equals("custom_model_data")){
+                            ItemStack newIcon = CustomStack.getInstance(resultItemWerte.getString("inhalt")).getItemStack();
+                            newItem.icon = newIcon;
+                            newItem.customModelData = resultItemWerte.getString("inhalt");
+                        }
 
                         if(resultItemWerte.getString("schlussel").equals("immer_freigeschlatet")){
                             if(resultItemWerte.getString("inhalt").equalsIgnoreCase("ja")) newItem.immerFreigeschaltet = true;
