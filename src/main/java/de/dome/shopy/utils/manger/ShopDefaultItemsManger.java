@@ -20,6 +20,7 @@ public class ShopDefaultItemsManger {
     ItemStack upgrader;
     ItemStack verzauber;
     ItemStack reparaturTisch;
+    ItemStack setAufwerter;
 
     HashMap<Material, ItemStack> standertItemMatrialList;
 
@@ -152,6 +153,18 @@ public class ShopDefaultItemsManger {
 
         reparaturTisch = Shopy.getInstance().createItemWithLore(Material.ANVIL, "§9Reparatur Tisch", beschreibung);
         standertItemMatrialList.put(reparaturTisch.getType(), reparaturTisch);
+
+        beschreibung = new ArrayList<>();
+        beschreibung.add("§5Mit diesem gerät kannst du,");
+        beschreibung.add("§5Die Items ins Set's verwandel. ");
+        beschreibung.add("");
+        beschreibung.add(buildingHinweis);
+        beschreibung.add(buildingHinweis1);
+        beschreibung.add(buildingHinweis2);
+        beschreibung.add(buildingHinweis3);
+
+        setAufwerter = Shopy.getInstance().createItemWithLore(Material.CALIBRATED_SCULK_SENSOR, "§9Setaufwerter", beschreibung);
+        standertItemMatrialList.put(setAufwerter.getType(), setAufwerter);
     }
 
     public static ShopDefaultItemsManger INSTANCE() {
@@ -202,5 +215,9 @@ public class ShopDefaultItemsManger {
 
     public ItemStack getReparaturTisch() {
         return reparaturTisch.clone();
+    }
+
+    public ItemStack getSetAufwerter() {
+        return setAufwerter.clone();
     }
 }

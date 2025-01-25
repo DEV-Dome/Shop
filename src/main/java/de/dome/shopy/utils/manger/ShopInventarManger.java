@@ -357,6 +357,9 @@ public class ShopInventarManger {
                             }else if(solt == 20 && type.equals("STANDART")){
                                 solt += 8;
                                 zaheler = 0;
+                            }else if(solt == 14 && type.equals("AUFWERTER")){
+                                solt += 5;
+                                zaheler = 0;
                             }else {
                                 solt++;
                             }

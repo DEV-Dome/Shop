@@ -365,7 +365,7 @@ public class NPCInteractListener implements Listener {
                     contents.updateOrSet(19, updateLoreMitPreis(ShopDefaultItemsManger.INSTANCE().getUpgrader(), 5000));
                     contents.updateOrSet(20, updateLoreMitPreis(ShopDefaultItemsManger.INSTANCE().getVerzauber(), 2000));
                     contents.updateOrSet(21, updateLoreMitPreis(ShopDefaultItemsManger.INSTANCE().getReparaturTisch(), 750));
-
+                    contents.updateOrSet(22, updateLoreMitPreis(ShopDefaultItemsManger.INSTANCE().getSetAufwerter(), 6500));
 
                     contents.updateOrSet(27, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
                 }

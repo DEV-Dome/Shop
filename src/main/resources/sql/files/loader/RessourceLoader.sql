@@ -66,6 +66,9 @@ INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten
 INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('PAPER', 'Schriftrollenpapier', 'Auf dieses Papier können neue Entwürfe gezeichnet werden', 'AUFWERTER', 5, '0', '0');
 
 /* SET Ressourcen */
---INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('LIME_DYE', 'Setaufwärter \'Fox Returns\'', 'Mit diesem Gegenstand kann das set\n\'Fox Returns\' geschaffen werden.', 'SET', 6, '0', '0');
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('RABBIT_FOOT', 'Setaufwärter \'Fox Returns\'', 'Mit diesem Gegenstand kann das set\n\'Fox Returns\' geschaffen werden.', 'AUFWERTER', 6, '0', '0');
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('FIREWORK_ROCKET', 'Setaufwärter \'Kamikaze\'', 'Mit diesem Gegenstand kann das set\n\'Kamikaze\' geschaffen werden.', 'AUFWERTER', 7, '0', '0');
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('ENDER_PEARL', 'Setaufwärter \'Enderman\'', 'Mit diesem Gegenstand kann das set\n\'Enderman\' geschaffen werden.', 'AUFWERTER', 8, '0', '0');
+INSERT INTO ressource (icon, name, beschreibung, typ, reinfolge, minimale_kosten, maximale_kosten) VALUES ('REDSTONE', 'Setaufwärter \'Low Live\'', 'Mit diesem Gegenstand kann das set\n\'Low Live\' geschaffen werden.', 'AUFWERTER', 9, '0', '0');
 
 
