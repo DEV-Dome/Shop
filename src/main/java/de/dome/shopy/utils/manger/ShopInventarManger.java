@@ -2,10 +2,7 @@ package de.dome.shopy.utils.manger;
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.Ressource;
-import de.dome.shopy.utils.items.Item;
-import de.dome.shopy.utils.items.ItemKategorie;
-import de.dome.shopy.utils.items.ItemRessourecenKosten;
-import de.dome.shopy.utils.items.ItemSeltenheit;
+import de.dome.shopy.utils.items.*;
 import de.dome.shopy.utils.shop.*;
 import de.dome.shopy.utils.shop.shophandwerksaufgabe.ShopHandwerksAufgabeItem;
 import io.github.rysefoxx.inventory.plugin.content.IntelligentItemData;
@@ -690,6 +687,7 @@ public class ShopInventarManger {
                         continue;
                     }
                     if(shopItem.isAusgestellt()) continue;
+                    if(shopItem.getItemVerzauberungenSet() != null) continue;
                     if(shopItem.getItemSeltenheit().getId() < 2) continue;
                     if(i >= max_item) break;
 
@@ -725,7 +723,7 @@ public class ShopInventarManger {
                     beschreibung.add("§7§e50 €§7 und §e1 Repatur Material§7.");
 
                     contents.updateOrSet(12, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§7Item auswählen"));
-                    contents.updateOrSet(14, Shopy.getInstance().createItemWithLore(Material.GOLD_INGOT, "§9Repaturmateriali", beschreibung));
+                    contents.updateOrSet(14, Shopy.getInstance().createItemWithLore(Material.GOLD_INGOT, "§9Repaturmaterialien", beschreibung));
 
                     contents.updateOrSet(18, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
                 }else {
@@ -736,7 +734,7 @@ public class ShopInventarManger {
                     beschreibung.add("§7§e50 €§7 und §e1 "+ repaturMaterial.getName() +"§7.");
 
                     contents.updateOrSet(12, item.buildBaseItem());
-                    contents.updateOrSet(14, Shopy.getInstance().createItemWithLore(Material.GOLD_INGOT, "§9Repaturmateriali", beschreibung));
+                    contents.updateOrSet(14, Shopy.getInstance().createItemWithLore(Material.GOLD_INGOT, "§9Repaturmaterialien", beschreibung));
 
                     contents.updateOrSet(22, Shopy.getInstance().createItem(Material.ANVIL, "§9Reparieren"));
                     contents.updateOrSet(27, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
@@ -782,4 +780,131 @@ public class ShopInventarManger {
         }).build(Shopy.getInstance()).open(shop.getOwner());
     }
 
+    public void openSetAufwerter(ShopItem item, ItemVerzauberungSet itemVerzauberungSet){
+        /* Größe je nach ansicht festlegen */
+        int inventarGroeße = 3;
+        if(item != null) inventarGroeße = 4;
+
+        RyseInventory.builder().title("§9Set-Aufwerter").rows(inventarGroeße).provider(new InventoryProvider() {
+            @Override
+            public void init(Player player, InventoryContents contents) {
+                if(item == null){
+                    ArrayList<String> beschreibung = new ArrayList<>();
+                    beschreibung.add("§7Eine Set Aufwertung kostetet");
+                    beschreibung.add("§7§1000 €§7 und §e1 Set-Material§7.");
+
+                    contents.updateOrSet(11, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§7Item auswählen"));
+
+                    if(itemVerzauberungSet != null){
+                        contents.updateOrSet(14, itemVerzauberungSet.buildIconBaseItem(shop));
+                    }else{
+                        contents.updateOrSet(14, Shopy.getInstance().createItem(Material.ALLAY_SPAWN_EGG, "§7Set auswählen"));
+                    }
+
+                    contents.updateOrSet(15, Shopy.getInstance().createItemWithLore(Material.GOLD_INGOT, "§9Aufwertungsmaterialien", beschreibung));
+
+                    contents.updateOrSet(18, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
+                }else {
+                    ArrayList<String> beschreibung = new ArrayList<>();
+                    beschreibung.add("§7Eine Set Aufwertung kostetet");
+                    beschreibung.add("§7§1000 €§7 und §e1 Set-Material§7.");
+
+                    contents.updateOrSet(11, item.buildBaseItem());
+
+                    if(itemVerzauberungSet != null){
+                        contents.updateOrSet(14, itemVerzauberungSet.buildIconBaseItem(shop));
+                        contents.updateOrSet(22, Shopy.getInstance().createItem(Material.CALIBRATED_SCULK_SENSOR, "§9Aufwerten"));
+                    }else{
+                        contents.updateOrSet(14, Shopy.getInstance().createItem(Material.ALLAY_SPAWN_EGG, "§7Set auswählen"));
+                    }
+
+                    contents.updateOrSet(15, Shopy.getInstance().createItemWithLore(Material.GOLD_INGOT, "§9Aufwertungsmaterialien", beschreibung));
+
+                    contents.updateOrSet(27, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
+                }
+            }
+
+            @Override
+            public void update(Player player, InventoryContents contents) {
+                init(player, contents);
+            }
+        }).build(Shopy.getInstance()).open(shop.getOwner());
+    }
+
+    public void openSetAufwerterItemAuswahl(int seite, ItemVerzauberungSet itemVerzauberungSet){
+        RyseInventory.builder().title("§9Set-Aufwerter Itemauswahl Seite " + seite).rows(4).provider(new InventoryProvider() {
+            @Override
+            public void init(Player player, InventoryContents contents) {
+                int i = 0;
+                int start_item = (seite - 1) * 27;
+                int max_item = seite * 27;
+                for (ShopItem shopItem : shop.getShopItems()){
+                    if(i < start_item) {
+                        i++;
+                        continue;
+                    }
+                    if(i >= max_item) break;
+                    if(shopItem.getItemSeltenheit().getId() != 4) continue;
+                    if(shopItem.getItemKategorie().getId() == 1 || shopItem.getItemKategorie().getId() == 2 || shopItem.getItemKategorie().getId() == 3) continue;
+                    if(shopItem.getItemVerzauberung() != null) continue;
+
+                    contents.updateOrSet(i - start_item, shopItem.buildBaseItem());
+                    i++;
+                }
+
+                contents.updateOrSet(27, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§7Zurück"));
+                contents.updateOrSet(28, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
+
+                if(itemVerzauberungSet != null) contents.updateOrSet(31,  itemVerzauberungSet.buildIconBaseItem(shop));
+
+
+                if(seite != 1) contents.updateOrSet(34, Shopy.getInstance().createItem(Material.ARROW, "§7Letzte Seite"));
+                if(!contents.get(26).isEmpty()) contents.updateOrSet(35, Shopy.getInstance().createItem(Material.ARROW, "§7Nächste Seite"));
+            }
+
+            @Override
+            public void update(Player player, InventoryContents contents) {
+                init(player, contents);
+            }
+        }).build(Shopy.getInstance()).open(shop.getOwner());
+    }
+    public void openSetAufwerterSetAuswahl(int seite, ShopItem shopItem){
+        RyseInventory.builder().title("§9Set-Aufwerter Setauswahl Seite " + seite).rows(4).provider(new InventoryProvider() {
+            @Override
+            public void init(Player player, InventoryContents contents) {
+                int i = 0;
+                int start_item = (seite - 1) * 27;
+                int max_item = seite * 27;
+                for (ItemVerzauberungSet itemVerzauberungSet : ItemVerzauberungSet.getItemItemVerzauberungSetList()){
+                    if(i < start_item) {
+                        i++;
+                        continue;
+                    }
+                    if(i >= max_item) break;
+
+                    ArrayList<String> beschreibung = new ArrayList<>();
+                    beschreibung.add("§7Um das Item aufzuwerten, benötigst ");
+                    beschreibung.add("§7du den endsprechenden Aufwerter:");
+                    beschreibung.add("");
+                    beschreibung.add("§e" + shop.getShopRessourenManger().getRessourceValue(itemVerzauberungSet.getAufwerter()) + " §7/ §e1 §7Aufwerter");
+
+                    contents.updateOrSet(i - start_item, itemVerzauberungSet.buildIconBaseItem(shop));
+                    i++;
+                }
+
+                contents.updateOrSet(27, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§7Zurück"));
+                contents.updateOrSet(28, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
+
+                if(shopItem != null) contents.updateOrSet(31, shopItem.buildBaseItem());
+
+                if(seite != 1) contents.updateOrSet(34, Shopy.getInstance().createItem(Material.ARROW, "§7Letzte Seite"));
+                if(!contents.get(26).isEmpty()) contents.updateOrSet(35, Shopy.getInstance().createItem(Material.ARROW, "§7Nächste Seite"));
+            }
+
+            @Override
+            public void update(Player player, InventoryContents contents) {
+                init(player, contents);
+            }
+        }).build(Shopy.getInstance()).open(shop.getOwner());
+    }
 }

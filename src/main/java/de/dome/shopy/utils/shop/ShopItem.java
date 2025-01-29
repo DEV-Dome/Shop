@@ -4,16 +4,13 @@ import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.Ressource;
 import de.dome.shopy.utils.items.*;
 import dev.lone.itemsadder.api.CustomStack;
-import org.bukkit.Bukkit;
+import net.citizensnpcs.api.trait.trait.Equipment;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -31,6 +28,7 @@ public class ShopItem {
     ItemStack icon;
     ItemSeltenheit itemSeltenheit;
     ItemVerzauberung itemVerzauberung;
+    ItemVerzauberungSet itemVerzauberungSet;
     double schaden = 0;
     double angriffsgeschwindigkeit = 0;
     double rustung = 0;
@@ -40,19 +38,21 @@ public class ShopItem {
     Item baseItem;
     boolean ausgestellt;
 
-    public ShopItem(int id, int baseItemID, ItemKategorie itemKategorie, String name, String beschreibung, Material icon, ItemSeltenheit itemSeltenheit, ItemVerzauberung itemVerzauberung, double schaden, double angriffsgeschwindigkeit, double rustung, int haltbarkeit, int maxHaltbarkeit, boolean ausgestellt, String customModelData) {
+    public ShopItem(int id, int baseItemID, ItemKategorie itemKategorie, String name, String beschreibung, Material icon, ItemSeltenheit itemSeltenheit, ItemVerzauberung itemVerzauberung, ItemVerzauberungSet itemVerzauberungSet, double schaden, double angriffsgeschwindigkeit, double rustung, int haltbarkeit, int maxHaltbarkeit, boolean ausgestellt, String customModelData) {
         this.id = id;
         this.itemKategorie = itemKategorie;
         this.name = name;
         this.beschreibung = beschreibung;
         this.itemSeltenheit = itemSeltenheit;
         this.itemVerzauberung = itemVerzauberung;
+        this.itemVerzauberungSet = itemVerzauberungSet;
         this.schaden = roundToTwoDecimalPlaces(schaden);
         this.angriffsgeschwindigkeit = roundToTwoDecimalPlaces(angriffsgeschwindigkeit);
         this.rustung = roundToTwoDecimalPlaces(rustung);
         this.haltbarkeit = haltbarkeit;
         this.maxHaltbarkeit = maxHaltbarkeit;
         this.ausgestellt = ausgestellt;
+
         baseItem = Item.getItemById(baseItemID);
 
         /* richtiges Icon setzten */
@@ -86,9 +86,10 @@ public class ShopItem {
                 if(itemSeltenheit.getId() == 5) prozentErhoert = 25;
 
                 preis += preis * ((double) (25 + prozentErhoert) / 100);
-            }
-            else preis += preis * ((double) 25 / 100);
+            } else preis += preis * ((double) 25 / 100);
         }
+        if(itemVerzauberungSet != null) preis += preis * ((double) (30) / 100);
+
 
         return preis;
     }
@@ -100,6 +101,12 @@ public class ShopItem {
     public ItemStack buildBaseItem(){
         ItemStack item = baseItem.getIcon();
         if(!customModelData.equals("")) item = getIcon();
+        if(itemVerzauberungSet != null){
+            if(Shopy.getInstance().getEquipmentSlot(item.getType()) == Equipment.EquipmentSlot.HELMET) item = CustomStack.getInstance(itemVerzauberungSet.getCustomModelDataHelm()).getItemStack();
+            if(Shopy.getInstance().getEquipmentSlot(item.getType()) == Equipment.EquipmentSlot.CHESTPLATE) item = CustomStack.getInstance(itemVerzauberungSet.getCustomModelDataRuestung()).getItemStack();
+            if(Shopy.getInstance().getEquipmentSlot(item.getType()) == Equipment.EquipmentSlot.LEGGINGS) item = CustomStack.getInstance(itemVerzauberungSet.getCustomModelDataHose()).getItemStack();
+            if(Shopy.getInstance().getEquipmentSlot(item.getType()) == Equipment.EquipmentSlot.BOOTS) item = CustomStack.getInstance(itemVerzauberungSet.getCustomModelDataSchuhe()).getItemStack();
+        }
 
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(getVollenName());
@@ -150,8 +157,6 @@ public class ShopItem {
     }
 
 
-
-
     public String getBeschreibung() {
         return beschreibung;
     }
@@ -170,13 +175,26 @@ public class ShopItem {
         volleBeschreibung.add("§7Durchschnittspreis: §e" + Math.round(getItemPreis() * 100.0) / 100.0);
         volleBeschreibung.add("");
 
-        /*Verzauberung */
+        /* Verzauberung */
         if(itemVerzauberung != null){
             volleBeschreibung.add("§5" + itemVerzauberung.getName());
             volleBeschreibung.add("§5" + itemVerzauberung.getBeschreibung());
             volleBeschreibung.add("");
-        }
 
+        }
+        /* Set*/
+        if(itemVerzauberungSet != null){
+            volleBeschreibung.add("§2" + itemVerzauberungSet.getName() + ":");
+            volleBeschreibung.add("§7" + itemVerzauberungSet.getBeschreibung());
+            volleBeschreibung.add("");
+            volleBeschreibung.add("§21ter Set Bonus (2 Teile):");
+            volleBeschreibung.add("§7" + itemVerzauberungSet.getVerbesserung1());
+            volleBeschreibung.add("");
+            volleBeschreibung.add("§22ter Set Bonus (4 Teile):");
+            volleBeschreibung.add("§7" + itemVerzauberungSet.getVerbesserung2());
+
+            volleBeschreibung.add("");
+        }
         /*Beschreibung*/
         String[] beschreibungsArray = getBeschreibung().split("\n");
 
@@ -218,7 +236,11 @@ public class ShopItem {
         return ausgestellt;
     }
 
-    public void setAusgestellt(boolean ausgestellt,int austellID) {
+    public ItemVerzauberungSet getItemVerzauberungenSet() {
+        return itemVerzauberungSet;
+    }
+
+    public void setAusgestellt(boolean ausgestellt, int austellID) {
         this.ausgestellt = ausgestellt;
 
         if(ausgestellt){
@@ -238,6 +260,14 @@ public class ShopItem {
         CompletableFuture.runAsync(() -> {
             Shopy.getInstance().getMySQLConntion().query("DELETE FROM shop_item_werte WHERE item  = '" + id +"' AND schlussel = 'verzauberung'");
             Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_werte (item, schlussel, inhalt) VALUES ('" + id + "', 'verzauberung','" + itemVerzauberung.getId() + "')");
+        });
+    }
+    public void setItemVerzauberungSet(ItemVerzauberungSet itemVerzauberungSet) {
+        this.itemVerzauberungSet = itemVerzauberungSet;
+
+        CompletableFuture.runAsync(() -> {
+            Shopy.getInstance().getMySQLConntion().query("DELETE FROM shop_item_werte WHERE item  = '" + id +"' AND schlussel = 'verzauberung_set'");
+            Shopy.getInstance().getMySQLConntion().query("INSERT INTO shop_item_werte (item, schlussel, inhalt) VALUES ('" + id + "', 'verzauberung_set','" + itemVerzauberungSet.getId() + "')");
         });
     }
 
@@ -341,6 +371,7 @@ public class ShopItem {
         bd = bd.setScale(2, RoundingMode.HALF_UP);
         return bd.doubleValue();
     }
+
 
 
 

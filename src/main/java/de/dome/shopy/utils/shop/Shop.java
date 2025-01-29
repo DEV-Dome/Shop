@@ -2,21 +2,16 @@ package de.dome.shopy.utils.shop;
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.Cuboid;
-import de.dome.shopy.utils.Ressource;
 import de.dome.shopy.utils.items.*;
 import de.dome.shopy.utils.manger.ShopInventarManger;
 import de.dome.shopy.utils.shop.shophandwerksaufgabe.ShopHandwerksAufgabe;
 import de.dome.shopy.utils.shop.shophandwerksaufgabe.ShopHandwerksAufgabeItem;
-import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
-import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import org.bukkit.*;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SpawnCategory;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -251,6 +246,7 @@ public class Shop {
                         int haltbarkeit = 0;
                         int maxHaltbarkeit = 0;
                         ItemVerzauberung itemVerzauberung = null;
+                        ItemVerzauberungSet itemVerzauberungSet = null;
                         String icon = "";
 
                         boolean ausgestellt = false;
@@ -265,10 +261,11 @@ public class Shop {
                             if(resultItemLagerItemWerte.getString("schlussel").equals("max_haltbarkeit")) maxHaltbarkeit = Integer.parseInt(resultItemLagerItemWerte.getString("inhalt"));
                             if(resultItemLagerItemWerte.getString("schlussel").equals("ruestung")) rustung = Double.parseDouble(resultItemLagerItemWerte.getString("inhalt"));
                             if(resultItemLagerItemWerte.getString("schlussel").equals("verzauberung")) itemVerzauberung = ItemVerzauberung.getItemVerzauberungById(Integer.parseInt(resultItemLagerItemWerte.getString("inhalt")));
+                            if(resultItemLagerItemWerte.getString("schlussel").equals("verzauberung_set")) itemVerzauberungSet = ItemVerzauberungSet.getItemVerzauberungenSetById(Integer.parseInt(resultItemLagerItemWerte.getString("inhalt")));
                             if(resultItemLagerItemWerte.getString("schlussel").equals("custom_model_data")) icon = resultItemLagerItemWerte.getString("inhalt");
                         }
 
-                        ShopItem newItem = new ShopItem(resultItemLager.getInt("sid"), resultItemLager.getInt("iid"),ItemKategorie.getItemKategorieById(resultItemLager.getInt("item_kategorie")), resultItemLager.getString("name"), resultItemLager.getString("beschreibung"), Material.getMaterial(resultItemLager.getString("icon")), ItemSeltenheit.getItemStufeById(resultItemLager.getInt("shop_item.item_seltenheit")),itemVerzauberung, schaden, angriffsgeschwindigkeit, rustung, haltbarkeit, maxHaltbarkeit, ausgestellt, icon);
+                        ShopItem newItem = new ShopItem(resultItemLager.getInt("sid"), resultItemLager.getInt("iid"),ItemKategorie.getItemKategorieById(resultItemLager.getInt("item_kategorie")), resultItemLager.getString("name"), resultItemLager.getString("beschreibung"), Material.getMaterial(resultItemLager.getString("icon")), ItemSeltenheit.getItemStufeById(resultItemLager.getInt("shop_item.item_seltenheit")),itemVerzauberung, itemVerzauberungSet,schaden, angriffsgeschwindigkeit, rustung, haltbarkeit, maxHaltbarkeit, ausgestellt, icon);
                         shopItems.add(newItem);
                     }
                 }

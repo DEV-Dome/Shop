@@ -63,7 +63,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (503, "min_ruestung", 0.75);
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (503, "max_ruestung", 1);
 
-INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('504', '5', 'LEATHER_CHESTPLATE', 'Assassinen Rüstung', 'Eine der Besten leichten Rüstungen die Es gibt.\nSchützen tu sie trotzdem nicht', 1, 5);
+INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('504', '5', 'LEATHER_CHESTPLATE', 'Assassinen Rüstung', 'Eine der Besten leichten Rüstungen die es gibt.\nSchützen tut sie trotzdem nicht', 1, 5);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (504, 8, 8);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (504, 9, 2);
 
@@ -80,7 +80,7 @@ INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit,
     INSERT INTO item_werte (item, schlussel, inhalt) VALUES (504, "max_ruestung", 1.1);
 
 -- SEITE 2: Eisen Rüstung
-INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('505', '5', 'IRON_CHESTPLATE', 'Rostige Rüstung', 'Ist diese Rüstung schon Braun?', 1, 6);
+INSERT INTO item (id, item_kategorie, icon, name, beschreibung, item_seltenheit, reinfolge) VALUES ('505', '5', 'IRON_CHESTPLATE', 'Rostige Rüstung', 'Ist diese Rüstung schon braun?', 1, 6);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (505, 8, 2);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (505, 9, 1);
     INSERT INTO item_kosten (item, ressource, menge) VALUES (505, 1, 3);

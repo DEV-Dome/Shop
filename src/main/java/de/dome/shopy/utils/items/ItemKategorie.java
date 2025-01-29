@@ -2,7 +2,6 @@ package de.dome.shopy.utils.items;
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.shop.Shop;
-import de.dome.shopy.utils.shop.ShopItemKategorie;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
@@ -61,6 +60,7 @@ public class ItemKategorie {
             }
         }).thenRun(() -> {
             ItemVerzauberung.registerItemVerzauberungen();
+            ItemVerzauberungSet.registerItemVerzauberungenSet();
             ItemSeltenheit.registerItemStufen();
         });
     }

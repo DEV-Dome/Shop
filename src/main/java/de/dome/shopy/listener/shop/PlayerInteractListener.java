@@ -18,14 +18,14 @@ public class PlayerInteractListener implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
         Player p = e.getPlayer();
-        if(e.getClickedBlock() == null) return;
-        if(e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_AIR) return;
-        if(!Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())) return;
+        if (e.getClickedBlock() == null) return;
+        if (e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_AIR) return;
+        if (!Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())) return;
 
         ShopInventarManger shopInventarManger = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopInventarManger();
 
-        if(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getWorld().getName().equalsIgnoreCase(e.getClickedBlock().getWorld().getName()) || p.hasPermission("shopy.bypass.interactOnOtherWorlds")) {
-            if(e.getClickedBlock().getType() == Material.LECTERN)  e.setCancelled(true);
+        if (Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getWorld().getName().equalsIgnoreCase(e.getClickedBlock().getWorld().getName()) || p.hasPermission("shopy.bypass.interactOnOtherWorlds")) {
+            if (e.getClickedBlock().getType() == Material.LECTERN) e.setCancelled(true);
 
             if (e.getClickedBlock().getType() == Material.CARTOGRAPHY_TABLE) {
                 shopInventarManger.openMarkplatzInventar();
@@ -34,7 +34,7 @@ public class PlayerInteractListener implements Listener {
                 e.setCancelled(true);
                 shopInventarManger.openWerkbankInventar();
             }
-            if(e.getClickedBlock().getType() == Material.TRAPPED_CHEST){
+            if (e.getClickedBlock().getType() == Material.TRAPPED_CHEST) {
                 e.setCancelled(true);
                 shopInventarManger.openItemLagerInventar(0);
             }
@@ -45,17 +45,21 @@ public class PlayerInteractListener implements Listener {
                 e.setCancelled(true);
             }
 
-            if(e.getClickedBlock().getType() == Material.SMITHING_TABLE){
+            if (e.getClickedBlock().getType() == Material.SMITHING_TABLE) {
                 e.setCancelled(true);
                 shopInventarManger.openAufwerter(null);
             }
-            if(e.getClickedBlock().getType() == Material.AMETHYST_BLOCK){
+            if (e.getClickedBlock().getType() == Material.AMETHYST_BLOCK) {
                 e.setCancelled(true);
                 shopInventarManger.openVerzaubere(null);
             }
-            if(e.getClickedBlock().getType() == Material.ANVIL){
+            if (e.getClickedBlock().getType() == Material.ANVIL) {
                 e.setCancelled(true);
                 shopInventarManger.openReparaturTisch(null);
+            }
+            if (e.getClickedBlock().getType() == Material.CALIBRATED_SCULK_SENSOR) {
+                e.setCancelled(true);
+                shopInventarManger.openSetAufwerter(null, null);
             }
         }
     }
