@@ -67,7 +67,7 @@ public class DropManger {
                 int chestplateLoreArrayItemID = Integer.parseInt(chestplateLoreArray[1].substring(1));
                 ShopItem chestplateShopItem = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopItemById(chestplateLoreArrayItemID);
 
-                if (chestplateShopItem.getItemVerzauberung().getName().equals("Bär")) {
+                if (chestplateShopItem.getItemVerzauberung() != null && chestplateShopItem.getItemVerzauberung().getName().equals("Bär")) {
                     double multiply = 0.07;
                     if(chestplateShopItem.getItemSeltenheit().getId() == 3) multiply = 0.13;
                     if(chestplateShopItem.getItemSeltenheit().getId() == 4) multiply = 0.17;
@@ -86,7 +86,7 @@ public class DropManger {
                 int legginsLoreArrayItemID = Integer.parseInt(legginsLoreArray[1].substring(1));
                 ShopItem legginsShopItem = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopItemById(legginsLoreArrayItemID);
 
-                if (legginsShopItem.getItemVerzauberung().getName().equals("Glückstreffer")) {
+                if (legginsShopItem.getItemVerzauberung() != null && legginsShopItem.getItemVerzauberung().getName().equals("Glückstreffer")) {
                     double multiply = 0.07;
                     if(legginsShopItem.getItemSeltenheit().getId() == 3) multiply = 0.13;
                     if(legginsShopItem.getItemSeltenheit().getId() == 4) multiply = 0.17;

@@ -33,6 +33,11 @@ public class EntityDeathListener implements Listener {
             Player p = e.getEntity().getKiller();
             Dungeon spielerDungeon = Shopy.getInstance().getSpielerDungeon().get(p.getUniqueId());
 
+            /* Set bonus */
+            if(spielerDungeon.getDungeonSetAusgeruestet().containsKey("Low Live") && spielerDungeon.getDungeonSetAusgeruestet().get("Low Live").isBonus2()){
+                p.setHealth(20);
+            }
+
             /* Spieler Loot ausgeben */
             if(spielerDungeon.getDungeonEntitys().contains(e.getEntity())){
                 ArrayList<Ressource> gedroppterLoot = null;

@@ -27,6 +27,13 @@ public class EntityDamageListener implements Listener {
                 Dungeon spielerDungeon = Shopy.getInstance().getSpielerDungeon().get(p.getUniqueId());
                 if(spielerDungeon.isSchutzPhase()){
                     e.setCancelled(true);
+                }else {
+                    if(spielerDungeon.getDungeonSetAusgeruestet().containsKey("Low Live") && spielerDungeon.getDungeonSetAusgeruestet().get("Low Live").isBonus1()){
+                        double heileZu = p.getHealthScale() + 1;
+                        if(heileZu > 20) heileZu = 20;
+
+                        p.setHealth(heileZu);
+                    }
                 }
             }
         }
