@@ -41,6 +41,7 @@ public class Dungeon {
     private ArrayList<Entity> dungeonEntitys;
     private HashMap<Ressource, Integer> dungeonLoot;
 
+    private HashMap<String,DungeonSetAusgeruestet> dungeonSetAusgeruestet;
     private boolean schutzPhase = true;
     private net.citizensnpcs.api.npc.NPC waffenkammerNPC = null;
     private ItemStack[] spielerInventrar;
@@ -49,6 +50,7 @@ public class Dungeon {
         this.shop = shop;
         this.dungeonLevel = level;
         this.dungeonEntitys = new ArrayList<>();
+        this.dungeonSetAusgeruestet = new HashMap<>();
         this.dungeonLoot = new HashMap<>();
 
          CompletableFuture.runAsync(() -> {
@@ -464,4 +466,7 @@ public class Dungeon {
         return loot;
     }
 
+    public HashMap<String, DungeonSetAusgeruestet> getDungeonSetAusgeruestet() {
+        return dungeonSetAusgeruestet;
+    }
 }

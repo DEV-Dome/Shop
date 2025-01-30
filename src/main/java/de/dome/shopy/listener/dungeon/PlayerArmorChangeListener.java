@@ -2,6 +2,8 @@ package de.dome.shopy.listener.dungeon;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import de.dome.shopy.Shopy;
+import de.dome.shopy.utils.Dungeon;
+import de.dome.shopy.utils.DungeonSetAusgeruestet;
 import de.dome.shopy.utils.shop.Shop;
 import de.dome.shopy.utils.shop.ShopItem;
 import org.bukkit.entity.Player;
@@ -26,6 +28,11 @@ public class PlayerArmorChangeListener implements Listener {
         if (!Shopy.getInstance().getSpielerDungeon().containsKey(p.getUniqueId())) return;
 
         Shop spielerShop = Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
+        Dungeon spielerDungeon = Shopy.getInstance().getSpielerDungeon().get(p.getUniqueId());
+
+        /* Set Verwalten */
+        DungeonSetAusgeruestet.ladeSets(p);
+
 
         /* Wird ein neues Verzaubers Rüstungsteil angelegt */
         if(item.hasItemMeta() && item.getItemMeta().hasLore()){
