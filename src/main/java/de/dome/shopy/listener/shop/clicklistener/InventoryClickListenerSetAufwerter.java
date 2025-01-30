@@ -1,6 +1,7 @@
 package de.dome.shopy.listener.shop.clicklistener;
 
 import de.dome.shopy.Shopy;
+import de.dome.shopy.utils.Ressource;
 import de.dome.shopy.utils.items.ItemSeltenheit;
 import de.dome.shopy.utils.items.ItemVerzauberungSet;
 import de.dome.shopy.utils.shop.Shop;
@@ -63,8 +64,15 @@ public class InventoryClickListenerSetAufwerter implements Listener {
                     p.sendMessage(Shopy.getInstance().getPrefix() + "§cDir fehlen noch §e" + (1 - spielerShop.getShopRessourenManger().getRessourceValue(itemVerzauberungSet.getAufwerter())) + " " + itemVerzauberungSet.getAufwerter().getName() +" §cUm das Item aufwerten zu können!");
                     return;
                 }
+
+                if(spielerShop.getShopRessourenManger().getRessourceValue(Ressource.getRessoureByName("Geld")) < 1000){
+                    p.sendMessage(Shopy.getInstance().getPrefix() + "§cDir fehlen noch §e" + (1000 - spielerShop.getShopRessourenManger().getRessourceValue(Ressource.getRessoureByName("Geld"))) + " € §cUm das Item aufwerten zu können!");
+                    return;
+                }
+
                 /* Kosten abziehen */
                 Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopRessourenManger().setRessourcenValue(itemVerzauberungSet.getAufwerter(), (spielerShop.getShopRessourenManger().getRessourceValue(itemVerzauberungSet.getAufwerter())) - 1);
+                Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopRessourenManger().setRessourcenValue(Ressource.getRessoureByName("Geld"), (spielerShop.getShopRessourenManger().getRessourceValue(Ressource.getRessoureByName("Geld"))) - 1000);
 
                 shopItem.setItemSeltenheit(ItemSeltenheit.getItemStufeById(6));
                 shopItem.setItemVerzauberungSet(itemVerzauberungSet);
@@ -86,6 +94,7 @@ public class InventoryClickListenerSetAufwerter implements Listener {
             else if(item.getItemMeta().getDisplayName().equals("§7Schlissen")) p.closeInventory();
             else if(item.getItemMeta().getDisplayName().equals("§7Letzte Seite")) spielerShop.getShopInventarManger().openSetAufwerterItemAuswahl(seite - 1, itemVerzauberungSet);
             else if(item.getItemMeta().getDisplayName().equals("§7Nächste Seite")) spielerShop.getShopInventarManger().openSetAufwerterItemAuswahl( seite + 1, itemVerzauberungSet);
+            else if(e.getSlot() == 31);
             else {
                 int itemID = Integer.parseInt(item.getItemMeta().getLore().get(0).split(":")[1].substring(1));
                 ShopItem shopItem = spielerShop.getShopItemById(itemID);
@@ -110,6 +119,7 @@ public class InventoryClickListenerSetAufwerter implements Listener {
             else if(item.getItemMeta().getDisplayName().equals("§7Schlissen")) p.closeInventory();
             else if(item.getItemMeta().getDisplayName().equals("§7Letzte Seite")) spielerShop.getShopInventarManger().openSetAufwerterSetAuswahl(seite - 1, shopItem);
             else if(item.getItemMeta().getDisplayName().equals("§7Nächste Seite")) spielerShop.getShopInventarManger().openSetAufwerterSetAuswahl( seite + 1, shopItem);
+            else if(e.getSlot() == 31);
             else {
                 String setName = item.getItemMeta().getDisplayName().substring(2);
                 ItemVerzauberungSet itemVerzauberungSet = ItemVerzauberungSet.getItemVerzauberungenSetByName(setName);

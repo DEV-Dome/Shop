@@ -788,11 +788,11 @@ public class ShopInventarManger {
         RyseInventory.builder().title("§9Set-Aufwerter").rows(inventarGroeße).provider(new InventoryProvider() {
             @Override
             public void init(Player player, InventoryContents contents) {
-                if(item == null){
-                    ArrayList<String> beschreibung = new ArrayList<>();
-                    beschreibung.add("§7Eine Set Aufwertung kostetet");
-                    beschreibung.add("§7§1000 €§7 und §e1 Set-Material§7.");
+                ArrayList<String> beschreibung = new ArrayList<>();
+                beschreibung.add("§7Eine Set Aufwertung kostet");
+                beschreibung.add("§e1000 €§7 und §e1 Set-Material§7.");
 
+                if(item == null){
                     contents.updateOrSet(11, Shopy.getInstance().createItem(Material.ARMOR_STAND, "§7Item auswählen"));
 
                     if(itemVerzauberungSet != null){
@@ -805,10 +805,6 @@ public class ShopInventarManger {
 
                     contents.updateOrSet(18, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
                 }else {
-                    ArrayList<String> beschreibung = new ArrayList<>();
-                    beschreibung.add("§7Eine Set Aufwertung kostetet");
-                    beschreibung.add("§7§1000 €§7 und §e1 Set-Material§7.");
-
                     contents.updateOrSet(11, item.buildBaseItem());
 
                     if(itemVerzauberungSet != null){
