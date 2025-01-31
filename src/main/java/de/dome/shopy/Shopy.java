@@ -33,12 +33,15 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Fox;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
@@ -114,6 +117,13 @@ public class Shopy extends JavaPlugin {
 
         /* Alle spieler beim Reload kicken */
         for(Player all : Bukkit.getOnlinePlayers()){
+            if(DungeonSetAusgeruestet.getSpielerFuechse().containsKey(all.getUniqueId())){
+                for (Fox fox : DungeonSetAusgeruestet.getSpielerFuechse().get(all.getUniqueId())){
+                    fox.damage(500f);
+                }
+                DungeonSetAusgeruestet.getSpielerFuechse().remove(all.getUniqueId());
+            }
+
             TextComponent component = Component.text("§7Der Server wird neu geladen, damit das ohne Umstände passieren kann wurdest du gekickt. Du kannst gleich weiter spielen.");
 
             if(Shopy.getInstance().getSpielerDungeon().containsKey(all.getUniqueId())){
@@ -188,6 +198,8 @@ public class Shopy extends JavaPlugin {
         new PlayerArmorChangeListener();
         new EntityDamageByEntityEventListener();
         new FoodLevelChangeListener();
+        new PlayerMoveListener();
+        new PlayerToggleFlightListener();
         new de.dome.shopy.listener.dungeon.EntityDamageListener();
         new de.dome.shopy.listener.dungeon.NPCInteractListener();
     }
@@ -410,5 +422,55 @@ public class Shopy extends JavaPlugin {
 
         // Standard: Rückgabe null, falls keine Zuordnung möglich
         return null;
+    }
+
+    public void spawnFox(Player p) {
+        if(!getSpielerDungeon().containsKey(p.getUniqueId())) return;
+        World world = p.getWorld();
+        Location loc = p.getLocation();
+        Fox fox = (Fox) world.spawnEntity(loc, EntityType.FOX);
+
+        fox.setCustomName("§9" + p.getName() + "'s Begleiter");
+        fox.setCustomNameVisible(true);
+        fox.setTarget(p);
+        fox.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20.0);
+        fox.setHealth(20);
+        fox.setAdult();
+        fox.setInvulnerable(false);
+        fox.setFirstTrustedPlayer(p);
+
+        if(!DungeonSetAusgeruestet.getSpielerFuechse().containsKey(p.getUniqueId())) DungeonSetAusgeruestet.getSpielerFuechse().put(p.getUniqueId(), new ArrayList<>());
+        DungeonSetAusgeruestet.getSpielerFuechse().get(p.getUniqueId()).add(fox);
+
+        followPlayer(p, fox);
+    }
+
+    private void followPlayer(Player p, Fox fox) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!fox.isValid() || !p.isOnline()) {
+                    cancel();
+                    return;
+                }
+                fox.setHealth(20);
+                if (getSpielerDungeon().get(p.getUniqueId()).getDungeonSetAusgeruestet().containsKey("Fox Returns") && getSpielerDungeon().get(p.getUniqueId()).getDungeonSetAusgeruestet().get("Fox Returns").isBonus2()) {
+                    if(isWahrscheinlichkeit(0.25)){
+                        double heileAuf = p.getHealth() + 0.5;
+                        if(heileAuf >= 20) heileAuf = 20;
+
+                        p.setHealth(heileAuf);
+                    }
+                }
+
+                if (fox.getLocation().distance(p.getLocation()) > 10) {
+                    fox.teleport(p.getLocation().subtract(1,0,1));
+                }
+                if (fox.getLocation().distance(p.getLocation()) > 3) {
+                    Location targetLocation = p.getLocation().clone().subtract(fox.getLocation()).toVector().normalize().multiply(0.5).toLocation(p.getWorld());
+                    fox.setVelocity(targetLocation.toVector());
+                }
+            }
+        }.runTaskTimer(this, 0L, 20L);
     }
 }

@@ -47,10 +47,13 @@ public class InventoryClickListenerSetAufwerter implements Listener {
                 itemVerzauberungSet = ItemVerzauberungSet.getItemVerzauberungenSetByName(setName);
             }
 
-            if(e.getSlot() == 11) spielerShop.getShopInventarManger().openSetAufwerterItemAuswahl(1, itemVerzauberungSet);
-            if(e.getSlot() == 14) spielerShop.getShopInventarManger().openSetAufwerterSetAuswahl(1, shopItem);
-            else if(e.getSlot() == 27 || e.getSlot() == 18) p.closeInventory();
-            else if(e.getSlot() == 22) {
+            if(e.getSlot() == 11){
+                spielerShop.getShopInventarManger().openSetAufwerterItemAuswahl(1, itemVerzauberungSet);
+            }if(e.getSlot() == 14) spielerShop.getShopInventarManger().openSetAufwerterSetAuswahl(1, shopItem);
+            else if(e.getSlot() == 27 || e.getSlot() == 18){
+                p.getOpenInventory().close();
+                p.closeInventory();
+            } else if(e.getSlot() == 22) {
 
                 /* CheckUP ob Alles nötige ausgewählt wurde */
                 if(shopItem == null || itemVerzauberungSet == null){

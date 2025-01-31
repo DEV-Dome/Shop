@@ -34,9 +34,12 @@ public class InventoryClickListenerAufwerter implements Listener {
 
         if(e.getView().getTitle().equals("§9Aufwerter")){
             e.setCancelled(true);
-            if(e.getSlot() == 12) spielerShop.getShopInventarManger().openAuswerterItemAuswahl(1);
-            else if(e.getSlot() == 27) p.closeInventory();
-            else if(e.getSlot() == 22) {
+            if(e.getSlot() == 12) {
+                spielerShop.getShopInventarManger().openAuswerterItemAuswahl(1);
+            } else if(e.getSlot() == 27){
+                p.getOpenInventory().close();
+                p.closeInventory();
+            } else if(e.getSlot() == 22) {
                 int itemID = Integer.parseInt(e.getClickedInventory().getItem(12).getItemMeta().getLore().get(0).split(":")[1].substring(1));
                 ShopItem shopItem = spielerShop.getShopItemById(itemID);
 

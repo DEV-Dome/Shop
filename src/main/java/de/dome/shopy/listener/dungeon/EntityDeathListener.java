@@ -37,6 +37,12 @@ public class EntityDeathListener implements Listener {
             if(spielerDungeon.getDungeonSetAusgeruestet().containsKey("Low Live") && spielerDungeon.getDungeonSetAusgeruestet().get("Low Live").isBonus2()){
                 p.setHealth(20);
             }
+            if(spielerDungeon.getDungeonSetAusgeruestet().containsKey("Enderman") && spielerDungeon.getDungeonSetAusgeruestet().get("Enderman").isBonus2()){
+                p.teleport(e.getEntity().getLocation());
+            }
+            if(spielerDungeon.getDungeonSetAusgeruestet().containsKey("Kamikaze") && spielerDungeon.getDungeonSetAusgeruestet().get("Kamikaze").isBonus1()){
+                e.getEntity().getLocation().getWorld().createExplosion(e.getEntity().getLocation().getX(), e.getEntity().getLocation().getY(), e.getEntity().getLocation().getZ(), 0.75F, false, false);
+            }
 
             /* Spieler Loot ausgeben */
             if(spielerDungeon.getDungeonEntitys().contains(e.getEntity())){

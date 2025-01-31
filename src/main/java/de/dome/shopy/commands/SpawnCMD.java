@@ -2,12 +2,14 @@ package de.dome.shopy.commands;
 
 import de.dome.shopy.Shopy;
 import de.dome.shopy.commands.welt.LadeWeltCMD;
+import de.dome.shopy.utils.DungeonSetAusgeruestet;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Fox;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -27,6 +29,12 @@ public class SpawnCMD  implements CommandExecutor {
             if(Shopy.getInstance().getServerSpawn() != null){
                 if (!Shopy.getInstance().getPlayersNotTeleport().contains(p)) {
                     Shopy.getInstance().getPlayersNotTeleport().add(p);
+                    if(DungeonSetAusgeruestet.getSpielerFuechse().containsKey(p.getUniqueId())){
+                        for (Fox fox : DungeonSetAusgeruestet.getSpielerFuechse().get(p.getUniqueId())){
+                            fox.damage(500f);
+                        }
+                        DungeonSetAusgeruestet.getSpielerFuechse().remove(p.getUniqueId());
+                    }
 
                     new BukkitRunnable() {
                         int countdownTime = 3;

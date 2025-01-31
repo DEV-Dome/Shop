@@ -195,6 +195,14 @@ public class Dungeon {
                     public void run() {
                         if (countdownTime <= 0) {
                             cancel();
+
+                            if(DungeonSetAusgeruestet.getSpielerFuechse().containsKey(p.getUniqueId())){
+                                for (Fox fox : DungeonSetAusgeruestet.getSpielerFuechse().get(p.getUniqueId())){
+                                    fox.damage(500f);
+                                }
+                                DungeonSetAusgeruestet.getSpielerFuechse().remove(p.getUniqueId());
+                            }
+
                             p.teleport(Shopy.getInstance().getServerSpawn());
                             p.sendMessage(Shopy.getInstance().getPrefix() + "Du wurdest zum Spawn Teleporiert. ");
                             if(Shopy.getInstance().getPlayersNotTeleport().contains(p)) Shopy.getInstance().getPlayersNotTeleport().remove(p);

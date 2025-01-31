@@ -1,15 +1,13 @@
 package de.dome.shopy.listener.dungeon;
 
 import de.dome.shopy.Shopy;
+import de.dome.shopy.utils.DungeonSetAusgeruestet;
 import de.dome.shopy.utils.shop.Shop;
 import de.dome.shopy.utils.shop.ShopItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -31,6 +29,7 @@ public class EntityDamageByEntityEventListener implements Listener {
 
             ItemStack item = p.getInventory().getItemInMainHand();
             Shop spielerShop = Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
+
 
             if(item.hasItemMeta() && item.getItemMeta().hasLore()) {
                 String[] lorearray = item.getItemMeta().getLore().get(0).split(":");
@@ -83,6 +82,7 @@ public class EntityDamageByEntityEventListener implements Listener {
             if(e.getEntity() instanceof Player ) {
                 Player p = (Player) e.getEntity();
 
+
                 ItemStack leggins = p.getInventory().getLeggings();
                 Projectile projectile = (Projectile) e.getDamager();
 
@@ -93,7 +93,7 @@ public class EntityDamageByEntityEventListener implements Listener {
                         int legginsItemID = Integer.parseInt(legginsLoreArray[1].substring(1));
                         ShopItem legginsShopItem = Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopItemById(legginsItemID);
 
-                        if (legginsShopItem.getItemVerzauberung().getName().equals("Spinne")) {
+                        if (legginsShopItem.getItemVerzauberung() != null && legginsShopItem.getItemVerzauberung().getName().equals("Spinne")) {
                             if (projectile.getShooter() instanceof Entity) {
 
                                 Entity schooter = (Entity) projectile.getShooter();

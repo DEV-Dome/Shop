@@ -1,6 +1,7 @@
 package de.dome.shopy.listener.lobby.clicklistener;
 
 import de.dome.shopy.Shopy;
+import de.dome.shopy.utils.DungeonSetAusgeruestet;
 import de.dome.shopy.utils.Ressource;
 import de.dome.shopy.utils.manger.ShopDefaultItemsManger;
 import de.dome.shopy.utils.shop.Shop;
@@ -9,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.Fox;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -147,6 +149,15 @@ public class InventoryClickListenerShop implements Listener {
                             public void run() {
                                 if (countdownTime <= 0) {
                                     cancel();
+
+                                    if(DungeonSetAusgeruestet.getSpielerFuechse().containsKey(p.getUniqueId())){
+                                        for (Fox fox : DungeonSetAusgeruestet.getSpielerFuechse().get(p.getUniqueId())){
+                                            fox.damage(500f);
+                                        }
+                                        DungeonSetAusgeruestet.getSpielerFuechse().remove(p.getUniqueId());
+                                    }
+
+
                                     p.teleport(Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopSpawn());
                                     p.sendMessage(Shopy.getInstance().getPrefix() + "§aDu wurdest zu deinem Shop Teleporiert.");
                                     if(Shopy.getInstance().getPlayersNotTeleport().contains(p)) Shopy.getInstance().getPlayersNotTeleport().remove(p);
