@@ -7,6 +7,7 @@ import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
@@ -23,10 +24,13 @@ public class PlayerInteractAtEntityListener implements Listener {
     @EventHandler
     public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent e) {
         if (e.getRightClicked() instanceof ArmorStand) {
-            e.setCancelled(true);
-
             Player p = e.getPlayer();
+
+            if(p.getGameMode() != GameMode.CREATIVE) e.setCancelled(true);
+
             if(!Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())) return;
+            if(!Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getWorld().getName().equals(e.getPlayer().getWorld().getName())) return;
+            e.setCancelled(true);
             Shop spielerShop = Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
             ArmorStand armorStand = (ArmorStand) e.getRightClicked();
 

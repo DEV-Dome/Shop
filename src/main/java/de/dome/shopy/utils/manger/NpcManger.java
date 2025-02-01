@@ -1,6 +1,7 @@
 package de.dome.shopy.utils.manger;
 
 import de.dome.shopy.Shopy;
+import dev.lone.itemsadder.api.CustomStack;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCRegistry;
@@ -22,6 +23,7 @@ public class NpcManger {
     NPC lara;
     NPC paul;
     NPC siegfried;
+    NPC jahn;
 
     private NpcManger(){}
 
@@ -85,6 +87,14 @@ public class NpcManger {
 
             siegfried.spawn(npcConfig.getLocation("npc.siegfried.location"));
         }
+        if(npcConfig.contains("npc.jahn.location")){
+            jahn = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "§9Baumeister Jahn");
+            jahn.getOrAddTrait(SkinTrait.class).setSkinPersistent("BaumeisterJahn", "yPZO5RP4Lrruj0SC+Ks6ywToyWAIe014p8gWLgXaUHux5R/Sa9POCh4Yt8YeVccPXKZ3KHpfAFQcvRSEbugyl0ROb5Pb3Q/zMZqQk5JbTB7sG7f8W9c+7cvyIWHBXuOm2rttLlSMtlI5lMFZqHHT6NJKXZSv0kZ+lo5dGGHjvZ+zL/yNuxlur0r0c/3nrX4zPIpttpCgcUaF32EeNAqRQCQ4egVbLYr0N6+veImmNnWX6t3l3pvtKTfj21XY4tF8BMJFeL/TrebjXcFHhSMyAhwQCRF55qApA2aioqCDi0UMKlpDDCplOo1KJWt9qGxkFBQWPgkpls5b5scjEqGrIaa1Ep9hQa/3BGA+isy0R3GceiPLqNM4tiAPSOHPgsz/aHjXLEdUvjCGHiffpSCf50Y98zHFxLcZ2KCjtHFe8WSKf0o0H3Ais8qmCiI42cPp7D3fs+rd4jgJoSnLmFvUu3LpqEVpz08E6+7z6jhbh0jCxLOwhNReMFtfMKaUxo6VOTwk0Ts8laT4H4uIGRdnCL08viR16b+2J3TOqVMVYu1IxFuvEVqY6vR25V/N9x47K1QXTGA1BpnA0hjTMTZofF+XJqct6tk6DeaV3XzdodR2XvG7uxfUulNefKODrWsZVz4q48ju6H1LVMMBmcAkOVYdZGJepE2s/6x2Ry7ffHk=", "ewogICJ0aW1lc3RhbXAiIDogMTY0NzEzOTI2MjEyMywKICAicHJvZmlsZUlkIiA6ICJiNzVjZDRmMThkZjg0MmNlYjJhY2MxNTU5MTNiMjA0YiIsCiAgInByb2ZpbGVOYW1lIiA6ICJLcmlzdGlqb25hczEzIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2Y3ODY3NTY0ODFmYzY4YzY3MGVmMTIyMzE1NWRmZGIyMDMwMzc0N2RiYTc4NzAwYjQ1MmQ4MmIyZDZmZDViZjQiCiAgICB9CiAgfQp9");
+
+            jahn.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.HAND, CustomStack.getInstance("thewildset:thewild_pickaxe").getItemStack());
+
+            jahn.spawn(npcConfig.getLocation("npc.jahn.location"));
+        }
     }
 
     public void loescheAlleNpc(){
@@ -124,5 +134,8 @@ public class NpcManger {
     }
     public NPC getSiegfried() {
         return siegfried;
+    }
+    public NPC getJahn() {
+        return jahn;
     }
 }

@@ -1,6 +1,7 @@
 package de.dome.shopy.listener.lobby;
 
 import de.dome.shopy.Shopy;
+import de.dome.shopy.utils.manger.ItemShopManger;
 import de.dome.shopy.utils.manger.NpcManger;
 import de.dome.shopy.utils.manger.ShopDefaultItemsManger;
 import de.dome.shopy.utils.shop.Shop;
@@ -403,8 +404,9 @@ public class NPCInteractListener implements Listener {
                     init(player, contents);
                 }
             }).build(Shopy.getInstance()).open(p);
+        } else if(NpcManger.INSTANCE().getJahn().getUniqueId() == npc.getUniqueId()){
+            ItemShopManger.INSTANCE().openUebersicht(p);
         }
-
     }
 
     private ItemStack updateLoreMitPreis(ItemStack item, int preis){

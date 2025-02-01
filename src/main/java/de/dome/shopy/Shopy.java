@@ -167,6 +167,8 @@ public class Shopy extends JavaPlugin {
         new InventoryClickListenerDungeonHaendler();
         new InventoryClickListenerPaul();
         new InventoryClickListenerSiegfried();
+        new InventoryClickListenerJahn();
+        new InventoryClickListenerItemShop();
 
         /* Shop Welt */
         new de.dome.shopy.listener.shop.BlockBreakListener();
