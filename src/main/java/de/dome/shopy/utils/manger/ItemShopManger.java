@@ -33,6 +33,7 @@ public class ItemShopManger {
                 contents.updateOrSet(16, Shopy.getInstance().createItem(Material.NETHERRACK,"§9Netherblöcke"));
 
                 contents.updateOrSet(19, Shopy.getInstance().createItem(Material.OAK_FENCE,"§9Holzitems"));
+                contents.updateOrSet(20, Shopy.getInstance().createItem(Material.COBBLESTONE_WALL,"§9Steinitems"));
 
                 contents.updateOrSet(27, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
             }
@@ -45,7 +46,7 @@ public class ItemShopManger {
     }
 
     public void openHolzBloeckeAnsicht(Player p){
-        RyseInventory.builder().title("§9Item-Shop: Holz").rows(6).provider(new InventoryProvider() {
+        RyseInventory.builder().title("§9Item-Shop: Holzblöcke").rows(6).provider(new InventoryProvider() {
             @Override
             public void init(Player player, InventoryContents contents) {
                 contents.updateOrSet(10, updateLoreMitPreis(Shopy.getInstance().createItem(Material.OAK_WOOD,"§9Eichenholz"), 10));
@@ -79,6 +80,233 @@ public class ItemShopManger {
                 contents.updateOrSet(41, updateLoreMitPreis(Shopy.getInstance().createItem(Material.ACACIA_STAIRS,"§9Akazienholztreppe"), 6));
                 contents.updateOrSet(42, updateLoreMitPreis(Shopy.getInstance().createItem(Material.CHERRY_STAIRS,"§9Krischblüttenholztreppe"), 6));
                 contents.updateOrSet(43, updateLoreMitPreis(Shopy.getInstance().createItem(Material.MANGROVE_STAIRS,"§9Mangoevenholztreppe"), 6));
+
+                contents.updateOrSet(45, Shopy.getInstance().createItem(Material.BARRIER,"§7Schlissen"));
+                contents.updateOrSet(46, Shopy.getInstance().createItem(Material.ARROW,"§7Zurück"));
+
+            }
+        }).build(Shopy.getInstance()).open(p);
+    }
+
+    public void openSteinBloeckeAnsicht(Player p){
+        RyseInventory.builder().title("§9Item-Shop: Steinblöcke").rows(6).provider(new InventoryProvider() {
+            @Override
+            public void init(Player player, InventoryContents contents) {
+                contents.updateOrSet(10, updateLoreMitPreis(Shopy.getInstance().createItem(Material.COBBLESTONE,"§9Cobblestone"), 10));
+                contents.updateOrSet(11, updateLoreMitPreis(Shopy.getInstance().createItem(Material.STONE,"§9Stein"), 10));
+                contents.updateOrSet(12, updateLoreMitPreis(Shopy.getInstance().createItem(Material.SMOOTH_STONE,"§9Glatterstein"), 10));
+                contents.updateOrSet(13, updateLoreMitPreis(Shopy.getInstance().createItem(Material.STONE_BRICKS,"§9Steinziegel"), 10));
+                contents.updateOrSet(14, updateLoreMitPreis(Shopy.getInstance().createItem(Material.CHISELED_STONE_BRICKS,"§9Steinziegel"), 10));
+                contents.updateOrSet(15, updateLoreMitPreis(Shopy.getInstance().createItem(Material.DEEPSLATE_BRICKS,"§9Dunkler Steinziegel"), 10));
+                contents.updateOrSet(16, updateLoreMitPreis(Shopy.getInstance().createItem(Material.PURPUR_BLOCK,"§9Lila Block"), 10));
+
+                contents.updateOrSet(19, updateLoreMitPreis(Shopy.getInstance().createItem(Material.DIORITE,"§9Diorite"), 10));
+                contents.updateOrSet(20, updateLoreMitPreis(Shopy.getInstance().createItem(Material.POLISHED_DIORITE,"§9Diorite"), 10));
+                contents.updateOrSet(21, updateLoreMitPreis(Shopy.getInstance().createItem(Material.ANDESITE,"§9Andesite"), 10));
+                contents.updateOrSet(22, updateLoreMitPreis(Shopy.getInstance().createItem(Material.POLISHED_ANDESITE,"§9Andesite"), 10));
+                contents.updateOrSet(23, updateLoreMitPreis(Shopy.getInstance().createItem(Material.GRANITE,"§9Granite"), 10));
+                contents.updateOrSet(24, updateLoreMitPreis(Shopy.getInstance().createItem(Material.POLISHED_GRANITE,"§9Granite"), 10));
+                contents.updateOrSet(25, updateLoreMitPreis(Shopy.getInstance().createItem(Material.MUD_BRICKS,"§9Schlammziegel"), 12));
+
+                contents.updateOrSet(28, updateLoreMitPreis(Shopy.getInstance().createItem(Material.SANDSTONE,"§9Sandstein"), 12));
+                contents.updateOrSet(29, updateLoreMitPreis(Shopy.getInstance().createItem(Material.SMOOTH_SANDSTONE,"§9Sandstein"), 14));
+                contents.updateOrSet(30, updateLoreMitPreis(Shopy.getInstance().createItem(Material.CHISELED_SANDSTONE,"§9Sandstein"), 14));
+                contents.updateOrSet(31, updateLoreMitPreis(Shopy.getInstance().createItem(Material.CUT_SANDSTONE,"§9Sandstein"), 14));
+                contents.updateOrSet(32, updateLoreMitPreis(Shopy.getInstance().createItem(Material.RED_SANDSTONE,"§9Roter Sandstein"), 13));
+                contents.updateOrSet(33, updateLoreMitPreis(Shopy.getInstance().createItem(Material.SMOOTH_RED_SANDSTONE,"§9Roter Sandstein"), 15));
+                contents.updateOrSet(34, updateLoreMitPreis(Shopy.getInstance().createItem(Material.CHISELED_RED_SANDSTONE,"§9Roter Sandstein"), 15));
+
+                contents.updateOrSet(37, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BRICKS,"§9Steinziegel"), 12));
+                contents.updateOrSet(38, updateLoreMitPreis(Shopy.getInstance().createItem(Material.PRISMARINE,"§9Prismarine"), 20));
+                contents.updateOrSet(39, updateLoreMitPreis(Shopy.getInstance().createItem(Material.DARK_PRISMARINE,"§9Prismarine"), 18));
+                contents.updateOrSet(40, updateLoreMitPreis(Shopy.getInstance().createItem(Material.COPPER_BLOCK,"§9Kupferblock"), 20));
+                contents.updateOrSet(41, updateLoreMitPreis(Shopy.getInstance().createItem(Material.CUT_COPPER,"§9Kupferblock"), 20));
+                contents.updateOrSet(42, updateLoreMitPreis(Shopy.getInstance().createItem(Material.QUARTZ_BLOCK,"§9Quarz Block"), 18));
+                contents.updateOrSet(43, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BAMBOO_BLOCK,"§9Bambusblock"), 20));
+
+                contents.updateOrSet(45, Shopy.getInstance().createItem(Material.BARRIER,"§7Schlissen"));
+                contents.updateOrSet(46, Shopy.getInstance().createItem(Material.ARROW,"§7Zurück"));
+
+            }
+        }).build(Shopy.getInstance()).open(p);
+    }
+    public void openGlasBloeckeAnsicht(Player p){
+        RyseInventory.builder().title("§9Item-Shop: Glasblöcke").rows(6).provider(new InventoryProvider() {
+            @Override
+            public void init(Player player, InventoryContents contents) {
+                contents.updateOrSet(10, updateLoreMitPreis(Shopy.getInstance().createItem(Material.GLASS,"§9Glasblock"), 13));
+                contents.updateOrSet(11, updateLoreMitPreis(Shopy.getInstance().createItem(Material.TINTED_GLASS,"§9Glasblock"), 15));
+                contents.updateOrSet(12, updateLoreMitPreis(Shopy.getInstance().createItem(Material.WHITE_STAINED_GLASS,"§9Glasblock"), 15));
+                contents.updateOrSet(13, updateLoreMitPreis(Shopy.getInstance().createItem(Material.GRAY_STAINED_GLASS,"§9Glasblock"), 15));
+                contents.updateOrSet(14, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BLACK_STAINED_GLASS,"§9Glasblock"), 15));
+                contents.updateOrSet(15, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BROWN_STAINED_GLASS,"§9Glasblock"), 15));
+                contents.updateOrSet(16, updateLoreMitPreis(Shopy.getInstance().createItem(Material.RED_STAINED_GLASS,"§9Glasblock"), 15));
+
+                contents.updateOrSet(19, updateLoreMitPreis(Shopy.getInstance().createItem(Material.ORANGE_STAINED_GLASS,"§9Glasblock"), 15));
+                contents.updateOrSet(20, updateLoreMitPreis(Shopy.getInstance().createItem(Material.YELLOW_STAINED_GLASS,"§9Glasblock"), 15));
+                contents.updateOrSet(21, updateLoreMitPreis(Shopy.getInstance().createItem(Material.LIME_STAINED_GLASS,"§9Glasblock"), 15));
+                contents.updateOrSet(22, updateLoreMitPreis(Shopy.getInstance().createItem(Material.GREEN_STAINED_GLASS,"§9Glasblock"), 15));
+                contents.updateOrSet(23, updateLoreMitPreis(Shopy.getInstance().createItem(Material.CYAN_STAINED_GLASS,"§9Glasblock"), 15));
+                contents.updateOrSet(24, updateLoreMitPreis(Shopy.getInstance().createItem(Material.LIGHT_BLUE_STAINED_GLASS,"§9Glasblock"), 15));
+                contents.updateOrSet(25, updateLoreMitPreis(Shopy.getInstance().createItem(Material.PURPLE_STAINED_GLASS,"§9Glasblock"), 15));
+
+                contents.updateOrSet(28, updateLoreMitPreis(Shopy.getInstance().createItem(Material.GLASS_PANE,"§9Glasscheibe"), 7));
+                contents.updateOrSet(29, updateLoreMitPreis(Shopy.getInstance().createItem(Material.WHITE_STAINED_GLASS_PANE,"§9Glasscheibe"), 9));
+                contents.updateOrSet(30, updateLoreMitPreis(Shopy.getInstance().createItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE,"§9Glasscheibe"), 9));
+                contents.updateOrSet(31, updateLoreMitPreis(Shopy.getInstance().createItem(Material.GRAY_STAINED_GLASS_PANE,"§9Glasscheibe"), 9));
+                contents.updateOrSet(32, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BLACK_STAINED_GLASS_PANE,"§9Glasscheibe"), 9));
+                contents.updateOrSet(33, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BROWN_STAINED_GLASS_PANE,"§9Glasscheibe"), 9));
+                contents.updateOrSet(34, updateLoreMitPreis(Shopy.getInstance().createItem(Material.RED_STAINED_GLASS_PANE,"§9Glasscheibe"), 9));
+
+                contents.updateOrSet(37, updateLoreMitPreis(Shopy.getInstance().createItem(Material.ORANGE_STAINED_GLASS_PANE,"§9Glasscheibe"), 9));
+                contents.updateOrSet(38, updateLoreMitPreis(Shopy.getInstance().createItem(Material.YELLOW_STAINED_GLASS_PANE,"§9Glasscheibe"), 9));
+                contents.updateOrSet(39, updateLoreMitPreis(Shopy.getInstance().createItem(Material.LIME_STAINED_GLASS_PANE,"§9Glasscheibe"), 9));
+                contents.updateOrSet(40, updateLoreMitPreis(Shopy.getInstance().createItem(Material.GREEN_STAINED_GLASS_PANE,"§9Glasscheibe"), 9));
+                contents.updateOrSet(41, updateLoreMitPreis(Shopy.getInstance().createItem(Material.LIGHT_BLUE_STAINED_GLASS_PANE,"§9Glasscheibe"), 9));
+                contents.updateOrSet(42, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BLUE_STAINED_GLASS_PANE,"§9Glasscheibe"), 9));
+                contents.updateOrSet(43, updateLoreMitPreis(Shopy.getInstance().createItem(Material.MAGENTA_STAINED_GLASS_PANE,"§9Glasscheibe"), 9));
+
+                contents.updateOrSet(45, Shopy.getInstance().createItem(Material.BARRIER,"§7Schlissen"));
+                contents.updateOrSet(46, Shopy.getInstance().createItem(Material.ARROW,"§7Zurück"));
+
+            }
+        }).build(Shopy.getInstance()).open(p);
+    }
+    public void openWolleBloeckeAnsicht(Player p){
+        RyseInventory.builder().title("§9Item-Shop: Wollblöcke").rows(6).provider(new InventoryProvider() {
+            @Override
+            public void init(Player player, InventoryContents contents) {
+                contents.updateOrSet(10, updateLoreMitPreis(Shopy.getInstance().createItem(Material.WHITE_WOOL,"§9Wollblock"), 7));
+                contents.updateOrSet(11, updateLoreMitPreis(Shopy.getInstance().createItem(Material.LIGHT_GRAY_WOOL,"§9Wollblock"), 7));
+                contents.updateOrSet(12, updateLoreMitPreis(Shopy.getInstance().createItem(Material.GRAY_WOOL,"§9Wollblock"), 7));
+                contents.updateOrSet(13, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BLACK_WOOL,"§9Wollblock"), 7));
+                contents.updateOrSet(14, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BROWN_WOOL,"§9Wollblock"), 7));
+                contents.updateOrSet(15, updateLoreMitPreis(Shopy.getInstance().createItem(Material.RED_WOOL,"§9Wollblock"), 7));
+                contents.updateOrSet(16, updateLoreMitPreis(Shopy.getInstance().createItem(Material.ORANGE_WOOL,"§9Wollblock"), 7));
+
+                contents.updateOrSet(19, updateLoreMitPreis(Shopy.getInstance().createItem(Material.YELLOW_WOOL,"§9Wollblock"), 7));
+                contents.updateOrSet(20, updateLoreMitPreis(Shopy.getInstance().createItem(Material.LIME_WOOL,"§9Wollblock"), 7));
+                contents.updateOrSet(21, updateLoreMitPreis(Shopy.getInstance().createItem(Material.GREEN_WOOL,"§9Wollblock"), 7));
+                contents.updateOrSet(22, updateLoreMitPreis(Shopy.getInstance().createItem(Material.CYAN_WOOL,"§9Wollblock"), 7));
+                contents.updateOrSet(23, updateLoreMitPreis(Shopy.getInstance().createItem(Material.LIGHT_BLUE_WOOL,"§9Wollblock"), 7));
+                contents.updateOrSet(24, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BLUE_WOOL,"§9Wollblock"), 7));
+                contents.updateOrSet(25, updateLoreMitPreis(Shopy.getInstance().createItem(Material.MAGENTA_WOOL,"§9Wollblock"), 7));
+
+                contents.updateOrSet(28, updateLoreMitPreis(Shopy.getInstance().createItem(Material.WHITE_CARPET,"§9Teppich"), 4));
+                contents.updateOrSet(29, updateLoreMitPreis(Shopy.getInstance().createItem(Material.LIGHT_GRAY_CARPET,"§9Teppich"), 4));
+                contents.updateOrSet(30, updateLoreMitPreis(Shopy.getInstance().createItem(Material.GRAY_CARPET,"§9Teppich"), 4));
+                contents.updateOrSet(31, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BLACK_CARPET,"§9Teppich"), 4));
+                contents.updateOrSet(32, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BROWN_CARPET,"§9Teppich"), 4));
+                contents.updateOrSet(33, updateLoreMitPreis(Shopy.getInstance().createItem(Material.RED_CARPET,"§9Teppich"), 4));
+                contents.updateOrSet(34, updateLoreMitPreis(Shopy.getInstance().createItem(Material.ORANGE_CARPET,"§9Teppich"), 4));
+
+                contents.updateOrSet(37, updateLoreMitPreis(Shopy.getInstance().createItem(Material.YELLOW_CARPET,"§9Teppich"), 4));
+                contents.updateOrSet(38, updateLoreMitPreis(Shopy.getInstance().createItem(Material.LIME_CARPET,"§9Teppich"), 4));
+                contents.updateOrSet(39, updateLoreMitPreis(Shopy.getInstance().createItem(Material.GREEN_CARPET,"§9Teppich"), 4));
+                contents.updateOrSet(40, updateLoreMitPreis(Shopy.getInstance().createItem(Material.CYAN_CARPET,"§9Teppich"), 4));
+                contents.updateOrSet(41, updateLoreMitPreis(Shopy.getInstance().createItem(Material.LIGHT_BLUE_CARPET,"§9Teppich"), 4));
+                contents.updateOrSet(42, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BLUE_CARPET,"§9Teppich"), 4));
+                contents.updateOrSet(43, updateLoreMitPreis(Shopy.getInstance().createItem(Material.MAGENTA_CARPET,"§9Teppich"), 4));
+
+                contents.updateOrSet(45, Shopy.getInstance().createItem(Material.BARRIER,"§7Schlissen"));
+                contents.updateOrSet(46, Shopy.getInstance().createItem(Material.ARROW,"§7Zurück"));
+
+            }
+        }).build(Shopy.getInstance()).open(p);
+    }
+    public void openNaturBloeckeAnsicht(Player p){
+        RyseInventory.builder().title("§9Item-Shop: Naturblöcke").rows(6).provider(new InventoryProvider() {
+            @Override
+            public void init(Player player, InventoryContents contents) {
+                contents.updateOrSet(10, updateLoreMitPreis(Shopy.getInstance().createItem(Material.DIRT,"§9Erde"), 1));
+                contents.updateOrSet(11, updateLoreMitPreis(Shopy.getInstance().createItem(Material.GRASS_BLOCK,"§9Erde"), 2));
+                contents.updateOrSet(12, updateLoreMitPreis(Shopy.getInstance().createItem(Material.COARSE_DIRT,"§9Erde"), 2));
+                contents.updateOrSet(13, updateLoreMitPreis(Shopy.getInstance().createItem(Material.PODZOL,"§9Erde"), 2));
+                contents.updateOrSet(14, updateLoreMitPreis(Shopy.getInstance().createItem(Material.MYCELIUM,"§9Mycelium"), 4));
+                contents.updateOrSet(15, updateLoreMitPreis(Shopy.getInstance().createItem(Material.DIRT_PATH,"§9Erde"), 2));
+                contents.updateOrSet(16, updateLoreMitPreis(Shopy.getInstance().createItem(Material.ROOTED_DIRT,"§9Erde"), 2));
+
+                contents.updateOrSet(19, updateLoreMitPreis(Shopy.getInstance().createItem(Material.SAND,"§9Sand"), 2));
+                contents.updateOrSet(20, updateLoreMitPreis(Shopy.getInstance().createItem(Material.RED_SAND,"§9Sand"), 2));
+                contents.updateOrSet(21, updateLoreMitPreis(Shopy.getInstance().createItem(Material.GRAVEL,"§9Kies"), 2));
+                contents.updateOrSet(22, updateLoreMitPreis(Shopy.getInstance().createItem(Material.MUD,"§9Matsch"), 2));
+                contents.updateOrSet(23, updateLoreMitPreis(Shopy.getInstance().createItem(Material.SNOW,"§9Schnee"), 5));
+                contents.updateOrSet(24, updateLoreMitPreis(Shopy.getInstance().createItem(Material.MOSS_BLOCK,"§9Moss"), 5));
+                contents.updateOrSet(25, updateLoreMitPreis(Shopy.getInstance().createItem(Material.OBSIDIAN,"§9Obsidian"), 10));
+
+                contents.updateOrSet(28, updateLoreMitPreis(Shopy.getInstance().createItem(Material.COAL_ORE,"§9Erz"), 6));
+                contents.updateOrSet(29, updateLoreMitPreis(Shopy.getInstance().createItem(Material.IRON_ORE,"§9Erz"), 6));
+                contents.updateOrSet(30, updateLoreMitPreis(Shopy.getInstance().createItem(Material.GOLD_ORE,"§9Erz"), 6));
+                contents.updateOrSet(31, updateLoreMitPreis(Shopy.getInstance().createItem(Material.DIAMOND_ORE,"§9Erz"), 6));
+                contents.updateOrSet(32, updateLoreMitPreis(Shopy.getInstance().createItem(Material.EMERALD_ORE,"§9Erz"), 6));
+                contents.updateOrSet(33, updateLoreMitPreis(Shopy.getInstance().createItem(Material.REDSTONE_ORE,"§9Erz"), 6));
+                contents.updateOrSet(34, updateLoreMitPreis(Shopy.getInstance().createItem(Material.LAPIS_ORE,"§9Erz"), 6));
+
+                contents.updateOrSet(37, updateLoreMitPreis(Shopy.getInstance().createItem(Material.DEEPSLATE_COAL_ORE,"§9Erz"), 8));
+                contents.updateOrSet(38, updateLoreMitPreis(Shopy.getInstance().createItem(Material.DEEPSLATE_IRON_ORE,"§9Erz"), 8));
+                contents.updateOrSet(39, updateLoreMitPreis(Shopy.getInstance().createItem(Material.DEEPSLATE_GOLD_ORE,"§9Erz"), 8));
+                contents.updateOrSet(40, updateLoreMitPreis(Shopy.getInstance().createItem(Material.DEEPSLATE_DIAMOND_ORE,"§9Erz"), 8));
+                contents.updateOrSet(41, updateLoreMitPreis(Shopy.getInstance().createItem(Material.DEEPSLATE_EMERALD_ORE,"§9Erz"), 8));
+                contents.updateOrSet(42, updateLoreMitPreis(Shopy.getInstance().createItem(Material.DEEPSLATE_REDSTONE_ORE,"§9Erz"), 8));
+                contents.updateOrSet(43, updateLoreMitPreis(Shopy.getInstance().createItem(Material.DEEPSLATE_LAPIS_ORE,"§9Erz"), 8));
+
+                contents.updateOrSet(45, Shopy.getInstance().createItem(Material.BARRIER,"§7Schlissen"));
+                contents.updateOrSet(46, Shopy.getInstance().createItem(Material.ARROW,"§7Zurück"));
+
+            }
+        }).build(Shopy.getInstance()).open(p);
+    }
+    public void openLichtBloeckeAnsicht(Player p){
+        RyseInventory.builder().title("§9Item-Shop: Lichtblöcke").rows(6).provider(new InventoryProvider() {
+            @Override
+            public void init(Player player, InventoryContents contents) {
+                contents.updateOrSet(10, updateLoreMitPreis(Shopy.getInstance().createItem(Material.TORCH,"§9Fackel"), 3));
+                contents.updateOrSet(11, updateLoreMitPreis(Shopy.getInstance().createItem(Material.SOUL_TORCH,"§9Fackel"), 3));
+                contents.updateOrSet(12, updateLoreMitPreis(Shopy.getInstance().createItem(Material.LANTERN,"§9Laterne"), 5));
+                contents.updateOrSet(13, updateLoreMitPreis(Shopy.getInstance().createItem(Material.SOUL_LANTERN,"§9Laterne"), 5));
+                contents.updateOrSet(14, updateLoreMitPreis(Shopy.getInstance().createItem(Material.END_ROD,"§9Laterne"), 6));
+                contents.updateOrSet(15, updateLoreMitPreis(Shopy.getInstance().createItem(Material.SEA_LANTERN,"§9Laterne"), 5));
+                contents.updateOrSet(16, updateLoreMitPreis(Shopy.getInstance().createItem(Material.GLOWSTONE,"§9Glowstone"), 8));
+
+                contents.updateOrSet(19, updateLoreMitPreis(Shopy.getInstance().createItem(Material.CAMPFIRE,"§9Lagerfeuer"), 25));
+                contents.updateOrSet(20, updateLoreMitPreis(Shopy.getInstance().createItem(Material.SOUL_CAMPFIRE,"§§9Lagerfeuer"), 25));
+                contents.updateOrSet(21, updateLoreMitPreis(Shopy.getInstance().createItem(Material.SHROOMLIGHT,"§9Leuchtpliz"), 10));
+                contents.updateOrSet(22, updateLoreMitPreis(Shopy.getInstance().createItem(Material.MAGMA_BLOCK,"§9Lavablock"), 10));
+
+
+                contents.updateOrSet(46, Shopy.getInstance().createItem(Material.BARRIER,"§7Schlissen"));
+                contents.updateOrSet(47, Shopy.getInstance().createItem(Material.ARROW,"§7Zurück"));
+
+            }
+        }).build(Shopy.getInstance()).open(p);
+    }
+    public void openNetherBloeckeAnsicht(Player p){
+        RyseInventory.builder().title("§9Item-Shop: Netherblöcke").rows(6).provider(new InventoryProvider() {
+            @Override
+            public void init(Player player, InventoryContents contents) {
+                contents.updateOrSet(10, updateLoreMitPreis(Shopy.getInstance().createItem(Material.NETHERRACK,"§9Höllenerde"), 6));
+                contents.updateOrSet(11, updateLoreMitPreis(Shopy.getInstance().createItem(Material.CRIMSON_NYLIUM,"§9Höllenerde"), 6));
+                contents.updateOrSet(12, updateLoreMitPreis(Shopy.getInstance().createItem(Material.WARPED_NYLIUM,"§9Höllenerde"), 6));
+                contents.updateOrSet(13, updateLoreMitPreis(Shopy.getInstance().createItem(Material.SOUL_SAND,"§9Selensand"), 12));
+                contents.updateOrSet(14, updateLoreMitPreis(Shopy.getInstance().createItem(Material.SOUL_SOIL,"§9Selensand"), 12));
+                contents.updateOrSet(15, updateLoreMitPreis(Shopy.getInstance().createItem(Material.CRIMSON_STEM,"§9Holz"), 12));
+                contents.updateOrSet(16, updateLoreMitPreis(Shopy.getInstance().createItem(Material.WARPED_STEM,"§9Holz"), 12));
+
+                contents.updateOrSet(19, updateLoreMitPreis(Shopy.getInstance().createItem(Material.NETHER_BRICKS,"§9Höllenstein"), 12));
+                contents.updateOrSet(20, updateLoreMitPreis(Shopy.getInstance().createItem(Material.CHISELED_NETHER_BRICKS,"§9Höllenstein"), 14));
+                contents.updateOrSet(21, updateLoreMitPreis(Shopy.getInstance().createItem(Material.CRACKED_NETHER_BRICKS,"§9Höllenstein"), 14));
+                contents.updateOrSet(22, updateLoreMitPreis(Shopy.getInstance().createItem(Material.NETHER_BRICK_SLAB,"§9Höllenstein"), 8));
+                contents.updateOrSet(23, updateLoreMitPreis(Shopy.getInstance().createItem(Material.NETHER_BRICK_STAIRS,"§9Höllenstein Treppe"), 15));
+                contents.updateOrSet(24, updateLoreMitPreis(Shopy.getInstance().createItem(Material.NETHER_BRICK_FENCE,"§9Höllenstein Zaun"), 17));
+                contents.updateOrSet(25, updateLoreMitPreis(Shopy.getInstance().createItem(Material.NETHER_BRICK_WALL,"§9Höllenstein Wand"), 17));
+
+                contents.updateOrSet(28, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BLACKSTONE,"§9Schwarzstein"), 12));
+                contents.updateOrSet(29, updateLoreMitPreis(Shopy.getInstance().createItem(Material.POLISHED_BLACKSTONE,"§9Schwarzstein"), 14));
+                contents.updateOrSet(30, updateLoreMitPreis(Shopy.getInstance().createItem(Material.CHISELED_POLISHED_BLACKSTONE,"§9Schwarzstein"), 14));
+                contents.updateOrSet(31, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BLACKSTONE_SLAB,"§9Schwarzstein"), 8));
+                contents.updateOrSet(32, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BLACKSTONE_STAIRS,"§9Schwarzstein Treppe"), 15));
+                contents.updateOrSet(33, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BLACKSTONE_WALL,"§9Schwarzstein Wand"), 17));
+                contents.updateOrSet(34, updateLoreMitPreis(Shopy.getInstance().createItem(Material.POLISHED_BLACKSTONE_WALL,"§9Schwarzstein Wand"), 17));
 
                 contents.updateOrSet(45, Shopy.getInstance().createItem(Material.BARRIER,"§7Schlissen"));
                 contents.updateOrSet(46, Shopy.getInstance().createItem(Material.ARROW,"§7Zurück"));
@@ -122,6 +350,33 @@ public class ItemShopManger {
                 contents.updateOrSet(41, updateLoreMitPreis(Shopy.getInstance().createItem(Material.ACACIA_TRAPDOOR,"§9Akazienholzfalltür"), 12));
                 contents.updateOrSet(42, updateLoreMitPreis(Shopy.getInstance().createItem(Material.CHERRY_TRAPDOOR,"§9Krischblüttenholzfalltür"), 12));
                 contents.updateOrSet(43, updateLoreMitPreis(Shopy.getInstance().createItem(Material.MANGROVE_TRAPDOOR,"§9Mangoevenholzfalltür"), 12));
+
+                contents.updateOrSet(45, Shopy.getInstance().createItem(Material.BARRIER,"§7Schlissen"));
+                contents.updateOrSet(46, Shopy.getInstance().createItem(Material.ARROW,"§7Zurück"));
+
+            }
+        }).build(Shopy.getInstance()).open(p);
+    }
+
+    public void openSteinItemsAnsicht(Player p){
+        RyseInventory.builder().title("§9Item-Shop: Steinitems").rows(6).provider(new InventoryProvider() {
+            @Override
+            public void init(Player player, InventoryContents contents) {
+                contents.updateOrSet(10, updateLoreMitPreis(Shopy.getInstance().createItem(Material.COBBLESTONE_WALL,"§9Steinmauer"), 15));
+                contents.updateOrSet(11, updateLoreMitPreis(Shopy.getInstance().createItem(Material.STONE_BRICK_WALL,"§9Steinmauer"), 15));
+                contents.updateOrSet(12, updateLoreMitPreis(Shopy.getInstance().createItem(Material.ANDESITE_WALL,"§9Steinmauer"), 15));
+                contents.updateOrSet(13, updateLoreMitPreis(Shopy.getInstance().createItem(Material.DIORITE_WALL,"§9Steinmauer"), 15));
+                contents.updateOrSet(14, updateLoreMitPreis(Shopy.getInstance().createItem(Material.GRANITE_WALL,"§9Steinmauer"), 15));
+                contents.updateOrSet(15, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BRICK_WALL,"§9Steinmauer"), 15));
+                contents.updateOrSet(16, updateLoreMitPreis(Shopy.getInstance().createItem(Material.PRISMARINE_WALL,"§9Prismarinemauer"), 16));
+
+                contents.updateOrSet(19, updateLoreMitPreis(Shopy.getInstance().createItem(Material.COBBLESTONE_SLAB,"§9Steinstufe"), 8));
+                contents.updateOrSet(20, updateLoreMitPreis(Shopy.getInstance().createItem(Material.STONE_BRICK_SLAB,"§9Steinstufe"), 8));
+                contents.updateOrSet(21, updateLoreMitPreis(Shopy.getInstance().createItem(Material.ANDESITE_SLAB,"§9Steinstufe"), 8));
+                contents.updateOrSet(22, updateLoreMitPreis(Shopy.getInstance().createItem(Material.DIORITE_SLAB,"§9Steinstufe"), 8));
+                contents.updateOrSet(23, updateLoreMitPreis(Shopy.getInstance().createItem(Material.GRANITE_SLAB,"§9Steinstufe"), 8));
+                contents.updateOrSet(24, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BRICK_SLAB,"§9Steinstufe"), 8));
+                contents.updateOrSet(25, updateLoreMitPreis(Shopy.getInstance().createItem(Material.PRISMARINE_SLAB,"§9Prismarinestufe"), 10));
 
                 contents.updateOrSet(45, Shopy.getInstance().createItem(Material.BARRIER,"§7Schlissen"));
                 contents.updateOrSet(46, Shopy.getInstance().createItem(Material.ARROW,"§7Zurück"));
