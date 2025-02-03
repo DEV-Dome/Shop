@@ -37,6 +37,8 @@ public class InventoryClickListenerJahn implements Listener {
 
             if (item.getItemMeta().getDisplayName().equals("§9Holzitems")) ItemShopManger.INSTANCE().openHolzItemsAnsicht(p);
             if (item.getItemMeta().getDisplayName().equals("§9Steinitems")) ItemShopManger.INSTANCE().openSteinItemsAnsicht(p);
+            if (item.getItemMeta().getDisplayName().equals("§9Schilder")) ItemShopManger.INSTANCE().openSchilderAnsicht(p);
+            if (item.getItemMeta().getDisplayName().equals("§9Ton")) ItemShopManger.INSTANCE().openTonBloeckeAnsicht(p);
 
             if (item.getItemMeta().getDisplayName().equals("§7Schlissen")) p.closeInventory();
         }

@@ -903,4 +903,17 @@ public class ShopInventarManger {
             }
         }).build(Shopy.getInstance()).open(shop.getOwner());
     }
+    public void openMuelleimer(){
+        RyseInventory.builder().title("§9Mülleimer").rows(3).provider(new InventoryProvider() {
+            @Override
+            public void init(Player player, InventoryContents contents) {
+                ArrayList<String> beschreibung = new ArrayList<>();
+                beschreibung.add("§7Klicke alle Items an,");
+                beschreibung.add("§7welche gelöscht werden sollen!");
+
+                contents.updateOrSet(13, Shopy.getInstance().createItemWithLore(Material.LAVA_BUCKET, "§9Info", beschreibung));
+                contents.updateOrSet(18, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
+            }
+        }).build(Shopy.getInstance()).open(shop.getOwner());
+    }
 }

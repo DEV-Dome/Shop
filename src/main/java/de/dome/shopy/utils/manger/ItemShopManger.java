@@ -34,6 +34,8 @@ public class ItemShopManger {
 
                 contents.updateOrSet(19, Shopy.getInstance().createItem(Material.OAK_FENCE,"§9Holzitems"));
                 contents.updateOrSet(20, Shopy.getInstance().createItem(Material.COBBLESTONE_WALL,"§9Steinitems"));
+                contents.updateOrSet(21, Shopy.getInstance().createItem(Material.OAK_SIGN,"§9Schilder"));
+                contents.updateOrSet(22, Shopy.getInstance().createItem(Material.WHITE_CONCRETE,"§9Ton"));
 
                 contents.updateOrSet(27, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
             }
@@ -230,7 +232,7 @@ public class ItemShopManger {
                 contents.updateOrSet(20, updateLoreMitPreis(Shopy.getInstance().createItem(Material.RED_SAND,"§9Sand"), 2));
                 contents.updateOrSet(21, updateLoreMitPreis(Shopy.getInstance().createItem(Material.GRAVEL,"§9Kies"), 2));
                 contents.updateOrSet(22, updateLoreMitPreis(Shopy.getInstance().createItem(Material.MUD,"§9Matsch"), 2));
-                contents.updateOrSet(23, updateLoreMitPreis(Shopy.getInstance().createItem(Material.SNOW,"§9Schnee"), 5));
+                contents.updateOrSet(23, updateLoreMitPreis(Shopy.getInstance().createItem(Material.SNOW_BLOCK,"§9Schnee"), 5));
                 contents.updateOrSet(24, updateLoreMitPreis(Shopy.getInstance().createItem(Material.MOSS_BLOCK,"§9Moss"), 5));
                 contents.updateOrSet(25, updateLoreMitPreis(Shopy.getInstance().createItem(Material.OBSIDIAN,"§9Obsidian"), 10));
 
@@ -377,6 +379,87 @@ public class ItemShopManger {
                 contents.updateOrSet(23, updateLoreMitPreis(Shopy.getInstance().createItem(Material.GRANITE_SLAB,"§9Steinstufe"), 8));
                 contents.updateOrSet(24, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BRICK_SLAB,"§9Steinstufe"), 8));
                 contents.updateOrSet(25, updateLoreMitPreis(Shopy.getInstance().createItem(Material.PRISMARINE_SLAB,"§9Prismarinestufe"), 10));
+
+                contents.updateOrSet(45, Shopy.getInstance().createItem(Material.BARRIER,"§7Schlissen"));
+                contents.updateOrSet(46, Shopy.getInstance().createItem(Material.ARROW,"§7Zurück"));
+
+            }
+        }).build(Shopy.getInstance()).open(p);
+    }
+
+    public void openSchilderAnsicht(Player p){
+        RyseInventory.builder().title("§9Item-Shop: Schilder").rows(6).provider(new InventoryProvider() {
+            @Override
+            public void init(Player player, InventoryContents contents) {
+                contents.updateOrSet(10, updateLoreMitPreis(Shopy.getInstance().createItem(Material.OAK_SIGN,"§9Schild"), 13));
+                contents.updateOrSet(11, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BIRCH_SIGN,"§9Schild"), 13));
+                contents.updateOrSet(12, updateLoreMitPreis(Shopy.getInstance().createItem(Material.SPRUCE_SIGN,"§9Schild"), 13));
+                contents.updateOrSet(13, updateLoreMitPreis(Shopy.getInstance().createItem(Material.JUNGLE_SIGN,"§9Schild"), 13));
+                contents.updateOrSet(14, updateLoreMitPreis(Shopy.getInstance().createItem(Material.ACACIA_SIGN,"§9Schild"), 13));
+                contents.updateOrSet(15, updateLoreMitPreis(Shopy.getInstance().createItem(Material.DARK_OAK_SIGN,"§9Schild"), 13));
+                contents.updateOrSet(16, updateLoreMitPreis(Shopy.getInstance().createItem(Material.MANGROVE_SIGN,"§9Schild"), 13));
+
+                contents.updateOrSet(19, updateLoreMitPreis(Shopy.getInstance().createItem(Material.CHERRY_SIGN,"§9Schild"), 13));
+                contents.updateOrSet(20, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BAMBOO_SIGN,"§9Schild"), 13));
+                contents.updateOrSet(21, updateLoreMitPreis(Shopy.getInstance().createItem(Material.CRIMSON_SIGN,"§9Schild"), 13));
+                contents.updateOrSet(22, updateLoreMitPreis(Shopy.getInstance().createItem(Material.WARPED_SIGN,"§9Schild"), 13));
+
+                contents.updateOrSet(28, updateLoreMitPreis(Shopy.getInstance().createItem(Material.OAK_HANGING_SIGN,"§9Schild"), 13));
+                contents.updateOrSet(29, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BIRCH_HANGING_SIGN,"§9Schild"), 13));
+                contents.updateOrSet(30, updateLoreMitPreis(Shopy.getInstance().createItem(Material.SPRUCE_HANGING_SIGN,"§9Schild"), 13));
+                contents.updateOrSet(31, updateLoreMitPreis(Shopy.getInstance().createItem(Material.JUNGLE_HANGING_SIGN,"§9Schild"), 13));
+                contents.updateOrSet(32, updateLoreMitPreis(Shopy.getInstance().createItem(Material.ACACIA_HANGING_SIGN,"§9Schild"), 13));
+                contents.updateOrSet(33, updateLoreMitPreis(Shopy.getInstance().createItem(Material.DARK_OAK_HANGING_SIGN,"§9Schild"), 13));
+                contents.updateOrSet(34, updateLoreMitPreis(Shopy.getInstance().createItem(Material.MANGROVE_HANGING_SIGN,"§9Schild"), 13));
+
+                contents.updateOrSet(37, updateLoreMitPreis(Shopy.getInstance().createItem(Material.CHERRY_HANGING_SIGN,"§9Schild"), 13));
+                contents.updateOrSet(38, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BAMBOO_HANGING_SIGN,"§9Schild"), 13));
+                contents.updateOrSet(39, updateLoreMitPreis(Shopy.getInstance().createItem(Material.CRIMSON_HANGING_SIGN,"§9Schild"), 13));
+                contents.updateOrSet(40, updateLoreMitPreis(Shopy.getInstance().createItem(Material.WARPED_HANGING_SIGN,"§9Schild"), 13));
+
+                contents.updateOrSet(45, Shopy.getInstance().createItem(Material.BARRIER,"§7Schlissen"));
+                contents.updateOrSet(46, Shopy.getInstance().createItem(Material.ARROW,"§7Zurück"));
+
+            }
+        }).build(Shopy.getInstance()).open(p);
+    }
+
+
+    public void openTonBloeckeAnsicht(Player p){
+        RyseInventory.builder().title("§9Item-Shop: Tonblöcke").rows(6).provider(new InventoryProvider() {
+            @Override
+            public void init(Player player, InventoryContents contents) {
+                contents.updateOrSet(10, updateLoreMitPreis(Shopy.getInstance().createItem(Material.WHITE_CONCRETE,"§9Ton"), 10));
+                contents.updateOrSet(11, updateLoreMitPreis(Shopy.getInstance().createItem(Material.LIGHT_GRAY_CONCRETE,"§9Ton"), 10));
+                contents.updateOrSet(12, updateLoreMitPreis(Shopy.getInstance().createItem(Material.GRAY_CONCRETE,"§9Ton"), 10));
+                contents.updateOrSet(13, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BLACK_CONCRETE,"§9Ton"), 10));
+                contents.updateOrSet(14, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BROWN_CONCRETE,"§9Ton"), 10));
+                contents.updateOrSet(15, updateLoreMitPreis(Shopy.getInstance().createItem(Material.RED_CONCRETE,"§9Ton"), 10));
+                contents.updateOrSet(16, updateLoreMitPreis(Shopy.getInstance().createItem(Material.ORANGE_CONCRETE,"§9Ton"), 10));
+
+                contents.updateOrSet(19, updateLoreMitPreis(Shopy.getInstance().createItem(Material.YELLOW_CONCRETE,"§9Ton"), 10));
+                contents.updateOrSet(20, updateLoreMitPreis(Shopy.getInstance().createItem(Material.LIME_CONCRETE,"§9Ton"), 10));
+                contents.updateOrSet(21, updateLoreMitPreis(Shopy.getInstance().createItem(Material.CYAN_CONCRETE,"§9Ton"), 10));
+                contents.updateOrSet(22, updateLoreMitPreis(Shopy.getInstance().createItem(Material.LIGHT_BLUE_CONCRETE,"§9Ton"), 10));
+                contents.updateOrSet(23, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BLUE_CONCRETE,"§9Ton"), 10));
+                contents.updateOrSet(24, updateLoreMitPreis(Shopy.getInstance().createItem(Material.MAGENTA_CONCRETE,"§9Ton"), 10));
+                contents.updateOrSet(25, updateLoreMitPreis(Shopy.getInstance().createItem(Material.PINK_CONCRETE,"§9Ton"), 10));
+
+                contents.updateOrSet(28, updateLoreMitPreis(Shopy.getInstance().createItem(Material.WHITE_CONCRETE_POWDER,"§9Ton"), 12));
+                contents.updateOrSet(29, updateLoreMitPreis(Shopy.getInstance().createItem(Material.LIGHT_GRAY_CONCRETE_POWDER,"§9Ton"), 12));
+                contents.updateOrSet(30, updateLoreMitPreis(Shopy.getInstance().createItem(Material.GRAY_CONCRETE_POWDER,"§9Ton"), 12));
+                contents.updateOrSet(31, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BLACK_CONCRETE_POWDER,"§9Ton"), 12));
+                contents.updateOrSet(32, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BROWN_CONCRETE_POWDER,"§9Ton"), 12));
+                contents.updateOrSet(33, updateLoreMitPreis(Shopy.getInstance().createItem(Material.RED_CONCRETE_POWDER,"§9Ton"), 12));
+                contents.updateOrSet(34, updateLoreMitPreis(Shopy.getInstance().createItem(Material.ORANGE_CONCRETE_POWDER,"§9Ton"), 12));
+
+                contents.updateOrSet(37, updateLoreMitPreis(Shopy.getInstance().createItem(Material.YELLOW_CONCRETE_POWDER,"§9Ton"), 12));
+                contents.updateOrSet(38, updateLoreMitPreis(Shopy.getInstance().createItem(Material.LIME_CONCRETE_POWDER,"§9Ton"), 12));
+                contents.updateOrSet(39, updateLoreMitPreis(Shopy.getInstance().createItem(Material.CYAN_CONCRETE_POWDER,"§9Ton"), 12));
+                contents.updateOrSet(40, updateLoreMitPreis(Shopy.getInstance().createItem(Material.LIGHT_BLUE_CONCRETE_POWDER,"§9Ton"), 12));
+                contents.updateOrSet(41, updateLoreMitPreis(Shopy.getInstance().createItem(Material.BLUE_CONCRETE_POWDER,"§9Ton"), 12));
+                contents.updateOrSet(42, updateLoreMitPreis(Shopy.getInstance().createItem(Material.MAGENTA_CONCRETE_POWDER,"§9Ton"), 12));
+                contents.updateOrSet(43, updateLoreMitPreis(Shopy.getInstance().createItem(Material.PINK_CONCRETE_POWDER,"§9Ton"), 12));
 
                 contents.updateOrSet(45, Shopy.getInstance().createItem(Material.BARRIER,"§7Schlissen"));
                 contents.updateOrSet(46, Shopy.getInstance().createItem(Material.ARROW,"§7Zurück"));

@@ -21,6 +21,8 @@ public class ShopDefaultItemsManger {
     ItemStack verzauber;
     ItemStack reparaturTisch;
     ItemStack setAufwerter;
+    ItemStack truhe;
+    ItemStack muelleimer;
 
     HashMap<Material, ItemStack> standertItemMatrialList;
 
@@ -165,6 +167,30 @@ public class ShopDefaultItemsManger {
 
         setAufwerter = Shopy.getInstance().createItemWithLore(Material.CALIBRATED_SCULK_SENSOR, "§9Setaufwerter", beschreibung);
         standertItemMatrialList.put(setAufwerter.getType(), setAufwerter);
+
+        beschreibung = new ArrayList<>();
+        beschreibung.add("§5Mit diesem Item kannst du,");
+        beschreibung.add("§5deine Baumaterialien aufbewahren.");
+        beschreibung.add("");
+        beschreibung.add(buildingHinweis);
+        beschreibung.add(buildingHinweis1);
+        beschreibung.add(buildingHinweis2);
+        beschreibung.add(buildingHinweis3);
+
+        truhe = Shopy.getInstance().createItemWithLore(Material.CHEST, "§9Truhe", beschreibung);
+        standertItemMatrialList.put(truhe.getType(), truhe);
+
+        beschreibung = new ArrayList<>();
+        beschreibung.add("§5Mit diesem gerät kannst du,");
+        beschreibung.add("§5kannst du Baumaterialien löschen");
+        beschreibung.add("");
+        beschreibung.add(buildingHinweis);
+        beschreibung.add(buildingHinweis1);
+        beschreibung.add(buildingHinweis2);
+        beschreibung.add(buildingHinweis3);
+
+        muelleimer = Shopy.getInstance().createItemWithLore(Material.HONEY_BLOCK, "§9Mülleimer", beschreibung);
+        standertItemMatrialList.put(muelleimer.getType(), muelleimer);
     }
 
     public static ShopDefaultItemsManger INSTANCE() {
@@ -219,5 +245,13 @@ public class ShopDefaultItemsManger {
 
     public ItemStack getSetAufwerter() {
         return setAufwerter.clone();
+    }
+
+    public ItemStack getTruhe() {
+        return truhe.clone();
+    }
+
+    public ItemStack getMuelleimer() {
+        return muelleimer.clone();
     }
 }
