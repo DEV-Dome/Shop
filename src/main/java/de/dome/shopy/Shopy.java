@@ -196,7 +196,7 @@ public class Shopy extends JavaPlugin {
         new EntityDeathListener();
         new EntityCombustListener();
         new PlayerRespawnListener();
-        new InventoryCloseListener();
+        //new InventoryCloseListener();
         new PlayerDropItemListener();
         new PlayerArmorChangeListener();
         new EntityDamageByEntityEventListener();

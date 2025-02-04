@@ -125,7 +125,6 @@ public class ShopHandwerksAufgabe {
                 }
 
 
-
                 int finalMenge = menge;
                 int finalBelohnungsMenge = belohnungsMenge;
                 String finalBelohnung= belohnung;
