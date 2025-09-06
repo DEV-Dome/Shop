@@ -35,7 +35,7 @@ public class InventoryClickListenerLara implements Listener {
             }
 
             /* Check, ob es ein zu verkaufens Item ist*/
-            if(e.getClickedInventory() == null) return;
+            if(e.getCurrentItem() == null) return;
             if(!e.getClickedInventory().equals(e.getView().getTopInventory())) return;
 
 

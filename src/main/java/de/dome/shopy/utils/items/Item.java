@@ -214,18 +214,17 @@ public class Item {
                         if(resultItemWerte.getString("schlussel").equals("max_ruestung")) newItem.maxRuestung = Double.parseDouble(resultItemWerte.getString("inhalt"));
 
                         /* Wenn eine Cotom Textur gefunden wird, anwenden! */
-                        if(resultItemWerte.getString("schlussel").equals("custom_model_data")){
-                            ItemStack newIcon = CustomStack.getInstance(resultItemWerte.getString("inhalt")).getItemStack();
-                            newItem.icon = newIcon;
-                            newItem.customModelData = resultItemWerte.getString("inhalt");
-                        }
+//                        if(resultItemWerte.getString("schlussel").equals("custom_model_data")){
+//                            ItemStack newIcon = CustomStack.getInstance(resultItemWerte.getString("inhalt")).getItemStack();
+//                            newItem.icon = newIcon;
+//                            newItem.customModelData = resultItemWerte.getString("inhalt");
+//                        }
 
                         if(resultItemWerte.getString("schlussel").equals("immer_freigeschlatet")){
                             if(resultItemWerte.getString("inhalt").equalsIgnoreCase("ja")) newItem.immerFreigeschaltet = true;
                             else newItem.immerFreigeschaltet = false;
                         }
                     }
-
                     /* Item Stufe */
                     newItem.itemSeltenheit = ItemSeltenheit.getItemStufeById(resultItem.getInt("item_seltenheit"));
                     newItem.hauptMaterial = newItem.ermitteleHauptMaterial();

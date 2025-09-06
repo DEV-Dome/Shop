@@ -208,7 +208,7 @@ public class Shop {
                         shopItemKategorie.put(itemKategorie.getName(), new ShopItemKategorie(level, xpZumNachstenLevel, aktuelleXP, itemKategorie, this, freigeschaltet));
                     }
 
-                    Shopy.getInstance().getSpielerShops().put(owner.getUniqueId(), this);
+
 
                     /* Item vorlagen laden */
                     int lastID = 1;
@@ -268,33 +268,36 @@ public class Shop {
                         ShopItem newItem = new ShopItem(resultItemLager.getInt("sid"), resultItemLager.getInt("iid"),ItemKategorie.getItemKategorieById(resultItemLager.getInt("item_kategorie")), resultItemLager.getString("name"), resultItemLager.getString("beschreibung"), Material.getMaterial(resultItemLager.getString("icon")), ItemSeltenheit.getItemStufeById(resultItemLager.getInt("shop_item.item_seltenheit")),itemVerzauberung, itemVerzauberungSet,schaden, angriffsgeschwindigkeit, rustung, haltbarkeit, maxHaltbarkeit, ausgestellt, icon);
                         shopItems.add(newItem);
                     }
-                }
 
-                String queryItemHalter = "SELECT * From shop_item_halter WHERE shop = " + shopId ;
-                ResultSet resultItemHalter = Shopy.getInstance().getMySQLConntion().resultSet(queryItemHalter);
-                while(resultItemHalter.next()){
+                    String queryItemHalter = "SELECT * From shop_item_halter WHERE shop = " + shopId + " ORDER BY id" ;
+                    ResultSet resultItemHalter = Shopy.getInstance().getMySQLConntion().resultSet(queryItemHalter);
+                    while(resultItemHalter.next()){
 
-                    Location itemHalterLoaction = Shopy.getInstance().getLocationFromString(resultItemHalter.getString("location"));
-                    ShopItem shopItem1 = null;
-                    ShopItem shopItem2 = null;
-                    ShopItem shopItem3 = null;
-                    ShopItem shopItem4 = null;
-                    ShopItem shopItem5 = null;
-                    ShopItem shopItem6 = null;
+                        Location itemHalterLoaction = Shopy.getInstance().getLocationFromString(resultItemHalter.getString("location"));
+                        itemHalterLoaction.setWorld(null);
 
-                    for(ShopItem shopItem : shopItems){
-                        if(shopItem.getId() == resultItemHalter.getInt("item_1")) shopItem1 = shopItem;
-                        if(shopItem.getId() == resultItemHalter.getInt("item_2")) shopItem2 = shopItem;
-                        if(shopItem.getId() == resultItemHalter.getInt("item_3")) shopItem3 = shopItem;
-                        if(shopItem.getId() == resultItemHalter.getInt("item_4")) shopItem4 = shopItem;
-                        if(shopItem.getId() == resultItemHalter.getInt("item_5")) shopItem5 = shopItem;
-                        if(shopItem.getId() == resultItemHalter.getInt("item_6")) shopItem6 = shopItem;
+                        ShopItem shopItem1 = null;
+                        ShopItem shopItem2 = null;
+                        ShopItem shopItem3 = null;
+                        ShopItem shopItem4 = null;
+                        ShopItem shopItem5 = null;
+                        ShopItem shopItem6 = null;
+
+                        for(ShopItem shopItem : shopItems){
+                            if(shopItem.getId() == resultItemHalter.getInt("item_1")) shopItem1 = shopItem;
+                            if(shopItem.getId() == resultItemHalter.getInt("item_2")) shopItem2 = shopItem;
+                            if(shopItem.getId() == resultItemHalter.getInt("item_3")) shopItem3 = shopItem;
+                            if(shopItem.getId() == resultItemHalter.getInt("item_4")) shopItem4 = shopItem;
+                            if(shopItem.getId() == resultItemHalter.getInt("item_5")) shopItem5 = shopItem;
+                            if(shopItem.getId() == resultItemHalter.getInt("item_6")) shopItem6 = shopItem;
+                        }
+
+                        ShopItemHalter newShopItemHalter = new ShopItemHalter(resultItemHalter.getInt("id"), this, resultItemHalter.getString("typ"), itemHalterLoaction, shopItem1, shopItem2, shopItem3, shopItem4, shopItem5, shopItem6);
+                        shopItemHalter.put(itemHalterLoaction, newShopItemHalter);
                     }
 
-                    ShopItemHalter newShopItemHalter = new ShopItemHalter(resultItemHalter.getInt("id"), this, resultItemHalter.getString("typ"), itemHalterLoaction, shopItem1, shopItem2, shopItem3, shopItem4, shopItem5, shopItem6);
-                    shopItemHalter.put(itemHalterLoaction, newShopItemHalter);
+                    Shopy.getInstance().getSpielerShops().put(owner.getUniqueId(), this);
                 }
-
 
             } catch (SQLException e) { }
         });
@@ -534,6 +537,11 @@ public class Shop {
         });
     }
     public void platziereItemHalter(Location postion, String typ){
+        /* Postion anpassen  */
+
+        postion.setYaw(0);
+        postion.set((int)postion.x(), (int)postion.y(), (int)postion.z());
+
         CompletableFuture.runAsync(() -> {
             int insertId = Shopy.getInstance().getMySQLConntion().queryReturnKey("INSERT INTO shop_item_halter (shop, typ, location) VALUES ('"+ shopId +"', '"+ typ +"','"+ postion +"' )");
 
@@ -652,9 +660,16 @@ public class Shop {
                 for(ShopItemHalter shopItemHalter : shopItemHalter.values()){
                     /* Wenn kein Armor Stand suchen */
                     ArmorStand armorStand = null;
-                    for (Entity entity : shopItemHalter.getLocation().getWorld().getNearbyEntities(shopItemHalter.getLocation(), 0.5, 0.5, 0.5)) {
-                        if (entity instanceof ArmorStand) {
-                            armorStand = (ArmorStand) entity;
+
+                    if(armorStand == null){
+                        Location armorStandLocationWithWorld = shopItemHalter.getLocation();
+                        armorStandLocationWithWorld.setWorld(getWorld());
+
+                        for (Entity entity : getWorld().getNearbyEntities(armorStandLocationWithWorld, 0.5, 0.5, 0.5)) {
+                            if (entity instanceof ArmorStand) {
+                                armorStand = (ArmorStand) entity;
+                                break;
+                            }
                         }
                     }
 

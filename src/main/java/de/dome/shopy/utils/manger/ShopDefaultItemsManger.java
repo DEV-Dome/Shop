@@ -158,7 +158,8 @@ public class ShopDefaultItemsManger {
 
         beschreibung = new ArrayList<>();
         beschreibung.add("§5Mit diesem gerät kannst du,");
-        beschreibung.add("§5Die Items ins Set's verwandel. ");
+        beschreibung.add("§5Die haltbarkeit deiner Ausrüstung ");
+        beschreibung.add("§5wiederherstellen. ");
         beschreibung.add("");
         beschreibung.add(buildingHinweis);
         beschreibung.add(buildingHinweis1);

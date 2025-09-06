@@ -257,12 +257,12 @@ public class Dungeon {
 
         switch (dungeonLevel){
             case 1:
-                spawnMenge = 25;
+                spawnMenge = 20;
                 minLeben = 15;
                 maxLeben = 35;
                 break;
             case 2:
-                spawnMenge = 50;
+                spawnMenge = 40;
                 minLeben = 40;
                 maxLeben = 50;
 
@@ -271,9 +271,9 @@ public class Dungeon {
                 mobTypes.remove(Zombie.class);
                 break;
             case 3:
-                spawnMenge = 100;
-                minLeben = 70;
-                maxLeben = 100;
+                spawnMenge = 75;
+                minLeben = 60;
+                maxLeben = 90;
 
                 /* zusätzliche Mob Typen Anpassen */
                 mobTypes.add(Vindicator.class);
@@ -283,9 +283,9 @@ public class Dungeon {
                 mobTypes.remove(Spider.class);
                 break;
             case 4:
-                spawnMenge = 200;
-                minLeben = 100;
-                maxLeben = 125;
+                spawnMenge = 100;
+                minLeben = 75;
+                maxLeben = 100;
 
                 /*  Mob Typen Anpassen */
                 mobTypes.add(Vindicator.class);

@@ -29,7 +29,7 @@ public class MySQL {
         this.connection = null;
     }
 
-    public static void createConfig(){
+    public static void createConfig() {
         File configFile = new File(Shopy.getInstance().getDataFolder(), "mysql.yml");
         FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
@@ -50,7 +50,11 @@ public class MySQL {
     public boolean connect() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            this.connection = DriverManager.getConnection("jdbc:mysql://" + host + "/" + database + "?autoReconnect=true&useSSL=false", username, password);
+            this.connection = DriverManager.getConnection(
+                    "jdbc:mysql://" + host + "/" + database + "?autoReconnect=true&useSSL=false",
+                    username,
+                    password
+            );
             return true;
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -75,23 +79,31 @@ public class MySQL {
         return this.connection;
     }
 
-    public void query(String sql) {
-        if (this.connection == null) {
-            return;
+    private boolean validateConnection() {
+        try {
+            if (this.connection == null || !this.connection.isValid(2)) {
+                return connect();
+            }
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return connect();
         }
+    }
+
+    public void query(String sql) {
+        if (!validateConnection()) return;
 
         try {
             Statement statement = connection.createStatement();
             statement.executeUpdate(sql);
-
         } catch (SQLException e) {
             e.printStackTrace();
-            return;
         }
     }
-    public int queryReturnKey(String sql) {
-        if (this.connection == null) return -1;
 
+    public int queryReturnKey(String sql) {
+        if (!validateConnection()) return -1;
 
         try {
             Statement statement = connection.createStatement();
@@ -100,7 +112,7 @@ public class MySQL {
             ResultSet generatedKeys = statement.getGeneratedKeys();
             if (generatedKeys.next()) {
                 return generatedKeys.getInt(1);
-            }else return -2;
+            } else return -2;
         } catch (SQLException e) {
             e.printStackTrace();
             return -1;
@@ -108,9 +120,8 @@ public class MySQL {
     }
 
     public ResultSet resultSet(String sql) {
-        if (this.connection == null) {
-            return null;
-        }
+        if (!validateConnection()) return null;
+
         try {
             PreparedStatement statement = this.connection.prepareStatement(sql);
             return statement.executeQuery();
@@ -121,14 +132,10 @@ public class MySQL {
     }
 
     public String readSQLFile(String filePath) throws IOException {
-        // Hole den ClassLoader deines Plugins
         ClassLoader classLoader = getClass().getClassLoader();
-
-        // Öffne einen InputStream zur Ressource
         InputStream inputStream = classLoader.getResourceAsStream(filePath);
 
         if (inputStream != null) {
-            // Lese den Inhalt der Datei aus dem InputStream
             try (Scanner scanner = new Scanner(inputStream, "UTF-8")) {
                 StringBuilder stringBuilder = new StringBuilder();
                 while (scanner.hasNextLine()) {

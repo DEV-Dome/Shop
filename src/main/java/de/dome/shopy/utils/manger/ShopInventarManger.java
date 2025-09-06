@@ -286,6 +286,8 @@ public class ShopInventarManger {
                                     item.setLore(beschreibung);
 
                                     contents.updateOrSet(slot, item);
+                                }else {
+                                    contents.updateOrSet(slot, new ItemStack(Material.AIR));
                                 }
                             }else {
                                 if(i > shop.getItemLagerSize() - 1){
@@ -452,6 +454,7 @@ public class ShopInventarManger {
                         if(handwerksAufgabeItem.getItem().getName().equals(shopItem.getName())){
                             if(handwerksAufgabeItem.getMenge() > handwerksAufgabeItem.getFortschritt()){
                                 gefunden = true;
+                                break;
                             }
                         }
                     }
@@ -877,12 +880,6 @@ public class ShopInventarManger {
                         continue;
                     }
                     if(i >= max_item) break;
-
-                    ArrayList<String> beschreibung = new ArrayList<>();
-                    beschreibung.add("§7Um das Item aufzuwerten, benötigst ");
-                    beschreibung.add("§7du den endsprechenden Aufwerter:");
-                    beschreibung.add("");
-                    beschreibung.add("§e" + shop.getShopRessourenManger().getRessourceValue(itemVerzauberungSet.getAufwerter()) + " §7/ §e1 §7Aufwerter");
 
                     contents.updateOrSet(i - start_item, itemVerzauberungSet.buildIconBaseItem(shop));
                     i++;

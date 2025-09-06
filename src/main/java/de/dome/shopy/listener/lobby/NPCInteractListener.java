@@ -23,6 +23,8 @@ import java.util.List;
 
 public class NPCInteractListener implements Listener {
 
+    private String spielerOhneShopFehlermeldung = Shopy.getInstance().getPrefix() + "§cUm diesen Händler Benutzen zu können, musst du erst einen Shop gründen!";
+
     public NPCInteractListener() {
         Shopy.getInstance().getServer().getPluginManager().registerEvents(this, Shopy.getInstance());
     }
@@ -69,9 +71,10 @@ public class NPCInteractListener implements Listener {
             }
             return;
         }
+
         /* Wenn kein Shop vorhanden */
         if(!Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())) {
-            p.sendMessage(Shopy.getInstance().getPrefix() + "§cUm diesen Händler Benutzen zu können, musst erst einen Shop gründen!");
+            p.sendMessage(spielerOhneShopFehlermeldung);
             return;
         }
 
@@ -86,7 +89,7 @@ public class NPCInteractListener implements Listener {
                     beschreibung.add("§7Für einen Dungeon der Stufe 1");
                     beschreibung.add("§7gelten folgende Bedingungen:");
                     beschreibung.add("");
-                    beschreibung.add("§7  - 25 Monster (Monster Materialien Drop)");
+                    beschreibung.add("§7  - 20 Monster (Monster Materialien Drop)");
                     beschreibung.add("§7  - Abschlussbelohnung (Besondere Materialien)");
 
                     contents.set(10, Shopy.getInstance().createItemWithLore(Material.ZOMBIE_SPAWN_EGG, "§5Dungeon Stufe 1", beschreibung));
@@ -100,7 +103,7 @@ public class NPCInteractListener implements Listener {
                     beschreibung.add("§7Für einen Dungeon der Stufe 2");
                     beschreibung.add("§7gelten folgende Bedingungen:");
                     beschreibung.add("");
-                    beschreibung.add("§7  - 50 Monster (Monster Materialien Drop)");
+                    beschreibung.add("§7  - 40 Monster (Monster Materialien Drop)");
                     beschreibung.add("§7  - + Erhöhte Chance Monster Materialien zu dropen");
                     beschreibung.add("§7  - Abschlussbelohnung (Besondere Materialien)");
                     beschreibung.add("§7  - + Erhöhte Chance Abschlussbelohnung zu dropen");
@@ -116,7 +119,7 @@ public class NPCInteractListener implements Listener {
                     beschreibung.add("§7Für einen Dungeon der Stufe 3");
                     beschreibung.add("§7gelten folgende Bedingungen:");
                     beschreibung.add("");
-                    beschreibung.add("§7  - 100 Monster (Monster Materialien Drop)");
+                    beschreibung.add("§7  - 75 Monster (Monster Materialien Drop)");
                     beschreibung.add("§7  - + Erhöhte Chance Monster Materialien zu dropen");
                     beschreibung.add("§7  - + Erhöhte Chance Speziale Materialien zu dropen");
                     beschreibung.add("§7  - Abschlussbelohnung (Besondere Materialien)");
@@ -133,7 +136,7 @@ public class NPCInteractListener implements Listener {
                     beschreibung.add("§7Für einen Dungeon der Stufe 4");
                     beschreibung.add("§7gelten folgende Bedingungen:");
                     beschreibung.add("");
-                    beschreibung.add("§7  - 200 Monster (Monster Materialien Drop)");
+                    beschreibung.add("§7  - 100 Monster (Monster Materialien Drop)");
                     beschreibung.add("§7  - + Erhöhte Chance Monster Materialien zu dropen");
                     beschreibung.add("§7  - + Erhöhte Chance Speziale Materialien zu dropen");
                     beschreibung.add("§7  - Abschlussbelohnung (Besondere Materialien)");
@@ -368,6 +371,7 @@ public class NPCInteractListener implements Listener {
                     contents.updateOrSet(22, updateLoreMitPreis(ShopDefaultItemsManger.INSTANCE().getReparaturTisch(), 750));
                     contents.updateOrSet(22, updateLoreMitPreis(ShopDefaultItemsManger.INSTANCE().getSetAufwerter(), 6500));
                     contents.updateOrSet(23, updateLoreMitPreis(ShopDefaultItemsManger.INSTANCE().getMuelleimer(), 1000));
+                    contents.updateOrSet(24, updateLoreMitPreis(ShopDefaultItemsManger.INSTANCE().getReparaturTisch(), 1350));
 
                     contents.updateOrSet(27, Shopy.getInstance().createItem(Material.BARRIER, "§7Schlissen"));
                 }

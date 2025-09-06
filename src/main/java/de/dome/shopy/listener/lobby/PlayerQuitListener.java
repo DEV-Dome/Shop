@@ -26,6 +26,7 @@ public class PlayerQuitListener implements Listener {
 
         if(Shopy.getInstance().getSpielerShops().containsKey(p.getUniqueId())) {
             Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).unLoadWorld();
+            Shopy.getInstance().getSpielerShops().get(p.getUniqueId()).getShopItemHalter().clear();
             Shopy.getInstance().getSpielerShops().remove(p.getUniqueId());
         }
         if(de.dome.shopy.listener.shop.BlockBreakListener.shopszones.containsKey(p.getUniqueId())){

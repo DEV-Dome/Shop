@@ -99,6 +99,10 @@ public class ItemVerzauberungSet {
         beschreibung.add("§7du den endsprechenden Aufwerter:");
         beschreibung.add("");
         beschreibung.add("§e" + shop.getShopRessourenManger().getRessourceValue(getAufwerter()) + " §7/ §e1 §7Aufwerter");
+        beschreibung.add("");
+        beschreibung.add("§7" + getBeschreibung());
+        beschreibung.add("§2Bonus 1: §7" + getVerbesserung1());
+        beschreibung.add("§2Bonus 2: §7" + getVerbesserung2());
 
         return Shopy.getInstance().createItemWithLore(getAufwerter().getIcon(), "§d" + getName(), beschreibung);
     }

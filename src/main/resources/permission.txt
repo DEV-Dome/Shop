@@ -8,6 +8,7 @@ shopy.cmd.ladewelt
 shopy.cmd.welttp
 shopy.cmd.setshopposition
 shopy.cmd.npcreload
+shopy.cmd.debugnpc
 
 shopy.cmd.adddungeon
 shopy.cmd.setdungeon

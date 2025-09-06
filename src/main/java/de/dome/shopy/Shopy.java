@@ -39,6 +39,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -174,6 +175,7 @@ public class Shopy extends JavaPlugin {
         new de.dome.shopy.listener.shop.BlockBreakListener();
         new PlayerInteractListener();
         new BlockPlaceListener();
+//        new InventoryCloseEventListener();
 
         new InventoryClickListenerWerkbank();
         new InventoryClickListenerRessourenMarkplatz();
@@ -226,6 +228,7 @@ public class Shopy extends JavaPlugin {
         getCommand("dungeon").setExecutor(new DungeonCMD());
         getCommand("setshopposition").setExecutor(new SetShopPosition());
         getCommand("npcreload").setExecutor(new NpcReloadCMD());
+        getCommand("debugnpc").setExecutor(new DebugNpc());
     }
 
 
@@ -262,6 +265,20 @@ public class Shopy extends JavaPlugin {
         item.setItemMeta(meta);
 
         return item;
+    }
+    public static ItemStack getPlayerHead(String playerName, String anzeigename, ArrayList<String> lore) {
+        ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1);
+        SkullMeta meta = (SkullMeta) skull.getItemMeta();
+
+        if (meta != null) {
+            OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
+            meta.setOwningPlayer(player);
+            meta.setDisplayName(anzeigename);
+            meta.setLore(lore);
+            skull.setItemMeta(meta);
+        }
+
+        return skull;
     }
 
     public ItemStack createItemWithLore(Material m, String name, ArrayList<String> lore, int menge) {

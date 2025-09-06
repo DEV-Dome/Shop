@@ -100,13 +100,13 @@ public class ShopItem {
 
     public ItemStack buildBaseItem(){
         ItemStack item = baseItem.getIcon();
-        if(!customModelData.equals("")) item = getIcon();
-        if(itemVerzauberungSet != null){
-            if(Shopy.getInstance().getEquipmentSlot(item.getType()) == Equipment.EquipmentSlot.HELMET) item = CustomStack.getInstance(itemVerzauberungSet.getCustomModelDataHelm()).getItemStack();
-            if(Shopy.getInstance().getEquipmentSlot(item.getType()) == Equipment.EquipmentSlot.CHESTPLATE) item = CustomStack.getInstance(itemVerzauberungSet.getCustomModelDataRuestung()).getItemStack();
-            if(Shopy.getInstance().getEquipmentSlot(item.getType()) == Equipment.EquipmentSlot.LEGGINGS) item = CustomStack.getInstance(itemVerzauberungSet.getCustomModelDataHose()).getItemStack();
-            if(Shopy.getInstance().getEquipmentSlot(item.getType()) == Equipment.EquipmentSlot.BOOTS) item = CustomStack.getInstance(itemVerzauberungSet.getCustomModelDataSchuhe()).getItemStack();
-        }
+//        if(!customModelData.equals("")) item = getIcon();
+//        if(itemVerzauberungSet != null){
+//            if(Shopy.getInstance().getEquipmentSlot(item.getType()) == Equipment.EquipmentSlot.HELMET) item = CustomStack.getInstance(itemVerzauberungSet.getCustomModelDataHelm()).getItemStack();
+//            if(Shopy.getInstance().getEquipmentSlot(item.getType()) == Equipment.EquipmentSlot.CHESTPLATE) item = CustomStack.getInstance(itemVerzauberungSet.getCustomModelDataRuestung()).getItemStack();
+//            if(Shopy.getInstance().getEquipmentSlot(item.getType()) == Equipment.EquipmentSlot.LEGGINGS) item = CustomStack.getInstance(itemVerzauberungSet.getCustomModelDataHose()).getItemStack();
+//            if(Shopy.getInstance().getEquipmentSlot(item.getType()) == Equipment.EquipmentSlot.BOOTS) item = CustomStack.getInstance(itemVerzauberungSet.getCustomModelDataSchuhe()).getItemStack();
+//        }
 
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(getVollenName());

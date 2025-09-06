@@ -48,7 +48,12 @@ public class NPCInteractListener implements Listener {
                             if(shopKunden == null) return;
 
                             /*Inventroy aufbauen*/
-                            contents.set(13, Shopy.getInstance().createItemWithLore(Material.WHITE_CANDLE, "§eInteressante Items", new ArrayList<>(), false, false));
+                            String cleanNpcName = npc.getFullName().substring(2);
+                            ArrayList kopfbeschreibung = new ArrayList<String>();
+                            kopfbeschreibung.add("");
+                            kopfbeschreibung.add("§7Kundenlaune: §e0%");
+
+                            contents.set(13, Shopy.getInstance().getPlayerHead(cleanNpcName, "§9" + cleanNpcName + "§7:", kopfbeschreibung));
 
                             int zeahler = 21;
                             if(shopKunden.getGesuchteItems().size() >= 5) zeahler--;

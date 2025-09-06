@@ -51,7 +51,7 @@ public class ShopItemVorlage {
         //Check ob, ob die Kategorie ein Level Aufgestiegen ist.
         if(hergestellt >= item.getFreischaltMenge() && item.getFreischaltItemID() != 0){
             Item freischaltItem = Item.getItemById(item.getFreischaltItemID());
-            if(!shop.getShopItemVorlageByItem(freischaltItem.getId()).isfreigeschaltet()){
+            if(freischaltItem != null && !shop.getShopItemVorlageByItem(freischaltItem.getId()).isfreigeschaltet()){
                 shop.getShopItemVorlageByItem(freischaltItem.getId()).setFreigeschaltet(true);
 
                 freischaltItem.freischalten(shop);

@@ -3,11 +3,13 @@ package de.dome.shopy.listener.shop;
 import de.dome.shopy.Shopy;
 import de.dome.shopy.utils.manger.ShopDefaultItemsManger;
 import de.dome.shopy.utils.shop.Shop;
+import de.dome.shopy.utils.shop.ShopItemHalter;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
@@ -33,9 +35,14 @@ public class PlayerInteractAtEntityListener implements Listener {
             e.setCancelled(true);
             Shop spielerShop = Shopy.getInstance().getSpielerShops().get(p.getUniqueId());
             ArmorStand armorStand = (ArmorStand) e.getRightClicked();
+            Location vergleichsLocation = armorStand.getLocation();
 
-            int itemAusstellerID = -1;
-            if(spielerShop.getShopItemHalter().containsKey(armorStand.getLocation())) itemAusstellerID = spielerShop.getShopItemHalter().get(armorStand.getLocation()).getId();
+            vergleichsLocation.setYaw(0);
+            vergleichsLocation.setWorld(null);
+            vergleichsLocation.set((int)vergleichsLocation.x(), (int)vergleichsLocation.y(), (int)vergleichsLocation.z());
+
+            int itemAusstellerID;
+            if(spielerShop.getShopItemHalter().containsKey(vergleichsLocation)) itemAusstellerID = spielerShop.getShopItemHalter().get(vergleichsLocation).getId();
             else {
                 p.sendMessage(Shopy.getInstance().getKonatktSupport());
                 return;

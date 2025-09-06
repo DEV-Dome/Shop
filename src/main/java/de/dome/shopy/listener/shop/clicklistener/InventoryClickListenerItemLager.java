@@ -70,7 +70,6 @@ public class InventoryClickListenerItemLager implements Listener {
                             int itemID = Integer.parseInt(item.getItemMeta().getLore().get(0).split(":")[1].substring(1));
                             ShopItem shopItem = spielerShop.getShopItemById(itemID);
 
-
                             /* Check wurde das Item gefunden */
                             if(shopItem != null && itemID != -1){
                                 spielerShop.delteShopItemById(itemID);
